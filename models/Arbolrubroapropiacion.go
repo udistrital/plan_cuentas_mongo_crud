@@ -24,6 +24,7 @@ type ArbolRubroApropiacion struct {
 	Unidad_ejecutora    string                        `json:"unidad_ejecutora"`
 	Padre               string                        `json:"padre"`
 	Hijos               []string                      `json:"hijos"`
+	Estado				string						   `json:"estado"`
 	Apropiacion_inicial int                           `json:"apropiacion_inicial"`
 	Movimientos         map[string]map[string]float64 `json:"movimientos"`
 }
