@@ -190,7 +190,6 @@ func (j *ArbolRubroApropiacionController) ArbolApropiacion() {
 
 	if err == nil {
 		arbolApropiaciones := make(map[string]interface{})
-		arbolApropiaciones["Id"], _ = strconv.Atoi(raiz.Idpsql)
 		arbolApropiaciones["Codigo"] = raiz.Id
 		arbolApropiaciones["Nombre"] = raiz.Nombre
 		arbolApropiaciones["IsLeaf"] = true
@@ -229,9 +228,7 @@ func (j *ArbolRubroApropiacionController) RaicesArbolApropiacion() {
 	var roots []map[string]interface{}
 	raices, err := models.GetRaicesApropiacion(session, ueStr, vigencia)
 	for i := 0; i < len(raices); i++ {
-		idPsql, _ := strconv.Atoi(raices[i].Idpsql)
 		root := map[string]interface{}{
-			"Id":                 idPsql,
 			"Codigo":             raices[i].Id,
 			"Nombre":             raices[i].Nombre,
 			"Hijos":              raices[i].Hijos,
@@ -271,7 +268,6 @@ func getHijoApropiacion(id, ue, vigencia string) map[string]interface{} {
 	hijo := make(map[string]interface{})
 	if rubroHijo != nil {
 		if rubroHijo.Id != "" {
-			hijo["Id"], _ = strconv.Atoi(rubroHijo.Idpsql)
 			hijo["Codigo"] = rubroHijo.Id
 			hijo["Nombre"] = rubroHijo.Nombre
 			hijo["IsLeaf"] = false
@@ -323,7 +319,6 @@ func (j *ArbolRubroApropiacionController) RegistrarApropiacionInicial() {
 
 		nuevaApropiacion := models.ArbolRubroApropiacion{
 			Id:                  codigoRubro,
-			Idpsql:              strconv.Itoa(int(dataApropiacion["Id"].(float64))),
 			Nombre:              dataApropiacion["Nombre"].(string),
 			Descripcion:         "",
 			Unidad_ejecutora:    dataApropiacion["UnidadEjecutora"].(string),
@@ -337,7 +332,7 @@ func (j *ArbolRubroApropiacionController) RegistrarApropiacionInicial() {
 			session, _ = db.GetSession()
 			models.InsertArbolRubroApropiacion(session, &nuevaApropiacion, unidadEjecutora, vigencia)
 		} else { // si el rubro actual no es una raíz, se itera para registrar toda la rama
-			if err = construirRama(nuevaApropiacion.Id, unidadEjecutora, vigencia, nuevaApropiacion.Idpsql, nuevaApropiacion.Apropiacion_inicial); err != nil {
+			if err = construirRama(nuevaApropiacion.Id, unidadEjecutora, vigencia, nuevaApropiacion.Id, nuevaApropiacion.Apropiacion_inicial); err != nil {
 				fmt.Println("error en construir rama: ", err.Error())
 				panic(err.Error())
 			}
@@ -376,7 +371,7 @@ func construirRama(codigoRubro, ue, vigencia, idApr string, nuevaApropiacion int
 		actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
 		models.InsertArbolRubroApropiacion(session, actualApropiacion, ue, vigencia)
 		if actualApropiacion.Padre != "" {
-			construirRama(actualRubro.Padre, ue, vigencia, actualRubro.Idpsql, actualApropiacion.Apropiacion_inicial)
+			construirRama(actualRubro.Padre, ue, vigencia, actualRubro.Id, actualApropiacion.Apropiacion_inicial)
 		}
 	} else {
 		session, _ = db.GetSession()
@@ -428,7 +423,6 @@ func propagarCambio(codigoRubro, ue, vigencia string, valorPropagado int) error 
 func crearNuevaApropiacion(actualRubro models.ArbolRubros, aprId string, nuevaApropiacion int) *models.ArbolRubroApropiacion {
 	actualApropiacion := &models.ArbolRubroApropiacion{
 		Id:                  actualRubro.Id,
-		Idpsql:              aprId,
 		Nombre:              actualRubro.Nombre,
 		Descripcion:         actualRubro.Descripcion,
 		Unidad_ejecutora:    actualRubro.Unidad_Ejecutora,
