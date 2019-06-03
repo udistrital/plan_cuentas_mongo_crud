@@ -10,8 +10,8 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/manucorporat/try"
-	"github.com/udistrital/financiera_mongo_crud/db"
-	"github.com/udistrital/financiera_mongo_crud/models"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
 // ArbolRubrosController estructura para un controlador de beego

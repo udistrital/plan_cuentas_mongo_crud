@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "github.com/udistrital/financiera_mongo_crud/routers"
+	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 )

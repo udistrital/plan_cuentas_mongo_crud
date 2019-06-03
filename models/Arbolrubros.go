@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/udistrital/financiera_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"

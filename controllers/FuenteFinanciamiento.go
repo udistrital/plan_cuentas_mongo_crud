@@ -7,8 +7,8 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/manucorporat/try"
-	"github.com/udistrital/financiera_mongo_crud/db"
-	"github.com/udistrital/financiera_mongo_crud/models"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 	"github.com/udistrital/utils_oas/formatdata"
 )
 

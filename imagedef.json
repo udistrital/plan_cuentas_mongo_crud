@@ -1,4 +1,4 @@
 [{
-  "name": "financiera_mongo_crud",
-  "imageUri": "oas0/financiera_mongo_crud:SED_TAG"
+  "name": "plan_cuentas_mongo_crud",
+  "imageUri": "oas0/plan_cuentas_mongo_crud:SED_TAG"
 }]
