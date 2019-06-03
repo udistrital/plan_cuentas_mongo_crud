@@ -1,0 +1,63 @@
+version: '3.4'
+
+services: 
+  api:
+    build: ./bee_build
+    image: ${SERVICE_NAME}
+    container_name: ${SERVICE_NAME}
+    volumes:
+      - gosrc:/go
+      - .:/go/src/${API_BASE_DIR}/${API_NAME}
+    ports: 
+      - "${PORT}:${PORT}"
+    env_file: 
+      - custom.env
+    environment:
+      - FINANCIERA_MONGO_CRUD_PORT=${PORT}
+      - RUN_MODE=dev 
+      - FINANCIERA_MONGO_CRUD_DB_URL=${FINANCIERA_MONGO_CRUD_DB_URL}
+      - FINANCIERA_MONGO_CRUD_DB_NAME=${FINANCIERA_MONGO_CRUD_DB_NAME}
+      - FINANCIERA_MONGO_CRUD_DB_USER=${FINANCIERA_MONGO_CRUD_DB_USER}
+      - FINANCIERA_MONGO_CRUD_DB_PASS=${FINANCIERA_MONGO_CRUD_DB_PASS}
+      - FINANCIERA_MONGO_CRUD_DB_AUTH=${FINANCIERA_MONGO_CRUD_DB_AUTH}
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost   
+    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -u ./...; bee run'
+    depends_on: 
+      - db
+    networks: 
+      - back_end
+  db:
+    image: mongo:latest
+    container_name: ${FINANCIERA_MONGO_CRUD_DB_URL}
+    environment: 
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGO_INITDB_ROOT_USERNAME=${FINANCIERA_MONGO_CRUD_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${FINANCIERA_MONGO_CRUD_DB_PASS}
+    volumes:
+      - financiera_mongo_data:/data/db
+    ports:
+      - ${DB_PORT}:27017 
+    networks: 
+      - back_end
+  mongoexpress:
+    image: mongo-express
+    restart: on-failure
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=${FINANCIERA_MONGO_CRUD_DB_URL}
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${FINANCIERA_MONGO_CRUD_DB_USER}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${FINANCIERA_MONGO_CRUD_DB_PASS}
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+    ports:
+      - 8090:8081
+    depends_on:
+      - db
+    networks: 
+      - back_end
+
+volumes:
+  gosrc:
+  financiera_mongo_data:
+networks: 
+  back_end:
+    external: true

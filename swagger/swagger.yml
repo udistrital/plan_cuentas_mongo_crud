@@ -1,0 +1,203 @@
+swagger: "2.0"
+info:
+  title: API Aplicacion Voto
+  description: API Aplicacion Voto - Entidades Core
+  version: 1.0.0
+  termsOfService: http://oas.udistrital.edu.co/
+  contact:
+    email: ssierraf@correo.udistrital.edu.co
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /v1
+paths:
+  /candidato/:
+    get:
+      tags:
+      - candidato
+      description: get all objects
+      operationId: CandidatoController.GetAll
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Candidato'
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - candidato
+      description: Crear Candidato Jornada Electoral
+      operationId: CandidatoController.Crear Candidato
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de candidato
+        required: true
+        schema:
+          $ref: '#/definitions/.Candidato'
+      responses:
+        "200":
+          description: '{int} candidato.Id'
+        "403":
+          description: body is empty
+  /candidato/{nombre}:
+    get:
+      tags:
+      - candidato
+      description: get candidato by nombre
+      operationId: CandidatoController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la jornada a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Candidato'
+        "403":
+          description: :uid is empty
+  /candidato/{objectId}:
+    put:
+      tags:
+      - candidato
+      description: update the Candidato
+      operationId: CandidatoController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/.Candidato'
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Candidato'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - candidato
+      description: Borrar Candidato
+      operationId: CandidatoController.Borrar Candidato
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
+  /jornada/:
+    get:
+      tags:
+      - jornada
+      description: get all objects
+      operationId: JornadaController.GetAll
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Jornada'
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - jornada
+      description: Crear Jornada
+      operationId: JornadaController.Crear Jornada Electoral
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de jornada de votacion
+        required: true
+        schema:
+          $ref: '#/definitions/.User'
+      responses:
+        "200":
+          description: '{int} jornada.Id'
+        "403":
+          description: body is empty
+  /jornada/{nombre}:
+    get:
+      tags:
+      - jornada
+      description: get jornada by nombre
+      operationId: JornadaController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la jornada a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Jornada'
+        "403":
+          description: :uid is empty
+  /jornada/{objectId}:
+    put:
+      tags:
+      - jornada
+      description: update the Jornada
+      operationId: JornadaController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/.Object'
+      responses:
+        "200":
+          schema:
+            $ref: '#/definitions/.Object'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - jornada
+      description: Borrar Jornada Electoral
+      operationId: JornadaController.Borrar Jornada
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
+definitions:
+  .Candidato:
+    type: object
+  .Jornada:
+    type: object
+  .Object:
+    type: object
+  .User:
+    type: object
+tags:
+- name: jornada
+  description: |
+    Operaciones Crud Jornada
+- name: candidato
+  description: |
+    Operaciones Crud Candidato

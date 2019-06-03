@@ -1,0 +1,11 @@
+.DS_Store
+api
+api~
+api.exe
+api.exe~
+plan_cuentas_mongo_crud
+plan_cuentas_mongo_crud~
+plan_cuentas_mongo_crud.exe
+plan_cuentas_mongo_crud.exe~
+lastupdate.tmp
+custom.env

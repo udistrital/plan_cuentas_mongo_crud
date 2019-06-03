@@ -1,0 +1,67 @@
+workspace:
+  base: /go
+  path: src/github.com/udistrital/${DRONE_REPO##udistrital/}
+  when:
+    branch: [master, develop]
+
+pipeline:
+
+  # build and test the go program
+  go:
+    image: golang:1.9
+    commands:
+     - go get -t
+     - GOOS=linux GOARCH=amd64 go build -o main
+     
+    when:
+      branch: [master, develop]
+      
+  # prepare imagedef.json and app.zip for deployment
+  sed:
+    image: alpine
+    commands:
+      - sed -i 's|SED_TAG|'${CI_COMMIT:0:7}'|' imagedef.json
+      - apk -U add zip
+      - zip app.zip imagedef.json
+      - zip ${DRONE_REPO##udistrital/}-${DRONE_BRANCH}.zip app.zip
+    when:
+      branch: [master, develop]
+            
+  # build and push docker image to docker hub
+  publish_dockerhub:
+    image: plugins/docker
+    repo: oas0/${DRONE_REPO##udistrital/}
+    secrets: [ docker_username, docker_password ]
+    tag:
+      - ${DRONE_COMMIT:0:7}
+      - latest
+    when:
+      branch: [master, develop]
+            
+  # upload app.zip to s3 bucket for CodePipline
+  publish_s3:
+    image: plugins/s3
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    region: "us-east-1"
+    bucket: "drone-helper-bucket"
+    source: ${DRONE_REPO##udistrital/}-${DRONE_BRANCH}.zip   
+    target: /apps
+    when:
+      branch: [master, develop]
+      
+  #Notify results to telegram    
+  notify_telegram:
+    image: appleboy/drone-telegram    
+    secrets: [ telegram_token, telegram_to ]
+    format: html
+    message: >
+      {{#success build.status}}
+        <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">SUCCESS</a> 
+        <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+      {{else}}
+        <code>{{repo.owner}}/{{repo.name}}</code> <a href="{{build.link}}">FAILURE</a>
+        <code>{{commit.branch}}</code>@<a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+      {{/success}}
+    when:
+      status: [success, failure]
+      branch: [master, develop]
