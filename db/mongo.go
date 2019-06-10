@@ -2,7 +2,7 @@ package db
 
 import (
 	"time"
-
+	"github.com/astaxie/beego"
 	"github.com/globalsign/mgo"
 )
 

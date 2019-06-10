@@ -172,7 +172,6 @@ func (j *ArbolRubrosController) RegistrarRubro() {
 		session, _ := db.GetSession()
 		json.Unmarshal(j.Ctx.Input.RequestBody, &rubroData)
 		rubroDataHijo := rubroData.(map[string]interface{})["RubroHijo"].(map[string]interface{})
-
 		nuevoRubro := models.ArbolRubros{
 			Id:               rubroDataHijo["Codigo"].(string),
 			Idpsql:           strconv.FormatFloat(rubroDataHijo["Id"].(float64), 'f', 0, 64),
@@ -181,7 +180,8 @@ func (j *ArbolRubrosController) RegistrarRubro() {
 			Hijos:            nil,
 			Unidad_Ejecutora: strconv.FormatFloat(rubroDataHijo["UnidadEjecutora"].(float64), 'f', 0, 64)}
 
-		if rubroDataPadre := rubroData.(map[string]interface{})["RubroPadre"].(map[string]interface{}); rubroDataPadre["Codigo"] != nil {
+		if rubroData.(map[string]interface{})["RubroPadre"] != nil {
+			rubroDataPadre := rubroData.(map[string]interface{})["RubroPadre"].(map[string]interface{})
 			rubroPadre = rubroDataPadre["Codigo"].(string)
 			nuevoRubro.Padre = rubroPadre
 			updatedRubro, _ := models.GetArbolRubrosById(session, rubroPadre)
