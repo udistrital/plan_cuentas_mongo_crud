@@ -79,14 +79,13 @@ FINANCIERA_MONGO_CRUD_SOME_VARIABLE=some_value
 .
 bee run
 ```
+*Nota: El comando anterior es una sola linea, no se ejecuta uno por uno (sin saltos de linea).*
 
 ![Vista previa](images/terminal_api_view.png)
 
 ## Servicios
 
 Para la documentación de esta API, se utiliza swagger. Si quieres ver una documentación exaustiva de todos los servicios que provee esta API, una vez ejecutado el contenedor o el proyecto de beego, ve a la dirección http://127.0.0.1:8082/swagger/swagger-1/
-
-*Nota: El comando anterior es una sola linea, no se ejecuta uno por uno (sin saltos de linea).*
 
 ## Derechos de Autor
 
