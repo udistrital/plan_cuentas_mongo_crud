@@ -288,6 +288,7 @@ func getHijoApropiacion(id, ue, vigencia string) map[string]interface{} {
 	return hijo
 }
 
+//RegistrarApropiacionInicial
 // @Title RegistrarApropiacionInicial...
 // @Description Crear ArbolRubroApropiacion2018
 // @Param	body		body 	models.ArbolRubroApropiacion2018 true		"Body para la creacion de ApropiacionInicial"
@@ -330,12 +331,13 @@ func (j *ArbolRubroApropiacionController) RegistrarApropiacionInicial() {
 					panic(err.Error())
 				}
 			}
-
+			defer session.Close()
 			j.Data["json"] = map[string]interface{}{"Type": "success"}
 		} else {
 			panic(err.Error())
 			fmt.Println("unmarshal error: ", err.Error())
 		}
+
 	}).Catch(func(e try.E) {
 		fmt.Println("catch error: ", e)
 		j.Data["json"] = map[string]interface{}{"Type": "error"}
@@ -354,6 +356,7 @@ func construirRama(codigoRubro, ue, vigencia, idApr string, nuevaApropiacion int
 
 	try.This(func() {
 		session, _ := db.GetSession()
+		defer session.Close()
 		actualRubro, err = models.GetArbolRubrosById(session, codigoRubro)
 		actualRubro.Unidad_Ejecutora = ue
 		session, _ = db.GetSession()
@@ -390,7 +393,8 @@ func construirRama(codigoRubro, ue, vigencia, idApr string, nuevaApropiacion int
 	return err
 }
 
-// Propaga el cambio de la apropiación desde la hoja hasta la raiz, verificando recursivamente si el rubro que se está obteniendo tiene un padre o no
+// Propaga el cambio de la apropiación desde la hoja hasta la raiz,
+// verificando recursivamente si el rubro que se está obteniendo tiene un padre o no
 func propagarCambio(codigoRubro, ue, vigencia string, valorPropagado int) error {
 	var err error
 
@@ -437,12 +441,12 @@ var tipoMovimientoPadre string
 //@Title SaldoCDP
 //
 
+//RegistrarMovimiento ...
 // @Title RegistrarMovimiento
 // @Description Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
 // arbolrubrosapropiacion_[vigencia]_[unidad_ejecutura], como en la colección movimientos. Utiliza la función registrarValores para registrar los valores,
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
-
 // @Param	body		body 	models.Object true "json de movimientos enviado desde el api_mid_financiera"
 // @Success 200 {string} success
 // @Failure 403 error
@@ -491,7 +495,8 @@ func (j *ArbolRubroApropiacionController) RegistrarMovimiento() {
 	j.ServeJSON()
 }
 
-// De acuerdo a los valores que recibe, se hacen las modificaciones en el arbolrubroapropiacion y también en la colección de movimientos
+// De acuerdo a los valores que recibe, se hacen las modificaciones en el arbolrubroapropiacion
+// y también en la colección de movimientos
 // Parámetros: Recibe los valores correspondientes a la modificación, el mes correspondiente de la modificaicón
 func registrarModifacionApr(dataValor map[string]interface{}) (err error) {
 	var ops []interface{}
@@ -888,6 +893,7 @@ func selectTipoMovimientoPadre(tipoHijo string) {
 	}
 }
 
+// SaldoApropiacion ...
 // @Title SaldoApropiacion
 // @Description Devuelve el saldo de una apropiación especifica
 // @Param	body		body 	models.Object true "json de movimientos enviado desde el api_mid_financiera"
