@@ -3,22 +3,22 @@ package models
 import (
 	"fmt"
 
-	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
 const ArbolRubrosCollection = "arbol_rubro"
 
 type ArbolRubros struct {
 	Id               string   `json:"_id" bson:"_id,omitempty"`
-	Idpsql           string   `json:"idpsql"`
-	Nombre           string   `json:"nombre"`
-	Descripcion      string   `json:"descripcion"`
-	Hijos            []string `json:"hijos"`
-	Padre            string   `json:"padre"`
-	Unidad_Ejecutora string   `json:"unidad_ejecutora"`
+	Idpsql           string   `json:"Id"`
+	Nombre           string   `json:"Nombre"`
+	Descripcion      string   `json:"Descripcion"`
+	Hijos            []string `json:"Hijos"`
+	Padre            string   `json:"Padre"`
+	Unidad_Ejecutora string   `json:"UnidadEjecutora"`
 }
 
 func UpdateArbolRubros(session *mgo.Session, j ArbolRubros, id string) error {
