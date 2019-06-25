@@ -198,6 +198,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"],
         beego.ControllerComments{
+            Method: "FullArbolRubro",
+            Router: `/FullArbolRubro/:unidadEjecutora`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"],
+        beego.ControllerComments{
             Method: "RaicesArbol",
             Router: `/RaicesArbol/:unidadEjecutora`,
             AllowHTTPMethods: []string{"get"},

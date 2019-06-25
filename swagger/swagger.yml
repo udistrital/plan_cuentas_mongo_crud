@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  title: API Aplicacion Voto
+  title: API
   description: API Aplicacion Voto - Entidades Core
   version: 1.0.0
   termsOfService: http://oas.udistrital.edu.co/
@@ -11,59 +11,76 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 basePath: /v1
 paths:
-  /candidato/:
+  /arbol_rubro/:
     get:
       tags:
-      - candidato
+      - arbol_rubro
       description: get all objects
-      operationId: CandidatoController.GetAll
+      operationId: ArbolRubrosController.GetAll
       responses:
         "200":
-          schema:
-            $ref: '#/definitions/.Candidato'
+          description: ArbolRubros models.ArbolRubros
         "403":
           description: :objectId is empty
     post:
       tags:
-      - candidato
-      description: Crear Candidato Jornada Electoral
-      operationId: CandidatoController.Crear Candidato
+      - arbol_rubro
+      description: Crear ArbolRubros
+      operationId: ArbolRubrosController.Crear ArbolRubros
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de candidato
+        description: Body para la creacion de ArbolRubros
         required: true
         schema:
-          $ref: '#/definitions/.Candidato'
+          $ref: '#/definitions/models.ArbolRubros'
       responses:
         "200":
-          description: '{int} candidato.Id'
+          description: '{int} ArbolRubros.Id'
         "403":
           description: body is empty
-  /candidato/{nombre}:
+    options:
+      tags:
+      - arbol_rubro
+      description: Crear ArbolRubros
+      operationId: ArbolRubrosController.Preflight options
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ArbolRubros
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubros'
+      responses:
+        "200":
+          description: '{int} ArbolRubros.Id'
+        "403":
+          description: body is empty
+  /arbol_rubro/{id}:
     get:
       tags:
-      - candidato
-      description: get candidato by nombre
-      operationId: CandidatoController.Get
+      - arbol_rubro
+      description: get ArbolRubros by nombre
+      operationId: ArbolRubrosController.Get
       parameters:
       - in: path
         name: nombre
-        description: El nombre de la jornada a consultar
+        description: El nombre de la ArbolRubros a consultar
         required: true
         type: string
       responses:
         "200":
+          description: ""
           schema:
-            $ref: '#/definitions/.Candidato'
+            $ref: '#/definitions/models.ArbolRubros'
         "403":
           description: :uid is empty
-  /candidato/{objectId}:
+  /arbol_rubro/{objectId}:
     put:
       tags:
-      - candidato
-      description: update the Candidato
-      operationId: CandidatoController.Update
+      - arbol_rubro
+      description: update the ArbolRubros
+      operationId: ArbolRubrosController.Update
       parameters:
       - in: path
         name: objectId
@@ -75,18 +92,19 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/.Candidato'
+          $ref: '#/definitions/models.Object'
       responses:
         "200":
+          description: ""
           schema:
-            $ref: '#/definitions/.Candidato'
+            $ref: '#/definitions/models.Object'
         "403":
           description: :objectId is empty
     delete:
       tags:
-      - candidato
-      description: Borrar Candidato
-      operationId: CandidatoController.Borrar Candidato
+      - arbol_rubro
+      description: Borrar ArbolRubros
+      operationId: ArbolRubrosController.Borrar ArbolRubros
       parameters:
       - in: path
         name: objectId
@@ -98,59 +116,193 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
-  /jornada/:
-    get:
+    options:
       tags:
-      - jornada
-      description: get all objects
-      operationId: JornadaController.GetAll
-      responses:
-        "200":
-          schema:
-            $ref: '#/definitions/.Jornada'
-        "403":
-          description: :objectId is empty
-    post:
-      tags:
-      - jornada
-      description: Crear Jornada
-      operationId: JornadaController.Crear Jornada Electoral
+      - arbol_rubro
+      description: Crear ArbolRubros
+      operationId: ArbolRubrosController.Preflight options
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de jornada de votacion
+        description: Body para la creacion de ArbolRubros
         required: true
         schema:
-          $ref: '#/definitions/.User'
+          $ref: '#/definitions/models.ArbolRubros'
       responses:
         "200":
-          description: '{int} jornada.Id'
+          description: '{int} ArbolRubros.Id'
         "403":
           description: body is empty
-  /jornada/{nombre}:
+  /arbol_rubro/ArbolRubro/{raiz}/{unidadEjecutora}:
     get:
       tags:
-      - jornada
-      description: get jornada by nombre
-      operationId: JornadaController.Get
+      - arbol_rubro
+      description: Construye el árbol a un nivel dependiendo de la raíz
+      operationId: ArbolRubrosController.Preflight options
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        schema:
+          $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro/FullArbolRubro/{unidadEjecutora}:
+    get:
+      tags:
+      - arbol_rubro
+      description: Construye el árbol a un nivel dependiendo de la raíz
+      operationId: ArbolRubrosController.FullArbolRubro
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        schema:
+          $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro/RaicesArbol/{unidadEjecutora}:
+    get:
+      tags:
+      - arbol_rubro
+      description: RaicesArbol
+      operationId: ArbolRubrosController.RaicesArbol
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de Rubro
+        required: true
+        schema:
+          $ref: '#/definitions/models.Rubro'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro/eliminarRubro/{idPsql}:
+    delete:
+      tags:
+      - arbol_rubro
+      description: recibe el idPsql del rubro desde api mid para eliminar el rubro
+      operationId: ArbolRubrosController.Eliminar rubro
+      parameters:
+      - in: interface{}
+        name: body
+        description: Body para la eliminación de un rubro
+        schema:
+          $ref: '#/definitions/true'
+      responses:
+        "201":
+          description: '{string} sucess'
+        "403":
+          description: body is empty
+  /arbol_rubro/registrarRubro:
+    post:
+      tags:
+      - arbol_rubro
+      description: Convierte la estructura del api mid para registrarla en un documento
+        mongo
+      operationId: ArbolRubrosController.Registra rubro
+      parameters:
+      - in: interface{}
+        name: body
+        description: Body para la creacion de un nuevo rubro
+        schema:
+          $ref: '#/definitions/true'
+      responses:
+        "201":
+          description: '{string} recibido'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiaciones/:
+    options:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Crear ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.Preflight options
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ArbolRubroApropiacion2018
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+      responses:
+        "200":
+          description: '{int} ArbolRubroApropiacion2018.Id'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiaciones/{id}/{vigencia}/{unidadEjecutora}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: get ArbolRubroApropiacion2018 by nombre
+      operationId: ArbolRubroApropiacionController.Get
       parameters:
       - in: path
         name: nombre
-        description: El nombre de la jornada a consultar
+        description: El nombre de la ArbolRubroApropiacion2018 a consultar
         required: true
         type: string
       responses:
         "200":
+          description: ""
           schema:
-            $ref: '#/definitions/.Jornada'
+            $ref: '#/definitions/models.ArbolRubroApropiacion2018'
         "403":
           description: :uid is empty
-  /jornada/{objectId}:
+  /arbol_rubro_apropiaciones/{objectId}:
+    delete:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Borrar ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.Delete ArbolRubroApropiacion2018
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
+    options:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Crear ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.Preflight options
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ArbolRubroApropiacion2018
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+      responses:
+        "200":
+          description: '{int} ArbolRubroApropiacion2018.Id'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiaciones/{objectId}/{vigencia}/{unidadEjecutora}:
     put:
       tags:
-      - jornada
-      description: update the Jornada
-      operationId: JornadaController.Update
+      - arbol_rubro_apropiaciones
+      description: update the ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.Update
       parameters:
       - in: path
         name: objectId
@@ -162,42 +314,242 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/.Object'
+          $ref: '#/definitions/models.Object'
       responses:
         "200":
+          description: ""
           schema:
-            $ref: '#/definitions/.Object'
+            $ref: '#/definitions/models.Object'
         "403":
           description: :objectId is empty
-    delete:
+  /arbol_rubro_apropiaciones/{vigencia}/{unidadEjecutora}:
+    get:
       tags:
-      - jornada
-      description: Borrar Jornada Electoral
-      operationId: JornadaController.Borrar Jornada
+      - arbol_rubro_apropiaciones
+      description: get all objects
+      operationId: ArbolRubroApropiacionController.GetAll
+      responses:
+        "200":
+          description: ArbolRubroApropiacion models.ArbolRubroApropiacion
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Crear ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.Crear ArbolRubroApropiacion2018
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ArbolRubroApropiacion2018
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+      responses:
+        "200":
+          description: '{int} ArbolRubroApropiacion2018.Id'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiaciones/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Devuelve un nivel del árbol de apropiaciones
+      operationId: ArbolRubroApropiacionController.Preflight ArbolApropiacion
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ArbolRubroApropiacion2018
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiaciones/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: RaicesArbolApropiacion
+      operationId: ArbolRubroApropiacionController.RaicesArbolApropiacion
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro_apropiaciones/SaldoApropiacion/{rubro}/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Devuelve el saldo de una apropiación especifica
+      operationId: ArbolRubroApropiacionController.SaldoApropiacion
+      parameters:
+      - in: body
+        name: body
+        description: json de movimientos enviado desde el api_mid_financiera
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /arbol_rubro_apropiaciones/SaldoMovimiento/{idPsql}/{rubro}/{tipoMovimiento}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Devuelve el saldo de un CDP especifico
+      operationId: ArbolRubroApropiacionController.SaldoMovimiento
       parameters:
       - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
+        name: idPsql
+        description: idPsql del documento
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: rubro
+        description: código del rubro
+        required: true
+        type: string
+      - in: query
+        name: fuente
+        description: fuente de financiamiento
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /arbol_rubro_apropiacionesRegistrarApropiacionInicial/{vigencia}:
+    post:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Crear ArbolRubroApropiacion2018
+      operationId: ArbolRubroApropiacionController.RegistrarApropiacionInicial...
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de ApropiacionInicial
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+      responses:
+        "200":
+          description: '{int} ArbolRubroApropiacion2018.Id'
+        "403":
+          description: body is empty
+  /arbol_rubro_apropiacionesRegistrarMovimiento/{tipoPago}:
+    post:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
+        y los propaga tanto en la colección
+      operationId: ArbolRubroApropiacionController.RegistrarMovimiento
+      parameters:
+      - in: body
+        name: body
+        description: json de movimientos enviado desde el api_mid_financiera
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /fuente_financiamiento/:
+    post:
+      tags:
+      - fuente_financiamiento
+      description: create FuenteFinanciamiento
+      operationId: FuenteFinanciamientoController.Create
+      parameters:
+      - in: body
+        name: body
+        description: body for FuenteFinanciamiento content
+        required: true
+        schema:
+          $ref: '#/definitions/models.FuenteFinanciamiento'
+      responses:
+        "201":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.FuenteFinanciamiento'
+        "403":
+          description: body is empty
+  /fuente_financiamiento/{id}:
+    get:
+      tags:
+      - fuente_financiamiento
+      description: get FuenteFinanciamiento by id
+      operationId: FuenteFinanciamientoController.GetOne
+      parameters:
+      - in: path
+        name: id
+        description: The key for staticblock
         required: true
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
-          description: objectId is empty
+          description: :id is empty
 definitions:
-  .Candidato:
+  models.ArbolRubroApropiacion2018:
+    title: ArbolRubroApropiacion2018
     type: object
-  .Jornada:
+  models.ArbolRubros:
+    title: ArbolRubros
     type: object
-  .Object:
+    properties:
+      _id:
+        type: string
+      Descripcion:
+        type: string
+      Hijos:
+        type: array
+        items:
+          type: string
+      Id:
+        type: string
+      Nombre:
+        type: string
+      Padre:
+        type: string
+      UnidadEjecutora:
+        type: string
+  models.FuenteFinanciamiento:
+    title: FuenteFinanciamiento
     type: object
-  .User:
+  models.Object:
+    title: Object
+    type: object
+  models.Rubro:
+    title: Rubro
+    type: object
+  stringtrue:
+    title: stringtrue
+    type: object
+  "true":
+    title: "true"
     type: object
 tags:
-- name: jornada
+- name: arbol_rubro
   description: |
-    Operaciones Crud Jornada
-- name: candidato
+    ArbolRubrosController estructura para un controlador de beego
+- name: arbol_rubro_apropiaciones
   description: |
-    Operaciones Crud Candidato
+    ArbolRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego
+- name: fuente_financiamiento
+  description: |
+    FuenteFinanciamientoController operations for FuenteFinanciamiento

@@ -11,6 +11,7 @@ import (
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -337,6 +338,18 @@ func (j *ArbolRubrosController) ArbolRubro() {
 	}
 
 	j.ServeJSON()
+}
+
+// @Title FullArbolRubro
+// @Description Construye el árbol a un nivel dependiendo de la raíz
+// @Param body body stringtrue "Código de la raíz"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /FullArbolRubro/:unidadEjecutora [get]
+func (j *ArbolRubrosController) FullArbolRubro() {
+	ueStr := j.GetString(":unidadEjecutora")
+	tree := rubroHelper.BuildTree(ueStr)
+	j.Data["json"] = tree
 }
 
 func GetHijoRubro(id, ue string) map[string]interface{} {
