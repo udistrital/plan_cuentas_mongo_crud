@@ -57,7 +57,7 @@ func (c *FuenteFinanciamientoController) Post() {
 			}
 
 			valorOriginal := calcularValorOriginal(v["MovimientoFuenteFinanciamientoApropiacion"].([]interface{}))
-			err, op := crearFuenetPadre(infoFuente, valorOriginal)
+			err, op := crearFuentePadre(infoFuente, valorOriginal)
 			if err != nil {
 				panic(err)
 			}
@@ -70,7 +70,7 @@ func (c *FuenteFinanciamientoController) Post() {
 
 			RubrosAfecta := []map[string]interface{}{rubroAfecta}
 
-			movimiento := models.MovimientoCdp{
+			movimiento := models.Movimiento{
 				IDPsql:         "3",
 				RubrosAfecta:   RubrosAfecta,
 				ValorOriginal:  v["MovimientoFuenteFinanciamientoApropiacion"].([]interface{})[0].(map[string]interface{})["Valor"].(float64),
@@ -101,9 +101,9 @@ func (c *FuenteFinanciamientoController) Post() {
 	c.ServeJSON()
 }
 
-// crearFuenetPadre busca la fuente de financiamiento padre, en caso de que exista, devuelve vacio,
+// crearFuentePadre busca la fuente de financiamiento padre, en caso de que exista, devuelve vacio,
 // de lo contario devuelve un objeto de tipo transaccion con la información del registro de la fuente
-func crearFuenetPadre(informacionFuente map[string]interface{}, valorOriginal float64) (err error, op interface{}) {
+func crearFuentePadre(informacionFuente map[string]interface{}, valorOriginal float64) (err error, op interface{}) {
 	var tipoFuente string
 
 	session, err := db.GetSession()
@@ -132,7 +132,7 @@ func crearFuenetPadre(informacionFuente map[string]interface{}, valorOriginal fl
 	}
 	op, err = models.EstructaRegistroFuentePadreTransaccion(session, fuentePadre)
 	if err != nil {
-		fmt.Println("Error al creae estructura de fuente padre")
+		fmt.Println("Error al crearse estructura de fuente padre")
 		panic(err)
 	}
 	return

@@ -514,7 +514,7 @@ func registrarModifacionApr(dataValor map[string]interface{}) (err error) {
 
 			tipoMovimiento := value["TipoMovimiento"].(string)
 
-			modificacionApr := models.MovimientoCdp{
+			modificacionApr := models.Movimiento{
 				IDPsql:          strconv.Itoa(int(dataValor["Id"].(float64))),
 				Tipo:            tipoMovimiento,
 				Vigencia:        vigencia,
@@ -558,7 +558,7 @@ func crearCdp(dataMovimiento map[string]interface{}, unidadEjecutora, fechaRegis
 
 		rubrosAfecta["Valor"] = dataMovimiento["Valor"].(float64)
 		rubrosAfecta["Apropiacion"] = strconv.Itoa(int(dataMovimiento["Apropiacion"].(float64)))
-		cdp := models.MovimientoCdp{
+		cdp := models.Movimiento{
 			IDPsql:          strconv.Itoa(int(dataMovimiento["Disponibilidad"].(float64))),
 			Tipo:            "Cdp",
 			Vigencia:        vigencia,
@@ -727,7 +727,7 @@ func registrarDocumentoMovimiento(dataValor map[string]interface{}, total, mes s
 		for _, rubroAfecta := range dataValor["Afectacion"].([]interface{}) {
 			rubrosAfecta = append(rubrosAfecta, rubroAfecta.(map[string]interface{}))
 		}
-		movimiento := models.MovimientoCdp{
+		movimiento := models.Movimiento{
 			IDPsql:         strconv.Itoa(int(dataValor["Id"].(float64))),
 			RubrosAfecta:   rubrosAfecta,
 			Tipo:           tipoMovimiento,
@@ -754,7 +754,7 @@ func registrarDocumentoMovimiento(dataValor map[string]interface{}, total, mes s
 }
 
 // H
-func propagarValorMovimientos(documentoPadre string, Rp models.MovimientoCdp, tMovimiento string) (op []interface{}, err error) {
+func propagarValorMovimientos(documentoPadre string, Rp models.Movimiento, tMovimiento string) (op []interface{}, err error) {
 	session, _ := db.GetSession()
 	selectTipoMovimientoPadre(tMovimiento)
 	padre, _ := models.GetMovimientoByPsqlId(session, documentoPadre, tipoMovimientoPadre)
@@ -787,7 +787,7 @@ func propagarValorMovimientos(documentoPadre string, Rp models.MovimientoCdp, tM
 // Si el movimiento aún no tiene registrado el atributo tipoTotal, se crea y se le asigna el valor que viene del RP (el cual afectaria al CDP)
 // Si el movimiento ya tiene registrado el atributo tipoTotal, se modifica su valor sumándole el que viene del RP (el cual afectaria a los correspondientes rubros del CDP)
 // Finalmente los apuntadores son modificados y continuan su proceso en la función propagarValorMovimientos
-func afectacionWalk(Rp, Cdp *models.MovimientoCdp) {
+func afectacionWalk(Rp, Cdp *models.Movimiento) {
 	for _, rubroRp := range Rp.RubrosAfecta {
 		for i := 0; i < len(Cdp.RubrosAfecta); i++ {
 			if Cdp.RubrosAfecta[i]["Rubro"].(string) == rubroRp["Rubro"].(string) {
