@@ -1,10 +1,10 @@
 package models
 
 import (
-	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
 // FuenteFinaciamientoPadre ...
@@ -24,7 +24,7 @@ type FuenteMovimiento struct {
 	IDPsql            string  `json:"idpsql"`
 	Rubro             string  `json:"rubro"`
 	DependenciaIDPsql string  `json:"dependencia_idpsql"`
-	Saldo             float64 `json:"saldo"`
+	Valor             float64 `json:"valor"`
 }
 
 // ArbolRubroApropiacion2018Collection constante para la colección
