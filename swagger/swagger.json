@@ -773,7 +773,7 @@
         }
     },
     "definitions": {
-        "2260.0xc00031f860.false": {
+        "2028.0xc000335500.false": {
             "title": "false",
             "type": "object"
         },
@@ -829,7 +829,7 @@
                     "type": "string"
                 },
                 "tipo_fuente": {
-                    "$ref": "#/definitions/2260.0xc00031f860.false"
+                    "$ref": "#/definitions/2028.0xc000335500.false"
                 },
                 "unidad_ejecutora": {
                     "type": "integer",
