@@ -773,6 +773,10 @@
         }
     },
     "definitions": {
+        "2260.0xc00031f860.false": {
+            "title": "false",
+            "type": "object"
+        },
         "models.ArbolRubroApropiacion2018": {
             "title": "ArbolRubroApropiacion2018",
             "type": "object"
@@ -809,7 +813,37 @@
         },
         "models.FuenteFinanciamiento": {
             "title": "FuenteFinanciamiento",
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "descripcion": {
+                    "type": "string"
+                },
+                "idpsql": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "tipo_fuente": {
+                    "$ref": "#/definitions/2260.0xc00031f860.false"
+                },
+                "unidad_ejecutora": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "valor_acumulado": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "valor_original": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
         },
         "models.Object": {
             "title": "Object",
