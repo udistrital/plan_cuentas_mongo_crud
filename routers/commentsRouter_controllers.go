@@ -115,15 +115,6 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubroApropiacionController"],
-        beego.ControllerComments{
-            Method: "RegistrarMovimiento",
-            Router: `RegistrarMovimiento/:tipoPago`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ArbolRubrosController"],
         beego.ControllerComments{
             Method: "GetAll",
@@ -246,6 +237,15 @@ func init() {
             Method: "GetOne",
             Router: `/:id`,
             AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:MovimientosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:MovimientosController"],
+        beego.ControllerComments{
+            Method: "RegistrarMovimiento",
+            Router: `RegistrarMovimiento/:tipoPago`,
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

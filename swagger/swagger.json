@@ -683,34 +683,6 @@
                 }
             }
         },
-        "/arbol_rubro_apropiacionesRegistrarMovimiento/{tipoPago}": {
-            "post": {
-                "tags": [
-                    "arbol_rubro_apropiaciones"
-                ],
-                "description": "Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección",
-                "operationId": "ArbolRubroApropiacionController.RegistrarMovimiento",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "json de movimientos enviado desde el api_mid_financiera",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} success"
-                    },
-                    "403": {
-                        "description": "error"
-                    }
-                }
-            }
-        },
         "/fuente_financiamiento/": {
             "post": {
                 "tags": [
@@ -770,10 +742,38 @@
                     }
                 }
             }
+        },
+        "/movimientosRegistrarMovimiento/{tipoPago}": {
+            "post": {
+                "tags": [
+                    "movimientos"
+                ],
+                "description": "Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección",
+                "operationId": "MovimientosController.RegistrarMovimiento",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "json de movimientos enviado desde el api_mid_financiera",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "2028.0xc000335500.false": {
+        "1296.0xc0003ab170.false": {
             "title": "false",
             "type": "object"
         },
@@ -829,7 +829,7 @@
                     "type": "string"
                 },
                 "tipo_fuente": {
-                    "$ref": "#/definitions/2028.0xc000335500.false"
+                    "$ref": "#/definitions/1296.0xc0003ab170.false"
                 },
                 "unidad_ejecutora": {
                     "type": "integer",
@@ -874,6 +874,10 @@
         {
             "name": "fuente_financiamiento",
             "description": "FuenteFinanciamientoController operations for FuenteFinanciamiento\n"
+        },
+        {
+            "name": "movimientos",
+            "description": "MovimientosController estructura para un controlador de beego\n"
         }
     ]
 }
