@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/manucorporat/try"
@@ -451,183 +450,183 @@ var tipoMovimientoPadre string
 // @Success 200 {string} success
 // @Failure 403 error
 // @router RegistrarMovimiento/:tipoPago [post]
-func (j *ArbolRubroApropiacionController) RegistrarMovimiento() {
-	var dataValor map[string]interface{}
+// func (j *ArbolRubroApropiacionController) RegistrarMovimiento() {
+// 	var dataValor map[string]interface{}
 
-	try.This(func() {
+// 	try.This(func() {
 
-		if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataValor); err != nil {
-			panic(err.Error())
-		}
+// 		if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataValor); err != nil {
+// 			panic(err.Error())
+// 		}
 
-		switch tipoMovimiento = j.GetString(":tipoPago"); tipoMovimiento {
-		//rp
-		case "Cdp":
-			tipoTotal = "TotalComprometidoCdp"
-			tipoMovimientoPadre = "Apr"
-			registrarValores(dataValor, "total_cdp", "mes_cdp")
-		case "Rp":
-			tipoTotal = "TotalComprometidoRp"
-			tipoMovimientoPadre = "Cdp"
-			registrarValores(dataValor, "total_rp", "mes_rp")
-		case "AnulacionRp":
-			tipoTotal = "TotalAnuladoRp"
-			tipoMovimientoPadre = "Rp"
-			registrarValores(dataValor, "total_anulado_rp", "mes_anulado_rp")
-		case "AnulacionCdp":
-			tipoTotal = "TotalAnuladoCdp"
-			tipoMovimientoPadre = "Cdp"
-			registrarValores(dataValor, "total_anulado_cdp", "mes_anulado_cdp")
-		case "Adicion": //Adición a la apropiación inicial
-			tipoTotal = "AdicionApr"
-			tipoMovimientoPadre = ""
-			registrarValores(dataValor, "total_adicion", "mes_modificacion")
-		case "ModificacionApr": // traslado de apropiación
-			fmt.Println("Modificación de apropiación.....")
-			registrarModifacionApr(dataValor)
-		}
+// 		switch tipoMovimiento = j.GetString(":tipoPago"); tipoMovimiento {
+// 		//rp
+// 		case "Cdp":
+// 			tipoTotal = "TotalComprometidoCdp"
+// 			tipoMovimientoPadre = "Apr"
+// 			registrarValores(dataValor, "total_cdp", "mes_cdp")
+// 		case "Rp":
+// 			tipoTotal = "TotalComprometidoRp"
+// 			tipoMovimientoPadre = "Cdp"
+// 			registrarValores(dataValor, "total_rp", "mes_rp")
+// 		case "AnulacionRp":
+// 			tipoTotal = "TotalAnuladoRp"
+// 			tipoMovimientoPadre = "Rp"
+// 			registrarValores(dataValor, "total_anulado_rp", "mes_anulado_rp")
+// 		case "AnulacionCdp":
+// 			tipoTotal = "TotalAnuladoCdp"
+// 			tipoMovimientoPadre = "Cdp"
+// 			registrarValores(dataValor, "total_anulado_cdp", "mes_anulado_cdp")
+// 		case "Adicion": //Adición a la apropiación inicial
+// 			tipoTotal = "AdicionApr"
+// 			tipoMovimientoPadre = ""
+// 			registrarValores(dataValor, "total_adicion", "mes_modificacion")
+// 		case "ModificacionApr": // traslado de apropiación
+// 			fmt.Println("Modificación de apropiación.....")
+// 			registrarModifacionApr(dataValor)
+// 		}
 
-		j.Data["json"] = map[string]interface{}{"Type": "success"}
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error registrar movimiento: ", e)
-		j.Data["json"] = map[string]interface{}{"Type": "error"}
-	})
-	j.ServeJSON()
-}
+// 		j.Data["json"] = map[string]interface{}{"Type": "success"}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error registrar movimiento: ", e)
+// 		j.Data["json"] = map[string]interface{}{"Type": "error"}
+// 	})
+// 	j.ServeJSON()
+// }
 
-// De acuerdo a los valores que recibe, se hacen las modificaciones en el arbolrubroapropiacion
-// y también en la colección de movimientos
-// Parámetros: Recibe los valores correspondientes a la modificación, el mes correspondiente de la modificaicón
-func registrarModifacionApr(dataValor map[string]interface{}) (err error) {
-	var ops []interface{}
+// // De acuerdo a los valores que recibe, se hacen las modificaciones en el arbolrubroapropiacion
+// // y también en la colección de movimientos
+// // Parámetros: Recibe los valores correspondientes a la modificación, el mes correspondiente de la modificaicón
+// func registrarModifacionApr(dataValor map[string]interface{}) (err error) {
+// 	var ops []interface{}
 
-	try.This(func() {
-		unidadEjecutora := strconv.Itoa(int(dataValor["UnidadEjecutora"].(float64)))
-		fechaRegistro := dataValor["FechaMovimiento"].(string)
-		vigencia := strconv.Itoa(int(dataValor["Vigencia"].(float64)))
-		mes, _ := time.Parse("2006-01-02", fechaRegistro)
+// 	try.This(func() {
+// 		unidadEjecutora := strconv.Itoa(int(dataValor["UnidadEjecutora"].(float64)))
+// 		fechaRegistro := dataValor["FechaMovimiento"].(string)
+// 		vigencia := strconv.Itoa(int(dataValor["Vigencia"].(float64)))
+// 		mes, _ := time.Parse("2006-01-02", fechaRegistro)
 
-		opsApr := registrarValoresModf(dataValor["Afectacion"].([]interface{}), strconv.Itoa(int(mes.Month())), vigencia, unidadEjecutora)
+// 		opsApr := registrarValoresModf(dataValor["Afectacion"].([]interface{}), strconv.Itoa(int(mes.Month())), vigencia, unidadEjecutora)
 
-		for _, v := range dataValor["Afectacion"].([]interface{}) {
-			value := v.(map[string]interface{}) // Convierte el elemento v en un map[string]inerface{}, para evitar una conversión constante del mismo
+// 		for _, v := range dataValor["Afectacion"].([]interface{}) {
+// 			value := v.(map[string]interface{}) // Convierte el elemento v en un map[string]inerface{}, para evitar una conversión constante del mismo
 
-			tipoMovimiento := value["TipoMovimiento"].(string)
+// 			tipoMovimiento := value["TipoMovimiento"].(string)
 
-			modificacionApr := models.Movimiento{
-				IDPsql:          strconv.Itoa(int(dataValor["Id"].(float64))),
-				Tipo:            tipoMovimiento,
-				Vigencia:        vigencia,
-				DocumentoPadre:  strconv.Itoa(int(value["Apropiacion"].(float64))),
-				FechaRegistro:   fechaRegistro,
-				UnidadEjecutora: unidadEjecutora,
-			}
-			modificacionApr.RubrosAfecta = append(modificacionApr.RubrosAfecta, value)
+// 			modificacionApr := models.Movimiento{
+// 				IDPsql:          strconv.Itoa(int(dataValor["Id"].(float64))),
+// 				Tipo:            tipoMovimiento,
+// 				Vigencia:        vigencia,
+// 				DocumentoPadre:  strconv.Itoa(int(value["Apropiacion"].(float64))),
+// 				FechaRegistro:   fechaRegistro,
+// 				UnidadEjecutora: unidadEjecutora,
+// 			}
+// 			modificacionApr.RubrosAfecta = append(modificacionApr.RubrosAfecta, value)
 
-			session, _ := db.GetSession()
-			op, err := models.EstrctTransaccionMov(session, &modificacionApr)
-			if err != nil {
-				panic(err.Error())
-			}
-			ops = append(ops, op)
+// 			session, _ := db.GetSession()
+// 			op, err := models.EstrctTransaccionMov(session, &modificacionApr)
+// 			if err != nil {
+// 				panic(err.Error())
+// 			}
+// 			ops = append(ops, op)
 
-		}
-		ops = append(ops, opsApr...)
-		for i := range ops {
-			fmt.Println(ops[i], "\n......")
-		}
-		session, _ := db.GetSession()
-		err = models.RegistrarMovimiento(session, ops)
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error registrar modificación apropiación")
-		panic(e)
-	})
-	return err
-}
+// 		}
+// 		ops = append(ops, opsApr...)
+// 		for i := range ops {
+// 			fmt.Println(ops[i], "\n......")
+// 		}
+// 		session, _ := db.GetSession()
+// err = models.RegistrarMovimiento(session, ops)
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error registrar modificación apropiación")
+// 		panic(e)
+// 	})
+// 	return err
+// }
 
 // Crea un CDP para las modificaciones de apropiación inicial que lo necesitan
-func crearCdp(dataMovimiento map[string]interface{}, unidadEjecutora, fechaRegistro, vigencia string) (op interface{}) {
-	var err error // error handle variable
+// func crearCdp(dataMovimiento map[string]interface{}, unidadEjecutora, fechaRegistro, vigencia string) (op interface{}) {
+// 	var err error // error handle variable
 
-	try.This(func() {
-		rubrosAfecta := make(map[string]interface{})
-		rubrosAfecta["Rubro"] = dataMovimiento["CuentaCredito"].(string)
-		if dataMovimiento["TipoMovimiento"] == "Traslado" {
-			rubrosAfecta["Rubro"] = dataMovimiento["CuentaContraCredito"].(string)
-		}
+// 	try.This(func() {
+// 		rubrosAfecta := make(map[string]interface{})
+// 		rubrosAfecta["Rubro"] = dataMovimiento["CuentaCredito"].(string)
+// 		if dataMovimiento["TipoMovimiento"] == "Traslado" {
+// 			rubrosAfecta["Rubro"] = dataMovimiento["CuentaContraCredito"].(string)
+// 		}
 
-		rubrosAfecta["Valor"] = dataMovimiento["Valor"].(float64)
-		rubrosAfecta["Apropiacion"] = strconv.Itoa(int(dataMovimiento["Apropiacion"].(float64)))
-		cdp := models.Movimiento{
-			IDPsql:          strconv.Itoa(int(dataMovimiento["Disponibilidad"].(float64))),
-			Tipo:            "Cdp",
-			Vigencia:        vigencia,
-			DocumentoPadre:  "0",
-			FechaRegistro:   fechaRegistro,
-			UnidadEjecutora: unidadEjecutora,
-		}
-		cdp.RubrosAfecta = append(cdp.RubrosAfecta, rubrosAfecta)
+// 		rubrosAfecta["Valor"] = dataMovimiento["Valor"].(float64)
+// 		rubrosAfecta["Apropiacion"] = strconv.Itoa(int(dataMovimiento["Apropiacion"].(float64)))
+// 		cdp := models.Movimiento{
+// 			IDPsql:          strconv.Itoa(int(dataMovimiento["Disponibilidad"].(float64))),
+// 			Tipo:            "Cdp",
+// 			Vigencia:        vigencia,
+// 			DocumentoPadre:  "0",
+// 			FechaRegistro:   fechaRegistro,
+// 			UnidadEjecutora: unidadEjecutora,
+// 		}
+// 		cdp.RubrosAfecta = append(cdp.RubrosAfecta, rubrosAfecta)
 
-		session, _ := db.GetSession()
-		op, err = models.EstrctTransaccionMov(session, &cdp)
-		if err != nil {
-			panic(err.Error())
-		}
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error en crearCdp")
-		panic(e)
-	})
-	return
-}
+// 		session, _ := db.GetSession()
+// 		op, err = models.EstrctTransaccionMov(session, &cdp)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error en crearCdp")
+// 		panic(e)
+// 	})
+// 	return
+// }
 
-// Registrar valores de modificación en arbolrubroapropiacion
-func registrarValoresModf(dataModificacion []interface{}, mes, vigencia, ue string) (ops []interface{}) {
-	// var err error
-	nuevoValor := make(map[string]map[string]map[string]float64)
+// // Registrar valores de modificación en arbolrubroapropiacion
+// func registrarValoresModf(dataModificacion []interface{}, mes, vigencia, ue string) (ops []interface{}) {
+// 	// var err error
+// 	nuevoValor := make(map[string]map[string]map[string]float64)
 
-	try.This(func() {
+// 	try.This(func() {
 
-		for _, d := range dataModificacion {
-			data := d.(map[string]interface{})
-			data["Mes"] = mes
-			if nuevoValor[data["CuentaCredito"].(string)] == nil {
-				nuevoValor[data["CuentaCredito"].(string)] = make(map[string]map[string]float64)
-			}
+// 		for _, d := range dataModificacion {
+// 			data := d.(map[string]interface{})
+// 			data["Mes"] = mes
+// 			if nuevoValor[data["CuentaCredito"].(string)] == nil {
+// 				nuevoValor[data["CuentaCredito"].(string)] = make(map[string]map[string]float64)
+// 			}
 
-			if nuevoValor[data["CuentaCredito"].(string)][mes] == nil {
-				nuevoValor[data["CuentaCredito"].(string)][mes] = make(map[string]float64)
-			}
+// 			if nuevoValor[data["CuentaCredito"].(string)][mes] == nil {
+// 				nuevoValor[data["CuentaCredito"].(string)][mes] = make(map[string]float64)
+// 			}
 
-			if data["CuentaContraCredito"].(string) != "" && nuevoValor[data["CuentaContraCredito"].(string)] == nil {
-				nuevoValor[data["CuentaContraCredito"].(string)] = make(map[string]map[string]float64)
-			}
+// 			if data["CuentaContraCredito"].(string) != "" && nuevoValor[data["CuentaContraCredito"].(string)] == nil {
+// 				nuevoValor[data["CuentaContraCredito"].(string)] = make(map[string]map[string]float64)
+// 			}
 
-			if data["CuentaContraCredito"].(string) != "" && nuevoValor[data["CuentaContraCredito"].(string)][mes] == nil {
-				nuevoValor[data["CuentaContraCredito"].(string)][mes] = make(map[string]float64)
-			}
+// 			if data["CuentaContraCredito"].(string) != "" && nuevoValor[data["CuentaContraCredito"].(string)][mes] == nil {
+// 				nuevoValor[data["CuentaContraCredito"].(string)][mes] = make(map[string]float64)
+// 			}
 
-			if data["TipoMovimiento"].(string) != "Traslado" {
+// 			if data["TipoMovimiento"].(string) != "Traslado" {
 
-				formatModifGeneral(data, nuevoValor)
-			} else {
-				formatModifTraslado(data, nuevoValor)
-			}
-			beego.Debug(data["TipoMovimiento"], data["CuentaContraCredito"].(string), nuevoValor)
+// 				formatModifGeneral(data, nuevoValor)
+// 			} else {
+// 				formatModifTraslado(data, nuevoValor)
+// 			}
+// 			beego.Debug(data["TipoMovimiento"], data["CuentaContraCredito"].(string), nuevoValor)
 
-		}
-		for k, v := range nuevoValor {
-			op, err := prograpacionValores(k, mes, vigencia, ue, v[mes])
-			if err != nil {
-				panic(err.Error())
-			}
-			ops = append(ops, op...)
-		}
-	}).Catch(func(e try.E) {
-		beego.Error("catch error en registrarValoresModificaciones")
-		panic(e)
-	})
-	return
-}
+// 		}
+// 		for k, v := range nuevoValor {
+// 			op, err := prograpacionValores(k, mes, vigencia, ue, v[mes])
+// 			if err != nil {
+// 				panic(err.Error())
+// 			}
+// 			ops = append(ops, op...)
+// 		}
+// 	}).Catch(func(e try.E) {
+// 		beego.Error("catch error en registrarValoresModificaciones")
+// 		panic(e)
+// 	})
+// 	return
+// }
 
 // Formatea las modificaciones de tipo: reducción, adición, suspensión
 func formatModifGeneral(data map[string]interface{}, res map[string]map[string]map[string]float64) {
@@ -661,124 +660,124 @@ func formatModifTraslado(data map[string]interface{}, res map[string]map[string]
 // se instancia un nuevo atributo para que tenga esos valores, luego se guardan los valores enviados desde el api_mid_finciera en la variable nuevoValor y se envian
 // como parametro para la función propagarValores, la cuál propaga los valores en el arbolrubrosapropiaciones, devolviendo un arrreglo de interfaces op
 // Para la transacción que se llevará acabo
-func registrarValores(dataValor map[string]interface{}, total, mes string) (err error) {
-	try.This(func() {
+// func registrarValores(dataValor map[string]interface{}, total, mes string) (err error) {
+// 	try.This(func() {
 
-		var (
-			op  []interface{} // operación para la transacción
-			ops []interface{} // todas las operaciones de la transacción
-		)
+// 		var (
+// 			op  []interface{} // operación para la transacción
+// 			ops []interface{} // todas las operaciones de la transacción
+// 		)
 
-		for _, v := range dataValor["Afectacion"].([]interface{}) {
-			rubro := v.(map[string]interface{})["Rubro"].(string)
-			unidadEjecutora := v.(map[string]interface{})["UnidadEjecutora"].(string)
-			vigencia := dataValor["Vigencia"].(string)
+// 		for _, v := range dataValor["Afectacion"].([]interface{}) {
+// 			rubro := v.(map[string]interface{})["Rubro"].(string)
+// 			unidadEjecutora := v.(map[string]interface{})["UnidadEjecutora"].(string)
+// 			vigencia := dataValor["Vigencia"].(string)
 
-			session, _ := db.GetSession()
+// 			session, _ := db.GetSession()
 
-			rubroApropiacion, err := models.GetArbolRubroApropiacionById(session, rubro, unidadEjecutora, vigencia)
+// 			rubroApropiacion, err := models.GetArbolRubroApropiacionById(session, rubro, unidadEjecutora, vigencia)
 
-			if err != nil {
-				panic(err.Error())
-			}
+// 			if err != nil {
+// 				panic(err.Error())
+// 			}
 
-			nuevoValor := make(map[string]float64)
+// 			nuevoValor := make(map[string]float64)
 
-			if len(rubroApropiacion.Movimientos) == 0 {
-				rubroApropiacion.Movimientos = make(map[string]map[string]float64)
-				rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] = make(map[string]float64)
-			}
+// 			if len(rubroApropiacion.Movimientos) == 0 {
+// 				rubroApropiacion.Movimientos = make(map[string]map[string]float64)
+// 				rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] = make(map[string]float64)
+// 			}
 
-			if rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] == nil {
-				rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] = make(map[string]float64)
-			}
+// 			if rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] == nil {
+// 				rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)] = make(map[string]float64)
+// 			}
 
-			nuevoValor[mes] = v.(map[string]interface{})["Valor"].(float64)
-			nuevoValor[total] = v.(map[string]interface{})["Valor"].(float64)
+// 			nuevoValor[mes] = v.(map[string]interface{})["Valor"].(float64)
+// 			nuevoValor[total] = v.(map[string]interface{})["Valor"].(float64)
 
-			rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)][mes] = v.(map[string]interface{})["Valor"].(float64)
-			rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)][total] += v.(map[string]interface{})["Valor"].(float64)
+// 			rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)][mes] = v.(map[string]interface{})["Valor"].(float64)
+// 			rubroApropiacion.Movimientos[dataValor["MesRegistro"].(string)][total] += v.(map[string]interface{})["Valor"].(float64)
 
-			ops, err = prograpacionValores(rubroApropiacion.Id, dataValor["MesRegistro"].(string), vigencia, unidadEjecutora, nuevoValor)
-			if err != nil {
-				panic(err.Error())
-			}
-		}
+// 			ops, err = prograpacionValores(rubroApropiacion.Id, dataValor["MesRegistro"].(string), vigencia, unidadEjecutora, nuevoValor)
+// 			if err != nil {
+// 				panic(err.Error())
+// 			}
+// 		}
 
-		op, err = registrarDocumentoMovimiento(dataValor, total, mes)
+// 		op, err = registrarDocumentoMovimiento(dataValor, total, mes)
 
-		ops = append(ops, op...)
+// 		ops = append(ops, op...)
 
-		session, _ := db.GetSession()
-		models.RegistrarMovimiento(session, ops)
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error registrar valores: ", e)
-		panic(e)
-	})
-	return err
-}
+// 		session, _ := db.GetSession()
+// 		models.RegistrarMovimiento(session, ops)
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error registrar valores: ", e)
+// 		panic(e)
+// 	})
+// 	return err
+// }
 
-func registrarDocumentoMovimiento(dataValor map[string]interface{}, total, mes string) (ops []interface{}, err error) {
-	try.This(func() {
-		var rubrosAfecta []map[string]interface{}
+// func registrarDocumentoMovimiento(dataValor map[string]interface{}, total, mes string) (ops []interface{}, err error) {
+// 	try.This(func() {
+// 		var rubrosAfecta []map[string]interface{}
 
-		documentoPadre, _ := dataValor["Disponibilidad"].(float64)
+// 		documentoPadre, _ := dataValor["Disponibilidad"].(float64)
 
-		for _, rubroAfecta := range dataValor["Afectacion"].([]interface{}) {
-			rubrosAfecta = append(rubrosAfecta, rubroAfecta.(map[string]interface{}))
-		}
-		movimiento := models.Movimiento{
-			IDPsql:         strconv.Itoa(int(dataValor["Id"].(float64))),
-			RubrosAfecta:   rubrosAfecta,
-			Tipo:           tipoMovimiento,
-			Vigencia:       dataValor["Vigencia"].(string),
-			DocumentoPadre: strconv.Itoa(int(documentoPadre)), // si el documento padre esta vacio (no tiene) el valor guardado es 0 (?)
-		}
-		session, _ := db.GetSession()
-		op, err := models.EstrctTransaccionMov(session, &movimiento)
-		if err != nil {
-			panic(err.Error())
-		}
-		ops = append(ops, op)
+// 		for _, rubroAfecta := range dataValor["Afectacion"].([]interface{}) {
+// 			rubrosAfecta = append(rubrosAfecta, rubroAfecta.(map[string]interface{}))
+// 		}
+// 		movimiento := models.Movimiento{
+// 			IDPsql:         strconv.Itoa(int(dataValor["Id"].(float64))),
+// 			RubrosAfecta:   rubrosAfecta,
+// 			Tipo:           tipoMovimiento,
+// 			Vigencia:       dataValor["Vigencia"].(string),
+// 			DocumentoPadre: strconv.Itoa(int(documentoPadre)), // si el documento padre esta vacio (no tiene) el valor guardado es 0 (?)
+// 		}
+// 		session, _ := db.GetSession()
+// 		op, err := models.EstrctTransaccionMov(session, &movimiento)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		ops = append(ops, op)
 
-		opp, err := propagarValorMovimientos(movimiento.DocumentoPadre, movimiento, tipoMovimiento) // opp son los movimientos a propagar en la tx de mongodb
-		ops = append(ops, opp...)
-		if err != nil {
-			panic(err.Error())
-		}
-	}).Catch(func(e try.E) {
-		fmt.Println("error en registrar RP ", e)
-		panic(e)
-	})
-	return ops, err
-}
+// 		opp, err := propagarValorMovimientos(movimiento.DocumentoPadre, movimiento, tipoMovimiento) // opp son los movimientos a propagar en la tx de mongodb
+// 		ops = append(ops, opp...)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("error en registrar RP ", e)
+// 		panic(e)
+// 	})
+// 	return ops, err
+// }
 
 // H
-func propagarValorMovimientos(documentoPadre string, Rp models.Movimiento, tMovimiento string) (op []interface{}, err error) {
-	session, _ := db.GetSession()
-	selectTipoMovimientoPadre(tMovimiento)
-	padre, _ := models.GetMovimientoByPsqlId(session, documentoPadre, tipoMovimientoPadre)
+// func propagarValorMovimientos(documentoPadre string, Rp models.Movimiento, tMovimiento string) (op []interface{}, err error) {
+// 	session, _ := db.GetSession()
+// 	selectTipoMovimientoPadre(tMovimiento)
+// 	padre, _ := models.GetMovimientoByPsqlId(session, documentoPadre, tipoMovimientoPadre)
 
-	if padre != nil {
-		afectacionWalk(&Rp, padre)
+// 	if padre != nil {
+// 		afectacionWalk(&Rp, padre)
 
-		session, _ = db.GetSession()
-		opM, err := models.EstrctUpdateTransaccionMov(session, padre) //opM es la tx del movimiento a actualizar
-		if err != nil {
-			panic(err.Error())
-		}
+// 		session, _ = db.GetSession()
+// 		opM, err := models.EstrctUpdateTransaccionMov(session, padre) //opM es la tx del movimiento a actualizar
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
 
-		op = append(op, opM)
-		opp, err := propagarValorMovimientos(padre.DocumentoPadre, Rp, tipoMovimientoPadre)
-		if err != nil {
-			panic(err.Error())
-		}
-		op = append(op, opp...)
+// 		op = append(op, opM)
+// 		opp, err := propagarValorMovimientos(padre.DocumentoPadre, Rp, tipoMovimientoPadre)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		op = append(op, opp...)
 
-	}
+// 	}
 
-	return
-}
+// 	return
+// }
 
 // afectacionWalk itera en todos los elementos de RubrosAfecta del apuntador rp, y luego itera en todos los elementos de RubroAfecta del apuntador RP
 // hasta encontrar los elementos que el movimiento de tipo RP afecta al CDP, en este punto se pueden dar dos acciones dependiendo de la variable tipoTotal:
