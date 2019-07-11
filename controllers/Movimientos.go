@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors/movimientoCompositor"
-	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 
 	"github.com/astaxie/beego"
@@ -22,31 +21,25 @@ type MovimientosController struct {
 // arbolrubrosapropiacion_[vigencia]_[unidad_ejecutura], como en la colección movimientos. Utiliza la función registrarValores para registrar los valores,
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
-// @Param	body		body 	models.Object true "json de movimientos enviado desde el api_mid_financiera"
+// @Param	body		body 	[]models.Object true "json de movimientos enviado desde el api_mid_financiera"
 // @Success 200 {string} success
 // @Failure 403 error
-// @router RegistrarMovimiento/:tipoPago [post]
+// @router RegistrarMovimientos/ [post]
 func (j *MovimientosController) RegistrarMovimiento() {
 
 	var (
-		tipo           string
-		movimientoData models.Movimiento
-		requestData    map[string]interface{}
+		movimientoData []models.Movimiento
 	)
-
-	tipo = j.GetString(":tipoPago")
 
 	defer func() {
 		j.Data["json"] = movimientoData
 	}()
 
-	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &requestData); err != nil {
+	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &movimientoData); err != nil {
 		logManager.LogError(err.Error())
 		panic(err.Error())
 	}
 
-	movimientoData = movimientoHelper.FormatMovimientoRequestData(requestData, tipo)
-
-	movimientoCompositor.AddMovimientoTransaction(movimientoData)
+	movimientoCompositor.AddMovimientoTransaction(movimientoData...)
 
 }

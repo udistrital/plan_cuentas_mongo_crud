@@ -1,58 +1,54 @@
 package movimientoCompositor
 
 import (
-	"strconv"
-	"time"
-
-	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
-
-	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/apropiacionHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
 // AddMovimientoTransaction ... Add Movimiento's document to mongo db and it's afectation
 // over the apropiation's tree.
-func AddMovimientoTransaction(movimientoData models.Movimiento) {
+func AddMovimientoTransaction(movimientoData ...models.Movimiento) {
 	var (
-		ops   []interface{}
-		month string
-		year  string
+		ops []interface{}
+		// month string
+		// year  string
 	)
 
-	layout := "2006-01-02T15:04:05.000Z"
-	t, err := time.Parse(layout, movimientoData.FechaRegistro)
+	// layout := "2006-01-02T15:04:05.000Z"
+	// t, err := time.Parse(layout, movimientoData.FechaRegistro)
 
-	if err != nil {
-		logManager.LogError(err.Error())
-		panic(err.Error())
+	// if err != nil {
+	// 	logManager.LogError(err.Error())
+	// 	panic(err.Error())
+	// }
+
+	// month = strconv.Itoa(int(t.Month()))
+	// year = strconv.Itoa(int(t.Year()))
+
+	for _, element := range movimientoData {
+		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, element)
+		ops = append(ops, opMov)
 	}
 
-	month = strconv.Itoa(int(t.Month()))
-	year = strconv.Itoa(int(t.Year()))
+	// afectacionMap := make(map[string]map[string]float64)
 
-	opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, movimientoData)
-	ops = append(ops, opMov)
+	// for _, afect := range movimientoData.Afectacion {
 
-	afectacionMap := make(map[string]map[string]float64)
+	// 	if afectacionMap[afect["Codigo"].(string)] == nil {
+	// 		afectacionMap[afect["Codigo"].(string)] = make(map[string]float64)
+	// 	}
 
-	for _, afect := range movimientoData.RubrosAfecta {
+	// 	afectacionMap[afect["Codigo"].(string)][afect["Tipo"].(string)] += afect["Valor"].(float64)
+	// }
 
-		if afectacionMap[afect["Codigo"].(string)] == nil {
-			afectacionMap[afect["Codigo"].(string)] = make(map[string]float64)
-		}
-
-		afectacionMap[afect["Codigo"].(string)][afect["Tipo"].(string)] += afect["Valor"].(float64)
-	}
-
-	for k, v := range afectacionMap {
-		op, err := apropiacionHelper.PropagacionValores(k, month, year, strconv.Itoa(movimientoData.UnidadEjecutora), v)
-		if err != nil {
-			logManager.LogError(err.Error())
-			panic(err.Error())
-		}
-		ops = append(ops, op...)
-	}
+	// for k, v := range afectacionMap {
+	// 	op, err := apropiacionHelper.PropagacionValores(k, month, year, strconv.Itoa(movimientoData.UnidadEjecutora), v)
+	// 	if err != nil {
+	// 		logManager.LogError(err.Error())
+	// 		panic(err.Error())
+	// 	}
+	// 	ops = append(ops, op...)
+	// }
 
 	transactionManager.RunTransaction(models.MovimientosCollection, ops)
 

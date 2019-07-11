@@ -29,7 +29,7 @@ func init() {
 				&controllers.FuenteFinanciamientoController{},
 			),
 		),
-		beego.NSNamespace("/movimientos",
+		beego.NSNamespace("/movimiento",
 			beego.NSInclude(
 				&controllers.MovimientosController{},
 			),

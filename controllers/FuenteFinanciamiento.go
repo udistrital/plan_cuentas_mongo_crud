@@ -76,11 +76,11 @@ func (c *FuenteFinanciamientoController) Post() {
 		// 	"Dedepencia": int(v["Dependencia"].(float64)),
 		// }
 
-		// RubrosAfecta := []map[string]interface{}{rubroAfecta}
+		// Afectacion := []map[string]interface{}{rubroAfecta}
 
 		// movimiento := models.Movimiento{
 		// 	IDPsql:         "3",
-		// 	RubrosAfecta:   RubrosAfecta,
+		// 	Afectacion:   Afectacion,
 		// 	ValorOriginal:  v["MovimientoFuenteFinanciamientoApropiacion"].([]interface{})[0].(map[string]interface{})["Valor"].(float64),
 		// 	Tipo:           "fuente_financiamiento_" + v["MovimientoFuenteFinanciamientoApropiacion"].([]interface{})[0].(map[string]interface{})["TipoMovimiento"].(map[string]interface{})["Nombre"].(string),
 		// 	Vigencia:       "2018",
