@@ -9,34 +9,22 @@ import (
 
 // FuenteFinanciamiento ...
 type FuenteFinanciamiento struct {
-	ID              string      `json:"_id" bson:"_id,omitempty"`
-	UnidadEjecutora int         `json:"unidad_ejecutora"`
-	Descripcion     string      `json:"descripcion"`
-	IDPsql          int         `json:"idpsql"`
-	Nombre          string      `json:"nombre"`
-	TipoFuente      interface{} `json:"tipo_fuente"`
-	ValorOriginal   float64     `json:"valor_original"`
-	ValorAcumulado  float64     `json:"valor_acumulado"`
-}
-
-// FuenteMovimiento ...
-type FuenteMovimiento struct {
-	ID                string  `orm:"size(128)"`
-	IDPsql            string  `json:"idpsql"`
-	Rubro             string  `json:"rubro"`
-	DependenciaIDPsql string  `json:"dependencia_idpsql"`
-	ValorAcumulado    float64 `json:"valor_acumulado"`
+	*General
+	// UnidadEjecutora int         `json:"unidad_ejecutora"`
+	TipoFuente    interface{} `json:"TipoFuente"`
+	ValorOriginal float64     `json:"ValorOriginal"`
+	// ValorAcumulado float64     `json:"ValorAcumulado"`
+	Rubros []map[string]interface{} `json:"Rubros"`
 }
 
 // ArbolRubroApropiacion2018Collection constante para la colección
 const fuenteFinanciamiento = "fuente_financiamiento"
-const fuenteMovimiento = "fuente_movimiento"
 
-// InsertFuenteMovimiento función para registrar un documento de tipo fuente_movimiento
-func InsertFuenteMovimiento(session *mgo.Session, j *FuenteMovimiento) {
-	c := db.Cursor(session, fuenteFinanciamiento)
-	c.Insert(&j)
-}
+// // InsertFuenteMovimiento función para registrar un documento de tipo fuente_movimiento
+// func InsertFuenteMovimiento(session *mgo.Session, j *FuenteMovimiento) {
+// 	c := db.Cursor(session, fuenteFinanciamiento)
+// 	c.Insert(&j)
+// }
 
 // InsertFuentFinanciamientoPadre función para registrar un documento de tipo fuente_financiamiento
 func InsertFuentFinanciamientoPadre(session *mgo.Session, j *FuenteFinanciamiento) {

@@ -16,71 +16,71 @@ paths:
       tags:
       - arbol_rubro
       description: get all objects
-      operationId: ArbolRubrosController.GetAll
+      operationId: NodoRubroController.GetAll
       responses:
         "200":
-          description: ArbolRubros models.ArbolRubros
+          description: NodoRubro models.NodoRubro
         "403":
           description: :objectId is empty
     post:
       tags:
       - arbol_rubro
-      description: Crear ArbolRubros
-      operationId: ArbolRubrosController.Crear ArbolRubros
+      description: Crear NodoRubro
+      operationId: NodoRubroController.Crear NodoRubro
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubros
+        description: Body para la creacion de NodoRubro
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubros'
+          $ref: '#/definitions/models.NodoRubro'
       responses:
         "200":
-          description: '{int} ArbolRubros.Id'
+          description: '{int} NodoRubro.Id'
         "403":
           description: body is empty
     options:
       tags:
       - arbol_rubro
-      description: Crear ArbolRubros
-      operationId: ArbolRubrosController.Preflight options
+      description: Crear NodoRubro
+      operationId: NodoRubroController.Preflight options
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubros
+        description: Body para la creacion de NodoRubro
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubros'
+          $ref: '#/definitions/models.NodoRubro'
       responses:
         "200":
-          description: '{int} ArbolRubros.Id'
+          description: '{int} NodoRubro.Id'
         "403":
           description: body is empty
   /arbol_rubro/{id}:
     get:
       tags:
       - arbol_rubro
-      description: get ArbolRubros by nombre
-      operationId: ArbolRubrosController.Get
+      description: get NodoRubro by nombre
+      operationId: NodoRubroController.Get
       parameters:
       - in: path
         name: nombre
-        description: El nombre de la ArbolRubros a consultar
+        description: El nombre de la NodoRubro a consultar
         required: true
         type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.ArbolRubros'
+            $ref: '#/definitions/models.NodoRubro'
         "403":
           description: :uid is empty
   /arbol_rubro/{objectId}:
     put:
       tags:
       - arbol_rubro
-      description: update the ArbolRubros
-      operationId: ArbolRubrosController.Update
+      description: update the NodoRubro
+      operationId: NodoRubroController.Update
       parameters:
       - in: path
         name: objectId
@@ -103,8 +103,8 @@ paths:
     delete:
       tags:
       - arbol_rubro
-      description: Borrar ArbolRubros
-      operationId: ArbolRubrosController.Borrar ArbolRubros
+      description: Borrar NodoRubro
+      operationId: NodoRubroController.Borrar NodoRubro
       parameters:
       - in: path
         name: objectId
@@ -119,18 +119,18 @@ paths:
     options:
       tags:
       - arbol_rubro
-      description: Crear ArbolRubros
-      operationId: ArbolRubrosController.Preflight options
+      description: Crear NodoRubro
+      operationId: NodoRubroController.Preflight options
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubros
+        description: Body para la creacion de NodoRubro
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubros'
+          $ref: '#/definitions/models.NodoRubro'
       responses:
         "200":
-          description: '{int} ArbolRubros.Id'
+          description: '{int} NodoRubro.Id'
         "403":
           description: body is empty
   /arbol_rubro/ArbolRubro/{raiz}/{unidadEjecutora}:
@@ -138,7 +138,7 @@ paths:
       tags:
       - arbol_rubro
       description: Construye el árbol a un nivel dependiendo de la raíz
-      operationId: ArbolRubrosController.Preflight options
+      operationId: NodoRubroController.Preflight options
       parameters:
       - in: body
         name: body
@@ -157,7 +157,7 @@ paths:
       tags:
       - arbol_rubro
       description: Construye el árbol a un nivel dependiendo de la raíz
-      operationId: ArbolRubrosController.FullArbolRubro
+      operationId: NodoRubroController.FullArbolRubro
       parameters:
       - in: body
         name: body
@@ -176,7 +176,7 @@ paths:
       tags:
       - arbol_rubro
       description: RaicesArbol
-      operationId: ArbolRubrosController.RaicesArbol
+      operationId: NodoRubroController.RaicesArbol
       parameters:
       - in: body
         name: body
@@ -196,7 +196,7 @@ paths:
       tags:
       - arbol_rubro
       description: recibe el idPsql del rubro desde api mid para eliminar el rubro
-      operationId: ArbolRubrosController.Eliminar rubro
+      operationId: NodoRubroController.Eliminar rubro
       parameters:
       - in: interface{}
         name: body
@@ -214,7 +214,7 @@ paths:
       - arbol_rubro
       description: Convierte la estructura del api mid para registrarla en un documento
         mongo
-      operationId: ArbolRubrosController.Registra rubro
+      operationId: NodoRubroController.Registra rubro
       parameters:
       - in: interface{}
         name: body
@@ -230,45 +230,45 @@ paths:
     options:
       tags:
       - arbol_rubro_apropiaciones
-      description: Crear ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.Preflight options
+      description: Crear NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Preflight options
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubroApropiacion2018
+        description: Body para la creacion de NodoRubroApropiacion2018
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
       responses:
         "200":
-          description: '{int} ArbolRubroApropiacion2018.Id'
+          description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
   /arbol_rubro_apropiaciones/{id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
       - arbol_rubro_apropiaciones
-      description: get ArbolRubroApropiacion2018 by nombre
-      operationId: ArbolRubroApropiacionController.Get
+      description: get NodoRubroApropiacion2018 by nombre
+      operationId: NodoRubroApropiacionController.Get
       parameters:
       - in: path
         name: nombre
-        description: El nombre de la ArbolRubroApropiacion2018 a consultar
+        description: El nombre de la NodoRubroApropiacion2018 a consultar
         required: true
         type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+            $ref: '#/definitions/models.NodoRubroApropiacion2018'
         "403":
           description: :uid is empty
   /arbol_rubro_apropiaciones/{objectId}:
     delete:
       tags:
       - arbol_rubro_apropiaciones
-      description: Borrar ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.Delete ArbolRubroApropiacion2018
+      description: Borrar NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Delete NodoRubroApropiacion2018
       parameters:
       - in: path
         name: objectId
@@ -283,26 +283,26 @@ paths:
     options:
       tags:
       - arbol_rubro_apropiaciones
-      description: Crear ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.Preflight options
+      description: Crear NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Preflight options
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubroApropiacion2018
+        description: Body para la creacion de NodoRubroApropiacion2018
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
       responses:
         "200":
-          description: '{int} ArbolRubroApropiacion2018.Id'
+          description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
   /arbol_rubro_apropiaciones/{objectId}/{vigencia}/{unidadEjecutora}:
     put:
       tags:
       - arbol_rubro_apropiaciones
-      description: update the ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.Update
+      description: update the NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Update
       parameters:
       - in: path
         name: objectId
@@ -327,27 +327,27 @@ paths:
       tags:
       - arbol_rubro_apropiaciones
       description: get all objects
-      operationId: ArbolRubroApropiacionController.GetAll
+      operationId: NodoRubroApropiacionController.GetAll
       responses:
         "200":
-          description: ArbolRubroApropiacion models.ArbolRubroApropiacion
+          description: NodoRubroApropiacion models.NodoRubroApropiacion
         "403":
           description: :objectId is empty
     post:
       tags:
       - arbol_rubro_apropiaciones
-      description: Crear ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.Crear ArbolRubroApropiacion2018
+      description: Crear NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Crear NodoRubroApropiacion2018
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubroApropiacion2018
+        description: Body para la creacion de NodoRubroApropiacion2018
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
       responses:
         "200":
-          description: '{int} ArbolRubroApropiacion2018.Id'
+          description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
   /arbol_rubro_apropiaciones/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}:
@@ -355,14 +355,14 @@ paths:
       tags:
       - arbol_rubro_apropiaciones
       description: Devuelve un nivel del árbol de apropiaciones
-      operationId: ArbolRubroApropiacionController.Preflight ArbolApropiacion
+      operationId: NodoRubroApropiacionController.Preflight ArbolApropiacion
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de ArbolRubroApropiacion2018
+        description: Body para la creacion de NodoRubroApropiacion2018
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
       responses:
         "200":
           description: ""
@@ -375,7 +375,7 @@ paths:
       tags:
       - arbol_rubro_apropiaciones
       description: RaicesArbolApropiacion
-      operationId: ArbolRubroApropiacionController.RaicesArbolApropiacion
+      operationId: NodoRubroApropiacionController.RaicesArbolApropiacion
       responses:
         "200":
           description: ""
@@ -388,7 +388,7 @@ paths:
       tags:
       - arbol_rubro_apropiaciones
       description: Devuelve el saldo de una apropiación especifica
-      operationId: ArbolRubroApropiacionController.SaldoApropiacion
+      operationId: NodoRubroApropiacionController.SaldoApropiacion
       parameters:
       - in: body
         name: body
@@ -406,7 +406,7 @@ paths:
       tags:
       - arbol_rubro_apropiaciones
       description: Devuelve el saldo de un CDP especifico
-      operationId: ArbolRubroApropiacionController.SaldoMovimiento
+      operationId: NodoRubroApropiacionController.SaldoMovimiento
       parameters:
       - in: path
         name: idPsql
@@ -432,18 +432,18 @@ paths:
     post:
       tags:
       - arbol_rubro_apropiaciones
-      description: Crear ArbolRubroApropiacion2018
-      operationId: ArbolRubroApropiacionController.RegistrarApropiacionInicial...
+      description: Crear NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.RegistrarApropiacionInicial...
       parameters:
       - in: body
         name: body
         description: Body para la creacion de ApropiacionInicial
         required: true
         schema:
-          $ref: '#/definitions/models.ArbolRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
       responses:
         "200":
-          description: '{int} ArbolRubroApropiacion2018.Id'
+          description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
   /arbol_rubro_apropiacionesRegistrarMovimiento/{tipoPago}:
@@ -452,7 +452,7 @@ paths:
       - arbol_rubro_apropiaciones
       description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
         y los propaga tanto en la colección
-      operationId: ArbolRubroApropiacionController.RegistrarMovimiento
+      operationId: NodoRubroApropiacionController.RegistrarMovimiento
       parameters:
       - in: body
         name: body
@@ -485,76 +485,57 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/{id}:
-    get:
-      tags:
-      - fuente_financiamiento
-      description: get FuenteFinanciamiento by id
-      operationId: FuenteFinanciamientoController.GetOne
-      parameters:
-      - in: path
-        name: id
-        description: The key for staticblock
-        required: true
-        type: string
-      responses:
-        "200":
-          description: ""
-          schema:
-            $ref: '#/definitions/models.FuenteFinanciamiento'
-        "403":
-          description: :id is empty
 definitions:
-  2028.0xc000335500.false:
+  10312.0xc00044f0e0.false:
     title: "false"
     type: object
-  models.ArbolRubroApropiacion2018:
-    title: ArbolRubroApropiacion2018
+  12677.string.float64:
+    title: float64
     type: object
-  models.ArbolRubros:
-    title: ArbolRubros
+  models.FuenteFinanciamiento:
+    title: FuenteFinanciamiento
+    type: object
+    properties:
+      Rubros:
+        $ref: '#/definitions/map[string][10470.0xc00044f110.false]'
+      TipoFuente:
+        $ref: '#/definitions/10312.0xc00044f0e0.false'
+      ValorOriginal:
+        type: number
+        format: double
+  models.General:
+    title: General
     type: object
     properties:
       _id:
         type: string
       Descripcion:
         type: string
+      IdPsql:
+        type: integer
+        format: int64
+      Movimientos:
+        $ref: '#/definitions/12677.string.float64'
+      Nombre:
+        type: string
+      Vigencia:
+        type: integer
+        format: int64
+  models.NodoRubro:
+    title: NodoRubro
+    type: object
+    properties:
       Hijos:
         type: array
         items:
           type: string
-      Id:
-        type: string
-      Nombre:
-        type: string
       Padre:
         type: string
       UnidadEjecutora:
         type: string
-  models.FuenteFinanciamiento:
-    title: FuenteFinanciamiento
+  models.NodoRubroApropiacion2018:
+    title: NodoRubroApropiacion2018
     type: object
-    properties:
-      _id:
-        type: string
-      descripcion:
-        type: string
-      idpsql:
-        type: integer
-        format: int64
-      nombre:
-        type: string
-      tipo_fuente:
-        $ref: '#/definitions/2028.0xc000335500.false'
-      unidad_ejecutora:
-        type: integer
-        format: int64
-      valor_acumulado:
-        type: number
-        format: double
-      valor_original:
-        type: number
-        format: double
   models.Object:
     title: Object
     type: object
@@ -570,10 +551,10 @@ definitions:
 tags:
 - name: arbol_rubro
   description: |
-    ArbolRubrosController estructura para un controlador de beego
+    NodoRubroController estructura para un controlador de beego
 - name: arbol_rubro_apropiaciones
   description: |
-    ArbolRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego
+    NodoRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego
 - name: fuente_financiamiento
   description: |
     FuenteFinanciamientoController operations for FuenteFinanciamiento

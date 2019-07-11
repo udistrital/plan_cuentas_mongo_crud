@@ -15,18 +15,18 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-// ArbolRubrosController estructura para un controlador de beego
-type ArbolRubrosController struct {
+// NodoRubroController estructura para un controlador de beego
+type NodoRubroController struct {
 	beego.Controller
 }
 
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 ArbolRubros models.ArbolRubros
+// @Success 200 NodoRubro models.NodoRubro
 // @Failure 403 :objectId is empty
 // @router / [get]
-func (j *ArbolRubrosController) GetAll() {
+func (j *NodoRubroController) GetAll() {
 	session, _ := db.GetSession()
 
 	var query = make(map[string]interface{})
@@ -50,7 +50,7 @@ func (j *ArbolRubrosController) GetAll() {
 		}
 	}
 
-	obs := models.GetAllArbolRubross(session, query)
+	obs := models.GetAllNodoRubro(session, query)
 
 	if len(obs) == 0 {
 		j.Data["json"] = []string{}
@@ -63,16 +63,16 @@ func (j *ArbolRubrosController) GetAll() {
 
 // Get obtiene un elemento por su id
 // @Title Get
-// @Description get ArbolRubros by nombre
-// @Param	nombre		path 	string	true		"El nombre de la ArbolRubros a consultar"
-// @Success 200 {object} models.ArbolRubros
+// @Description get NodoRubro by nombre
+// @Param	nombre		path 	string	true		"El nombre de la NodoRubro a consultar"
+// @Success 200 {object} models.NodoRubro
 // @Failure 403 :uid is empty
 // @router /:id [get]
-func (j *ArbolRubrosController) Get() {
+func (j *NodoRubroController) Get() {
 	id := j.GetString(":id")
 	session, _ := db.GetSession()
 	if id != "" {
-		arbolrubros, err := models.GetArbolRubrosById(session, id)
+		arbolrubros, err := models.GetNodoRubroById(session, id)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
@@ -82,51 +82,51 @@ func (j *ArbolRubrosController) Get() {
 	j.ServeJSON()
 }
 
-// @Title Borrar ArbolRubros
-// @Description Borrar ArbolRubros
+// @Title Borrar NodoRubro
+// @Description Borrar NodoRubro
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
-func (j *ArbolRubrosController) Delete() {
+func (j *NodoRubroController) Delete() {
 	session, _ := db.GetSession()
 	objectId := j.Ctx.Input.Param(":objectId")
-	result, _ := models.DeleteArbolRubrosById(session, objectId)
+	result, _ := models.DeleteNodoRubroById(session, objectId)
 	j.Data["json"] = result
 	j.ServeJSON()
 }
 
-// @Title Crear ArbolRubros
-// @Description Crear ArbolRubros
-// @Param	body		body 	models.ArbolRubros	true		"Body para la creacion de ArbolRubros"
-// @Success 200 {int} ArbolRubros.Id
+// @Title Crear NodoRubro
+// @Description Crear NodoRubro
+// @Param	body		body 	models.NodoRubro	true		"Body para la creacion de NodoRubro"
+// @Success 200 {int} NodoRubro.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (j *ArbolRubrosController) Post() {
-	var arbolrubros models.ArbolRubros
+func (j *NodoRubroController) Post() {
+	var arbolrubros models.NodoRubro
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubros)
 	fmt.Println(arbolrubros)
 	session, _ := db.GetSession()
-	models.InsertArbolRubros(session, arbolrubros)
+	models.InsertNodoRubro(session, arbolrubros)
 	j.Data["json"] = "insert success!"
 	j.ServeJSON()
 }
 
 // @Title Update
-// @Description update the ArbolRubros
+// @Description update the NodoRubro
 // @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
-func (j *ArbolRubrosController) Put() {
+func (j *NodoRubroController) Put() {
 	objectId := j.Ctx.Input.Param(":objectId")
 
-	var arbolrubros models.ArbolRubros
+	var arbolrubros models.NodoRubro
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubros)
 	session, _ := db.GetSession()
 
-	err := models.UpdateArbolRubros(session, arbolrubros, objectId)
+	err := models.UpdateNodoRubro(session, arbolrubros, objectId)
 	if err != nil {
 		j.Data["json"] = err.Error()
 	} else {
@@ -136,23 +136,23 @@ func (j *ArbolRubrosController) Put() {
 }
 
 // @Title Preflight options
-// @Description Crear ArbolRubros
-// @Param	body		body 	models.ArbolRubros	true		"Body para la creacion de ArbolRubros"
-// @Success 200 {int} ArbolRubros.Id
+// @Description Crear NodoRubro
+// @Param	body		body 	models.NodoRubro	true		"Body para la creacion de NodoRubro"
+// @Success 200 {int} NodoRubro.Id
 // @Failure 403 body is empty
 // @router / [options]
-func (j *ArbolRubrosController) Options() {
+func (j *NodoRubroController) Options() {
 	j.Data["json"] = "success!"
 	j.ServeJSON()
 }
 
 // @Title Preflight options
-// @Description Crear ArbolRubros
-// @Param	body		body 	models.ArbolRubros true		"Body para la creacion de ArbolRubros"
-// @Success 200 {int} ArbolRubros.Id
+// @Description Crear NodoRubro
+// @Param	body		body 	models.NodoRubro true		"Body para la creacion de NodoRubro"
+// @Success 200 {int} NodoRubro.Id
 // @Failure 403 body is empty
 // @router /:objectId [options]
-func (j *ArbolRubrosController) ArbolRubrosDeleteOptions() {
+func (j *NodoRubroController) NodoRubroDeleteOptions() {
 	j.Data["json"] = "success!"
 	j.ServeJSON()
 }
@@ -163,7 +163,7 @@ func (j *ArbolRubrosController) ArbolRubrosDeleteOptions() {
 // @Success 201 {string} recibido
 // @Failure 403 body is empty
 // @router /registrarRubro [post]
-func (j *ArbolRubrosController) RegistrarRubro() {
+func (j *NodoRubroController) RegistrarRubro() {
 	try.This(func() {
 		var (
 			rubroData  interface{}
@@ -173,24 +173,38 @@ func (j *ArbolRubrosController) RegistrarRubro() {
 		session, _ := db.GetSession()
 		json.Unmarshal(j.Ctx.Input.RequestBody, &rubroData)
 		rubroDataHijo := rubroData.(map[string]interface{})["RubroHijo"].(map[string]interface{})
-		nuevoRubro := models.ArbolRubros{
-			Id:               rubroDataHijo["Codigo"].(string),
-			Idpsql:           strconv.FormatFloat(rubroDataHijo["Id"].(float64), 'f', 0, 64),
-			Nombre:           rubroDataHijo["Nombre"].(string),
-			Descripcion:      rubroDataHijo["Descripcion"].(string),
-			Hijos:            nil,
-			Unidad_Ejecutora: strconv.FormatFloat(rubroDataHijo["UnidadEjecutora"].(float64), 'f', 0, 64)}
+
+		general := models.General{
+			rubroDataHijo["Codigo"].(string),
+			0,
+			rubroDataHijo["Nombre"].(string),
+			rubroDataHijo["Descripcion"].(string),
+			rubroDataHijo["Id"].(int),
+			nil}
+
+		nuevoRubro := models.NodoRubro{
+			&general,
+			nil,
+			"",
+			rubroDataHijo["UnidadEjecutora"].(string)}
+		// nuevoRubro := models.NodoRubro{
+		// 	Id:               rubroDataHijo["Codigo"].(string),
+		// 	Idpsql:           strconv.FormatFloat(rubroDataHijo["Id"].(float64), 'f', 0, 64),
+		// 	Nombre:           rubroDataHijo["Nombre"].(string),
+		// 	Descripcion:      rubroDataHijo["Descripcion"].(string),
+		// 	Hijos:            nil,
+		// 	Unidad_Ejecutora: strconv.FormatFloat(rubroDataHijo["UnidadEjecutora"].(float64), 'f', 0, 64)}
 
 		if rubroData.(map[string]interface{})["RubroPadre"] != nil {
 			rubroDataPadre := rubroData.(map[string]interface{})["RubroPadre"].(map[string]interface{})
 			rubroPadre = rubroDataPadre["Codigo"].(string)
 			nuevoRubro.Padre = rubroPadre
-			updatedRubro, _ := models.GetArbolRubrosById(session, rubroPadre)
+			updatedRubro, _ := models.GetNodoRubroById(session, rubroPadre)
 			updatedRubro.Hijos = append(updatedRubro.Hijos, rubroDataHijo["Codigo"].(string))
 			session, _ = db.GetSession()
 			err = models.RegistrarRubroTransacton(updatedRubro, nuevoRubro, session)
 		} else {
-			err = models.InsertArbolRubros(session, nuevoRubro)
+			err = models.InsertNodoRubro(session, nuevoRubro)
 		}
 
 		if err != nil {
@@ -212,7 +226,7 @@ func (j *ArbolRubrosController) RegistrarRubro() {
 // @Success 201 {string} sucess
 // @Failure 403 body is empty
 // @router /eliminarRubro/:idPsql [delete]
-func (j *ArbolRubrosController) EliminarRubro() {
+func (j *NodoRubroController) EliminarRubro() {
 	try.This(func() {
 		session, _ := db.GetSession()
 		var (
@@ -220,18 +234,18 @@ func (j *ArbolRubrosController) EliminarRubro() {
 			err error
 		)
 		rubroIdPsql := j.GetString(":idPsql")
-		rubroHijo, _ := models.GetArbolRubrosByIdPsql(session, rubroIdPsql)
+		rubroHijo, _ := models.GetNodoRubroByIdPsql(session, rubroIdPsql)
 		fmt.Println("rubroHijo: ", rubroHijo)
 		session, _ = db.GetSession()
 		if rubroHijo.Padre != "" {
-			rubroPadre, _ := models.GetArbolRubrosById(session, rubroHijo.Padre)
+			rubroPadre, _ := models.GetNodoRubroById(session, rubroHijo.Padre)
 			fmt.Println("rubroPadre sin modificar: ", rubroPadre)
-			rubroPadre.Hijos = remove(rubroPadre.Hijos, rubroHijo.Id)
+			rubroPadre.Hijos = remove(rubroPadre.Hijos, rubroHijo.ID)
 			fmt.Println("rubroPadre modificado: ", rubroPadre)
 			session, _ = db.GetSession()
 			err = models.EliminarRubroTransaccion(rubroPadre, rubroHijo, session)
 		} else {
-			_, err = models.DeleteArbolRubrosById(session, rubroHijo.Id)
+			_, err = models.DeleteNodoRubroById(session, rubroHijo.ID)
 		}
 
 		if err != nil {
@@ -263,20 +277,20 @@ func remove(slice []string, object string) []string {
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /RaicesArbol/:unidadEjecutora [get]
-func (j *ArbolRubrosController) RaicesArbol() {
+func (j *NodoRubroController) RaicesArbol() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
 	session, _ := db.GetSession()
 	var roots []map[string]interface{}
 	rubros, err := models.GetRaices(session, ueStr)
 	for i := 0; i < len(rubros); i++ {
-		idPsql, _ := strconv.Atoi(rubros[i].Idpsql)
+		idPsql := rubros[i].IDPsql
 		root := map[string]interface{}{
 			"Id":              idPsql,
-			"Codigo":          rubros[i].Id,
+			"Codigo":          rubros[i].ID,
 			"Nombre":          rubros[i].Nombre,
 			"Hijos":           rubros[i].Hijos,
 			"IsLeaf":          true,
-			"UnidadEjecutora": rubros[i].Unidad_Ejecutora,
+			"UnidadEjecutora": rubros[i].UnidadEjecutora,
 		}
 		if len(rubros[i].Hijos) > 0 {
 			var hijos []map[string]interface{}
@@ -307,7 +321,7 @@ func (j *ArbolRubrosController) RaicesArbol() {
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /ArbolRubro/:raiz/:unidadEjecutora [get]
-func (j *ArbolRubrosController) ArbolRubro() {
+func (j *NodoRubroController) ArbolRubro() {
 	nodoRaiz := j.GetString(":raiz")
 	ueStr := j.GetString(":unidadEjecutora")
 	session, _ := db.GetSession()
@@ -316,11 +330,11 @@ func (j *ArbolRubrosController) ArbolRubro() {
 	if err == nil {
 
 		arbolRubros := make(map[string]interface{})
-		arbolRubros["Id"], _ = strconv.Atoi(raiz.Idpsql)
-		arbolRubros["Codigo"] = raiz.Id
+		arbolRubros["Id"] = raiz.IDPsql
+		arbolRubros["Codigo"] = raiz.ID
 		arbolRubros["Nombre"] = raiz.Nombre
 		arbolRubros["IsLeaf"] = true
-		arbolRubros["UnidadEjecutora"] = raiz.Unidad_Ejecutora
+		arbolRubros["UnidadEjecutora"] = raiz.UnidadEjecutora
 		var hijos []interface{}
 		for j := 0; j < len(raiz.Hijos); j++ {
 			hijo := GetHijoRubro(raiz.Hijos[j], ueStr)
@@ -346,7 +360,7 @@ func (j *ArbolRubrosController) ArbolRubro() {
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /FullArbolRubro/:unidadEjecutora [get]
-func (j *ArbolRubrosController) FullArbolRubro() {
+func (j *NodoRubroController) FullArbolRubro() {
 	ueStr := j.GetString(":unidadEjecutora")
 	tree := rubroHelper.BuildTree(ueStr)
 	j.Data["json"] = tree
@@ -357,12 +371,12 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 	rubroHijo, _ := models.GetNodo(session, id, ue)
 	hijo := make(map[string]interface{})
 
-	if rubroHijo.Id != "" {
-		hijo["Id"], _ = strconv.Atoi(rubroHijo.Idpsql)
-		hijo["Codigo"] = rubroHijo.Id
+	if rubroHijo.ID != "" {
+		hijo["Id"] = rubroHijo.IDPsql
+		hijo["Codigo"] = rubroHijo.ID
 		hijo["Nombre"] = rubroHijo.Nombre
 		hijo["IsLeaf"] = false
-		hijo["UnidadEjecutora"] = rubroHijo.Unidad_Ejecutora
+		hijo["UnidadEjecutora"] = rubroHijo.UnidadEjecutora
 		if len(rubroHijo.Hijos) == 0 {
 			hijo["IsLeaf"] = true
 			hijo["Hijos"] = nil
