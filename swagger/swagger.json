@@ -425,74 +425,6 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/SaldoApropiacion/{rubro}/{unidadEjecutora}/{vigencia}": {
-            "get": {
-                "tags": [
-                    "arbol_rubro_apropiaciones"
-                ],
-                "description": "Devuelve el saldo de una apropiación especifica",
-                "operationId": "ArbolRubroApropiacionController.SaldoApropiacion",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "json de movimientos enviado desde el api_mid_financiera",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} success"
-                    },
-                    "403": {
-                        "description": "error"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro_apropiaciones/SaldoMovimiento/{idPsql}/{rubro}/{tipoMovimiento}": {
-            "get": {
-                "tags": [
-                    "arbol_rubro_apropiaciones"
-                ],
-                "description": "Devuelve el saldo de un CDP especifico",
-                "operationId": "ArbolRubroApropiacionController.SaldoMovimiento",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "idPsql",
-                        "description": "idPsql del documento",
-                        "required": true,
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    {
-                        "in": "path",
-                        "name": "rubro",
-                        "description": "código del rubro",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "fuente",
-                        "description": "fuente de financiamiento",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} success"
-                    },
-                    "403": {
-                        "description": "error"
-                    }
-                }
-            }
-        },
         "/arbol_rubro_apropiaciones/{id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
@@ -743,10 +675,10 @@
                 }
             }
         },
-        "/movimientosRegistrarMovimiento/{tipoPago}": {
+        "/movimientoRegistrarMovimientos/": {
             "post": {
                 "tags": [
-                    "movimientos"
+                    "movimiento"
                 ],
                 "description": "Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección",
                 "operationId": "MovimientosController.RegistrarMovimiento",
@@ -757,7 +689,10 @@
                         "description": "json de movimientos enviado desde el api_mid_financiera",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Object"
+                            }
                         }
                     }
                 ],
@@ -773,7 +708,7 @@
         }
     },
     "definitions": {
-        "1296.0xc0003ab170.false": {
+        "515.0xc00035de90.false": {
             "title": "false",
             "type": "object"
         },
@@ -829,7 +764,7 @@
                     "type": "string"
                 },
                 "tipo_fuente": {
-                    "$ref": "#/definitions/1296.0xc0003ab170.false"
+                    "$ref": "#/definitions/515.0xc00035de90.false"
                 },
                 "unidad_ejecutora": {
                     "type": "integer",
@@ -876,7 +811,7 @@
             "description": "FuenteFinanciamientoController operations for FuenteFinanciamiento\n"
         },
         {
-            "name": "movimientos",
+            "name": "movimiento",
             "description": "MovimientosController estructura para un controlador de beego\n"
         }
     ]

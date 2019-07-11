@@ -11,13 +11,12 @@ const MovimientosCollection = "movimientos"
 
 // Movimiento es una estructura generica para los tipos de movimiento registados.
 type Movimiento struct {
-	ID              string                   `json:"_id" bson:"_id,omitempty"`
-	IDPsql          int                      `json:"idpsql"`
-	RubrosAfecta    []map[string]interface{} `json:"rubros_afecta"`
-	Tipo            string                   `json:"tipo"`
-	DocumentoPadre  string                   `json:"documento_padre"`
-	FechaRegistro   string                   `json:"fecha_registro"`
-	UnidadEjecutora int                      `json:"unidad_ejecutora"`
+	ID             string  `json:"_id" bson:"_id,omitempty"`
+	IDPsql         int     `json:"idpsql"`
+	Valor          float64 `json:"valor"`
+	Tipo           string  `json:"tipo"`
+	DocumentoPadre int64   `json:"documento_padre"`
+	FechaRegistro  string  `json:"fecha_registro"`
 }
 
 // GetMovimientoByPsqlId Obtener un documento por el idpsql
