@@ -99,24 +99,6 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
         beego.ControllerComments{
-            Method: "SaldoApropiacion",
-            Router: `/SaldoApropiacion/:rubro/:unidadEjecutora/:vigencia`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
-        beego.ControllerComments{
-            Method: "SaldoMovimiento",
-            Router: `/SaldoMovimiento/:idPsql/:rubro/:tipoMovimiento`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
-        beego.ControllerComments{
             Method: "RegistrarApropiacionInicial",
             Router: `RegistrarApropiacionInicial/:vigencia`,
             AllowHTTPMethods: []string{"post"},
@@ -253,7 +235,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:MovimientosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:MovimientosController"],
         beego.ControllerComments{
             Method: "RegistrarMovimiento",
-            Router: `RegistrarMovimiento/:tipoPago`,
+            Router: `RegistrarMovimientos/`,
             AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
