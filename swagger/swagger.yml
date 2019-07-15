@@ -370,6 +370,25 @@ paths:
             $ref: '#/definitions/models.Object'
         "403":
           description: body is empty
+  /arbol_rubro_apropiaciones/FullArbolRubroApropiaciones/{unidadEjecutora}:
+    get:
+      tags:
+      - arbol_rubro_apropiaciones
+      description: Construye el árbol a un nivel dependiendo de la raíz
+      operationId: ArbolRubroApropiacionController.FullArbolRubroApropiaciones
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        schema:
+          $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro_apropiaciones/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -462,7 +481,7 @@ paths:
         "403":
           description: error
 definitions:
-  515.0xc00035de90.false:
+  9378.0xc0003b2a80.false:
     title: "false"
     type: object
   models.ArbolRubroApropiacion2018:
@@ -502,7 +521,7 @@ definitions:
       nombre:
         type: string
       tipo_fuente:
-        $ref: '#/definitions/515.0xc00035de90.false'
+        $ref: '#/definitions/9378.0xc0003b2a80.false'
       unidad_ejecutora:
         type: integer
         format: int64
