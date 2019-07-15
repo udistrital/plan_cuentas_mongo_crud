@@ -11,7 +11,7 @@ import (
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
-	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
+	// "github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -362,7 +362,30 @@ func (j *NodoRubroController) ArbolRubro() {
 // @router /FullArbolRubro/:unidadEjecutora [get]
 func (j *NodoRubroController) FullArbolRubro() {
 	ueStr := j.GetString(":unidadEjecutora")
-	tree := rubroHelper.BuildTree(ueStr)
+	fmt.Println(ueStr)
+	// tree := rubroHelper.BuildTree(ueStr)
+
+	var tree, childrens []map[string]interface{}
+
+	forkData := make(map[string]interface{})
+	
+	//forkData["Codigo"] = "3"
+
+	children := make(map[string]interface{})
+	children["data"] = map[string]interface{}{ "Codigo": "3-1", "children": []map[string]interface{} {
+		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-1", "children": []map[string]interface{}{} }},
+		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2", "children": []map[string]interface{}{
+			map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2-1", "children": []map[string]interface{}{} }},
+			map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2-2", "children": []map[string]interface{}{} }},
+			}},
+		},
+	}}
+
+	childrens = append(childrens, children)
+	forkData["data"] = map[string]interface{}{"Codigo": 3, "children": childrens}
+	// forkData["data"]["children"] = childrens
+
+	tree = append(tree, forkData)
 	j.Data["json"] = tree
 }
 
