@@ -9,7 +9,7 @@ import (
 
 	"github.com/astaxie/beego"
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
-	"github.com/manucorporat/try"
+	// "github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	// "github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -163,62 +163,62 @@ func (j *NodoRubroController) NodoRubroDeleteOptions() {
 // @Success 201 {string} recibido
 // @Failure 403 body is empty
 // @router /registrarRubro [post]
-func (j *NodoRubroController) RegistrarRubro() {
-	try.This(func() {
-		var (
-			rubroData  interface{}
-			rubroPadre string = ""
-			err        error
-		)
-		session, _ := db.GetSession()
-		json.Unmarshal(j.Ctx.Input.RequestBody, &rubroData)
-		rubroDataHijo := rubroData.(map[string]interface{})["RubroHijo"].(map[string]interface{})
+// func (j *NodoRubroController) RegistrarRubro() {
+// 	try.This(func() {
+// 		var (
+// 			rubroData  interface{}
+// 			rubroPadre string = ""
+// 			err        error
+// 		)
+// 		session, _ := db.GetSession()
+// 		json.Unmarshal(j.Ctx.Input.RequestBody, &rubroData)
+// 		rubroDataHijo := rubroData.(map[string]interface{})["RubroHijo"].(map[string]interface{})
+		
+// 		general := models.General{
+// 			rubroDataHijo["Codigo"].(string),
+// 			0,
+// 			rubroDataHijo["Nombre"].(string),
+// 			rubroDataHijo["Descripcion"].(string),
+// 			rubroDataHijo["Id"].(int),
+// 			nil}
 
-		general := models.General{
-			rubroDataHijo["Codigo"].(string),
-			0,
-			rubroDataHijo["Nombre"].(string),
-			rubroDataHijo["Descripcion"].(string),
-			rubroDataHijo["Id"].(int),
-			nil}
+// 		nuevoRubro := models.NodoRubro{
+// 			&general,
+// 			nil,
+// 			"",
+// 			rubroDataHijo["UnidadEjecutora"].(string)}
+// 		// nuevoRubro := models.NodoRubro{
+// 		// 	Id:               rubroDataHijo["Codigo"].(string),
+// 		// 	Idpsql:           strconv.FormatFloat(rubroDataHijo["Id"].(float64), 'f', 0, 64),
+// 		// 	Nombre:           rubroDataHijo["Nombre"].(string),
+// 		// 	Descripcion:      rubroDataHijo["Descripcion"].(string),
+// 		// 	Hijos:            nil,
+// 		// 	Unidad_Ejecutora: strconv.FormatFloat(rubroDataHijo["UnidadEjecutora"].(float64), 'f', 0, 64)}
 
-		nuevoRubro := models.NodoRubro{
-			&general,
-			nil,
-			"",
-			rubroDataHijo["UnidadEjecutora"].(string)}
-		// nuevoRubro := models.NodoRubro{
-		// 	Id:               rubroDataHijo["Codigo"].(string),
-		// 	Idpsql:           strconv.FormatFloat(rubroDataHijo["Id"].(float64), 'f', 0, 64),
-		// 	Nombre:           rubroDataHijo["Nombre"].(string),
-		// 	Descripcion:      rubroDataHijo["Descripcion"].(string),
-		// 	Hijos:            nil,
-		// 	Unidad_Ejecutora: strconv.FormatFloat(rubroDataHijo["UnidadEjecutora"].(float64), 'f', 0, 64)}
+// 		if rubroData.(map[string]interface{})["RubroPadre"] != nil {
+// 			rubroDataPadre := rubroData.(map[string]interface{})["RubroPadre"].(map[string]interface{})
+// 			rubroPadre = rubroDataPadre["Codigo"].(string)
+// 			nuevoRubro.Padre = rubroPadre
+// 			updatedRubro, _ := models.GetNodoRubroById(session, rubroPadre)
+// 			updatedRubro.Hijos = append(updatedRubro.Hijos, rubroDataHijo["Codigo"].(string))
+// 			session, _ = db.GetSession()
+// 			err = models.RegistrarRubroTransacton(updatedRubro, nuevoRubro, session)
+// 		} else {
+// 			err = models.InsertNodoRubro(session, nuevoRubro)
+// 		}
 
-		if rubroData.(map[string]interface{})["RubroPadre"] != nil {
-			rubroDataPadre := rubroData.(map[string]interface{})["RubroPadre"].(map[string]interface{})
-			rubroPadre = rubroDataPadre["Codigo"].(string)
-			nuevoRubro.Padre = rubroPadre
-			updatedRubro, _ := models.GetNodoRubroById(session, rubroPadre)
-			updatedRubro.Hijos = append(updatedRubro.Hijos, rubroDataHijo["Codigo"].(string))
-			session, _ = db.GetSession()
-			err = models.RegistrarRubroTransacton(updatedRubro, nuevoRubro, session)
-		} else {
-			err = models.InsertNodoRubro(session, nuevoRubro)
-		}
+// 		if err != nil {
+// 			panic(err.Error())
+// 		} else {
+// 			j.Data["json"] = map[string]interface{}{"Type": "success"}
+// 		}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println(e)
+// 		j.Data["json"] = map[string]interface{}{"Type": "error"}
+// 	})
 
-		if err != nil {
-			panic(err.Error())
-		} else {
-			j.Data["json"] = map[string]interface{}{"Type": "success"}
-		}
-	}).Catch(func(e try.E) {
-		fmt.Println(e)
-		j.Data["json"] = map[string]interface{}{"Type": "error"}
-	})
-
-	j.ServeJSON()
-}
+// 	j.ServeJSON()
+// }
 
 // @Title Eliminar rubro
 // @Description recibe el idPsql del rubro desde api mid para eliminar el rubro
@@ -226,50 +226,50 @@ func (j *NodoRubroController) RegistrarRubro() {
 // @Success 201 {string} sucess
 // @Failure 403 body is empty
 // @router /eliminarRubro/:idPsql [delete]
-func (j *NodoRubroController) EliminarRubro() {
-	try.This(func() {
-		session, _ := db.GetSession()
-		var (
-			// rubroIdPsql interface{}
-			err error
-		)
-		rubroIdPsql := j.GetString(":idPsql")
-		rubroHijo, _ := models.GetNodoRubroByIdPsql(session, rubroIdPsql)
-		fmt.Println("rubroHijo: ", rubroHijo)
-		session, _ = db.GetSession()
-		if rubroHijo.Padre != "" {
-			rubroPadre, _ := models.GetNodoRubroById(session, rubroHijo.Padre)
-			fmt.Println("rubroPadre sin modificar: ", rubroPadre)
-			rubroPadre.Hijos = remove(rubroPadre.Hijos, rubroHijo.ID)
-			fmt.Println("rubroPadre modificado: ", rubroPadre)
-			session, _ = db.GetSession()
-			err = models.EliminarRubroTransaccion(rubroPadre, rubroHijo, session)
-		} else {
-			_, err = models.DeleteNodoRubroById(session, rubroHijo.ID)
-		}
+// func (j *NodoRubroController) EliminarRubro() {
+// 	try.This(func() {
+// 		session, _ := db.GetSession()
+// 		var (
+// 			// rubroIdPsql interface{}
+// 			err error
+// 		)
+// 		rubroIdPsql := j.GetString(":idPsql")
+// 		rubroHijo, _ := models.GetNodoRubroByIdPsql(session, rubroIdPsql)
+// 		fmt.Println("rubroHijo: ", rubroHijo)
+// 		session, _ = db.GetSession()
+// 		if rubroHijo.Padre != "" {
+// 			rubroPadre, _ := models.GetNodoRubroById(session, rubroHijo.Padre)
+// 			fmt.Println("rubroPadre sin modificar: ", rubroPadre)
+// 			rubroPadre.Hijos = remove(rubroPadre.Hijos, rubroHijo.ID)
+// 			fmt.Println("rubroPadre modificado: ", rubroPadre)
+// 			session, _ = db.GetSession()
+// 			err = models.EliminarRubroTransaccion(rubroPadre, rubroHijo, session)
+// 		} else {
+// 			_, err = models.DeleteNodoRubroById(session, rubroHijo.ID)
+// 		}
 
-		if err != nil {
-			panic(err.Error())
-		} else {
-			j.Data["json"] = map[string]interface{}{"Type": "success"}
-		}
+// 		if err != nil {
+// 			panic(err.Error())
+// 		} else {
+// 			j.Data["json"] = map[string]interface{}{"Type": "success"}
+// 		}
 
-	}).Catch(func(e try.E) {
-		fmt.Println(e)
-		j.Data["json"] = map[string]interface{}{"Type": "error"}
-	})
-	j.ServeJSON()
-}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println(e)
+// 		j.Data["json"] = map[string]interface{}{"Type": "error"}
+// 	})
+// 	j.ServeJSON()
+// }
 
-func remove(slice []string, object string) []string {
-	for i := 0; i < len(slice); i++ {
-		if slice[i] == object {
-			slice = append(slice[:i], slice[i+1:]...)
-			return slice
-		}
-	}
-	return slice
-}
+// func remove(slice []string, object string) []string {
+// 	for i := 0; i < len(slice); i++ {
+// 		if slice[i] == object {
+// 			slice = append(slice[:i], slice[i+1:]...)
+// 			return slice
+// 		}
+// 	}
+// 	return slice
+// }
 
 // @Title RaicesArbol
 // @Description RaicesArbol
@@ -277,43 +277,43 @@ func remove(slice []string, object string) []string {
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /RaicesArbol/:unidadEjecutora [get]
-func (j *NodoRubroController) RaicesArbol() {
-	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
-	session, _ := db.GetSession()
-	var roots []map[string]interface{}
-	rubros, err := models.GetRaices(session, ueStr)
-	for i := 0; i < len(rubros); i++ {
-		idPsql := rubros[i].IDPsql
-		root := map[string]interface{}{
-			"Id":              idPsql,
-			"Codigo":          rubros[i].ID,
-			"Nombre":          rubros[i].Nombre,
-			"Hijos":           rubros[i].Hijos,
-			"IsLeaf":          true,
-			"UnidadEjecutora": rubros[i].UnidadEjecutora,
-		}
-		if len(rubros[i].Hijos) > 0 {
-			var hijos []map[string]interface{}
-			root["IsLeaf"] = false
-			for j := 0; j < len(root["Hijos"].([]string)); j++ {
-				hijo := GetHijoRubro(root["Hijos"].([]string)[j], ueStr)
-				if len(hijo) > 0 {
-					hijos = append(hijos, hijo)
-				}
-			}
-			root["Hijos"] = hijos
-		}
-		roots = append(roots, root)
-	}
+// func (j *NodoRubroController) RaicesArbol() {
+// 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
+// 	session, _ := db.GetSession()
+// 	var roots []map[string]interface{}
+// 	rubros, err := models.GetRaices(session, ueStr)
+// 	for i := 0; i < len(rubros); i++ {
+// 		idPsql := rubros[i].IDPsql
+// 		root := map[string]interface{}{
+// 			"Id":              idPsql,
+// 			"Codigo":          rubros[i].ID,
+// 			"Nombre":          rubros[i].Nombre,
+// 			"Hijos":           rubros[i].Hijos,
+// 			"IsLeaf":          true,
+// 			"UnidadEjecutora": rubros[i].UnidadEjecutora,
+// 		}
+// 		if len(rubros[i].Hijos) > 0 {
+// 			var hijos []map[string]interface{}
+// 			root["IsLeaf"] = false
+// 			for j := 0; j < len(root["Hijos"].([]string)); j++ {
+// 				hijo := GetHijoRubro(root["Hijos"].([]string)[j], ueStr)
+// 				if len(hijo) > 0 {
+// 					hijos = append(hijos, hijo)
+// 				}
+// 			}
+// 			root["Hijos"] = hijos
+// 		}
+// 		roots = append(roots, root)
+// 	}
 
-	if err != nil {
-		j.Data["json"] = err
-	} else {
-		j.Data["json"] = roots
-	}
+// 	if err != nil {
+// 		j.Data["json"] = err
+// 	} else {
+// 		j.Data["json"] = roots
+// 	}
 
-	j.ServeJSON()
-}
+// 	j.ServeJSON()
+// }
 
 // @Title Preflight options
 // @Description Construye el árbol a un nivel dependiendo de la raíz
@@ -321,38 +321,38 @@ func (j *NodoRubroController) RaicesArbol() {
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /ArbolRubro/:raiz/:unidadEjecutora [get]
-func (j *NodoRubroController) ArbolRubro() {
-	nodoRaiz := j.GetString(":raiz")
-	ueStr := j.GetString(":unidadEjecutora")
-	session, _ := db.GetSession()
-	var arbolRubrosGrande []map[string]interface{}
-	raiz, err := models.GetNodo(session, nodoRaiz, ueStr)
-	if err == nil {
+// func (j *NodoRubroController) ArbolRubro() {
+// 	nodoRaiz := j.GetString(":raiz")
+// 	ueStr := j.GetString(":unidadEjecutora")
+// 	session, _ := db.GetSession()
+// 	var arbolRubrosGrande []map[string]interface{}
+// 	raiz, err := models.GetNodo(session, nodoRaiz, ueStr)
+// 	if err == nil {
 
-		arbolRubros := make(map[string]interface{})
-		arbolRubros["Id"] = raiz.IDPsql
-		arbolRubros["Codigo"] = raiz.ID
-		arbolRubros["Nombre"] = raiz.Nombre
-		arbolRubros["IsLeaf"] = true
-		arbolRubros["UnidadEjecutora"] = raiz.UnidadEjecutora
-		var hijos []interface{}
-		for j := 0; j < len(raiz.Hijos); j++ {
-			hijo := GetHijoRubro(raiz.Hijos[j], ueStr)
-			if len(hijo) > 0 {
-				arbolRubros["IsLeaf"] = false
-				hijos = append(hijos, hijo)
-			}
-		}
-		arbolRubros["Hijos"] = hijos
-		arbolRubrosGrande = append(arbolRubrosGrande, arbolRubros)
+// 		arbolRubros := make(map[string]interface{})
+// 		arbolRubros["Id"] = raiz.IDPsql
+// 		arbolRubros["Codigo"] = raiz.ID
+// 		arbolRubros["Nombre"] = raiz.Nombre
+// 		arbolRubros["IsLeaf"] = true
+// 		arbolRubros["UnidadEjecutora"] = raiz.UnidadEjecutora
+// 		var hijos []interface{}
+// 		for j := 0; j < len(raiz.Hijos); j++ {
+// 			hijo := GetHijoRubro(raiz.Hijos[j], ueStr)
+// 			if len(hijo) > 0 {
+// 				arbolRubros["IsLeaf"] = false
+// 				hijos = append(hijos, hijo)
+// 			}
+// 		}
+// 		arbolRubros["Hijos"] = hijos
+// 		arbolRubrosGrande = append(arbolRubrosGrande, arbolRubros)
 
-		j.Data["json"] = arbolRubrosGrande
-	} else {
-		j.Data["json"] = err
-	}
+// 		j.Data["json"] = arbolRubrosGrande
+// 	} else {
+// 		j.Data["json"] = err
+// 	}
 
-	j.ServeJSON()
-}
+// 	j.ServeJSON()
+// }
 
 // @Title FullArbolRubro
 // @Description Construye el árbol a un nivel dependiendo de la raíz

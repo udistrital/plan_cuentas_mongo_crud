@@ -11,6 +11,7 @@ import (
 type FuenteFinanciamiento struct {
 	*General
 	// UnidadEjecutora int         `json:"unidad_ejecutora"`
+	ID               string   `json:"_id" bson:"_id,omitempty"`
 	TipoFuente    interface{} `json:"TipoFuente"`
 	ValorOriginal float64     `json:"ValorOriginal"`
 	// ValorAcumulado float64     `json:"ValorAcumulado"`

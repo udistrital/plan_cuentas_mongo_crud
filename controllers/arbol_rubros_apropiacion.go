@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/manucorporat/try"
+	// "github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -192,7 +192,7 @@ func (j *NodoRubroApropiacionController) ArbolApropiacion() {
 	if err == nil {
 		arbolApropiaciones := make(map[string]interface{})
 		arbolApropiaciones["Id"] = raiz.General.IDPsql
-		arbolApropiaciones["Codigo"] = raiz.General.ID
+		arbolApropiaciones["Codigo"] = raiz.ID
 		arbolApropiaciones["Nombre"] = raiz.General.Nombre
 		arbolApropiaciones["IsLeaf"] = true
 		arbolApropiaciones["UnidadEjecutora"] = raiz.NodoRubro.UnidadEjecutora
@@ -234,7 +234,7 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 		idPsql := raices[i].General.IDPsql
 		root := map[string]interface{}{
 			"Id":                 idPsql,
-			"Codigo":             raices[i].General.ID,
+			"Codigo":             raices[i].ID,
 			"Nombre":             raices[i].General.Nombre,
 			"Hijos":              raices[i].NodoRubro.Hijos,
 			"IsLeaf":             true,
@@ -272,9 +272,9 @@ func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	rubroHijo, _ := models.GetNodoRubroApropiacionById(session, id, ue, vigencia)
 	hijo := make(map[string]interface{})
 	if rubroHijo != nil {
-		if rubroHijo.General.ID != "" {
+		if rubroHijo.ID != "" {
 			hijo["Id"] = rubroHijo.General.IDPsql
-			hijo["Codigo"] = rubroHijo.General.ID
+			hijo["Codigo"] = rubroHijo.ID
 			hijo["Nombre"] = rubroHijo.General.Nombre
 			hijo["IsLeaf"] = false
 			hijo["UnidadEjecutora"] = rubroHijo.NodoRubro.UnidadEjecutora
@@ -297,185 +297,185 @@ func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 // @Success 200 {int} NodoRubroApropiacion2018.Id
 // @Failure 403 body is empty
 // @router RegistrarApropiacionInicial/:vigencia [post]
-func (j *NodoRubroApropiacionController) RegistrarApropiacionInicial() {
-	var (
-		dataApropiacion map[string]interface{}
-		rubro           models.NodoRubro
-	)
-	try.This(func() {
-		vigenciaStr := j.Ctx.Input.Param(":vigencia")
-		if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataApropiacion); err == nil {
-			session, _ := db.GetSession()
+// func (j *NodoRubroApropiacionController) RegistrarApropiacionInicial() {
+// 	var (
+// 		dataApropiacion map[string]interface{}
+// 		rubro           models.NodoRubro
+// 	)
+// 	try.This(func() {
+// 		vigenciaStr := j.Ctx.Input.Param(":vigencia")
+// 		if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataApropiacion); err == nil {
+// 			session, _ := db.GetSession()
 
-			codigoRubro := dataApropiacion["Codigo"].(string)
-			unidadEjecutora := dataApropiacion["UnidadEjecutora"].(string)
-			if rubro, err = models.GetNodoRubroById(session, codigoRubro); err != nil {
-				panic(err.Error())
-			}
-			vigencia, _ := strconv.Atoi(vigenciaStr)
-			general := models.General{
-				codigoRubro,
-				vigencia,
-				dataApropiacion["Nombre"].(string),
-				"",
-				int(dataApropiacion["Id"].(float64)),
-				nil,
-			}
+// 			codigoRubro := dataApropiacion["Codigo"].(string)
+// 			unidadEjecutora := dataApropiacion["UnidadEjecutora"].(string)
+// 			if rubro, err = models.GetNodoRubroById(session, codigoRubro); err != nil {
+// 				panic(err.Error())
+// 			}
+// 			vigencia, _ := strconv.Atoi(vigenciaStr)
+// 			general := models.General{
+// 				codigoRubro,
+// 				vigencia,
+// 				dataApropiacion["Nombre"].(string),
+// 				"",
+// 				int(dataApropiacion["Id"].(float64)),
+// 				nil,
+// 			}
 
-			nodoRubro := models.NodoRubro{
-				&general,
-				rubro.Hijos,
-				rubro.Padre,
-				dataApropiacion["UnidadEjecutora"].(string),
-			}
+// 			nodoRubro := models.NodoRubro{
+// 				&general,
+// 				rubro.Hijos,
+// 				rubro.Padre,
+// 				dataApropiacion["UnidadEjecutora"].(string),
+// 			}
 
-			nuevaApropiacion := models.NodoRubroApropiacion{
-				&nodoRubro,
-				dataApropiacion["ApropiacionInicial"].(float64),
-			}
+// 			nuevaApropiacion := models.NodoRubroApropiacion{
+// 				&nodoRubro,
+// 				dataApropiacion["ApropiacionInicial"].(float64),
+// 			}
 
-			// nuevaApropiacion := models.NodoRubroApropiacion{
-			// 	&General.ID:         codigoRubro,
-			// 	Idpsql:              strconv.Itoa(int(dataApropiacion["Id"].(float64))),
-			// 	Nombre:              dataApropiacion["Nombre"].(string),
-			// 	Descripcion:         "",
-			// 	Unidad_ejecutora:    dataApropiacion["UnidadEjecutora"].(string),
-			// 	Padre:               rubro.Padre,
-			// 	Hijos:               rubro.Hijos,
-			// 	Apropiacion_inicial: int(dataApropiacion["ApropiacionInicial"].(float64)),
-			// }
+// 			// nuevaApropiacion := models.NodoRubroApropiacion{
+// 			// 	&General.ID:         codigoRubro,
+// 			// 	Idpsql:              strconv.Itoa(int(dataApropiacion["Id"].(float64))),
+// 			// 	Nombre:              dataApropiacion["Nombre"].(string),
+// 			// 	Descripcion:         "",
+// 			// 	Unidad_ejecutora:    dataApropiacion["UnidadEjecutora"].(string),
+// 			// 	Padre:               rubro.Padre,
+// 			// 	Hijos:               rubro.Hijos,
+// 			// 	Apropiacion_inicial: int(dataApropiacion["ApropiacionInicial"].(float64)),
+// 			// }
 
-			if nuevaApropiacion.Padre == "" { // Si el rubro actual es una raíz, se hace un registro sencillo
-				session, _ = db.GetSession()
-				models.InsertNodoRubroApropiacion(session, &nuevaApropiacion, unidadEjecutora, vigencia)
-			} else { // si el rubro actual no es una raíz, se itera para registrar toda la rama
-				if err = construirRama(nuevaApropiacion.General.ID, unidadEjecutora, vigencia, nuevaApropiacion.IDPsql, nuevaApropiacion.ApropiacionInicial); err != nil {
-					fmt.Println("error en construir rama: ", err.Error())
-					panic(err.Error())
-				}
-			}
-			defer session.Close()
-			j.Data["json"] = map[string]interface{}{"Type": "success"}
-		} else {
-			panic(err.Error())
-			fmt.Println("unmarshal error: ", err.Error())
-		}
+// 			if nuevaApropiacion.Padre == "" { // Si el rubro actual es una raíz, se hace un registro sencillo
+// 				session, _ = db.GetSession()
+// 				models.InsertNodoRubroApropiacion(session, &nuevaApropiacion, unidadEjecutora, vigencia)
+// 			} else { // si el rubro actual no es una raíz, se itera para registrar toda la rama
+// 				if err = construirRama(nuevaApropiacion.General.ID, unidadEjecutora, vigencia, nuevaApropiacion.IDPsql, nuevaApropiacion.ApropiacionInicial); err != nil {
+// 					fmt.Println("error en construir rama: ", err.Error())
+// 					panic(err.Error())
+// 				}
+// 			}
+// 			defer session.Close()
+// 			j.Data["json"] = map[string]interface{}{"Type": "success"}
+// 		} else {
+// 			panic(err.Error())
+// 			fmt.Println("unmarshal error: ", err.Error())
+// 		}
 
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-		j.Data["json"] = map[string]interface{}{"Type": "error"}
-	})
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error: ", e)
+// 		j.Data["json"] = map[string]interface{}{"Type": "error"}
+// 	})
 
-	j.ServeJSON()
-}
+// 	j.ServeJSON()
+// }
 
 // Construye la rama a partir de un registro de apropiación inicial
-func construirRama(codigoRubro, ue string, vigencia, idApr int, nuevaApropiacion float64) error {
-	var (
-		actualRubro                         models.NodoRubro
-		padreApropiacion, actualApropiacion *models.NodoRubroApropiacion
-		err                                 error
-	)
+// func construirRama(codigoRubro, ue string, vigencia, idApr int, nuevaApropiacion float64) error {
+// 	var (
+// 		actualRubro                         models.NodoRubro
+// 		padreApropiacion, actualApropiacion *models.NodoRubroApropiacion
+// 		err                                 error
+// 	)
 
-	try.This(func() {
-		session, _ := db.GetSession()
-		defer session.Close()
-		actualRubro, err = models.GetNodoRubroById(session, codigoRubro)
-		actualRubro.UnidadEjecutora = ue
-		session, _ = db.GetSession()
-		padreApropiacion, _ = models.GetNodoRubroApropiacionById(session, actualRubro.Padre, ue, vigencia)
+// 	try.This(func() {
+// 		session, _ := db.GetSession()
+// 		defer session.Close()
+// 		actualRubro, err = models.GetNodoRubroById(session, codigoRubro)
+// 		actualRubro.UnidadEjecutora = ue
+// 		session, _ = db.GetSession()
+// 		padreApropiacion, _ = models.GetNodoRubroApropiacionById(session, actualRubro.Padre, ue, vigencia)
 
-		if padreApropiacion == nil {
-			session, _ = db.GetSession()
-			actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
-			models.InsertNodoRubroApropiacion(session, actualApropiacion, ue, vigencia)
-			if actualApropiacion.Padre != "" {
-				construirRama(actualRubro.Padre, ue, vigencia, actualRubro.IDPsql, actualApropiacion.ApropiacionInicial)
-			}
-		} else {
-			session, _ = db.GetSession()
-			apropiacionActualizada, _ := models.GetNodoRubroApropiacionById(session, codigoRubro, ue, vigencia)
-			apropiacionAnterior := 0.0
-			session, _ = db.GetSession()
-			if apropiacionActualizada != nil {
-				apropiacionAnterior = apropiacionActualizada.ApropiacionInicial
-				apropiacionActualizada.ApropiacionInicial = nuevaApropiacion
-				models.UpdateNodoRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.ID, ue, vigencia)
-			} else {
-				actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
-				models.InsertNodoRubroApropiacion(session, actualApropiacion, ue, vigencia)
-			}
+// 		if padreApropiacion == nil {
+// 			session, _ = db.GetSession()
+// 			actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
+// 			models.InsertNodoRubroApropiacion(session, actualApropiacion, ue, vigencia)
+// 			if actualApropiacion.Padre != "" {
+// 				construirRama(actualRubro.Padre, ue, vigencia, actualRubro.IDPsql, actualApropiacion.ApropiacionInicial)
+// 			}
+// 		} else {
+// 			session, _ = db.GetSession()
+// 			apropiacionActualizada, _ := models.GetNodoRubroApropiacionById(session, codigoRubro, ue, vigencia)
+// 			apropiacionAnterior := 0.0
+// 			session, _ = db.GetSession()
+// 			if apropiacionActualizada != nil {
+// 				apropiacionAnterior = apropiacionActualizada.ApropiacionInicial
+// 				apropiacionActualizada.ApropiacionInicial = nuevaApropiacion
+// 				models.UpdateNodoRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.ID, ue, vigencia)
+// 			} else {
+// 				actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
+// 				models.InsertNodoRubroApropiacion(session, actualApropiacion, ue, vigencia)
+// 			}
 
-			propagarCambio(padreApropiacion.ID, ue, vigencia, nuevaApropiacion-apropiacionAnterior)
+// 			propagarCambio(padreApropiacion.ID, ue, vigencia, nuevaApropiacion-apropiacionAnterior)
 
-		}
+// 		}
 
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-	})
-	return err
-}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error: ", e)
+// 	})
+// 	return err
+// }
 
 // Propaga el cambio de la apropiación desde la hoja hasta la raiz,
 // verificando recursivamente si el rubro que se está obteniendo tiene un padre o no
-func propagarCambio(codigoRubro, ue string, vigencia int, valorPropagado float64) error {
-	var err error
+// func propagarCambio(codigoRubro, ue string, vigencia int, valorPropagado float64) error {
+// 	var err error
 
-	try.This(func() { // try catch para recibir errores
+// 	try.This(func() { // try catch para recibir errores
 
-		session, _ := db.GetSession()
-		apropiacionActualizada, err := models.GetNodoRubroApropiacionById(session, codigoRubro, ue, vigencia)
-		apropiacionActualizada.ApropiacionInicial += valorPropagado
+// 		session, _ := db.GetSession()
+// 		apropiacionActualizada, err := models.GetNodoRubroApropiacionById(session, codigoRubro, ue, vigencia)
+// 		apropiacionActualizada.ApropiacionInicial += valorPropagado
 
-		if err != nil {
-			panic(err.Error())
-		}
-		session, _ = db.GetSession()
-		models.UpdateNodoRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.ID, ue, vigencia)
+// 		if err != nil {
+// 			panic(err.Error())
+// 		}
+// 		session, _ = db.GetSession()
+// 		models.UpdateNodoRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.ID, ue, vigencia)
 
-		if apropiacionActualizada.Padre != "" {
-			propagarCambio(apropiacionActualizada.Padre, ue, vigencia, valorPropagado)
-		}
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-		err = errors.New("unknow error")
-	})
-	return err
-}
+// 		if apropiacionActualizada.Padre != "" {
+// 			propagarCambio(apropiacionActualizada.Padre, ue, vigencia, valorPropagado)
+// 		}
+// 	}).Catch(func(e try.E) {
+// 		fmt.Println("catch error: ", e)
+// 		err = errors.New("unknow error")
+// 	})
+// 	return err
+// }
 
-func crearNuevaApropiacion(actualRubro models.NodoRubro, aprId int, nuevaApropiacion float64) *models.NodoRubroApropiacion {
-	general := models.General{
-		actualRubro.ID,
-		0,
-		actualRubro.Nombre,
-		actualRubro.Descripcion,
-		aprId,
-		nil,
-	}
+// func crearNuevaApropiacion(actualRubro models.NodoRubro, aprId int, nuevaApropiacion float64) *models.NodoRubroApropiacion {
+// 	general := models.General{
+// 		actualRubro.ID,
+// 		0,
+// 		actualRubro.Nombre,
+// 		actualRubro.Descripcion,
+// 		aprId,
+// 		nil,
+// 	}
 
-	nodoRubro := models.NodoRubro{
-		&general,
-		actualRubro.Hijos,
-		actualRubro.Padre,
-		actualRubro.UnidadEjecutora,
-	}
+// 	nodoRubro := models.NodoRubro{
+// 		&general,
+// 		actualRubro.Hijos,
+// 		actualRubro.Padre,
+// 		actualRubro.UnidadEjecutora,
+// 	}
 
-	nodoRubroApropiacion := models.NodoRubroApropiacion{
-		&nodoRubro,
-		nuevaApropiacion,
-	}
-	// actualApropiacion := &models.NodoRubroApropiacion{
-	// 	Id:                  actualRubro.ID,
-	// 	Idpsql:              aprId,
-	// 	Nombre:              actualRubro.Nombre,
-	// 	Descripcion:         actualRubro.Descripcion,
-	// 	Unidad_ejecutora:    actualRubro.Unidad_Ejecutora,
-	// 	Padre:               actualRubro.Padre,
-	// 	Hijos:               actualRubro.Hijos,
-	// 	Apropiacion_inicial: nuevaApropiacion,
-	// }
-	return &nodoRubroApropiacion
-}
+// 	nodoRubroApropiacion := models.NodoRubroApropiacion{
+// 		&nodoRubro,
+// 		nuevaApropiacion,
+// 	}
+// 	// actualApropiacion := &models.NodoRubroApropiacion{
+// 	// 	Id:                  actualRubro.ID,
+// 	// 	Idpsql:              aprId,
+// 	// 	Nombre:              actualRubro.Nombre,
+// 	// 	Descripcion:         actualRubro.Descripcion,
+// 	// 	Unidad_ejecutora:    actualRubro.Unidad_Ejecutora,
+// 	// 	Padre:               actualRubro.Padre,
+// 	// 	Hijos:               actualRubro.Hijos,
+// 	// 	Apropiacion_inicial: nuevaApropiacion,
+// 	// }
+// 	return &nodoRubroApropiacion
+// }
 
 // @Title FullArbolRubroApropiaciones
 // @Description Construye el árbol a un nivel dependiendo de la raíz
@@ -483,7 +483,7 @@ func crearNuevaApropiacion(actualRubro models.NodoRubro, aprId int, nuevaApropia
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /FullArbolRubroApropiaciones/:unidadEjecutora [get]
-func (j *ArbolRubroApropiacionController) FullArbolRubroApropiaciones() {
+func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 	ueStr := j.GetString(":unidadEjecutora")
 	fmt.Println(ueStr)
 	// tree := rubroHelper.BuildTree(ueStr)

@@ -19,7 +19,7 @@ func init() {
 				&controllers.NodoRubroController{},
 			),
 		),
-		beego.NSNamespace("/arbol_rubro_apropiaciones",
+		beego.NSNamespace("/arbol_rubro_apropiacion",
 			beego.NSInclude(
 				&controllers.NodoRubroApropiacionController{},
 			),

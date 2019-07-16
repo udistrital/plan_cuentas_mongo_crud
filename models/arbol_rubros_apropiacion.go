@@ -14,12 +14,14 @@ import (
 const NodoRubroApropiacion2018Collection = "NodoRubroApropiacion2018"
 
 // NodoRubroApropiacionCollection constante para la colección
-const NodoRubroApropiacionCollection = "NodoRubroApropiacion"
+const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {
 	*NodoRubro
-	ApropiacionInicial float64 `json:"ApropiacionInicial"`
+	ID               	string   	`json:"_id" bson:"_id,omitempty"`
+	ApropiacionInicial 	float64 	`json:"ApropiacionInicial"`
+	Movimientos 		[]string 	`json:"Movimientos"`
 }
 
 func GetAllNodoRubroApropiacion(session *mgo.Session, query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
@@ -101,7 +103,7 @@ func EstrctTransaccionArbolApropiacion(session *mgo.Session, estructuras []*Nodo
 	for _, estructura := range estructuras {
 		op := txn.Op{
 			C:      NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
-			Id:     estructura.General.ID,
+			Id:     estructura.ID,
 			Assert: "d+",
 			Update: bson.D{{"$set", bson.D{{"movimientos", estructura.Movimientos}}}},
 		}

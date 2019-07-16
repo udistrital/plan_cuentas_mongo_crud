@@ -14,6 +14,7 @@ const NodoRubroCollection = "arbol_rubro"
 // NodoRubro es la estructura de un Rubro, es un nodo puesto que forma parte del árbol
 type NodoRubro struct {
 	*General
+	ID               string   `json:"_id" bson:"_id,omitempty"`
 	Hijos           []string `json:"Hijos"`
 	Padre           string   `json:"Padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora"`
@@ -88,12 +89,12 @@ func RegistrarRubroTransacton(rubroPadre, rubroHijo NodoRubro, session *mgo.Sess
 	runner := txn.NewRunner(c)
 	ops := []txn.Op{{
 		C:      NodoRubroCollection,
-		Id:     rubroHijo.General.ID,
+		Id:     rubroHijo.ID,
 		Assert: "d-",
 		Insert: rubroHijo,
 	}, {
 		C:      NodoRubroCollection,
-		Id:     rubroPadre.General.ID,
+		Id:     rubroPadre.ID,
 		Assert: "d+",
 		Update: bson.D{{"$set", bson.D{{"hijos", rubroPadre.Hijos}}}},
 	}}
@@ -107,12 +108,12 @@ func EliminarRubroTransaccion(rubroPadre, rubroHijo NodoRubro, session *mgo.Sess
 	runner := txn.NewRunner(c)
 	ops := []txn.Op{{
 		C:      NodoRubroCollection,
-		Id:     rubroHijo.General.ID,
+		Id:     rubroHijo.ID,
 		Assert: "d+",
 		Remove: true,
 	}, {
 		C:      NodoRubroCollection,
-		Id:     rubroPadre.General.ID,
+		Id:     rubroPadre.ID,
 		Assert: "d+",
 		Update: bson.D{{"$set", bson.D{{"hijos", rubroPadre.Hijos}}}},
 	}}

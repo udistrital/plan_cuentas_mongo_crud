@@ -84,36 +84,6 @@
                 }
             }
         },
-        "/arbol_rubro/ArbolRubro/{raiz}/{unidadEjecutora}": {
-            "get": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "Construye el árbol a un nivel dependiendo de la raíz",
-                "operationId": "NodoRubroController.Preflight options",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    },
-                    "404": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
         "/arbol_rubro/FullArbolRubro/{unidadEjecutora}": {
             "get": {
                 "tags": [
@@ -139,91 +109,6 @@
                         }
                     },
                     "404": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro/RaicesArbol/{unidadEjecutora}": {
-            "get": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "RaicesArbol",
-                "operationId": "NodoRubroController.RaicesArbol",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Body para la creacion de Rubro",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Rubro"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    },
-                    "404": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro/eliminarRubro/{idPsql}": {
-            "delete": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "recibe el idPsql del rubro desde api mid para eliminar el rubro",
-                "operationId": "NodoRubroController.Eliminar rubro",
-                "parameters": [
-                    {
-                        "in": "interface{}",
-                        "name": "body",
-                        "description": "Body para la eliminación de un rubro",
-                        "schema": {
-                            "$ref": "#/definitions/true"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "{string} sucess"
-                    },
-                    "403": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro/registrarRubro": {
-            "post": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "Convierte la estructura del api mid para registrarla en un documento mongo",
-                "operationId": "NodoRubroController.Registra rubro",
-                "parameters": [
-                    {
-                        "in": "interface{}",
-                        "name": "body",
-                        "description": "Body para la creacion de un nuevo rubro",
-                        "schema": {
-                            "$ref": "#/definitions/true"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "{string} recibido"
-                    },
-                    "403": {
                         "description": "body is empty"
                     }
                 }
@@ -346,10 +231,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/": {
+        "/arbol_rubro_apropiacion/": {
             "options": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Crear NodoRubroApropiacion2018",
                 "operationId": "NodoRubroApropiacionController.Preflight options",
@@ -374,10 +259,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
+        "/arbol_rubro_apropiacion/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Devuelve un nivel del árbol de apropiaciones",
                 "operationId": "NodoRubroApropiacionController.Preflight ArbolApropiacion",
@@ -405,13 +290,13 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/FullArbolRubroApropiaciones/{unidadEjecutora}": {
+        "/arbol_rubro_apropiacion/FullArbolRubroApropiaciones/{unidadEjecutora}": {
             "get": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Construye el árbol a un nivel dependiendo de la raíz",
-                "operationId": "ArbolRubroApropiacionController.FullArbolRubroApropiaciones",
+                "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
                 "parameters": [
                     {
                         "in": "body",
@@ -435,10 +320,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}": {
+        "/arbol_rubro_apropiacion/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "RaicesArbolApropiacion",
                 "operationId": "NodoRubroApropiacionController.RaicesArbolApropiacion",
@@ -455,10 +340,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/{id}/{vigencia}/{unidadEjecutora}": {
+        "/arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "get NodoRubroApropiacion2018 by nombre",
                 "operationId": "NodoRubroApropiacionController.Get",
@@ -484,10 +369,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/{objectId}": {
+        "/arbol_rubro_apropiacion/{objectId}": {
             "delete": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Borrar NodoRubroApropiacion2018",
                 "operationId": "NodoRubroApropiacionController.Delete NodoRubroApropiacion2018",
@@ -511,7 +396,7 @@
             },
             "options": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Crear NodoRubroApropiacion2018",
                 "operationId": "NodoRubroApropiacionController.Preflight options",
@@ -536,10 +421,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/{objectId}/{vigencia}/{unidadEjecutora}": {
+        "/arbol_rubro_apropiacion/{objectId}/{vigencia}/{unidadEjecutora}": {
             "put": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "update the NodoRubroApropiacion2018",
                 "operationId": "NodoRubroApropiacionController.Update",
@@ -574,10 +459,10 @@
                 }
             }
         },
-        "/arbol_rubro_apropiaciones/{vigencia}/{unidadEjecutora}": {
+        "/arbol_rubro_apropiacion/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "get all objects",
                 "operationId": "NodoRubroApropiacionController.GetAll",
@@ -592,7 +477,7 @@
             },
             "post": {
                 "tags": [
-                    "arbol_rubro_apropiaciones"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "Crear NodoRubroApropiacion2018",
                 "operationId": "NodoRubroApropiacionController.Crear NodoRubroApropiacion2018",
@@ -601,34 +486,6 @@
                         "in": "body",
                         "name": "body",
                         "description": "Body para la creacion de NodoRubroApropiacion2018",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{int} NodoRubroApropiacion2018.Id"
-                    },
-                    "403": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro_apropiacionesRegistrarApropiacionInicial/{vigencia}": {
-            "post": {
-                "tags": [
-                    "arbol_rubro_apropiaciones"
-                ],
-                "description": "Crear NodoRubroApropiacion2018",
-                "operationId": "NodoRubroApropiacionController.RegistrarApropiacionInicial...",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Body para la creacion de ApropiacionInicial",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.NodoRubroApropiacion2018"
@@ -676,35 +533,6 @@
                 }
             }
         },
-        "/fuente_financiamiento/{id}": {
-            "get": {
-                "tags": [
-                    "fuente_financiamiento"
-                ],
-                "description": "get FuenteFinanciamiento by id",
-                "operationId": "FuenteFinanciamientoController.GetOne",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "description": "The key for staticblock",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.FuenteFinanciamiento"
-                        }
-                    },
-                    "403": {
-                        "description": ":id is empty"
-                    }
-                }
-            }
-        },
         "/movimientoRegistrarMovimientos/": {
             "post": {
                 "tags": [
@@ -738,12 +566,8 @@
         }
     },
     "definitions": {
-        "9378.0xc0003b2a80.false": {
+        "8727.0xc00037bda0.false": {
             "title": "false",
-            "type": "object"
-        },
-        "12677.string.float64": {
-            "title": "float64",
             "type": "object"
         },
         "models.FuenteFinanciamiento": {
@@ -751,14 +575,17 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/map[string][10470.0xc00044f110.false]"
+                    "$ref": "#/definitions/map[string][8888.0xc00037bdd0.false]"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10312.0xc00044f0e0.false"
+                    "$ref": "#/definitions/8727.0xc00037bda0.false"
                 },
                 "ValorOriginal": {
                     "type": "number",
                     "format": "double"
+                },
+                "_id": {
+                    "type": "string"
                 }
             }
         },
@@ -773,18 +600,12 @@
                     "type": "integer",
                     "format": "int64"
                 },
-                "Movimientos": {
-                    "$ref": "#/definitions/12677.string.float64"
-                },
                 "Nombre": {
                     "type": "string"
                 },
                 "Vigencia": {
                     "type": "integer",
                     "format": "int64"
-                },
-                "_id": {
-                    "type": "string"
                 }
             }
         },
@@ -804,20 +625,8 @@
                 "UnidadEjecutora": {
                     "type": "string"
                 },
-                "tipo_fuente": {
-                    "$ref": "#/definitions/9378.0xc0003b2a80.false"
-                },
-                "unidad_ejecutora": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "valor_acumulado": {
-                    "type": "number",
-                    "format": "double"
-                },
-                "valor_original": {
-                    "type": "number",
-                    "format": "double"
+                "_id": {
+                    "type": "string"
                 }
             }
         },
@@ -829,16 +638,8 @@
             "title": "Object",
             "type": "object"
         },
-        "models.Rubro": {
-            "title": "Rubro",
-            "type": "object"
-        },
         "stringtrue": {
             "title": "stringtrue",
-            "type": "object"
-        },
-        "true": {
-            "title": "true",
             "type": "object"
         }
     },
@@ -848,7 +649,7 @@
             "description": "NodoRubroController estructura para un controlador de beego\n"
         },
         {
-            "name": "arbol_rubro_apropiaciones",
+            "name": "arbol_rubro_apropiacion",
             "description": "NodoRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego\n"
         },
         {
