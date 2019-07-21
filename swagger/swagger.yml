@@ -481,7 +481,7 @@ paths:
         "403":
           description: error
 definitions:
-  9100.0xc000313a10.false:
+  11549.0xc0004a3800.false:
     title: "false"
     type: object
   models.ArbolRubroApropiacion2018:
@@ -521,7 +521,7 @@ definitions:
       nombre:
         type: string
       tipo_fuente:
-        $ref: '#/definitions/9100.0xc000313a10.false'
+        $ref: '#/definitions/11549.0xc0004a3800.false'
       unidad_ejecutora:
         type: integer
         format: int64

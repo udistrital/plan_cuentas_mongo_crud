@@ -3,10 +3,10 @@ package models
 import (
 	"fmt"
 
-	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
 // ArbolRubroApropiacion2018Collection constante para la colección
@@ -18,12 +18,12 @@ const ArbolRubroApropiacionCollection = "arbolrubroapropiacion"
 // ArbolRubroApropiacion es la estructura del documento que se va a registrar
 type ArbolRubroApropiacion struct {
 	Id                  string                        `json:"_id" bson:"_id,omitempty"`
-	Idpsql              string                        `json:"idpsql"`
 	Nombre              string                        `json:"nombre"`
 	Descripcion         string                        `json:"descripcion"`
 	Unidad_ejecutora    string                        `json:"unidad_ejecutora"`
 	Padre               string                        `json:"padre"`
 	Hijos               []string                      `json:"hijos"`
+	Estado              string                        `json:"estado"`
 	Apropiacion_inicial int                           `json:"apropiacion_inicial"`
 	Movimientos         map[string]map[string]float64 `json:"movimientos"`
 }
@@ -93,7 +93,6 @@ func GetRaicesApropiacion(session *mgo.Session, ue, vigencia string) ([]ArbolRub
 	err := c.Find(bson.M{
 		"$or": []bson.M{bson.M{"padre": nil},
 			bson.M{"padre": ""}},
-		"idpsql":           bson.M{"$ne": nil},
 		"unidad_ejecutora": bson.M{"$in": []string{"0", ue}},
 	}).All(&roots)
 	// fmt.Println("roots: ", roots)

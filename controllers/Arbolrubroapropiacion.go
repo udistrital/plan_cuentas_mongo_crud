@@ -8,8 +8,9 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/manucorporat/try"
+	"github.com/astaxie/beego/logs"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -189,7 +190,6 @@ func (j *ArbolRubroApropiacionController) ArbolApropiacion() {
 
 	if err == nil {
 		arbolApropiaciones := make(map[string]interface{})
-		arbolApropiaciones["Id"], _ = strconv.Atoi(raiz.Idpsql)
 		arbolApropiaciones["Codigo"] = raiz.Id
 		arbolApropiaciones["Nombre"] = raiz.Nombre
 		arbolApropiaciones["IsLeaf"] = true
@@ -228,9 +228,7 @@ func (j *ArbolRubroApropiacionController) RaicesArbolApropiacion() {
 	var roots []map[string]interface{}
 	raices, err := models.GetRaicesApropiacion(session, ueStr, vigencia)
 	for i := 0; i < len(raices); i++ {
-		idPsql, _ := strconv.Atoi(raices[i].Idpsql)
 		root := map[string]interface{}{
-			"Id":                 idPsql,
 			"Codigo":             raices[i].Id,
 			"Nombre":             raices[i].Nombre,
 			"Hijos":              raices[i].Hijos,
@@ -270,7 +268,6 @@ func getHijoApropiacion(id, ue, vigencia string) map[string]interface{} {
 	hijo := make(map[string]interface{})
 	if rubroHijo != nil {
 		if rubroHijo.Id != "" {
-			hijo["Id"], _ = strconv.Atoi(rubroHijo.Idpsql)
 			hijo["Codigo"] = rubroHijo.Id
 			hijo["Nombre"] = rubroHijo.Nombre
 			hijo["IsLeaf"] = false
@@ -299,48 +296,53 @@ func (j *ArbolRubroApropiacionController) RegistrarApropiacionInicial() {
 		dataApropiacion map[string]interface{}
 		rubro           models.ArbolRubros
 	)
-	try.This(func() {
-		vigencia := j.Ctx.Input.Param(":vigencia")
-		if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataApropiacion); err == nil {
-			session, _ := db.GetSession()
-
-			codigoRubro := dataApropiacion["Codigo"].(string)
-			unidadEjecutora := dataApropiacion["UnidadEjecutora"].(string)
-			if rubro, err = models.GetArbolRubrosById(session, codigoRubro); err != nil {
-				panic(err.Error())
-			}
-
-			nuevaApropiacion := models.ArbolRubroApropiacion{
-				Id:                  codigoRubro,
-				Idpsql:              strconv.Itoa(int(dataApropiacion["Id"].(float64))),
-				Nombre:              dataApropiacion["Nombre"].(string),
-				Descripcion:         "",
-				Unidad_ejecutora:    dataApropiacion["UnidadEjecutora"].(string),
-				Padre:               rubro.Padre,
-				Hijos:               rubro.Hijos,
-				Apropiacion_inicial: int(dataApropiacion["ApropiacionInicial"].(float64)),
-			}
-
-			if nuevaApropiacion.Padre == "" { // Si el rubro actual es una raíz, se hace un registro sencillo
-				session, _ = db.GetSession()
-				models.InsertArbolRubroApropiacion(session, &nuevaApropiacion, unidadEjecutora, vigencia)
-			} else { // si el rubro actual no es una raíz, se itera para registrar toda la rama
-				if err = construirRama(nuevaApropiacion.Id, unidadEjecutora, vigencia, nuevaApropiacion.Idpsql, nuevaApropiacion.Apropiacion_inicial); err != nil {
-					fmt.Println("error en construir rama: ", err.Error())
-					panic(err.Error())
-				}
-			}
-			defer session.Close()
-			j.Data["json"] = map[string]interface{}{"Type": "success"}
-		} else {
+	session, err := db.GetSession()
+	if err != nil {
+		fmt.Println("error en la sesión")
+		panic(err)
+	}
+	defer func() {
+		session.Close()
+		if r := recover(); r != nil {
+			logs.Error(r)
+			logManager.LogError(r)
+			panic(r)
+		}
+	}()
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &dataApropiacion); err == nil {
+		codigoRubro := dataApropiacion["Codigo"].(string)
+		unidadEjecutora := dataApropiacion["UnidadEjecutora"].(string)
+		if rubro, err = models.GetArbolRubrosById(session, codigoRubro); err != nil {
 			panic(err.Error())
-			fmt.Println("unmarshal error: ", err.Error())
 		}
 
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-		j.Data["json"] = map[string]interface{}{"Type": "error"}
-	})
+		nuevaApropiacion := models.ArbolRubroApropiacion{
+			Id:                  codigoRubro,
+			Nombre:              dataApropiacion["Nombre"].(string),
+			Descripcion:         "",
+			Unidad_ejecutora:    dataApropiacion["UnidadEjecutora"].(string),
+			Padre:               rubro.Padre,
+			Hijos:               rubro.Hijos,
+			Estado:              dataApropiacion["Estado"].(string),
+			Apropiacion_inicial: int(dataApropiacion["ApropiacionInicial"].(float64)),
+		}
+
+		if nuevaApropiacion.Padre == "" { // Si el rubro actual es una raíz, se hace un registro sencillo
+			session, _ = db.GetSession()
+			models.InsertArbolRubroApropiacion(session, &nuevaApropiacion, unidadEjecutora, vigencia)
+		} else { // si el rubro actual no es una raíz, se itera para registrar toda la rama
+			if err = construirRama(nuevaApropiacion.Id, unidadEjecutora, vigencia, nuevaApropiacion.Id, nuevaApropiacion.Apropiacion_inicial); err != nil {
+				fmt.Println("error en construir rama: ", err.Error())
+				panic(err.Error())
+			}
+		}
+
+		j.Data["json"] = map[string]interface{}{"Type": "success"}
+	} else {
+		panic(err.Error())
+		fmt.Println("unmarshal error: ", err.Error())
+	}
 
 	j.ServeJSON()
 }
@@ -353,42 +355,42 @@ func construirRama(codigoRubro, ue, vigencia, idApr string, nuevaApropiacion int
 		err                                 error
 	)
 
-	try.This(func() {
-		session, _ := db.GetSession()
-		defer session.Close()
-		actualRubro, err = models.GetArbolRubrosById(session, codigoRubro)
-		actualRubro.Unidad_Ejecutora = ue
-		session, _ = db.GetSession()
-		padreApropiacion, _ = models.GetArbolRubroApropiacionById(session, actualRubro.Padre, ue, vigencia)
+	session, err := db.GetSession()
+	if err != nil {
+		fmt.Println("error en la sesión")
+		panic(err)
+	}
+	defer session.Close()
+	actualRubro, err = models.GetArbolRubrosById(session, codigoRubro)
+	actualRubro.Unidad_Ejecutora = ue
+	session, _ = db.GetSession()
+	padreApropiacion, _ = models.GetArbolRubroApropiacionById(session, actualRubro.Padre, ue, vigencia)
 
-		if padreApropiacion == nil {
-			session, _ = db.GetSession()
+	if padreApropiacion == nil {
+		session, _ = db.GetSession()
+		actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
+		models.InsertArbolRubroApropiacion(session, actualApropiacion, ue, vigencia)
+		if actualApropiacion.Padre != "" {
+			construirRama(actualRubro.Padre, ue, vigencia, actualRubro.Id, actualApropiacion.Apropiacion_inicial)
+		}
+	} else {
+		session, _ = db.GetSession()
+		apropiacionActualizada, _ := models.GetArbolRubroApropiacionById(session, codigoRubro, ue, vigencia)
+		apropiacionAnterior := 0
+		session, _ = db.GetSession()
+		if apropiacionActualizada != nil {
+			apropiacionAnterior = apropiacionActualizada.Apropiacion_inicial
+			apropiacionActualizada.Apropiacion_inicial = nuevaApropiacion
+			models.UpdateArbolRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.Id, ue, vigencia)
+		} else {
 			actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
 			models.InsertArbolRubroApropiacion(session, actualApropiacion, ue, vigencia)
-			if actualApropiacion.Padre != "" {
-				construirRama(actualRubro.Padre, ue, vigencia, actualRubro.Idpsql, actualApropiacion.Apropiacion_inicial)
-			}
-		} else {
-			session, _ = db.GetSession()
-			apropiacionActualizada, _ := models.GetArbolRubroApropiacionById(session, codigoRubro, ue, vigencia)
-			apropiacionAnterior := 0
-			session, _ = db.GetSession()
-			if apropiacionActualizada != nil {
-				apropiacionAnterior = apropiacionActualizada.Apropiacion_inicial
-				apropiacionActualizada.Apropiacion_inicial = nuevaApropiacion
-				models.UpdateArbolRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.Id, ue, vigencia)
-			} else {
-				actualApropiacion = crearNuevaApropiacion(actualRubro, idApr, nuevaApropiacion)
-				models.InsertArbolRubroApropiacion(session, actualApropiacion, ue, vigencia)
-			}
-
-			propagarCambio(padreApropiacion.Id, ue, vigencia, nuevaApropiacion-apropiacionAnterior)
-
 		}
 
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-	})
+		propagarCambio(padreApropiacion.Id, ue, vigencia, nuevaApropiacion-apropiacionAnterior)
+
+	}
+
 	return err
 }
 
@@ -397,37 +399,36 @@ func construirRama(codigoRubro, ue, vigencia, idApr string, nuevaApropiacion int
 func propagarCambio(codigoRubro, ue, vigencia string, valorPropagado int) error {
 	var err error
 
-	try.This(func() { // try catch para recibir errores
+	session, err := db.GetSession()
+	if err != nil {
+		fmt.Println("error en la sesión")
+		panic(err)
+	}
+	defer session.Close()
+	apropiacionActualizada, err := models.GetArbolRubroApropiacionById(session, codigoRubro, ue, vigencia)
+	apropiacionActualizada.Apropiacion_inicial += valorPropagado
 
-		session, _ := db.GetSession()
-		apropiacionActualizada, err := models.GetArbolRubroApropiacionById(session, codigoRubro, ue, vigencia)
-		apropiacionActualizada.Apropiacion_inicial += valorPropagado
+	if err != nil {
+		panic(err.Error())
+	}
+	session, _ = db.GetSession()
+	models.UpdateArbolRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.Id, ue, vigencia)
 
-		if err != nil {
-			panic(err.Error())
-		}
-		session, _ = db.GetSession()
-		models.UpdateArbolRubroApropiacion(session, *apropiacionActualizada, apropiacionActualizada.Id, ue, vigencia)
-
-		if apropiacionActualizada.Padre != "" {
-			propagarCambio(apropiacionActualizada.Padre, ue, vigencia, valorPropagado)
-		}
-	}).Catch(func(e try.E) {
-		fmt.Println("catch error: ", e)
-		err = errors.New("unknow error")
-	})
+	if apropiacionActualizada.Padre != "" {
+		propagarCambio(apropiacionActualizada.Padre, ue, vigencia, valorPropagado)
+	}
 	return err
 }
 
 func crearNuevaApropiacion(actualRubro models.ArbolRubros, aprId string, nuevaApropiacion int) *models.ArbolRubroApropiacion {
 	actualApropiacion := &models.ArbolRubroApropiacion{
 		Id:                  actualRubro.Id,
-		Idpsql:              aprId,
 		Nombre:              actualRubro.Nombre,
 		Descripcion:         actualRubro.Descripcion,
 		Unidad_ejecutora:    actualRubro.Unidad_Ejecutora,
 		Padre:               actualRubro.Padre,
 		Hijos:               actualRubro.Hijos,
+		Estado:              "Aprobado",
 		Apropiacion_inicial: nuevaApropiacion,
 	}
 	return actualApropiacion
@@ -447,14 +448,14 @@ func (j *ArbolRubroApropiacionController) FullArbolRubroApropiaciones() {
 	var tree, childrens []map[string]interface{}
 
 	forkData := make(map[string]interface{})
-	
+
 	//forkData["Codigo"] = "3"
 
 	children := make(map[string]interface{})
-	children["data"] = map[string]interface{}{ "Codigo": "3-1", "ApropiacionInicial": 500, "children": []map[string]interface{} {
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-1", "ApropiacionInicial": 300, "children": []map[string]interface{}{} }},
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2", "ApropiacionInicial": 200, "children": []map[string]interface{}{} }},
-		},
+	children["data"] = map[string]interface{}{"Codigo": "3-1", "ApropiacionInicial": 500, "children": []map[string]interface{}{
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-1", "ApropiacionInicial": 300, "children": []map[string]interface{}{}}},
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2", "ApropiacionInicial": 200, "children": []map[string]interface{}{}}},
+	},
 	}
 
 	childrens = append(childrens, children)
