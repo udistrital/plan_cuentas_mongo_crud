@@ -19,9 +19,10 @@ const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {
 	*NodoRubro
-	ID               	string   	`json:"_id" bson:"_id,omitempty"`
-	ApropiacionInicial 	float64 	`json:"ApropiacionInicial"`
-	Movimientos 		[]string 	`json:"Movimientos"`
+	ID                 string   `json:"_id" bson:"_id,omitempty"`
+	ApropiacionInicial float64  `json:"ApropiacionInicial"`
+	Movimientos        []string `json:"Movimientos"`
+	Estado             string   `json:"estado"`
 }
 
 func GetAllNodoRubroApropiacion(session *mgo.Session, query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
@@ -51,11 +52,14 @@ func UpdateNodoRubroApropiacion(session *mgo.Session, j NodoRubroApropiacion, id
 }
 
 // InsertNodoRubroApropiacion Register function to NodoRubroApropiacion
-func InsertNodoRubroApropiacion(session *mgo.Session, j *NodoRubroApropiacion, ue string, vigencia int) {
-	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
+func InsertNodoRubroApropiacion(j *NodoRubroApropiacion) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(j.Vigencia)+"_"+j.UnidadEjecutora)
 	defer session.Close()
-	c.Insert(&j)
-
+	return c.Insert(&j)
 }
 
 // GetNodoRubroApropiacionById Obtener un documento por el id

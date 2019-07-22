@@ -105,20 +105,15 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Param	body		body 	models.NodoRubroApropiacion2018	true		"Body para la creacion de NodoRubroApropiacion2018"
 // @Success 200 {int} NodoRubroApropiacion2018.Id
 // @Failure 403 body is empty
-// @router /:vigencia/:unidadEjecutora [post]
+// @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
-	vigencia := j.GetString(":vigencia")
-	unidadEjecutora := j.GetString(":unidadEjecutora")
-	if vigencia != "" {
-		var arbolrubroapropiacion *models.NodoRubroApropiacion
-		json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
-		fmt.Println(arbolrubroapropiacion)
-		session, _ := db.GetSession()
-		vigenciaInt, _ := strconv.Atoi(vigencia)
-		models.InsertNodoRubroApropiacion(session, arbolrubroapropiacion, unidadEjecutora, vigenciaInt)
+	var arbolrubroapropiacion *models.NodoRubroApropiacion
+	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
+
+	if err := models.InsertNodoRubroApropiacion(arbolrubroapropiacion); err == nil {
 		j.Data["json"] = "insert success!"
 	} else {
-		j.Data["json"] = "vigencia null"
+		j.Data["json"] = "error!"
 	}
 
 	j.ServeJSON()
@@ -491,14 +486,14 @@ func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 	var tree, childrens []map[string]interface{}
 
 	forkData := make(map[string]interface{})
-	
+
 	//forkData["Codigo"] = "3"
 
 	children := make(map[string]interface{})
-	children["data"] = map[string]interface{}{ "Codigo": "3-1", "ApropiacionInicial": 500, "children": []map[string]interface{} {
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-1", "ApropiacionInicial": 300, "children": []map[string]interface{}{} }},
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2", "ApropiacionInicial": 200, "children": []map[string]interface{}{} }},
-		},
+	children["data"] = map[string]interface{}{"Codigo": "3-1", "ApropiacionInicial": 500, "children": []map[string]interface{}{
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-1", "ApropiacionInicial": 300, "children": []map[string]interface{}{}}},
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2", "ApropiacionInicial": 200, "children": []map[string]interface{}{}}},
+	},
 	}
 
 	childrens = append(childrens, children)

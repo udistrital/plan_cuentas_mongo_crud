@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
 	"github.com/udistrital/utils_oas/responseformat"
 )
@@ -16,12 +16,18 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	beego.InsertFilter("*", beego.BeforeRouter, func(ctx *context.Context) {
-
-		ctx.Output.Header("Access-Control-Allow-Origin", "*")
-		ctx.Output.Header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS")
-		ctx.Output.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-	})
+	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"PUT", "PATCH", "GET", "POST", "OPTIONS", "DELETE"},
+		AllowHeaders: []string{"Origin", "x-requested-with",
+			"content-type",
+			"accept",
+			"origin",
+			"authorization",
+			"x-csrftoken"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	beego.Run()
 }

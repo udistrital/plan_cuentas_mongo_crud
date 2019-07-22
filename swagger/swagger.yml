@@ -153,6 +153,23 @@ paths:
         "404":
           description: body is empty
   /arbol_rubro_apropiacion/:
+    post:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Crear NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Crear NodoRubroApropiacion2018
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de NodoRubroApropiacion2018
+        required: true
+        schema:
+          $ref: '#/definitions/models.NodoRubroApropiacion2018'
+      responses:
+        "200":
+          description: '{int} NodoRubroApropiacion2018.Id'
+        "403":
+          description: body is empty
     options:
       tags:
       - arbol_rubro_apropiacion
@@ -259,23 +276,6 @@ paths:
           description: NodoRubroApropiacion models.NodoRubroApropiacion
         "403":
           description: :objectId is empty
-    post:
-      tags:
-      - arbol_rubro_apropiacion
-      description: Crear NodoRubroApropiacion2018
-      operationId: NodoRubroApropiacionController.Crear NodoRubroApropiacion2018
-      parameters:
-      - in: body
-        name: body
-        description: Body para la creacion de NodoRubroApropiacion2018
-        required: true
-        schema:
-          $ref: '#/definitions/models.NodoRubroApropiacion2018'
-      responses:
-        "200":
-          description: '{int} NodoRubroApropiacion2018.Id'
-        "403":
-          description: body is empty
   /arbol_rubro_apropiacion/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -370,7 +370,7 @@ paths:
         "403":
           description: error
 definitions:
-  8727.0xc00037bda0.false:
+  1116.0xc000443770.false:
     title: "false"
     type: object
   models.FuenteFinanciamiento:
@@ -380,9 +380,9 @@ definitions:
       _id:
         type: string
       Rubros:
-        $ref: '#/definitions/map[string][8888.0xc00037bdd0.false]'
+        $ref: '#/definitions/map[string][1274.0xc0004437a0.false]'
       TipoFuente:
-        $ref: '#/definitions/8727.0xc00037bda0.false'
+        $ref: '#/definitions/1116.0xc000443770.false'
       ValorOriginal:
         type: number
         format: double
