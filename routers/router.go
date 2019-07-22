@@ -16,12 +16,12 @@ func init() {
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/arbol_rubro",
 			beego.NSInclude(
-				&controllers.ArbolRubrosController{},
+				&controllers.NodoRubroController{},
 			),
 		),
-		beego.NSNamespace("/arbol_rubro_apropiaciones",
+		beego.NSNamespace("/arbol_rubro_apropiacion",
 			beego.NSInclude(
-				&controllers.ArbolRubroApropiacionController{},
+				&controllers.NodoRubroApropiacionController{},
 			),
 		),
 		beego.NSNamespace("/fuente_financiamiento",

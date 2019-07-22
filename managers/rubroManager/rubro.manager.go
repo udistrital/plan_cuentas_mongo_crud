@@ -1,8 +1,6 @@
 package rubroManager
 
 import (
-	"strconv"
-
 	"github.com/astaxie/beego/logs"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -17,10 +15,10 @@ import (
 // GetRaices Returns the rubro's tree roots.
 func GetRaices(ue string) []map[string]interface{} {
 	var (
-		roots []models.ArbolRubros
+		roots []models.NodoRubro
 	)
 	session, _ := db.GetSession()
-	c := db.Cursor(session, models.ArbolRubrosCollection)
+	c := db.Cursor(session, models.NodoRubroCollection)
 	defer func() {
 		session.Close()
 		if r := recover(); r != nil {
@@ -49,12 +47,12 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 	rubroHijo, _ := models.GetNodo(session, id, ue)
 	hijo := make(map[string]interface{})
 
-	if rubroHijo.Id != "" {
-		hijo["Id"], _ = strconv.Atoi(rubroHijo.Idpsql)
-		hijo["Codigo"] = rubroHijo.Id
+	if rubroHijo.General.ID != "" {
+		hijo["Id"] = rubroHijo.General.IDPsql
+		hijo["Codigo"] = rubroHijo.General.ID
 		hijo["Nombre"] = rubroHijo.Nombre
 		hijo["IsLeaf"] = false
-		hijo["UnidadEjecutora"] = rubroHijo.Unidad_Ejecutora
+		hijo["UnidadEjecutora"] = rubroHijo.UnidadEjecutora
 		if len(rubroHijo.Hijos) == 0 {
 			hijo["IsLeaf"] = true
 			hijo["Hijos"] = nil
@@ -69,7 +67,7 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 */
 func GetNodo(id, ue string) map[string]interface{} {
 	session, _ := db.GetSession()
-	c := db.Cursor(session, models.ArbolRubrosCollection)
+	c := db.Cursor(session, models.NodoRubroCollection)
 	defer func() {
 		session.Close()
 		if r := recover(); r != nil {
@@ -78,7 +76,7 @@ func GetNodo(id, ue string) map[string]interface{} {
 		}
 	}()
 
-	var nodo models.ArbolRubros
+	var nodo models.NodoRubro
 	err := c.Find(bson.M{"_id": id, "unidad_ejecutora": bson.M{"$in": []string{"0", ue}}}).One(&nodo)
 
 	if err != nil {
