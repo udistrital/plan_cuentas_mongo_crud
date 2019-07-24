@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroApropiacionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -106,16 +107,26 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
-	var arbolrubroapropiacion *models.NodoRubroApropiacion
-	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
+	var nodoRubroApropiacion *models.NodoRubroApropiacion
+	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
-	if err := models.InsertNodoRubroApropiacion(arbolrubroapropiacion); err == nil {
+	fmt.Println("ARbol apropiacion=???")
+
+	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
+		fmt.Println("success!")
 		j.Data["json"] = "insert success!"
 	} else {
-		j.Data["json"] = "error!"
+		fmt.Println("error ", err.Error())
+		j.Data["json"] = err.Error()
 	}
 
-	j.ServeJSON()
+	// if err := models.InsertNodoRubroApropiacion(nodoRubroApropiacion); err == nil {
+	// 	j.Data["json"] = "insert success!"
+	// } else {
+	// 	j.Data["json"] = "error!"
+	// }
+
+	// j.ServeJSON()
 }
 
 // Put de HTTP
