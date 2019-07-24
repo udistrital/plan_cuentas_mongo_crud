@@ -9,4 +9,5 @@ type General struct {
 	Descripcion       string    `json:"Descripcion"`
 	FechaCreacion     time.Time `json:"FechaCreacion"`
 	FechaModificacion time.Time `json:"FechaModificacion"`
+	Activo bool `json:"Activo"`
 }
