@@ -185,7 +185,6 @@ func (j *NodoRubroApropiacionController) ArbolApropiacion() {
 
 	if err == nil {
 		arbolApropiaciones := make(map[string]interface{})
-		arbolApropiaciones["Id"] = raiz.General.IDPsql
 		arbolApropiaciones["Codigo"] = raiz.ID
 		arbolApropiaciones["Nombre"] = raiz.General.Nombre
 		arbolApropiaciones["IsLeaf"] = true
@@ -225,9 +224,7 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	vigencia, _ := strconv.Atoi(vigenciaStr)
 	raices, err := models.GetRaicesApropiacion(session, ueStr, vigencia)
 	for i := 0; i < len(raices); i++ {
-		idPsql := raices[i].General.IDPsql
 		root := map[string]interface{}{
-			"Id":                 idPsql,
 			"Codigo":             raices[i].ID,
 			"Nombre":             raices[i].General.Nombre,
 			"Hijos":              raices[i].NodoRubro.Hijos,
@@ -266,7 +263,6 @@ func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	hijo := make(map[string]interface{})
 	if rubroHijo != nil {
 		if rubroHijo.ID != "" {
-			hijo["Id"] = rubroHijo.General.IDPsql
 			hijo["Codigo"] = rubroHijo.ID
 			hijo["Nombre"] = rubroHijo.General.Nombre
 			hijo["IsLeaf"] = false

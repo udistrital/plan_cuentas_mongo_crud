@@ -370,7 +370,7 @@ paths:
         "403":
           description: error
 definitions:
-  9565.0xc0004ea2d0.false:
+  9565.0xc0004f6240.false:
     title: "false"
     type: object
   models.FuenteFinanciamiento:
@@ -380,9 +380,9 @@ definitions:
       _id:
         type: string
       Rubros:
-        $ref: '#/definitions/map[string][9723.0xc0004ea300.false]'
+        $ref: '#/definitions/map[string][9723.0xc0004f6270.false]'
       TipoFuente:
-        $ref: '#/definitions/9565.0xc0004ea2d0.false'
+        $ref: '#/definitions/9565.0xc0004f6240.false'
       ValorOriginal:
         type: number
         format: double
@@ -392,9 +392,12 @@ definitions:
     properties:
       Descripcion:
         type: string
-      IdPsql:
-        type: integer
-        format: int64
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
       Nombre:
         type: string
       Vigencia:
