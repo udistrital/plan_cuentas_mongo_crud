@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	// "github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -71,10 +71,9 @@ func (j *NodoRubroApropiacionController) Get() {
 	id := j.GetString(":id")
 	vigencia := j.GetString(":vigencia")
 	unidadEjecutora := j.GetString(":unidadEjecutora")
-	session, _ := db.GetSession()
 	if id != "" {
 		vigenciaInt, _ := strconv.Atoi(vigencia)
-		arbolrubroapropiacion, err := models.GetNodoRubroApropiacionById(session, id, unidadEjecutora, vigenciaInt)
+		arbolrubroapropiacion, err := models.GetNodoRubroApropiacionById(id, unidadEjecutora, vigenciaInt)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
@@ -260,8 +259,7 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 // Se devuelve un objeto de este tipo y no de models con el fin de utilizar la estructura de json utilizada ya en el cliente
 // y no tener que hacer grandes modificaciones en el
 func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
-	session, _ := db.GetSession()
-	rubroHijo, _ := models.GetNodoRubroApropiacionById(session, id, ue, vigencia)
+	rubroHijo, _ := models.GetNodoRubroApropiacionById(id, ue, vigencia)
 	hijo := make(map[string]interface{})
 	if rubroHijo != nil {
 		if rubroHijo.ID != "" {
@@ -281,34 +279,28 @@ func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	return hijo
 }
 
+// FullArbolRubroApropiaciones ...
 // @Title FullArbolRubroApropiaciones
 // @Description Construye el árbol a un nivel dependiendo de la raíz
 // @Param body body stringtrue "Código de la raíz"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /FullArbolRubroApropiaciones/:unidadEjecutora [get]
+// @router /arbol_apropiacion/:raiz/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
+	raiz := j.GetString(":raiz")
 	ueStr := j.GetString(":unidadEjecutora")
-	fmt.Println(ueStr)
-	// tree := rubroHelper.BuildTree(ueStr)
+	vigenciaStr := j.GetString(":vigencia")
 
-	var tree, childrens []map[string]interface{}
+	vigencia, err := strconv.Atoi(vigenciaStr)
 
-	forkData := make(map[string]interface{})
-
-	//forkData["Codigo"] = "3"
-
-	children := make(map[string]interface{})
-	children["data"] = map[string]interface{}{"Codigo": "3-1", "ApropiacionInicial": 500, "children": []map[string]interface{}{
-		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-1", "ApropiacionInicial": 300, "children": []map[string]interface{}{}}},
-		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2", "ApropiacionInicial": 200, "children": []map[string]interface{}{}}},
-	},
+	if err != nil {
+		j.Data["json"] = err
+		panic(err)
 	}
 
-	childrens = append(childrens, children)
-	forkData["data"] = map[string]interface{}{"Codigo": 3, "ApropiacionInicial": 500, "children": childrens}
-	// forkData["data"]["children"] = childrens
+	raizApropiacion, err := models.GetNodoRubroApropiacionById(raiz, ueStr, vigencia)
 
-	tree = append(tree, forkData)
+	tree := rubroApropiacionHelper.BuildTree(raizApropiacion)
+
 	j.Data["json"] = tree
 }

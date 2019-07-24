@@ -316,7 +316,27 @@
                 }
             }
         },
-        "/arbol_rubro_apropiacion/FullArbolRubroApropiaciones/{unidadEjecutora}": {
+        "/arbol_rubro_apropiacion/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "RaicesArbolApropiacion",
+                "operationId": "NodoRubroApropiacionController.RaicesArbolApropiacion",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/arbol_apropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
                     "arbol_rubro_apropiacion"
@@ -333,26 +353,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    },
-                    "404": {
-                        "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro_apropiacion/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}": {
-            "get": {
-                "tags": [
-                    "arbol_rubro_apropiacion"
-                ],
-                "description": "RaicesArbolApropiacion",
-                "operationId": "NodoRubroApropiacionController.RaicesArbolApropiacion",
                 "responses": {
                     "200": {
                         "description": "",
@@ -566,7 +566,7 @@
         }
     },
     "definitions": {
-        "9530.0xc0004dab70.false": {
+        "9565.0xc0004f6240.false": {
             "title": "false",
             "type": "object"
         },
@@ -575,10 +575,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/map[string][9688.0xc0004daba0.false]"
+                    "$ref": "#/definitions/map[string][9723.0xc0004f6270.false]"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9530.0xc0004dab70.false"
+                    "$ref": "#/definitions/9565.0xc0004f6240.false"
                 },
                 "ValorOriginal": {
                     "type": "number",

@@ -63,11 +63,15 @@ func InsertNodoRubroApropiacion(j *NodoRubroApropiacion) error {
 }
 
 // GetNodoRubroApropiacionById Obtener un documento por el id
-func GetNodoRubroApropiacionById(session *mgo.Session, id, ue string, vigencia int) (*NodoRubroApropiacion, error) {
+func GetNodoRubroApropiacionById(id, ue string, vigencia int) (*NodoRubroApropiacion, error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return nil, err
+	}
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
 	defer session.Close()
 	var NodoRubroApropiacion *NodoRubroApropiacion
-	err := c.Find(bson.M{"_id": id}).One(&NodoRubroApropiacion)
+	err = c.FindId(id).One(&NodoRubroApropiacion)
 	return NodoRubroApropiacion, err
 }
 
