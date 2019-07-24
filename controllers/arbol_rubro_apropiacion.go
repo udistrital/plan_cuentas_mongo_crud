@@ -155,26 +155,14 @@ func (j *NodoRubroApropiacionController) Options() {
 	j.ServeJSON()
 }
 
-// NodoRubroApropiacion2018DeleteOptions NodoRubroApropiacion2018DeleteOptions
-// @Title Preflight options
-// @Description Crear NodoRubroApropiacion2018
-// @Param	body		body 	models.NodoRubroApropiacion2018 true		"Body para la creacion de NodoRubroApropiacion2018"
-// @Success 200 {int} NodoRubroApropiacion2018.Id
-// @Failure 403 body is empty
-// @router /:objectId [options]
-func (j *NodoRubroApropiacionController) NodoRubroApropiacion2018DeleteOptions() {
-	j.Data["json"] = "success!"
-	j.ServeJSON()
-}
-
-// ArbolApropiacion devuelve un árbol desde la raiz indicada
-// @Title Preflight ArbolApropiacion
+// ArbolApropiacionPadreHijo devuelve un árbol desde la raiz indicada
+// @Title Preflight ArbolApropiacionPadreHijo
 // @Description Devuelve un nivel del árbol de apropiaciones
 // @Param	body		body 	models.NodoRubroApropiacion2018 true		"Body para la creacion de NodoRubroApropiacion2018"
 // @Success 200 {object} models.Object
 // @Failure 403 body is empty
-// @router /ArbolApropiacion/:raiz/:unidadEjecutora/:vigencia [get]
-func (j *NodoRubroApropiacionController) ArbolApropiacion() {
+// @router /ArbolApropiacionPadreHijo/:raiz/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 	nodoRaiz := j.GetString(":raiz")
 	ueStr := j.GetString(":unidadEjecutora")
 	vigenciastr := j.GetString(":vigencia")

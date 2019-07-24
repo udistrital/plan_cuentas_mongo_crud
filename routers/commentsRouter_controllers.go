@@ -54,15 +54,6 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
         beego.ControllerComments{
-            Method: "NodoRubroApropiacion2018DeleteOptions",
-            Router: `/:objectId`,
-            AllowHTTPMethods: []string{"options"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
-        beego.ControllerComments{
             Method: "Delete",
             Router: `/:objectId`,
             AllowHTTPMethods: []string{"delete"},
@@ -90,8 +81,8 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
         beego.ControllerComments{
-            Method: "ArbolApropiacion",
-            Router: `/ArbolApropiacion/:raiz/:unidadEjecutora/:vigencia`,
+            Method: "ArbolApropiacionPadreHijo",
+            Router: `/ArbolApropiacionPadreHijo/:raiz/:unidadEjecutora/:vigencia`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
