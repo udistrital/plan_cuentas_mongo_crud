@@ -80,22 +80,28 @@ func DeleteNodoRubroApropiacionById(session *mgo.Session, id string) (string, er
 	return "ok", err
 }
 
-func GetNodoApropiacion(session *mgo.Session, id, ue string, vigencia int) (NodoRubroApropiacion, error) {
+func GetNodoApropiacion(id, ue string, vigencia int) (nodo NodoRubroApropiacion, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
 	defer session.Close()
-	var nodo NodoRubroApropiacion
-	err := c.Find(bson.M{"_id": id}).One(&nodo)
-	return nodo, err
+	err = c.Find(bson.M{"_id": id}).One(&nodo)
+	return
 }
 
-func GetRaicesApropiacion(session *mgo.Session, ue string, vigencia int) ([]NodoRubroApropiacion, error) {
-	var roots []NodoRubroApropiacion
+func GetRaicesApropiacion(ue string, vigencia int) (roots []NodoRubroApropiacion, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
 	defer session.Close()
-	err := c.Find(bson.M{
+	err = c.Find(bson.M{
 		"$or": []bson.M{bson.M{"nodorubro.padre": nil}, bson.M{"nodorubro.padre": ""}},
 	}).All(&roots)
-	return roots, err
+	return
 }
 
 func EstrctTransaccionArbolApropiacion(session *mgo.Session, estructuras []*NodoRubroApropiacion, ue string, vigencia int) (ops []txn.Op, err error) {

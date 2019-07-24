@@ -540,7 +540,7 @@
         }
     },
     "definitions": {
-        "9381.0xc0004eabd0.false": {
+        "9392.0xc000532030.false": {
             "title": "false",
             "type": "object"
         },
@@ -549,10 +549,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/map[string][9539.0xc0004eac00.false]"
+                    "$ref": "#/definitions/map[string][9550.0xc000532060.false]"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9381.0xc0004eabd0.false"
+                    "$ref": "#/definitions/9392.0xc000532030.false"
                 },
                 "ValorOriginal": {
                     "type": "number",
