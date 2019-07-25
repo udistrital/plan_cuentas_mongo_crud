@@ -563,10 +563,45 @@
                     }
                 }
             }
+        },
+        "/producto/": {
+            "post": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "create FuenteFinanciamiento",
+                "operationId": "ProductoController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for FuenteFinanciamiento content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "9565.0xc0004f6240.false": {
+        "9693.0xc000521830.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "9888.0xc000521860.false": {
             "title": "false",
             "type": "object"
         },
@@ -575,10 +610,14 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/map[string][9723.0xc0004f6270.false]"
+                    "$ref": "#/definitions/9888.0xc000521860.false"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9565.0xc0004f6240.false"
+                    "$ref": "#/definitions/9693.0xc000521830.false"
+                },
+                "ValorAcumulado": {
+                    "type": "number",
+                    "format": "double"
                 },
                 "ValorOriginal": {
                     "type": "number",
@@ -593,6 +632,9 @@
             "title": "General",
             "type": "object",
             "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
                 "Descripcion": {
                     "type": "string"
                 },
@@ -663,6 +705,10 @@
         {
             "name": "movimiento",
             "description": "MovimientosController estructura para un controlador de beego\n"
+        },
+        {
+            "name": "producto",
+            "description": "ProductoController operations for FuenteFinanciamiento\n"
         }
     ]
 }
