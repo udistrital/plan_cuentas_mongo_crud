@@ -565,20 +565,35 @@
             }
         },
         "/producto/": {
+            "get": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "get all objects",
+                "operationId": "ProductoController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "Producto models.Producto"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "producto"
                 ],
-                "description": "create FuenteFinanciamiento",
+                "description": "create Producto",
                 "operationId": "ProductoController.Create",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "body for FuenteFinanciamiento content",
+                        "description": "body for Producto content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                            "$ref": "#/definitions/models.Producto"
                         }
                     }
                 ],
@@ -586,7 +601,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                            "$ref": "#/definitions/models.Producto"
                         }
                     },
                     "403": {
@@ -594,15 +609,110 @@
                     }
                 }
             }
+        },
+        "/producto/{id}": {
+            "get": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "get Producto by nombre",
+                "operationId": "ProductoController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la Producto a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Producto"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            }
+        },
+        "/producto/{objectId}": {
+            "put": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "update the Producto",
+                "operationId": "ProductoController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "The objectid you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "Eliminar Producto",
+                "operationId": "ProductoController.Eliminar Producto",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "9693.0xc000521830.false": {
+        "10013.0xc0005560c0.false": {
             "title": "false",
             "type": "object"
         },
-        "9888.0xc000521860.false": {
+        "9818.0xc000556090.false": {
             "title": "false",
+            "type": "object"
+        },
+        "bson.ObjectId": {
+            "title": "ObjectId",
             "type": "object"
         },
         "models.FuenteFinanciamiento": {
@@ -610,10 +720,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/9888.0xc000521860.false"
+                    "$ref": "#/definitions/10013.0xc0005560c0.false"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9693.0xc000521830.false"
+                    "$ref": "#/definitions/9818.0xc000556090.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -683,6 +793,15 @@
         "models.Object": {
             "title": "Object",
             "type": "object"
+        },
+        "models.Producto": {
+            "title": "Producto",
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "$ref": "#/definitions/bson.ObjectId"
+                }
+            }
         },
         "stringtrue": {
             "title": "stringtrue",
