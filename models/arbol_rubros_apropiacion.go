@@ -20,10 +20,10 @@ const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 type NodoRubroApropiacion struct {
 	*NodoRubro
 	ID                 string                            `json:"_id" bson:"_id,omitempty"`
-	ApropiacionInicial float64                           `json:"ApropiacionInicial"`
-	Movimientos        []string                          `json:"Movimientos"`
-	Productos          map[string]map[string]interface{} `json:"Productos"`
-	Estado             string                            `json:"estado"`
+	ApropiacionInicial float64                           `json:"ApropiacionInicial" bson:"apropiacionInicial"`
+	Movimientos        []string                          `json:"Movimientos" bson:"movimientos"`
+	Productos          map[string]map[string]interface{} `json:"Productos" bson:"productos"`
+	Estado             string                            `json:"Estado" bson:"estado"`
 }
 
 func GetAllNodoRubroApropiacion(session *mgo.Session, query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
