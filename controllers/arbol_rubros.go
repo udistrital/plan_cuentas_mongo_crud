@@ -9,8 +9,8 @@ import (
 
 	"github.com/astaxie/beego"
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
-	// "github.com/manucorporat/try"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+
 	// "github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -173,7 +173,7 @@ func (j *NodoRubroController) NodoRubroDeleteOptions() {
 // 		session, _ := db.GetSession()
 // 		json.Unmarshal(j.Ctx.Input.RequestBody, &rubroData)
 // 		rubroDataHijo := rubroData.(map[string]interface{})["RubroHijo"].(map[string]interface{})
-		
+
 // 		general := models.General{
 // 			rubroDataHijo["Codigo"].(string),
 // 			0,
@@ -368,16 +368,16 @@ func (j *NodoRubroController) FullArbolRubro() {
 	var tree, childrens []map[string]interface{}
 
 	forkData := make(map[string]interface{})
-	
+
 	//forkData["Codigo"] = "3"
 
 	children := make(map[string]interface{})
-	children["data"] = map[string]interface{}{ "Codigo": "3-1", "children": []map[string]interface{} {
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-1", "children": []map[string]interface{}{} }},
-		map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2", "children": []map[string]interface{}{
-			map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2-1", "children": []map[string]interface{}{} }},
-			map[string]interface{}{"data": map[string]interface{}{ "Codigo": "3-1-2-2", "children": []map[string]interface{}{} }},
-			}},
+	children["data"] = map[string]interface{}{"Codigo": "3-1", "children": []map[string]interface{}{
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-1", "children": []map[string]interface{}{}}},
+		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2", "children": []map[string]interface{}{
+			map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2-1", "children": []map[string]interface{}{}}},
+			map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2-2", "children": []map[string]interface{}{}}},
+		}},
 		},
 	}}
 
@@ -395,7 +395,6 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 	hijo := make(map[string]interface{})
 
 	if rubroHijo.ID != "" {
-		hijo["Id"] = rubroHijo.IDPsql
 		hijo["Codigo"] = rubroHijo.ID
 		hijo["Nombre"] = rubroHijo.Nombre
 		hijo["IsLeaf"] = false
