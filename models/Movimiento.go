@@ -1,29 +1,22 @@
 package models
 
-import (
-	"github.com/globalsign/mgo"
-	"github.com/globalsign/mgo/bson"
-	"github.com/udistrital/plan_cuentas_mongo_crud/db"
-)
-
 // MovimientosCollection es el nombre de la colección en mongo.
 const MovimientosCollection = "movimientos"
+const MovimientoParameterCollection = "movimientos_parametros"
 
 // Movimiento es una estructura generica para los tipos de movimiento registados.
 type Movimiento struct {
-	ID             string  `json:"_id" bson:"_id,omitempty"`
-	IDPsql         int     `json:"idpsql"`
-	Valor          float64 `json:"valor"`
-	Tipo           string  `json:"tipo"`
-	DocumentoPadre int64   `json:"documento_padre"`
-	FechaRegistro  string  `json:"fecha_registro"`
+	ID             string             `json:"_id" bson:"_id,omitempty"`
+	IDPsql         int                `json:"IDPsql" bson:"IDPsql" validate:"required"`
+	Valor          float64            `json:"Valor" bson:"Valor" validate:"required"`
+	Tipo           string             `json:"Tipo" bson:"Tipo" validate:"required"`
+	DocumentoPadre int                `json:"DocumentoPadre" bson:"DocumentoPadre"`
+	FechaRegistro  string             `json:"FechaRegistro" bson:"FechaRegistro" validate:"required"`
+	Movimientos    map[string]float64 `json:"Movimientos" bson:"Movimientos"`
 }
 
-// GetMovimientoByPsqlId Obtener un documento por el idpsql
-func GetMovimientoByPsqlId(session *mgo.Session, id, tipo string) (*Movimiento, error) {
-	c := db.Cursor(session, MovimientosCollection)
-	defer session.Close()
-	var Movimiento *Movimiento
-	err := c.Find(bson.M{"idpsql": id, "tipo": tipo}).One(&Movimiento)
-	return Movimiento, err
+type MovimientoParameter struct {
+	ID                  string `json:"_id" bson:"_id,omitempty"`
+	TipoMovimientoHijo  string `json:"TipoMovimientoHijo" bson:"TipoMovimientoHijo"`
+	TipoMovimientoPadre string `json:"TipoMovimientoPadre" bson:"TipoMovimientoPadre"`
 }

@@ -10,7 +10,7 @@ import (
 )
 
 // PropagacionValores ... Update the apropiation's tree balance over the data passed to this function as "valorPropagado"
-func PropagacionValores(rubro, mes, vigencia, ue string, valorPrograpado map[string]float64) (ops []interface{}, err error) {
+func PropagacionValoresBack(rubro, mes, vigencia, ue string, valorPrograpado map[string]float64) (ops []interface{}, err error) {
 	try.This(func() {
 		session, _ := db.GetSession()
 

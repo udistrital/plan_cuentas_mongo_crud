@@ -5,20 +5,21 @@ import (
 	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
+	"github.com/udistrital/utils_oas/formatdata"
 )
 
-const TransactionCollection = "transaction"
+const TransactionCollection = "transactions"
 
 // ConvertToTransactionItem ... This method manage the Mongo's transaction items from the current orm for registration of new elements in the DB , you should pass
 // the collection name and the model structure. This method will return a transaction elemnt.
-func ConvertToTransactionItem(collectionName string, model interface{}) (ops txn.Op) {
-	return buildTransactionItem("d-", collectionName, model)
+func ConvertToTransactionItem(collectionName string, models ...interface{}) (ops []interface{}) {
+	return buildTransactionArr("d-", collectionName, models)
 }
 
 // ConvertToUpdateTransactionItem ... This method manage the Mongo's transaction items from the current orm for update elements that currently exist in the DB , you should pass
 // the collection name and the model structure. This method will return a transaction elemnt.
-func ConvertToUpdateTransactionItem(collectionName string, model interface{}) (ops txn.Op) {
-	return buildTransactionItem("d+", collectionName, model)
+func ConvertToUpdateTransactionItem(collectionName string, models ...interface{}) (ops []interface{}) {
+	return buildTransactionArr("d+", collectionName, models)
 }
 
 // RunTransaction ... Perform a transaction over the DB with the options element.
@@ -30,7 +31,7 @@ func RunTransaction(collectionName string, options []interface{}) {
 		session.Close()
 	}()
 	var ops []txn.Op
-	c := db.Cursor(session, collectionName+"_"+TransactionCollection)
+	c := db.Cursor(session, TransactionCollection)
 	runner := txn.NewRunner(c)
 
 	for _, op := range options {
@@ -45,8 +46,27 @@ func RunTransaction(collectionName string, options []interface{}) {
 
 }
 
-func buildTransactionItem(assertType, collectionName string, model interface{}) (ops txn.Op) {
-	ID := bson.NewObjectId().Hex()
+func buildTransactionItem(assertType, collectionName string, uuid string, model interface{}) (ops txn.Op) {
+	ID := ""
+	if uuid == "" {
+		ID = bson.NewObjectId().Hex()
+	} else {
+		ID = uuid
+	}
+
+	if assertType == "d+" {
+		var data bson.M
+		formatdata.FillStructP(model, &data)
+
+		op := txn.Op{
+			C:      collectionName,
+			Id:     ID,
+			Assert: assertType,
+			Update: bson.M{"$set": data},
+		}
+		return op
+
+	}
 	op := txn.Op{
 		C:      collectionName,
 		Id:     ID,
@@ -54,4 +74,20 @@ func buildTransactionItem(assertType, collectionName string, model interface{}) 
 		Insert: model,
 	}
 	return op
+
+}
+
+func buildTransactionArr(assertType, collectionName string, models []interface{}) (ops []interface{}) {
+	for _, model := range models {
+		uuid := ""
+		if assertType == "d+" {
+			var modelMap map[string]interface{}
+			formatdata.FillStructP(model, &modelMap)
+
+			uuid = modelMap["_id"].(string)
+		}
+
+		ops = append(ops, buildTransactionItem(assertType, collectionName, uuid, model))
+	}
+	return
 }

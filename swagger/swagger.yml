@@ -348,7 +348,28 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /movimientoRegistrarMovimientos/:
+  /movimiento/RegistrarMovimientoParameter:
+    post:
+      tags:
+      - movimiento
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
+        y los propaga tanto en la colección
+      operationId: MovimientosController.RegistrarMovimientoParameter
+      parameters:
+      - in: body
+        name: body
+        description: json de movimientos enviado desde el api_mid_financiera
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /movimiento/RegistrarMovimientos:
     post:
       tags:
       - movimiento
@@ -370,7 +391,7 @@ paths:
         "403":
           description: error
 definitions:
-  1116.0xc000443770.false:
+  11550.0xc000511140.false:
     title: "false"
     type: object
   models.FuenteFinanciamiento:
@@ -380,9 +401,9 @@ definitions:
       _id:
         type: string
       Rubros:
-        $ref: '#/definitions/map[string][1274.0xc0004437a0.false]'
+        $ref: '#/definitions/map[string][11708.0xc000511170.false]'
       TipoFuente:
-        $ref: '#/definitions/1116.0xc000443770.false'
+        $ref: '#/definitions/11550.0xc000511140.false'
       ValorOriginal:
         type: number
         format: double
