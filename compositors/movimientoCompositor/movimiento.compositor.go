@@ -30,7 +30,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface
 
 	if err != nil {
 		logs.Error("1", err)
-		panic(err)
+		return
 	}
 
 	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.DocumentoPadre, movimientoParameter.TipoMovimientoPadre)
@@ -47,9 +47,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface
 		}
 
 		if movimientoPadre.Movimientos[movimientoHijo.Tipo] == 0 {
-			movimientoPadre.Movimientos[movimientoHijo.Tipo] = movimientoHijo.Valor
+			movimientoPadre.Movimientos[movimientoHijo.Tipo] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
 		} else {
-			movimientoPadre.Movimientos[movimientoHijo.Tipo] += movimientoHijo.Valor
+			movimientoPadre.Movimientos[movimientoHijo.Tipo] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
 		}
 
 		arrMovimientosUpdted = append(arrMovimientosUpdted, movimientoPadre)

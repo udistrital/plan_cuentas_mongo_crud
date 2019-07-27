@@ -57,7 +57,9 @@ func (j *MovimientosController) RegistrarMovimiento() {
 		var movimientoIntfc interface{}
 		movimientoIntfc = movimientoElmnt
 		if errStrc := formatdata.StructValidation(movimientoElmnt); len(errStrc) > 0 {
+			logs.Error(errStrc)
 			responseformat.SetResponseFormat(&j.Controller, errStrc, "", 422)
+			return
 		}
 
 		insertMovimientoData := transactionManager.ConvertToTransactionItem(collectionName, movimientoIntfc)

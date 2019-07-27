@@ -734,11 +734,11 @@
         }
     },
     "definitions": {
-        "13954.0xc000538bd0.false": {
+        "14026.0xc00050cb40.false": {
             "title": "false",
             "type": "object"
         },
-        "14149.0xc000538c00.false": {
+        "14221.0xc00050cb70.false": {
             "title": "false",
             "type": "object"
         },
@@ -751,10 +751,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/14149.0xc000538c00.false"
+                    "$ref": "#/definitions/14221.0xc00050cb70.false"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/13954.0xc000538bd0.false"
+                    "$ref": "#/definitions/14026.0xc00050cb40.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
