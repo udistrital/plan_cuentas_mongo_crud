@@ -15,6 +15,7 @@ type Movimiento struct {
 	Movimientos    map[string]float64 `json:"Movimientos" bson:"Movimientos"`
 }
 
+// MovimientoParameter this struct represent a "movmientos_parametros" collection item.
 type MovimientoParameter struct {
 	ID                  string `json:"_id" bson:"_id,omitempty"`
 	TipoMovimientoHijo  string `json:"TipoMovimientoHijo" bson:"TipoMovimientoHijo"`

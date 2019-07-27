@@ -23,6 +23,8 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 
 }
 
+// BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
+// This method search in "movimientos_parametros" collection for the afectation's config recursively.
 func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface{}) {
 	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
 	var arrMovimientosUpdted []interface{}
