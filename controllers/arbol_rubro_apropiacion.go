@@ -112,10 +112,9 @@ func (j *NodoRubroApropiacionController) Post() {
 	if err := models.InsertNodoRubroApropiacion(arbolrubroapropiacion); err == nil {
 		j.Data["json"] = "insert success!"
 	} else {
-		j.Data["json"] = "error!"
+		j.Data["json"] = err
 	}
 
-	j.ServeJSON()
 }
 
 // Put de HTTP
