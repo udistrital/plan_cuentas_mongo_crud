@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroApropiacionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -106,10 +107,13 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
-	var arbolrubroapropiacion *models.NodoRubroApropiacion
-	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
+	var nodoRubroApropiacion *models.NodoRubroApropiacion
+	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
-	if err := models.InsertNodoRubroApropiacion(arbolrubroapropiacion); err == nil {
+	fmt.Println("ARbol apropiacion=???")
+
+	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
+		fmt.Println("success!")
 		j.Data["json"] = "insert success!"
 	} else {
 		j.Data["json"] = err
@@ -154,33 +158,21 @@ func (j *NodoRubroApropiacionController) Options() {
 	j.ServeJSON()
 }
 
-// NodoRubroApropiacion2018DeleteOptions NodoRubroApropiacion2018DeleteOptions
-// @Title Preflight options
-// @Description Crear NodoRubroApropiacion2018
-// @Param	body		body 	models.NodoRubroApropiacion2018 true		"Body para la creacion de NodoRubroApropiacion2018"
-// @Success 200 {int} NodoRubroApropiacion2018.Id
-// @Failure 403 body is empty
-// @router /:objectId [options]
-func (j *NodoRubroApropiacionController) NodoRubroApropiacion2018DeleteOptions() {
-	j.Data["json"] = "success!"
-	j.ServeJSON()
-}
-
-// ArbolApropiacion devuelve un árbol desde la raiz indicada
-// @Title Preflight ArbolApropiacion
+// ArbolApropiacionPadreHijo devuelve un árbol desde la raiz indicada
+// @Title Preflight ArbolApropiacionPadreHijo
 // @Description Devuelve un nivel del árbol de apropiaciones
 // @Param	body		body 	models.NodoRubroApropiacion2018 true		"Body para la creacion de NodoRubroApropiacion2018"
 // @Success 200 {object} models.Object
 // @Failure 403 body is empty
-// @router /ArbolApropiacion/:raiz/:unidadEjecutora/:vigencia [get]
-func (j *NodoRubroApropiacionController) ArbolApropiacion() {
+// @router /ArbolApropiacionPadreHijo/:raiz/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 	nodoRaiz := j.GetString(":raiz")
 	ueStr := j.GetString(":unidadEjecutora")
 	vigenciastr := j.GetString(":vigencia")
-	session, _ := db.GetSession()
 	var arbolApropacionessGrande []map[string]interface{}
+
 	vigencia, _ := strconv.Atoi(vigenciastr)
-	raiz, err := models.GetNodoApropiacion(session, nodoRaiz, ueStr, vigencia)
+	raiz, err := models.GetNodoApropiacion(nodoRaiz, ueStr, vigencia)
 
 	if err == nil {
 		arbolApropiaciones := make(map[string]interface{})
@@ -192,7 +184,7 @@ func (j *NodoRubroApropiacionController) ArbolApropiacion() {
 
 		var hijos []interface{}
 		for j := 0; j < len(raiz.Hijos); j++ {
-			hijo := getHijoApropiacion(raiz.Hijos[j], ueStr, vigencia)
+			hijo := rubroApropiacionHelper.GetHijoApropiacion(raiz.Hijos[j], ueStr, vigencia)
 			if len(hijo) > 0 {
 				arbolApropiaciones["IsLeaf"] = false
 				hijos = append(hijos, hijo)
@@ -218,10 +210,10 @@ func (j *NodoRubroApropiacionController) ArbolApropiacion() {
 func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
-	session, _ := db.GetSession()
+
 	var roots []map[string]interface{}
 	vigencia, _ := strconv.Atoi(vigenciaStr)
-	raices, err := models.GetRaicesApropiacion(session, ueStr, vigencia)
+	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
 	for i := 0; i < len(raices); i++ {
 		root := map[string]interface{}{
 			"Codigo":             raices[i].ID,
@@ -235,7 +227,7 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 			var hijos []map[string]interface{}
 			root["IsLeaf"] = false
 			for j := 0; j < len(root["Hijos"].([]string)); j++ {
-				hijo := getHijoApropiacion(root["Hijos"].([]string)[j], ueStr, vigencia)
+				hijo := rubroApropiacionHelper.GetHijoApropiacion(root["Hijos"].([]string)[j], ueStr, vigencia)
 				if len(hijo) > 0 {
 					hijos = append(hijos, hijo)
 				}
@@ -252,30 +244,6 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	}
 
 	j.ServeJSON()
-}
-
-// Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
-// Se devuelve un objeto de este tipo y no de models con el fin de utilizar la estructura de json utilizada ya en el cliente
-// y no tener que hacer grandes modificaciones en el
-func getHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
-	rubroHijo, _ := models.GetNodoRubroApropiacionById(id, ue, vigencia)
-	hijo := make(map[string]interface{})
-	if rubroHijo != nil {
-		if rubroHijo.ID != "" {
-			hijo["Codigo"] = rubroHijo.ID
-			hijo["Nombre"] = rubroHijo.General.Nombre
-			hijo["IsLeaf"] = false
-			hijo["UnidadEjecutora"] = rubroHijo.NodoRubro.UnidadEjecutora
-			hijo["ApropiacionInicial"] = rubroHijo.ApropiacionInicial
-			if len(rubroHijo.Hijos) == 0 {
-				hijo["IsLeaf"] = true
-				hijo["Hijos"] = nil
-				return hijo
-			}
-		}
-	}
-
-	return hijo
 }
 
 // FullArbolRubroApropiaciones ...

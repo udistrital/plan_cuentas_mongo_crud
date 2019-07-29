@@ -31,3 +31,27 @@ func getChildren(children []string, unidadEjecutora string, vigencia int) (child
 	}
 	return
 }
+
+// Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
+// Se devuelve un objeto de este tipo y no de models con el fin de utilizar la estructura de json utilizada ya en el cliente
+// y no tener que hacer grandes modificaciones en el
+func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
+	rubroHijo, _ := models.GetNodoRubroApropiacionById(id, ue, vigencia)
+	hijo := make(map[string]interface{})
+	if rubroHijo != nil {
+		if rubroHijo.ID != "" {
+			hijo["Codigo"] = rubroHijo.ID
+			hijo["Nombre"] = rubroHijo.General.Nombre
+			hijo["IsLeaf"] = false
+			hijo["UnidadEjecutora"] = rubroHijo.NodoRubro.UnidadEjecutora
+			hijo["ApropiacionInicial"] = rubroHijo.ApropiacionInicial
+			if len(rubroHijo.Hijos) == 0 {
+				hijo["IsLeaf"] = true
+				hijo["Hijos"] = nil
+				return hijo
+			}
+		}
+	}
+
+	return hijo
+}

@@ -285,13 +285,13 @@
                 }
             }
         },
-        "/arbol_rubro_apropiacion/ArbolApropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
+        "/arbol_rubro_apropiacion/ArbolApropiacionPadreHijo/{raiz}/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
                 "description": "Devuelve un nivel del árbol de apropiaciones",
-                "operationId": "NodoRubroApropiacionController.Preflight ArbolApropiacion",
+                "operationId": "NodoRubroApropiacionController.Preflight ArbolApropiacionPadreHijo",
                 "parameters": [
                     {
                         "in": "body",
@@ -417,32 +417,6 @@
                     },
                     "403": {
                         "description": "objectId is empty"
-                    }
-                }
-            },
-            "options": {
-                "tags": [
-                    "arbol_rubro_apropiacion"
-                ],
-                "description": "Crear NodoRubroApropiacion2018",
-                "operationId": "NodoRubroApropiacionController.Preflight options",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Body para la creacion de NodoRubroApropiacion2018",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{int} NodoRubroApropiacion2018.Id"
-                    },
-                    "403": {
-                        "description": "body is empty"
                     }
                 }
             }
