@@ -14,7 +14,7 @@ const NodoRubroCollection = "arbol_rubro"
 // NodoRubro es la estructura de un Rubro, es un nodo puesto que forma parte del árbol
 type NodoRubro struct {
 	*General
-	ID              string   `json:"_id" bson:"_id,omitempty"`
+	ID              string   `json:"Codigo" bson:"_id,omitempty"`
 	Hijos           []string `json:"Hijos" bson:"hijos"`
 	Padre           string   `json:"Padre" bson:"padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
