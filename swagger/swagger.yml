@@ -331,6 +331,31 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
+  /fuente_financiamiento/{codigo}:
+    put:
+      tags:
+      - fuente_financiamiento
+      description: update the FuenteFinanciamiento
+      operationId: FuenteFinanciamientoController.Update
+      parameters:
+      - in: path
+        name: codigo
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :codigo is empty
   /fuente_financiamiento/VincularFuente:
     post:
       tags:
@@ -484,11 +509,11 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10283.0xc000313920.false:
+  10483.0xc000329cb0.false:
     title: "false"
     type: object
-  10573.string.0xc00031d2a0:
-    title: "0xc00031d2a0"
+  10760.rubroFuente:
+    title: rubroFuente
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -497,12 +522,12 @@ definitions:
     title: FuenteFinanciamiento
     type: object
     properties:
-      _id:
+      Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/10573.string.0xc00031d2a0'
+        $ref: '#/definitions/10760.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10283.0xc000313920.false'
+        $ref: '#/definitions/10483.0xc000329cb0.false'
       ValorAcumulado:
         type: number
         format: double
@@ -532,7 +557,7 @@ definitions:
     title: NodoRubro
     type: object
     properties:
-      _id:
+      Codigo:
         type: string
       Hijos:
         type: array

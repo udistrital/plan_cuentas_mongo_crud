@@ -47,7 +47,6 @@ func UpdateNodoRubroApropiacion(session *mgo.Session, j NodoRubroApropiacion, id
 		panic(err)
 	}*/
 	return err
-
 }
 
 // InsertNodoRubroApropiacion Register function to NodoRubroApropiacion

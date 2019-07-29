@@ -62,3 +62,24 @@ func (j *FuenteFinanciamientoController) VincularFuente() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 	fmt.Println("fuente:", fuente)
 }
+
+// Put de HTTP
+// @Title Update
+// @Description update the FuenteFinanciamiento
+// @Param	codigo		path 	string	true		"The objectid you want to update"
+// @Param	body		body 	models.Object	true		"The body"
+// @Success 200 {object} models.Object
+// @Failure 403 :codigo is empty
+// @router /:codigo [put]
+func (j *FuenteFinanciamientoController) Put() {
+	codigo := j.Ctx.Input.Param(":objectId")
+	var fuente models.FuenteFinanciamiento
+
+	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
+
+	if err := models.UpdateFuenteFinanciamiento(&fuente, codigo); err == nil {
+		j.Data["json"] = "update success!"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+}

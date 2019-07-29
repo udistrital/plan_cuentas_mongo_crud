@@ -7,24 +7,31 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
+type codigoRubro string
+
+// dependenciaRubro Relación entre dependencia y rubro
+type dependenciaRubro struct {
+	ID    int     `json:"Id" bson:"idDepdencia"`
+	Valor float64 `json:"ValorDependencia" bson:"valorDependencia"`
+}
+
 // rubroFuente Relación entre un rubro y una fuente
 type rubroFuente struct {
-	Valor        float64 `json:"Valor" bson"valor"`
-	Productos    []int   `json:"Productos" bson:"productos`
-	Dependencias []int   `json:"Dependencias" bson:"dependencias"`
+	Dependencias []*dependenciaRubro `json:"Dependencias" bson:"dependencias"`
+	Productos    []int               `json:"Productos" bson:"productos`
 }
 
 // FuenteFinanciamiento ...
 type FuenteFinanciamiento struct {
 	*General
-	ID             string                             `json:"_id" bson:"_id,omitempty"`
-	TipoFuente     interface{}                        `json:"TipoFuente" bson"tipoFuente"`
-	ValorOriginal  float64                            `json:"ValorOriginal" bson:"valorOriginal"`
-	ValorAcumulado float64                            `json:"ValorAcumulado" bson"valorAcumulado"`
-	Rubros         map[string]map[string]*rubroFuente `json:"Rubros" bson:"rubros"`
+	ID             string                       `json:"Codigo" bson:"_id,omitempty"`
+	TipoFuente     interface{}                  `json:"TipoFuente" bson"tipoFuente"`
+	ValorOriginal  float64                      `json:"ValorOriginal" bson:"valorOriginal"`
+	ValorAcumulado float64                      `json:"ValorAcumulado" bson"valorAcumulado"`
+	Rubros         map[codigoRubro]*rubroFuente `json:"Rubros" bson:"rubros"`
 }
 
-// ArbolRubroApropiacion2018Collection constante para la colección
+// FuenteFinanciamientoCollection constante para la colección
 const FuenteFinanciamientoCollection = "fuente_financiamiento"
 
 // // InsertFuenteMovimiento función para registrar un documento de tipo fuente_movimiento
@@ -39,9 +46,9 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 	if err != nil {
 		return err
 	}
-	defer session.Close()
-
 	c := db.Cursor(session, FuenteFinanciamientoCollection)
+
+	defer session.Close()
 	return c.Insert(&j)
 }
 
@@ -56,15 +63,17 @@ func GetFuenteFinanciamientoByID(session *mgo.Session, id string) *FuenteFinanci
 	return fuenteFinanciamiento
 }
 
-// GetFuenteFinanciamientoByIDPsql Obtener un documento por el idpsql
-func GetFuenteFinanciamientoByIDPsql(session *mgo.Session, id int) *FuenteFinanciamiento {
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
-	var fuenteFinanciamiento *FuenteFinanciamiento
-	err := c.Find(bson.M{"idpsql": id}).One(&fuenteFinanciamiento)
+// UpdateFuenteFinanciamiento actualiza una fuente de financiamiento
+func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string) error {
+	session, err := db.GetSession()
 	if err != nil {
-		return nil
+		return err
 	}
-	return fuenteFinanciamiento
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+
+	defer session.Close()
+
+	return c.Update(bson.M{"_id": id}, &j)
 }
 
 // PostFuentePadreTransaccion crea una estructura para FuenteFinanciamiento de tipo registro.

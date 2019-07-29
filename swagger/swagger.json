@@ -538,6 +538,44 @@
                 }
             }
         },
+        "/fuente_financiamiento/{codigo}": {
+            "put": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "update the FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "codigo",
+                        "description": "The objectid you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": ":codigo is empty"
+                    }
+                }
+            }
+        },
         "/movimiento/RegistrarMovimientoParameter": {
             "post": {
                 "tags": [
@@ -739,12 +777,12 @@
         }
     },
     "definitions": {
-        "10283.0xc000313920.false": {
+        "10483.0xc000329cb0.false": {
             "title": "false",
             "type": "object"
         },
-        "10573.string.0xc00031d2a0": {
-            "title": "0xc00031d2a0",
+        "10760.rubroFuente": {
+            "title": "rubroFuente",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -755,11 +793,14 @@
             "title": "FuenteFinanciamiento",
             "type": "object",
             "properties": {
+                "Codigo": {
+                    "type": "string"
+                },
                 "Rubros": {
-                    "$ref": "#/definitions/10573.string.0xc00031d2a0"
+                    "$ref": "#/definitions/10760.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10283.0xc000313920.false"
+                    "$ref": "#/definitions/10483.0xc000329cb0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -768,9 +809,6 @@
                 "ValorOriginal": {
                     "type": "number",
                     "format": "double"
-                },
-                "_id": {
-                    "type": "string"
                 }
             }
         },
@@ -805,6 +843,9 @@
             "title": "NodoRubro",
             "type": "object",
             "properties": {
+                "Codigo": {
+                    "type": "string"
+                },
                 "Hijos": {
                     "type": "array",
                     "items": {
@@ -815,9 +856,6 @@
                     "type": "string"
                 },
                 "UnidadEjecutora": {
-                    "type": "string"
-                },
-                "_id": {
                     "type": "string"
                 }
             }
