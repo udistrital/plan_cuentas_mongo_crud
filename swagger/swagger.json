@@ -677,11 +677,11 @@
         }
     },
     "definitions": {
-        "10013.0xc0005560c0.false": {
+        "9700.0xc0005574a0.false": {
             "title": "false",
             "type": "object"
         },
-        "9818.0xc000556090.false": {
+        "9895.0xc0005574d0.false": {
             "title": "false",
             "type": "object"
         },
@@ -694,10 +694,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/10013.0xc0005560c0.false"
+                    "$ref": "#/definitions/9895.0xc0005574d0.false"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9818.0xc000556090.false"
+                    "$ref": "#/definitions/9700.0xc0005574a0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

@@ -2,6 +2,7 @@ package rubroApropiacionManager
 
 import (
 	"fmt"
+	// "log"
 	"strconv"
 
 	"github.com/globalsign/mgo/bson"
@@ -12,12 +13,7 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
-	var ops []txn.Op
-
-	fmt.Println(nodoHoja)
-
 	session, err := db.GetSession()
-
 	if err != nil {
 		return err
 	}
@@ -25,35 +21,27 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	c := db.Cursor(session, models.NodoRubroApropiacionCollection)
 	runner := txn.NewRunner(c)
 
-	nodoPadre, err := models.GetNodoRubroApropiacionById(nodoHoja.Padre, nodoHoja.UnidadEjecutora, nodoHoja.Vigencia)
-
-	fmt.Println(nodoPadre.ID)
-
-	if err != nil {
-		return err
-	}
-
-	nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
-
 	id := bson.NewObjectId()
 
-	// opRegister := txn.Op{
-	// 	C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
-	// 	Id:     nodoHoja.ID,
-	// 	Assert: "d-",
-	// 	Insert: nodoHoja,
-	// }
-
-	opUpdate := txn.Op{
+	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
-		Id:     nodoPadre.ID,
+		Id:     nodoHoja.ID,
 		Assert: "d-",
-		Update: bson.D{{"$set", bson.D{{"nodorubro.hijos", nodoPadre.Hijos}}}},
-	}
+		Insert: nodoHoja,
+	}}
 
-	// ops = append(ops, opRegister, opUpdate)
-	ops = append(ops, opUpdate)
-	// ops = append(ops, opRegister)
+	nodoPadre, err := models.GetNodoRubroApropiacionById(nodoHoja.Padre, nodoHoja.UnidadEjecutora, nodoHoja.Vigencia)
+
+	if err == nil {
+		nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
+
+		ops = append(ops, txn.Op{
+			C:  models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
+			Id: nodoPadre.ID,
+			Assert: bson.M{"_id": nodoPadre.ID},
+			Update: bson.D{{"$set", bson.D{{"nodorubro.hijos", nodoPadre.Hijos}}}},
+		})
+	} 
 
 	return runner.Run(ops, id, nil)
 }
