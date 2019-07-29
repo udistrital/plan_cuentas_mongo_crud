@@ -708,12 +708,12 @@
         }
     },
     "definitions": {
-        "14114.0xc000557e60.false": {
+        "10275.0xc0002d9890.false": {
             "title": "false",
             "type": "object"
         },
-        "14309.0xc000557e90.false": {
-            "title": "false",
+        "10473.rubroFuente": {
+            "title": "rubroFuente",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -725,10 +725,10 @@
             "type": "object",
             "properties": {
                 "Rubros": {
-                    "$ref": "#/definitions/14309.0xc000557e90.false"
+                    "$ref": "#/definitions/10473.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/14114.0xc000557e60.false"
+                    "$ref": "#/definitions/10275.0xc0002d9890.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
