@@ -116,17 +116,9 @@ func (j *NodoRubroApropiacionController) Post() {
 		fmt.Println("success!")
 		j.Data["json"] = "insert success!"
 	} else {
-		fmt.Println("error ", err.Error())
-		j.Data["json"] = err.Error()
+		j.Data["json"] = err
 	}
 
-	// if err := models.InsertNodoRubroApropiacion(nodoRubroApropiacion); err == nil {
-	// 	j.Data["json"] = "insert success!"
-	// } else {
-	// 	j.Data["json"] = "error!"
-	// }
-
-	// j.ServeJSON()
 }
 
 // Put de HTTP

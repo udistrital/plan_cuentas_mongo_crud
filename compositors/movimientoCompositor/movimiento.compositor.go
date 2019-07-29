@@ -1,55 +1,76 @@
 package movimientoCompositor
 
 import (
+	"github.com/astaxie/beego/logs"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
 // AddMovimientoTransaction ... Add Movimiento's document to mongo db and it's afectation
 // over the apropiation's tree.
-func AddMovimientoTransaction(movimientoData ...models.Movimiento) {
+func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{} {
 	var (
 		ops []interface{}
-		// month string
-		// year  string
 	)
-
-	// layout := "2006-01-02T15:04:05.000Z"
-	// t, err := time.Parse(layout, movimientoData.FechaRegistro)
-
-	// if err != nil {
-	// 	logManager.LogError(err.Error())
-	// 	panic(err.Error())
-	// }
-
-	// month = strconv.Itoa(int(t.Month()))
-	// year = strconv.Itoa(int(t.Year()))
 
 	for _, element := range movimientoData {
 		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, element)
 		ops = append(ops, opMov)
 	}
 
-	// afectacionMap := make(map[string]map[string]float64)
+	return ops
 
-	// for _, afect := range movimientoData.Afectacion {
+}
 
-	// 	if afectacionMap[afect["Codigo"].(string)] == nil {
-	// 		afectacionMap[afect["Codigo"].(string)] = make(map[string]float64)
-	// 	}
+// BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
+// This method search in "movimientos_parametros" collection for the afectation's config recursively.
+func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface{}) {
+	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
+	var arrMovimientosUpdted []interface{}
+	var runFlag = true
 
-	// 	afectacionMap[afect["Codigo"].(string)][afect["Tipo"].(string)] += afect["Valor"].(float64)
-	// }
+	if err != nil {
+		logs.Error("1", err)
+		return
+	}
 
-	// for k, v := range afectacionMap {
-	// 	op, err := apropiacionHelper.PropagacionValores(k, month, year, strconv.Itoa(movimientoData.UnidadEjecutora), v)
-	// 	if err != nil {
-	// 		logManager.LogError(err.Error())
-	// 		panic(err.Error())
-	// 	}
-	// 	ops = append(ops, op...)
-	// }
+	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.DocumentoPadre, movimientoParameter.TipoMovimientoPadre)
+	movimientoHijo := movimiento
 
-	transactionManager.RunTransaction(models.MovimientosCollection, ops)
+	if err != nil {
+		runFlag = false
+	}
 
+	for runFlag {
+
+		if len(movimientoPadre.Movimientos) == 0 {
+			movimientoPadre.Movimientos = make(map[string]float64)
+		}
+
+		if movimientoPadre.Movimientos[movimientoHijo.Tipo] == 0 {
+			movimientoPadre.Movimientos[movimientoHijo.Tipo] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
+		} else {
+			movimientoPadre.Movimientos[movimientoHijo.Tipo] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
+		}
+
+		arrMovimientosUpdted = append(arrMovimientosUpdted, movimientoPadre)
+
+		movimientoHijo = movimientoPadre
+		movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimientoHijo.Tipo)
+
+		if err != nil {
+			logs.Error("2", err)
+			panic(err)
+		}
+		movimientoPadre.Movimientos = make(map[string]float64)
+		movimientoPadre, err = movimientoManager.GetOneMovimientoByTipo(movimientoHijo.DocumentoPadre, movimientoParameter.TipoMovimientoPadre)
+		if err != nil {
+			runFlag = false
+		}
+	}
+
+	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, arrMovimientosUpdted...)
+
+	return
 }
