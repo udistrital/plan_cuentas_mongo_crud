@@ -1,8 +1,6 @@
 package rubroApropiacionManager
 
 import (
-	"fmt"
-	// "log"
 	"strconv"
 
 	"github.com/globalsign/mgo/bson"
@@ -36,12 +34,12 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 		nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
 
 		ops = append(ops, txn.Op{
-			C:  models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
-			Id: nodoPadre.ID,
+			C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
+			Id:     nodoPadre.ID,
 			Assert: bson.M{"_id": nodoPadre.ID},
 			Update: bson.D{{"$set", bson.D{{"nodorubro.hijos", nodoPadre.Hijos}}}},
 		})
-	} 
+	}
 
 	return runner.Run(ops, id, nil)
 }
