@@ -331,6 +331,26 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
+  /fuente_financiamiento/VincularFuente:
+    post:
+      tags:
+      - fuente_financiamiento
+      description: create FuenteFinanciamiento
+      operationId: FuenteFinanciamientoController.Create
+      parameters:
+      - in: body
+        name: body
+        description: body for FuenteFinanciamiento content
+        required: true
+        schema:
+          $ref: '#/definitions/models.FuenteFinanciamiento'
+      responses:
+        "201":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.FuenteFinanciamiento'
+        "403":
+          description: body is empty
   /movimiento/RegistrarMovimientoParameter:
     post:
       tags:
@@ -464,11 +484,11 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10275.0xc0002d9890.false:
+  10283.0xc000313920.false:
     title: "false"
     type: object
-  10473.rubroFuente:
-    title: rubroFuente
+  10573.string.0xc00031d2a0:
+    title: "0xc00031d2a0"
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -480,9 +500,9 @@ definitions:
       _id:
         type: string
       Rubros:
-        $ref: '#/definitions/10473.rubroFuente'
+        $ref: '#/definitions/10573.string.0xc00031d2a0'
       TipoFuente:
-        $ref: '#/definitions/10275.0xc0002d9890.false'
+        $ref: '#/definitions/10283.0xc000313920.false'
       ValorAcumulado:
         type: number
         format: double
