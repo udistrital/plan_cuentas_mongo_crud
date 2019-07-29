@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -17,8 +17,9 @@ type FuenteFinanciamientoController struct {
 }
 
 // URLMapping ...
-func (c *FuenteFinanciamientoController) URLMapping() {
-	c.Mapping("Post", c.Post)
+func (j *FuenteFinanciamientoController) URLMapping() {
+	j.Mapping("Post", j.Post)
+	j.Mapping("VincularFuente", j.VincularFuente)
 }
 
 // Post ...
@@ -28,31 +29,36 @@ func (c *FuenteFinanciamientoController) URLMapping() {
 // @Success 201 {object} models.FuenteFinanciamiento
 // @Failure 403 body is empty
 // @router / [post]
-func (c *FuenteFinanciamientoController) Post() {
-	var (
-		fuente  models.FuenteFinanciamiento
-		options []interface{}
-	)
-
-	session, err := db.GetSession()
-	if err != nil {
-		log.Panicln(err.Error())
-	}
+func (j *FuenteFinanciamientoController) Post() {
+	var fuente models.FuenteFinanciamiento
 
 	defer func() {
 		if r := recover(); r != nil {
-			session.Close()
 			logs.Error(r)
 			logManager.LogError(r)
 			panic(r)
 		}
 	}()
 
-	json.Unmarshal(c.Ctx.Input.RequestBody, &fuente)
-	log.Println(fuente)
+	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
+	log.Println("fuente: ", fuente)
 
-	op, err := models.PostFuentePadreTransaccion(session, &fuente)
+	if err := models.InsertFuenteFinanciamiento(&fuente); err == nil {
+		j.Data["json"] = "insert success!"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+}
 
-	options = append(options, op)
-	models.TrRegistroFuente(session, options)
+// VincularFuente ...
+// @Title Create
+// @Description create FuenteFinanciamiento
+// @Param	body		body 	models.FuenteFinanciamiento	true		"body for FuenteFinanciamiento content"
+// @Success 201 {object} models.FuenteFinanciamiento
+// @Failure 403 body is empty
+// @router /VincularFuente [post]
+func (j *FuenteFinanciamientoController) VincularFuente() {
+	var fuente models.FuenteFinanciamiento
+	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
+	fmt.Println("fuente:", fuente)
 }

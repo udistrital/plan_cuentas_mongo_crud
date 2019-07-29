@@ -11,15 +11,8 @@ services:
     ports: 
       - "${PORT}:${PORT}"
     env_file: 
-      - custom.env
+      - .env
     environment:
-      - FINANCIERA_MONGO_CRUD_PORT=${PORT}
-      - RUN_MODE=dev 
-      - FINANCIERA_MONGO_CRUD_DB_URL=${FINANCIERA_MONGO_CRUD_DB_URL}
-      - FINANCIERA_MONGO_CRUD_DB_NAME=${FINANCIERA_MONGO_CRUD_DB_NAME}
-      - FINANCIERA_MONGO_CRUD_DB_USER=${FINANCIERA_MONGO_CRUD_DB_USER}
-      - FINANCIERA_MONGO_CRUD_DB_PASS=${FINANCIERA_MONGO_CRUD_DB_PASS}
-      - FINANCIERA_MONGO_CRUD_DB_AUTH=${FINANCIERA_MONGO_CRUD_DB_AUTH}
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost   
     command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -u ./...; bee run -downdoc=true -gendoc=true'
     depends_on: 
