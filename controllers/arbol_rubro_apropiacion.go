@@ -259,15 +259,12 @@ func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 	vigenciaStr := j.GetString(":vigencia")
 
 	vigencia, err := strconv.Atoi(vigenciaStr)
-
 	if err != nil {
 		j.Data["json"] = err
 		panic(err)
 	}
 
 	raizApropiacion, err := models.GetNodoRubroApropiacionById(raiz, ueStr, vigencia)
-
 	tree := rubroApropiacionHelper.BuildTree(raizApropiacion)
-
 	j.Data["json"] = tree
 }

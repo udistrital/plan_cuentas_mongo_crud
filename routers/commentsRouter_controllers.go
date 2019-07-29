@@ -199,7 +199,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroController"],
         beego.ControllerComments{
             Method: "FullArbolRubro",
-            Router: `/FullArbolRubro/:unidadEjecutora`,
+            Router: `/arbol/:raiz`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
