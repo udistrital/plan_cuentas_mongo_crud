@@ -11,7 +11,7 @@ import (
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 
-	// "github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -70,9 +70,8 @@ func (j *NodoRubroController) GetAll() {
 // @router /:id [get]
 func (j *NodoRubroController) Get() {
 	id := j.GetString(":id")
-	session, _ := db.GetSession()
 	if id != "" {
-		arbolrubros, err := models.GetNodoRubroById(session, id)
+		arbolrubros, err := models.GetNodoRubroById(id)
 		if err != nil {
 			j.Data["json"] = err.Error()
 		} else {
@@ -359,33 +358,17 @@ func (j *NodoRubroController) NodoRubroDeleteOptions() {
 // @Param body body stringtrue "Código de la raíz"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /FullArbolRubro/:unidadEjecutora [get]
+// @router /arbol/:raiz [get]
 func (j *NodoRubroController) FullArbolRubro() {
-	ueStr := j.GetString(":unidadEjecutora")
-	fmt.Println(ueStr)
-	// tree := rubroHelper.BuildTree(ueStr)
+	raiz := j.GetString(":raiz")
 
-	var tree, childrens []map[string]interface{}
+	raizRubro, err := models.GetNodoRubroById(raiz)
+	if err != nil {
+		j.Data["json"] = err
+		panic(err)
+	}
 
-	forkData := make(map[string]interface{})
-
-	//forkData["Codigo"] = "3"
-
-	children := make(map[string]interface{})
-	children["data"] = map[string]interface{}{"Codigo": "3-1", "children": []map[string]interface{}{
-		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-1", "children": []map[string]interface{}{}}},
-		map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2", "children": []map[string]interface{}{
-			map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2-1", "children": []map[string]interface{}{}}},
-			map[string]interface{}{"data": map[string]interface{}{"Codigo": "3-1-2-2", "children": []map[string]interface{}{}}},
-		}},
-		},
-	}}
-
-	childrens = append(childrens, children)
-	forkData["data"] = map[string]interface{}{"Codigo": 3, "children": childrens}
-	// forkData["data"]["children"] = childrens
-
-	tree = append(tree, forkData)
+	tree := rubroHelper.BuildTree(&raizRubro)
 	j.Data["json"] = tree
 }
 

@@ -84,7 +84,7 @@
                 }
             }
         },
-        "/arbol_rubro/FullArbolRubro/{unidadEjecutora}": {
+        "/arbol_rubro/arbol/{raiz}": {
             "get": {
                 "tags": [
                     "arbol_rubro"
@@ -777,11 +777,11 @@
         }
     },
     "definitions": {
-        "10483.0xc000329cb0.false": {
+        "10524.0xc0003533b0.false": {
             "title": "false",
             "type": "object"
         },
-        "10760.rubroFuente": {
+        "10801.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -797,10 +797,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/10760.rubroFuente"
+                    "$ref": "#/definitions/10801.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10483.0xc000329cb0.false"
+                    "$ref": "#/definitions/10524.0xc0003533b0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

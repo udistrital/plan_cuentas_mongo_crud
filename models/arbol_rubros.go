@@ -50,12 +50,19 @@ func GetAllNodoRubro(session *mgo.Session, query map[string]interface{}) []NodoR
 	return NodoRubros
 }
 
-func GetNodoRubroById(session *mgo.Session, id string) (NodoRubro, error) {
+func GetNodoRubroById(id string) (NodoRubro, error) {
+	var nodoRubro NodoRubro
+
+	session, err := db.GetSession()
+	if err != nil {
+		return nodoRubro, err
+	}
+
 	c := db.Cursor(session, NodoRubroCollection)
+	err = c.FindId(id).One(&nodoRubro)
+
 	defer session.Close()
-	var NodoRubros NodoRubro
-	err := c.Find(bson.M{"_id": id}).One(&NodoRubros)
-	return NodoRubros, err
+	return nodoRubro, err
 }
 
 func DeleteNodoRubroById(session *mgo.Session, id string) (string, error) {

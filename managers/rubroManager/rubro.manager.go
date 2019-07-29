@@ -47,9 +47,8 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 	rubroHijo, _ := models.GetNodo(session, id, ue)
 	hijo := make(map[string]interface{})
 
-	if rubroHijo.General.ID != "" {
-		hijo["Id"] = rubroHijo.General.IDPsql
-		hijo["Codigo"] = rubroHijo.General.ID
+	if rubroHijo.ID != "" {
+		hijo["Codigo"] = rubroHijo.ID
 		hijo["Nombre"] = rubroHijo.Nombre
 		hijo["IsLeaf"] = false
 		hijo["UnidadEjecutora"] = rubroHijo.UnidadEjecutora
