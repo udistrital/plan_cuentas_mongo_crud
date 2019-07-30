@@ -3,15 +3,14 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
-
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -102,13 +101,18 @@ func (j *NodoRubroController) Delete() {
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroController) Post() {
-	var arbolrubros models.NodoRubro
-	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubros)
-	fmt.Println(arbolrubros)
-	session, _ := db.GetSession()
-	models.InsertNodoRubro(session, arbolrubros)
-	j.Data["json"] = "insert success!"
-	j.ServeJSON()
+	var nodoRubro models.NodoRubro
+	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubro)
+
+	if err := rubroManager.TrRegistrarNodoHoja(&nodoRubro, models.NodoRubroCollection); err == nil {
+		j.Data["json"] = "insert success!"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+
+	// models.InsertNodoRubro(session, nodoRubro)
+
+	// j.ServeJSON()
 }
 
 // @Title Update

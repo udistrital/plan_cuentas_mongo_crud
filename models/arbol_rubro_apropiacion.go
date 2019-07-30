@@ -16,7 +16,7 @@ const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {
 	*NodoRubro
-	ID                   string                            `json:"_id" bson:"_id,omitempty"`
+	ID                   string                            `json:"Codigo" bson:"_id,omitempty"`
 	ApropiacionInicial   float64                           `json:"ApropiacionInicial" bson:"apropiacionInicial"`
 	ApropiacionUtilizada float64                           `json:"ApropiacionUtilizada" bson:"apropiacionUtilizada"`
 	Movimientos          []string                          `json:"Movimientos" bson:"movimientos"`

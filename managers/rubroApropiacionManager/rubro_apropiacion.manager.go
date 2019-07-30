@@ -16,7 +16,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 		return err
 	}
 
-	c := db.Cursor(session, models.NodoRubroApropiacionCollection)
+	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
