@@ -2,6 +2,7 @@ package db
 
 import (
 	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/globalsign/mgo"
 )
@@ -20,6 +21,7 @@ func GetSession() (*mgo.Session, error) {
 	mongoUser := beego.AppConfig.String("mongo_user")
 	mongoPassword := beego.AppConfig.String("mongo_pass")
 	mongoDatabase := beego.AppConfig.String("mongo_db_connect")
+	mongoAuthDb := beego.AppConfig.String("mongo_db_auth")
 
 	info := &mgo.DialInfo{
 		Addrs:    []string{mongoHost},
@@ -27,6 +29,7 @@ func GetSession() (*mgo.Session, error) {
 		Database: mongoDatabase,
 		Username: mongoUser,
 		Password: mongoPassword,
+		Source:   mongoAuthDb,
 	}
 
 	session, err := mgo.DialWithInfo(info)
