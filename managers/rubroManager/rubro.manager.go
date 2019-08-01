@@ -28,12 +28,8 @@ func GetRaices(ue string) []map[string]interface{} {
 			panic(r)
 		}
 	}()
-	err := c.Find(bson.M{
-		"$or": []bson.M{bson.M{"padre": nil},
-			bson.M{"padre": ""}},
-		"idpsql":           bson.M{"$ne": nil},
-		"unidad_ejecutora": bson.M{"$in": []string{"0", ue}},
-	}).All(&roots)
+
+	err := c.Find(bson.M{"padre": "", "unidad_ejecutora": "1"}).All(&roots)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -77,7 +73,7 @@ func GetNodo(id, ue string) map[string]interface{} {
 	}()
 
 	var nodo models.NodoRubro
-	err := c.Find(bson.M{"_id": id, "unidad_ejecutora": bson.M{"$in": []string{"0", ue}}}).One(&nodo)
+	err := c.Find(bson.M{"_id": id, "unidad_ejecutora": ue}).One(&nodo)
 
 	if err != nil {
 		panic("Cannot Find Node " + id)

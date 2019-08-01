@@ -67,9 +67,10 @@ func GetNodoRubroApropiacionById(id, ue string, vigencia int) (*NodoRubroApropia
 		return nil, err
 	}
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
-	defer session.Close()
 	var nodoRubroApropiacion *NodoRubroApropiacion
 	err = c.FindId(id).One(&nodoRubroApropiacion)
+
+	defer session.Close()
 	return nodoRubroApropiacion, err
 }
 

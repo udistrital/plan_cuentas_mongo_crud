@@ -26,6 +26,7 @@ func GetOneMovimientoParameterByHijo(tipo string) (res models.MovimientoParamete
 
 }
 
+// SaveMovimientoParameter ...
 func SaveMovimientoParameter(data *models.MovimientoParameter) error {
 	session, err := db.GetSession()
 	if err != nil {

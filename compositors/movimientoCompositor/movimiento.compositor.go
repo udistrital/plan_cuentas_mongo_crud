@@ -1,6 +1,8 @@
 package movimientoCompositor
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego/logs"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
@@ -20,7 +22,6 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 	}
 
 	return ops
-
 }
 
 // BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
@@ -41,7 +42,8 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface
 	if err != nil {
 		runFlag = false
 	}
-
+	fmt.Println("Documento padre: ", movimientoPadre)
+	fmt.Println("Movimiento parameter: ", movimientoParameter)
 	for runFlag {
 
 		if len(movimientoPadre.Movimientos) == 0 {
@@ -50,6 +52,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface
 
 		if movimientoPadre.Movimientos[movimientoHijo.Tipo] == 0 {
 			movimientoPadre.Movimientos[movimientoHijo.Tipo] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
+			fmt.Println("debio irse por aquí....")
 		} else {
 			movimientoPadre.Movimientos[movimientoHijo.Tipo] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
 		}
