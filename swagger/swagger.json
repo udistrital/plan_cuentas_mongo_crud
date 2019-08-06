@@ -366,6 +366,36 @@
                 }
             }
         },
+        "/arbol_rubro_apropiacion/arbol_apropiacion/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Construye el árbol a un nivel dependiendo de la raíz",
+                "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Código de la raíz",
+                        "schema": {
+                            "$ref": "#/definitions/stringtrue"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
         "/arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
@@ -777,11 +807,11 @@
         }
     },
     "definitions": {
-        "10527.0xc0003715f0.false": {
+        "9529.0xc000429170.false": {
             "title": "false",
             "type": "object"
         },
-        "10804.rubroFuente": {
+        "9809.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -797,10 +827,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/10804.rubroFuente"
+                    "$ref": "#/definitions/9809.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10527.0xc0003715f0.false"
+                    "$ref": "#/definitions/9529.0xc000429170.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

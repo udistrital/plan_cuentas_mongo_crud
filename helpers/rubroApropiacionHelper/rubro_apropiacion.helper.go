@@ -1,7 +1,9 @@
 package rubroApropiacionHelper
 
 import (
+	"fmt"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 )
 
 // BuildTree construye una estructura de árbol partiendo de una raíz
@@ -30,6 +32,14 @@ func getChildren(children []string, unidadEjecutora string, vigencia int) (child
 		childrenTree = append(childrenTree, forkData)
 	}
 	return
+}
+
+func ValuesTree(vigencia, unidadEjecutora string) []map[string]interface{} {
+	var rubrosTree []map[string]interface{}
+	raices := rubroManager.GetRaices(unidadEjecutora)
+	fmt.Println(raices)
+	return rubrosTree
+	//rubroHelper.BuildTree()
 }
 
 // Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
