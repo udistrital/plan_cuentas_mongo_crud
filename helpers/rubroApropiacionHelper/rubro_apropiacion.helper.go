@@ -1,9 +1,11 @@
 package rubroApropiacionHelper
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/udistrital/plan_cuentas_mongo_crud/models"
+
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
 // BuildTree construye una estructura de árbol partiendo de una raíz
@@ -34,12 +36,71 @@ func getChildren(children []string, unidadEjecutora string, vigencia int) (child
 	return
 }
 
-func ValuesTree(vigencia, unidadEjecutora string) []map[string]interface{} {
-	var rubrosTree []map[string]interface{}
+// ValuesTree árbol que contiene todos los rubros y le asgina un valor 0 cuando no tienen una apropiación
+func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
+	var tree []map[string]interface{}
 	raices := rubroManager.GetRaices(unidadEjecutora)
-	fmt.Println(raices)
-	return rubrosTree
-	//rubroHelper.BuildTree()
+
+	for i := 0; i < len(raices); i++ {
+		forkData := make(map[string]interface{})
+
+		raiz, err := models.GetNodoRubroById(raices[i]["Codigo"].(string))
+
+		if err != nil {
+			return nil
+		}
+
+		if apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
+			fmt.Println("por aquí.")
+			raices[i]["ApropiacionInicial"] = 0
+		} else {
+			raices[i]["ApropiacionInicial"] = apropiacion.ApropiacionInicial
+		}
+
+		forkData["Codigo"] = raices[i]["Codigo"]
+		forkData["data"] = raices[i]
+		forkData["Children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
+
+		tree = append(tree, forkData)
+	}
+
+	return tree
+}
+
+// getValueChildren crea la estructura de árbol con la función ValuesTree, encargándoe de asignar un valor de 0 cuando algún rubro
+// no tiene apropiación
+func getValueChildren(children []string, unidadEjecutora string, vigencia int) (childrenTree []map[string]interface{}) {
+	for i := 0; i < len(children); i++ {
+		child := children[i]
+
+		forkData := make(map[string]interface{})
+		nodo, err := models.GetNodoRubroById(child)
+
+		if err != nil {
+			return
+		}
+
+		inrec, _ := json.Marshal(nodo)
+		data := make(map[string]interface{})
+		json.Unmarshal(inrec, &data)
+
+		forkData["data"] = data
+		forkData["Codigo"] = nodo.ID
+
+		if apropiacion, err := models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia); err != nil {
+			forkData["data"].(map[string]interface{})["ApropiacionInicial"] = 0
+		} else {
+			forkData["data"].(map[string]interface{})["ApropiacionInicial"] = apropiacion.ApropiacionInicial
+		}
+
+		if len(nodo.Hijos) > 0 {
+			forkData["children"] = getValueChildren(nodo.Hijos, unidadEjecutora, vigencia)
+		}
+
+		childrenTree = append(childrenTree, forkData)
+	}
+
+	return
 }
 
 // Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})

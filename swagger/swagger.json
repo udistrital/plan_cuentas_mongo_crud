@@ -341,7 +341,7 @@
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
-                "description": "Construye el árbol a un nivel dependiendo de la raíz",
+                "description": "Construye el árbol dependiendo de la raíz",
                 "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
                 "parameters": [
                     {
@@ -366,13 +366,13 @@
                 }
             }
         },
-        "/arbol_rubro_apropiacion/arbol_apropiacion/{unidadEjecutora}/{vigencia}": {
+        "/arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
-                "description": "Construye el árbol a un nivel dependiendo de la raíz",
-                "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
+                "description": "Construye el árbol completo con valores",
+                "operationId": "NodoRubroApropiacionController.FullArbolApropiaciones",
                 "parameters": [
                     {
                         "in": "body",
@@ -807,7 +807,7 @@
         }
     },
     "definitions": {
-        "10528.0xc0003a4e70.false": {
+        "10528.0xc00042db60.false": {
             "title": "false",
             "type": "object"
         },
@@ -827,17 +827,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-<<<<<<< HEAD
-                    "$ref": "#/definitions/9809.rubroFuente"
-                },
-                "TipoFuente": {
-                    "$ref": "#/definitions/9529.0xc000429170.false"
-=======
                     "$ref": "#/definitions/10805.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10528.0xc0003a4e70.false"
->>>>>>> dev
+                    "$ref": "#/definitions/10528.0xc00042db60.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

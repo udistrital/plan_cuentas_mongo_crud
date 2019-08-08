@@ -246,7 +246,7 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 
 // FullArbolRubroApropiaciones ...
 // @Title FullArbolRubroApropiaciones
-// @Description Construye el árbol a un nivel dependiendo de la raíz
+// @Description Construye el árbol dependiendo de la raíz
 // @Param body body stringtrue "Código de la raíz"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
@@ -267,19 +267,25 @@ func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 	j.Data["json"] = tree
 }
 
-// FullArbolRubroApropiaciones ...
-// @Title FullArbolRubroApropiaciones
-// @Description Construye el árbol a un nivel dependiendo de la raíz
+// FullArbolApropiaciones ...
+// @Title FullArbolApropiaciones
+// @Description Construye el árbol completo con valores
 // @Param body body stringtrue "Código de la raíz"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /arbol_apropiacion/:unidadEjecutora/:vigencia [get]
-func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
+// @router /arbol_apropiacion_valores/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
-	vigencia := j.GetString(":vigencia")
+	vigenciaStr := j.GetString(":vigencia")
 
-	tree := ValuesTree.BuildTree(vigencia, unidadEjecutora)
-	j.Data["json"] = tree
+	vigencia, err := strconv.Atoi(vigenciaStr)
+
+	if err != nil {
+		j.Data["json"] = err
+	} else {
+		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia)
+		j.Data["json"] = tree
+	}
 
 	j.ServeJSON()
 }
