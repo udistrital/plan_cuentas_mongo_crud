@@ -296,8 +296,27 @@ paths:
     get:
       tags:
       - arbol_rubro_apropiacion
-      description: Construye el árbol a un nivel dependiendo de la raíz
+      description: Construye el árbol dependiendo de la raíz
       operationId: NodoRubroApropiacionController.FullArbolRubroApropiaciones
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        schema:
+          $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Construye el árbol completo con valores
+      operationId: NodoRubroApropiacionController.FullArbolApropiaciones
       parameters:
       - in: body
         name: body
@@ -509,7 +528,7 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10528.0xc0003a4e70.false:
+  10528.0xc00042db60.false:
     title: "false"
     type: object
   10805.rubroFuente:
@@ -527,7 +546,7 @@ definitions:
       Rubros:
         $ref: '#/definitions/10805.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10528.0xc0003a4e70.false'
+        $ref: '#/definitions/10528.0xc00042db60.false'
       ValorAcumulado:
         type: number
         format: double
