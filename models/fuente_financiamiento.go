@@ -53,14 +53,19 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 }
 
 // GetFuenteFinanciamientoByID Obtener un documento por el id
-func GetFuenteFinanciamientoByID(session *mgo.Session, id string) *FuenteFinanciamiento {
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
-	var fuenteFinanciamiento *FuenteFinanciamiento
-	err := c.Find(bson.M{"_id": id}).One(&fuenteFinanciamiento)
+func GetFuenteFinanciamientoByID(id string) (*FuenteFinanciamiento, error) {
+	var fuenteFinanciamiento FuenteFinanciamiento
+
+	session, err := db.GetSession()
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return fuenteFinanciamiento
+	defer session.Close()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+
+	err = c.FindId(id).One(&fuenteFinanciamiento)
+
+	return &fuenteFinanciamiento, err
 }
 
 // UpdateFuenteFinanciamiento actualiza una fuente de financiamiento

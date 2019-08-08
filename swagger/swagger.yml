@@ -360,7 +360,25 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/{codigo}:
+  /fuente_financiamiento/{objectId}:
+    get:
+      tags:
+      - fuente_financiamiento
+      description: get FuenteFinancimiento by nombre
+      operationId: FuenteFinanciamientoController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la FuenteFinancimiento a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.FuenteFinancimiento'
+        "403":
+          description: :uid is empty
     put:
       tags:
       - fuente_financiamiento
@@ -368,7 +386,7 @@ paths:
       operationId: FuenteFinanciamientoController.Update
       parameters:
       - in: path
-        name: codigo
+        name: objectId
         description: The objectid you want to update
         required: true
         type: string
@@ -384,8 +402,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :codigo is empty
-  /fuente_financiamiento/{objectId}:
+          description: :objectId is empty
     delete:
       tags:
       - fuente_financiamiento
@@ -555,7 +572,7 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10528.0xc0004356b0.false:
+  10528.0xc00046a780.false:
     title: "false"
     type: object
   10805.rubroFuente:
@@ -573,13 +590,16 @@ definitions:
       Rubros:
         $ref: '#/definitions/10805.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10528.0xc0004356b0.false'
+        $ref: '#/definitions/10528.0xc00046a780.false'
       ValorAcumulado:
         type: number
         format: double
       ValorOriginal:
         type: number
         format: double
+  models.FuenteFinancimiento:
+    title: FuenteFinancimiento
+    type: object
   models.General:
     title: General
     type: object

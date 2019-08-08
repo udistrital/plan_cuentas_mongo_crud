@@ -64,6 +64,23 @@ func (j *FuenteFinanciamientoController) GetAll() {
 	j.ServeJSON()
 }
 
+// Get obtiene un elemento por su _id
+// @Title Get
+// @Description get FuenteFinancimiento by nombre
+// @Param	nombre		path 	string	true		"El nombre de la FuenteFinancimiento a consultar"
+// @Success 200 {object} models.FuenteFinancimiento
+// @Failure 403 :uid is empty
+// @router /:objectId [get]
+func (j *FuenteFinanciamientoController) Get() {
+	objectID := j.GetString(":objectId")
+	if fuente, err := models.GetFuenteFinanciamientoByID(objectID); err != nil {
+		j.Data["json"] = err.Error()
+	} else {
+		j.Data["json"] = fuente
+	}
+	j.ServeJSON()
+}
+
 // Post ...
 // @Title Create
 // @Description create FuenteFinanciamiento
@@ -100,18 +117,18 @@ func (j *FuenteFinanciamientoController) VincularFuente() {
 // Put de HTTP
 // @Title Update
 // @Description update the FuenteFinanciamiento
-// @Param	codigo		path 	string	true		"The objectid you want to update"
+// @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :codigo is empty
-// @router /:codigo [put]
+// @Failure 403 :objectId is empty
+// @router /:objectId [put]
 func (j *FuenteFinanciamientoController) Put() {
-	codigo := j.Ctx.Input.Param(":codigo")
+	objectID := j.Ctx.Input.Param(":objectId")
 	var fuente models.FuenteFinanciamiento
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 
-	if err := models.UpdateFuenteFinanciamiento(&fuente, codigo); err == nil {
+	if err := models.UpdateFuenteFinanciamiento(&fuente, objectID); err == nil {
 		j.Data["json"] = "update success!"
 	} else {
 		j.Data["json"] = err.Error()

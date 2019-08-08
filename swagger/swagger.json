@@ -583,7 +583,34 @@
                 }
             }
         },
-        "/fuente_financiamiento/{codigo}": {
+        "/fuente_financiamiento/{objectId}": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "get FuenteFinancimiento by nombre",
+                "operationId": "FuenteFinanciamientoController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la FuenteFinancimiento a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinancimiento"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "fuente_financiamiento"
@@ -593,7 +620,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "codigo",
+                        "name": "objectId",
                         "description": "The objectid you want to update",
                         "required": true,
                         "type": "string"
@@ -616,12 +643,10 @@
                         }
                     },
                     "403": {
-                        "description": ":codigo is empty"
+                        "description": ":objectId is empty"
                     }
                 }
-            }
-        },
-        "/fuente_financiamiento/{objectId}": {
+            },
             "delete": {
                 "tags": [
                     "fuente_financiamiento"
@@ -848,7 +873,7 @@
         }
     },
     "definitions": {
-        "10528.0xc0004356b0.false": {
+        "10528.0xc00046a780.false": {
             "title": "false",
             "type": "object"
         },
@@ -871,7 +896,7 @@
                     "$ref": "#/definitions/10805.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10528.0xc0004356b0.false"
+                    "$ref": "#/definitions/10528.0xc00046a780.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -882,6 +907,10 @@
                     "format": "double"
                 }
             }
+        },
+        "models.FuenteFinancimiento": {
+            "title": "FuenteFinancimiento",
+            "type": "object"
         },
         "models.General": {
             "title": "General",
