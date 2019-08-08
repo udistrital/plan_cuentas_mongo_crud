@@ -3,11 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -19,6 +16,7 @@ type FuenteFinanciamientoController struct {
 // URLMapping ...
 func (j *FuenteFinanciamientoController) URLMapping() {
 	j.Mapping("Post", j.Post)
+	j.Mapping("Put", j.Put)
 	j.Mapping("VincularFuente", j.VincularFuente)
 }
 
@@ -31,23 +29,15 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 // @router / [post]
 func (j *FuenteFinanciamientoController) Post() {
 	var fuente models.FuenteFinanciamiento
-
-	defer func() {
-		if r := recover(); r != nil {
-			logs.Error(r)
-			logManager.LogError(r)
-			panic(r)
-		}
-	}()
-
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
-	log.Println("fuente: ", fuente)
 
 	if err := models.InsertFuenteFinanciamiento(&fuente); err == nil {
 		j.Data["json"] = "insert success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}
+
+	j.ServeJSON()
 }
 
 // VincularFuente ...
@@ -72,7 +62,7 @@ func (j *FuenteFinanciamientoController) VincularFuente() {
 // @Failure 403 :codigo is empty
 // @router /:codigo [put]
 func (j *FuenteFinanciamientoController) Put() {
-	codigo := j.Ctx.Input.Param(":objectId")
+	codigo := j.Ctx.Input.Param(":codigo")
 	var fuente models.FuenteFinanciamiento
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
@@ -82,4 +72,6 @@ func (j *FuenteFinanciamientoController) Put() {
 	} else {
 		j.Data["json"] = err.Error()
 	}
+
+	j.ServeJSON()
 }
