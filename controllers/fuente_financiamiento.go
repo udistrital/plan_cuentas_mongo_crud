@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"log"
+	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -19,7 +19,66 @@ type FuenteFinanciamientoController struct {
 // URLMapping ...
 func (j *FuenteFinanciamientoController) URLMapping() {
 	j.Mapping("Post", j.Post)
+	j.Mapping("Put", j.Put)
 	j.Mapping("VincularFuente", j.VincularFuente)
+	j.Mapping("Delete", j.Delete)
+	j.Mapping("GetAll", j.GetAll)
+}
+
+// GetAll función para obtener todos los objetos
+// @Title GetAll
+// @Description get all objects
+// @Success 200 FuenteFunanciamiento models.FuenteFinanciamiento
+// @Failure 403 :objectId is empty
+// @router / [get]
+func (j *FuenteFinanciamientoController) GetAll() {
+	var query = make(map[string]interface{})
+
+	if v := j.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				j.Data["json"] = errors.New("Consulta invalida")
+				j.ServeJSON()
+				return
+			}
+
+			if i, err := strconv.Atoi(kv[1]); err == nil {
+				k, v := kv[0], i
+				query[k] = v
+			} else {
+				k, v := kv[0], kv[1]
+				query[k] = v
+			}
+		}
+	}
+
+	obs, err := models.GetAllFuenteFinanciamiento(query)
+
+	if len(obs) == 0 {
+		j.Data["json"] = err
+	} else {
+		j.Data["json"] = &obs
+	}
+
+	j.ServeJSON()
+}
+
+// Get obtiene un elemento por su _id
+// @Title Get
+// @Description get FuenteFinancimiento by nombre
+// @Param	nombre		path 	string	true		"El nombre de la FuenteFinancimiento a consultar"
+// @Success 200 {object} models.FuenteFinancimiento
+// @Failure 403 :uid is empty
+// @router /:objectId [get]
+func (j *FuenteFinanciamientoController) Get() {
+	objectID := j.GetString(":objectId")
+	if fuente, err := models.GetFuenteFinanciamientoByID(objectID); err != nil {
+		j.Data["json"] = err.Error()
+	} else {
+		j.Data["json"] = fuente
+	}
+	j.ServeJSON()
 }
 
 // Post ...
@@ -31,23 +90,15 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 // @router / [post]
 func (j *FuenteFinanciamientoController) Post() {
 	var fuente models.FuenteFinanciamiento
-
-	defer func() {
-		if r := recover(); r != nil {
-			logs.Error(r)
-			logManager.LogError(r)
-			panic(r)
-		}
-	}()
-
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
-	log.Println("fuente: ", fuente)
 
 	if err := models.InsertFuenteFinanciamiento(&fuente); err == nil {
 		j.Data["json"] = "insert success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}
+
+	j.ServeJSON()
 }
 
 // VincularFuente ...
@@ -66,20 +117,41 @@ func (j *FuenteFinanciamientoController) VincularFuente() {
 // Put de HTTP
 // @Title Update
 // @Description update the FuenteFinanciamiento
-// @Param	codigo		path 	string	true		"The objectid you want to update"
+// @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :codigo is empty
-// @router /:codigo [put]
+// @Failure 403 :objectId is empty
+// @router /:objectId [put]
 func (j *FuenteFinanciamientoController) Put() {
-	codigo := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":objectId")
 	var fuente models.FuenteFinanciamiento
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 
-	if err := models.UpdateFuenteFinanciamiento(&fuente, codigo); err == nil {
+	if err := models.UpdateFuenteFinanciamiento(&fuente, objectID); err == nil {
 		j.Data["json"] = "update success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}
+
+	j.ServeJSON()
+}
+
+// Delete ...
+// @Title Borrar FuenteFinanciamiento
+// @Description Borrar FuenteFinanciamiento
+// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Success 200 {string} ok
+// @Failure 403 objectId is empty
+// @router /:objectId [delete]
+func (j *FuenteFinanciamientoController) Delete() {
+	objectID := j.Ctx.Input.Param(":objectId")
+
+	if err := models.DeleteFuenteFinanciamiento(objectID); err != nil {
+		j.Data["json"] = "delete success!"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+
+	j.ServeJSON()
 }

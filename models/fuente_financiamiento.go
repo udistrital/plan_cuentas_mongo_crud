@@ -53,14 +53,19 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 }
 
 // GetFuenteFinanciamientoByID Obtener un documento por el id
-func GetFuenteFinanciamientoByID(session *mgo.Session, id string) *FuenteFinanciamiento {
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
-	var fuenteFinanciamiento *FuenteFinanciamiento
-	err := c.Find(bson.M{"_id": id}).One(&fuenteFinanciamiento)
+func GetFuenteFinanciamientoByID(id string) (*FuenteFinanciamiento, error) {
+	var fuenteFinanciamiento FuenteFinanciamiento
+
+	session, err := db.GetSession()
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return fuenteFinanciamiento
+	defer session.Close()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+
+	err = c.FindId(id).One(&fuenteFinanciamiento)
+
+	return &fuenteFinanciamiento, err
 }
 
 // UpdateFuenteFinanciamiento actualiza una fuente de financiamiento
@@ -74,6 +79,36 @@ func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string) error {
 	defer session.Close()
 
 	return c.Update(bson.M{"_id": id}, &j)
+}
+
+// DeleteFuenteFinanciamiento elimina una fuente de financiamiento con su ID
+func DeleteFuenteFinanciamiento(id string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	defer session.Close()
+
+	return c.RemoveId(id)
+}
+
+// GetAllFuenteFinanciamiento obtiene todos los registros de fuente de financiamiento
+func GetAllFuenteFinanciamiento(query map[string]interface{}) ([]FuenteFinanciamiento, error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return nil, err
+	}
+
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	defer session.Close()
+
+	var fuentesFinanciamiento []FuenteFinanciamiento
+
+	err = c.Find(query).All(&fuentesFinanciamiento)
+
+	return fuentesFinanciamiento, err
 }
 
 // PostFuentePadreTransaccion crea una estructura para FuenteFinanciamiento de tipo registro.
