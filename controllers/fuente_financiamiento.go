@@ -18,6 +18,7 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 	j.Mapping("Post", j.Post)
 	j.Mapping("Put", j.Put)
 	j.Mapping("VincularFuente", j.VincularFuente)
+	j.Mapping("Delete", j.Delete)
 }
 
 // Post ...
@@ -69,6 +70,25 @@ func (j *FuenteFinanciamientoController) Put() {
 
 	if err := models.UpdateFuenteFinanciamiento(&fuente, codigo); err == nil {
 		j.Data["json"] = "update success!"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+
+	j.ServeJSON()
+}
+
+// Delete ...
+// @Title Borrar FuenteFinanciamiento
+// @Description Borrar FuenteFinanciamiento
+// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Success 200 {string} ok
+// @Failure 403 objectId is empty
+// @router /:objectId [delete]
+func (j *FuenteFinanciamientoController) Delete() {
+	objectID := j.Ctx.Input.Param(":objectId")
+
+	if err := models.DeleteFuenteFinanciamiento(objectID); err != nil {
+		j.Data["json"] = "delete success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}

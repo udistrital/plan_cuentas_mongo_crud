@@ -76,6 +76,19 @@ func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string) error {
 	return c.Update(bson.M{"_id": id}, &j)
 }
 
+// DeleteFuenteFinanciamiento elimina una fuente de financiamiento con su ID
+func DeleteFuenteFinanciamiento(id string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	defer session.Close()
+
+	return c.RemoveId(id)
+}
+
 // PostFuentePadreTransaccion crea una estructura para FuenteFinanciamiento de tipo registro.
 func PostFuentePadreTransaccion(session *mgo.Session, estructura *FuenteFinanciamiento) (op txn.Op, err error) {
 	estructura.ID = bson.NewObjectId().Hex()

@@ -606,6 +606,32 @@
                 }
             }
         },
+        "/fuente_financiamiento/{objectId}": {
+            "delete": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "Borrar FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Borrar FuenteFinanciamiento",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
         "/movimiento/RegistrarMovimientoParameter": {
             "post": {
                 "tags": [
@@ -807,7 +833,7 @@
         }
     },
     "definitions": {
-        "10528.0xc00042db60.false": {
+        "10528.0xc000446510.false": {
             "title": "false",
             "type": "object"
         },
@@ -830,7 +856,7 @@
                     "$ref": "#/definitions/10805.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10528.0xc00042db60.false"
+                    "$ref": "#/definitions/10528.0xc000446510.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
