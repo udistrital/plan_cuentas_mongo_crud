@@ -89,6 +89,23 @@ func DeleteFuenteFinanciamiento(id string) error {
 	return c.RemoveId(id)
 }
 
+// GetAllFuenteFinanciamiento obtiene todos los registros de fuente de financiamiento
+func GetAllFuenteFinanciamiento(query map[string]interface{}) ([]FuenteFinanciamiento, error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return nil, err
+	}
+
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	defer session.Close()
+
+	var fuentesFinanciamiento []FuenteFinanciamiento
+
+	err = c.Find(query).All(&fuentesFinanciamiento)
+
+	return fuentesFinanciamiento, err
+}
+
 // PostFuentePadreTransaccion crea una estructura para FuenteFinanciamiento de tipo registro.
 func PostFuentePadreTransaccion(session *mgo.Session, estructura *FuenteFinanciamiento) (op txn.Op, err error) {
 	estructura.ID = bson.NewObjectId().Hex()

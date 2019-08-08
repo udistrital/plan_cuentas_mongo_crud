@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -19,6 +22,46 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 	j.Mapping("Put", j.Put)
 	j.Mapping("VincularFuente", j.VincularFuente)
 	j.Mapping("Delete", j.Delete)
+	j.Mapping("GetAll", j.GetAll)
+}
+
+// GetAll función para obtener todos los objetos
+// @Title GetAll
+// @Description get all objects
+// @Success 200 FuenteFunanciamiento models.FuenteFinanciamiento
+// @Failure 403 :objectId is empty
+// @router / [get]
+func (j *FuenteFinanciamientoController) GetAll() {
+	var query = make(map[string]interface{})
+
+	if v := j.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				j.Data["json"] = errors.New("Consulta invalida")
+				j.ServeJSON()
+				return
+			}
+
+			if i, err := strconv.Atoi(kv[1]); err == nil {
+				k, v := kv[0], i
+				query[k] = v
+			} else {
+				k, v := kv[0], kv[1]
+				query[k] = v
+			}
+		}
+	}
+
+	obs, err := models.GetAllFuenteFinanciamiento(query)
+
+	if len(obs) == 0 {
+		j.Data["json"] = err
+	} else {
+		j.Data["json"] = &obs
+	}
+
+	j.ServeJSON()
 }
 
 // Post ...
