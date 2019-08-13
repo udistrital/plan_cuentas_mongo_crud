@@ -18,7 +18,7 @@ type dependenciaRubro struct {
 // rubroFuente Relación entre un rubro y una fuente
 type rubroFuente struct {
 	Dependencias []*dependenciaRubro `json:"Dependencias" bson:"dependencias"`
-	Productos    []int               `json:"Productos" bson:"productos`
+	Productos    []string               `json:"Productos" bson:"productos`
 }
 
 // FuenteFinanciamiento ...
