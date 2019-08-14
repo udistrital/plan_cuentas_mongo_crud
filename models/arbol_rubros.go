@@ -20,15 +20,15 @@ type NodoRubro struct {
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 }
 
-func UpdateNodoRubro(session *mgo.Session, j NodoRubro, id string) error {
+func UpdateNodoRubro(j NodoRubro, id string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	// Update
-	err := c.Update(bson.M{"_id": bson.ObjectIdHex(id)}, &j)
-	if err != nil {
-		panic(err)
-	}
-	return err
+	return c.UpdateId(id, &j)
 }
 
 func InsertNodoRubro(session *mgo.Session, j NodoRubro) error {

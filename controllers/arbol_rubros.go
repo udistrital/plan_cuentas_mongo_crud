@@ -124,12 +124,10 @@ func (j *NodoRubroController) Post() {
 // @router /:objectId [put]
 func (j *NodoRubroController) Put() {
 	objectId := j.Ctx.Input.Param(":objectId")
-
 	var arbolrubros models.NodoRubro
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubros)
-	session, _ := db.GetSession()
 
-	err := models.UpdateNodoRubro(session, arbolrubros, objectId)
+	err := models.UpdateNodoRubro(arbolrubros, objectId)
 	if err != nil {
 		j.Data["json"] = err.Error()
 	} else {
