@@ -4,12 +4,11 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
-	"github.com/udistrital/utils_oas/responseformat"
 )
 
 func main() {
 
-	beego.BConfig.RecoverFunc = responseformat.GlobalResponseHandler
+	// beego.BConfig.RecoverFunc = responseformat.GlobalResponseHandler
 
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
