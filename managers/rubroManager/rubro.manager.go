@@ -117,3 +117,56 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 
 	return runner.Run(ops, id, nil)
 }
+
+// TrEliminarNodoHoja transacción que elimina una hoja y actualiza el arreglo de hijos del padre
+func TrEliminarNodoHoja(idNodoHoja, collection string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+
+	c := db.Cursor(session, models.TransactionCollection)
+	runner := txn.NewRunner(c)
+
+	id := bson.NewObjectId()
+
+	ops := []txn.Op{{
+		C:      collection,
+		Id:     idNodoHoja,
+		Assert: "d+",
+		Remove: true,
+	}}
+
+	nodoHoja, err := models.GetNodoRubroById(idNodoHoja)
+
+	if err != nil {
+		return err
+	}
+
+	nodoPadre, err := models.GetNodoRubroById(nodoHoja.Padre)
+
+	if err == nil {
+		// nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
+		nodoPadre.Hijos = remove(nodoPadre.Hijos, idNodoHoja)
+		ops = append(ops, txn.Op{
+			C:      collection,
+			Id:     nodoPadre.ID,
+			Assert: bson.M{"_id": nodoPadre.ID},
+			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}},
+		})
+	}
+
+	return runner.Run(ops, id, nil)
+}
+
+func remove(slice []string, element string) []string {
+	newSlice := &slice
+	for i := 0; i < len(slice); i++ {
+		if slice[i] == element {
+			slice[i] = slice[len(slice)-1] // Copy last element to index i.
+			slice[len(slice)-1] = ""       // Erase last element (write zero value).
+			slice = slice[:len(slice)-1]
+		}
+	}
+	return *newSlice
+}

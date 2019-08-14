@@ -87,10 +87,15 @@ func (j *NodoRubroController) Get() {
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
 func (j *NodoRubroController) Delete() {
-	session, _ := db.GetSession()
+	// session, _ := db.GetSession()
 	objectId := j.Ctx.Input.Param(":objectId")
-	result, _ := models.DeleteNodoRubroById(session, objectId)
-	j.Data["json"] = result
+	if err := rubroManager.TrEliminarNodoHoja(objectId, models.NodoRubroCollection); err == nil {
+		j.Data["json"] = "delete success"
+	} else {
+		j.Data["json"] = err.Error()
+	}
+	// result, _ := models.DeleteNodoRubroById(session, objectId)
+	// j.Data["json"] = result
 	j.ServeJSON()
 }
 
