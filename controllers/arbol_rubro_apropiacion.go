@@ -111,12 +111,11 @@ func (j *NodoRubroApropiacionController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
-		fmt.Println("success!")
 		j.Data["json"] = "insert success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}
-
+	j.ServeJSON()
 }
 
 // Put de HTTP

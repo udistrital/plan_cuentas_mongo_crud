@@ -572,7 +572,7 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10489.0xc0004c16b0.false:
+  10489.0xc0004abda0.false:
     title: "false"
     type: object
   10766.rubroFuente:
@@ -590,7 +590,7 @@ definitions:
       Rubros:
         $ref: '#/definitions/10766.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10489.0xc0004c16b0.false'
+        $ref: '#/definitions/10489.0xc0004abda0.false'
       ValorAcumulado:
         type: number
         format: double

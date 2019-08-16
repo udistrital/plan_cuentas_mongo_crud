@@ -102,11 +102,13 @@ func (j *ProductoController) Post() {
 	var producto models.Producto
 	json.Unmarshal(j.Ctx.Input.RequestBody, &producto)
 
-	if err := models.InsertProducto(producto); err != nil {
+	if err := models.InsertProducto(producto); err == nil {
 		j.Data["json"] = "insert success!"
 	} else {
 		j.Data["json"] = err.Error()
 	}
+
+	j.ServeJSON()
 }
 
 // Delete ...
