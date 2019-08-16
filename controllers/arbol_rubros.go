@@ -115,9 +115,7 @@ func (j *NodoRubroController) Post() {
 		j.Data["json"] = err.Error()
 	}
 
-	// models.InsertNodoRubro(session, nodoRubro)
-
-	// j.ServeJSON()
+	j.ServeJSON()
 }
 
 // @Title Update
