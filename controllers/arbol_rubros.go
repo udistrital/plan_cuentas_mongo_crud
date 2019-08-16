@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/astaxie/beego/logs"
+
 	"github.com/astaxie/beego"
 	_ "github.com/globalsign/mgo" // Inicializa mgo para poder usar sus métodos
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
@@ -374,7 +376,9 @@ func (j *NodoRubroController) FullArbolRubro() {
 	}
 
 	tree := rubroHelper.BuildTree(&raizRubro)
+	logs.Debug("test", tree)
 	j.Data["json"] = tree
+	j.ServeJSON()
 }
 
 func GetHijoRubro(id, ue string) map[string]interface{} {
