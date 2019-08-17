@@ -59,7 +59,7 @@ func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
 
 		forkData["Codigo"] = raices[i]["Codigo"]
 		forkData["data"] = raices[i]
-		forkData["Children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
+		forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
 
 		tree = append(tree, forkData)
 	}
