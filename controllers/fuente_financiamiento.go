@@ -14,6 +14,7 @@ import (
 // FuenteFinanciamientoController operations for FuenteFinanciamiento
 type FuenteFinanciamientoController struct {
 	beego.Controller
+	response map[string]interface{}
 }
 
 // URLMapping ...
@@ -53,14 +54,13 @@ func (j *FuenteFinanciamientoController) GetAll() {
 		}
 	}
 
-	obs, err := models.GetAllFuenteFinanciamiento(query)
-
-	if len(obs) == 0 {
-		j.Data["json"] = err
+	if obs, err := models.GetAllFuenteFinanciamiento(query); len(obs) == 0 {
+		j.response = DefaultResponse(403, err, nil)
 	} else {
-		j.Data["json"] = &obs
+		j.response = DefaultResponse(200, nil, &obs)
 	}
 
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -73,11 +73,12 @@ func (j *FuenteFinanciamientoController) GetAll() {
 // @router /:objectId [get]
 func (j *FuenteFinanciamientoController) Get() {
 	objectID := j.GetString(":objectId")
-	if fuente, err := models.GetFuenteFinanciamientoByID(objectID); err != nil {
-		j.Data["json"] = err.Error()
+	if fuente, err := models.GetFuenteFinanciamientoByID(objectID); err == nil {
+		j.response = DefaultResponse(200, nil, &fuente)
 	} else {
-		j.Data["json"] = fuente
+		j.response = DefaultResponse(403, err, nil)
 	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -93,11 +94,12 @@ func (j *FuenteFinanciamientoController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 
 	if err := models.InsertFuenteFinanciamiento(&fuente); err == nil {
-		j.Data["json"] = "insert success!"
+		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
 
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -129,11 +131,12 @@ func (j *FuenteFinanciamientoController) Put() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 
 	if err := models.UpdateFuenteFinanciamiento(&fuente, objectID); err == nil {
-		j.Data["json"] = "update success!"
+		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
 
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -148,10 +151,11 @@ func (j *FuenteFinanciamientoController) Delete() {
 	objectID := j.Ctx.Input.Param(":objectId")
 
 	if err := models.DeleteFuenteFinanciamiento(objectID); err != nil {
-		j.Data["json"] = "delete success!"
+		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
 
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }

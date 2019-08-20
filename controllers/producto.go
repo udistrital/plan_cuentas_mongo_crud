@@ -19,6 +19,7 @@ import (
 // ProductoController operations for FuenteFinanciamiento
 type ProductoController struct {
 	beego.Controller
+	response map[string]interface{}
 }
 
 // URLMapping ...
@@ -58,14 +59,15 @@ func (j *ProductoController) GetAll() {
 		}
 	}
 
-	obs := models.GetAllProducto(query)
+	err := errors.New("Bad info response")
 
-	if len(obs) == 0 {
-		j.Data["json"] = []string{}
+	if obs := models.GetAllProducto(query); len(obs) == 0 {
+		j.response = DefaultResponse(403, err, nil)
 	} else {
-		j.Data["json"] = &obs
+		j.response = DefaultResponse(200, nil, &obs)
 	}
 
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -82,12 +84,13 @@ func (j *ProductoController) Get() {
 	fmt.Println(id)
 	if id != "" {
 		producto, err := models.GetProductoById(id)
-		if err != nil {
-			j.Data["json"] = err.Error()
+		if err == nil {
+			j.response = DefaultResponse(200, nil, &producto)
 		} else {
-			j.Data["json"] = producto
+			j.response = DefaultResponse(403, err, nil)
 		}
 	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -103,11 +106,11 @@ func (j *ProductoController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &producto)
 
 	if err := models.InsertProducto(producto); err == nil {
-		j.Data["json"] = "insert success!"
+		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
-
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -122,10 +125,12 @@ func (j *ProductoController) Delete() {
 	objectId := j.Ctx.Input.Param(":objectId")
 	err := models.DeleteProductoById(objectId)
 	if err == nil {
-		j.Data["json"] = "delete success!"
+		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }
 
 // Put ...
@@ -142,9 +147,11 @@ func (j *ProductoController) Put() {
 	var producto models.Producto
 	json.Unmarshal(j.Ctx.Input.RequestBody, &producto)
 
-	if err := models.UpdateProducto(producto, objectId); err != nil {
-		j.Data["json"] = err.Error()
+	if err := models.UpdateProducto(producto, objectId); err == nil {
+		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
-		j.Data["json"] = "update success!"
+		j.response = DefaultResponse(403, err, nil)
 	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }

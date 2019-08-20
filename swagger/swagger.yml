@@ -39,23 +39,6 @@ paths:
           description: '{int} NodoRubro.Id'
         "403":
           description: body is empty
-    options:
-      tags:
-      - arbol_rubro
-      description: Crear NodoRubro
-      operationId: NodoRubroController.Preflight options
-      parameters:
-      - in: body
-        name: body
-        description: Body para la creacion de NodoRubro
-        required: true
-        schema:
-          $ref: '#/definitions/models.NodoRubro'
-      responses:
-        "200":
-          description: '{int} NodoRubro.Id'
-        "403":
-          description: body is empty
   /arbol_rubro/{id}:
     get:
       tags:
@@ -116,23 +99,6 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
-    options:
-      tags:
-      - arbol_rubro
-      description: Crear NodoRubro
-      operationId: NodoRubroController.Preflight options
-      parameters:
-      - in: body
-        name: body
-        description: Body para la creacion de NodoRubro
-        required: true
-        schema:
-          $ref: '#/definitions/models.NodoRubro'
-      responses:
-        "200":
-          description: '{int} NodoRubro.Id'
-        "403":
-          description: body is empty
   /arbol_rubro/arbol/{raiz}:
     get:
       tags:
@@ -153,11 +119,21 @@ paths:
         "404":
           description: body is empty
   /arbol_rubro_apropiacion/:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: get all objects
+      operationId: NodoRubroApropiacionController.GetAll
+      responses:
+        "200":
+          description: NodoRubroApropiacion models.NodoRubroApropiacion
+        "403":
+          description: :objectId is empty
     post:
       tags:
       - arbol_rubro_apropiacion
-      description: Crear NodoRubroApropiacion2018
-      operationId: NodoRubroApropiacionController.Crear NodoRubroApropiacion2018
+      description: Post NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Post NodoRubroApropiacion2018
       parameters:
       - in: body
         name: body
@@ -253,12 +229,12 @@ paths:
       tags:
       - arbol_rubro_apropiacion
       description: get all objects
-      operationId: NodoRubroApropiacionController.GetAll
+      operationId: NodoRubroApropiacionController.GetAllVigencia
       responses:
         "200":
           description: NodoRubroApropiacion models.NodoRubroApropiacion
         "403":
-          description: :objectId is empty
+          description: :unidadEjecutora is empty
   /arbol_rubro_apropiacion/ArbolApropiacionPadreHijo/{raiz}/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -572,10 +548,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10489.0xc0004abda0.false:
+  9192.0xc0004bfad0.false:
     title: "false"
     type: object
-  10766.rubroFuente:
+  9469.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -588,9 +564,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/10766.rubroFuente'
+        $ref: '#/definitions/9469.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10489.0xc0004abda0.false'
+        $ref: '#/definitions/9192.0xc0004bfad0.false'
       ValorAcumulado:
         type: number
         format: double
