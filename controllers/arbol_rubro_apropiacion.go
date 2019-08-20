@@ -17,6 +17,78 @@ import (
 // NodoRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego
 type NodoRubroApropiacionController struct {
 	beego.Controller
+	response map[string]interface{}
+}
+
+// URLMapping ...
+func (j *NodoRubroApropiacionController) URLMapping() {
+	j.Mapping("Post", j.Post)
+	j.Mapping("Put", j.Put)
+	j.Mapping("Delete", j.Delete)
+	j.Mapping("Get", j.Get)
+	j.Mapping("GetAll", j.GetAll)
+	j.Mapping("ArbolApropiacionPadreHijo", j.ArbolApropiacionPadreHijo)
+	j.Mapping("RaicesArbolApropiacion", j.RaicesArbolApropiacion)
+	j.Mapping("FullArbolRubroApropiaciones", j.FullArbolRubroApropiaciones)
+	j.Mapping("FullArbolApropiaciones", j.FullArbolApropiaciones)
+}
+
+// GetAllVigencia función para obtener todos los objetos con una vigencia y una unidad ejecutora
+// @Title GetAllVigencia
+// @Description get all objects
+// @Success 200 NodoRubroApropiacion models.NodoRubroApropiacion
+// @Failure 403 :vigencia is empty
+// @Failure 403 :unidadEjecutora is empty
+// @router /:vigencia/:unidadEjecutora [get]
+func (j *NodoRubroApropiacionController) GetAllVigencia() {
+	session, _ := db.GetSession()
+	vigencia := j.GetString(":vigencia")
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	var query = make(map[string]interface{})
+	fmt.Println("get all funciton: ", vigencia, unidadEjecutora)
+	if v := j.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				j.Data["json"] = errors.New("Consulta invalida")
+				j.ServeJSON()
+				return
+			}
+
+			if i, err := strconv.Atoi(kv[1]); err == nil {
+				k, v := kv[0], i
+				query[k] = v
+			} else {
+				k, v := kv[0], kv[1]
+				query[k] = v
+			}
+		}
+	}
+
+	err := errors.New("Bad info response")
+
+	response := DefaultResponse(403, err, nil)
+
+	if obs := models.GetAllNodoRubroApropiacion(session, query, unidadEjecutora, vigencia); len(obs) > 0 {
+		response = DefaultResponse(200, nil, &obs)
+	}
+
+	j.Data["json"] = response
+	j.ServeJSON()
+}
+
+func DefaultResponse(code int, err error, info interface{}) map[string]interface{} {
+	response := make(map[string]interface{})
+
+	response["Code"] = code
+	response["Message"] = nil
+	response["Body"] = info
+
+	if err != nil {
+		response["Message"] = err.Error()
+	}
+
+	return response
 }
 
 // GetAll función para obtener todos los objetos
@@ -24,7 +96,7 @@ type NodoRubroApropiacionController struct {
 // @Description get all objects
 // @Success 200 NodoRubroApropiacion models.NodoRubroApropiacion
 // @Failure 403 :objectId is empty
-// @router /:vigencia/:unidadEjecutora [get]
+// @router / [get]
 func (j *NodoRubroApropiacionController) GetAll() {
 	session, _ := db.GetSession()
 	vigencia := j.GetString(":vigencia")
@@ -50,13 +122,15 @@ func (j *NodoRubroApropiacionController) GetAll() {
 		}
 	}
 
-	obs := models.GetAllNodoRubroApropiacion(session, query, unidadEjecutora, vigencia)
+	err := errors.New("Bad info response")
 
-	if len(obs) == 0 {
-		j.Data["json"] = []string{}
-	} else {
-		j.Data["json"] = &obs
+	response := DefaultResponse(404, err, nil)
+
+	if obs := models.GetAllNodoRubroApropiacion(session, query, unidadEjecutora, vigencia); len(obs) > 0 {
+		response = DefaultResponse(200, nil, &obs)
 	}
+
+	j.Data["json"] = response
 
 	j.ServeJSON()
 }
@@ -75,12 +149,13 @@ func (j *NodoRubroApropiacionController) Get() {
 	if id != "" {
 		vigenciaInt, _ := strconv.Atoi(vigencia)
 		arbolrubroapropiacion, err := models.GetNodoRubroApropiacionById(id, unidadEjecutora, vigenciaInt)
-		if err != nil {
-			j.Data["json"] = err.Error()
+		if err == nil {
+			j.response = DefaultResponse(200, nil, &arbolrubroapropiacion)
 		} else {
-			j.Data["json"] = arbolrubroapropiacion
+			j.response = DefaultResponse(403, err, nil)
 		}
 	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -94,14 +169,18 @@ func (j *NodoRubroApropiacionController) Get() {
 func (j *NodoRubroApropiacionController) Delete() {
 	session, _ := db.GetSession()
 	objectID := j.Ctx.Input.Param(":objectId")
-	result, _ := models.DeleteNodoRubroApropiacionById(session, objectID)
-	j.Data["json"] = result
+	if result, err := models.DeleteNodoRubroApropiacionById(session, objectID); err == nil {
+		j.response = DefaultResponse(200, nil, result)
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
 // Post Método Post de HTTP
-// @Title Crear NodoRubroApropiacion2018
-// @Description Crear NodoRubroApropiacion2018
+// @Title Post NodoRubroApropiacion2018
+// @Description Post NodoRubroApropiacion2018
 // @Param	body		body 	models.NodoRubroApropiacion2018	true		"Body para la creacion de NodoRubroApropiacion2018"
 // @Success 200 {int} NodoRubroApropiacion2018.Id
 // @Failure 403 body is empty
@@ -111,10 +190,11 @@ func (j *NodoRubroApropiacionController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
-		j.Data["json"] = "insert success!"
+		j.response = DefaultResponse(200, nil, "insert success")
 	} else {
-		j.Data["json"] = err.Error()
+		j.response = DefaultResponse(403, err, nil)
 	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -135,11 +215,12 @@ func (j *NodoRubroApropiacionController) Put() {
 	session, _ := db.GetSession()
 	vigenciaInt, _ := strconv.Atoi(vigencia)
 	err := models.UpdateNodoRubroApropiacion(session, arbolrubroapropiacion, objectID, unidadEjecutora, vigenciaInt)
-	if err != nil {
-		j.Data["json"] = err.Error()
+	if err == nil {
+		j.response = DefaultResponse(200, nil, "update success")
 	} else {
-		j.Data["json"] = "update success!"
+		j.response = DefaultResponse(403, err, nil)
 	}
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -190,11 +271,11 @@ func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 		arbolApropiaciones["Hijos"] = hijos
 		arbolApropacionessGrande = append(arbolApropacionessGrande, arbolApropiaciones)
 
-		j.Data["json"] = arbolApropacionessGrande
+		j.response = DefaultResponse(200, nil, arbolApropacionessGrande)
 	} else {
-		j.Data["json"] = err
+		j.response = DefaultResponse(403, err, nil)
 	}
-
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -234,12 +315,12 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 		roots = append(roots, root)
 	}
 
-	if err != nil {
-		j.Data["json"] = err
+	if err == nil {
+		j.response = DefaultResponse(200, nil, &roots)
 	} else {
-		j.Data["json"] = roots
+		j.response = DefaultResponse(404, err, nil)
 	}
-
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }
 
@@ -257,13 +338,16 @@ func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 
 	vigencia, err := strconv.Atoi(vigenciaStr)
 	if err != nil {
-		j.Data["json"] = err
+		j.response = DefaultResponse(404, err, nil)
 		panic(err)
-	}
+	} else {
+		raizApropiacion, _ := models.GetNodoRubroApropiacionById(raiz, ueStr, vigencia)
+		tree := rubroApropiacionHelper.BuildTree(raizApropiacion)
+		j.response = DefaultResponse(200, nil, &tree)
 
-	raizApropiacion, err := models.GetNodoRubroApropiacionById(raiz, ueStr, vigencia)
-	tree := rubroApropiacionHelper.BuildTree(raizApropiacion)
-	j.Data["json"] = tree
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }
 
 // FullArbolApropiaciones ...
@@ -280,11 +364,11 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	vigencia, err := strconv.Atoi(vigenciaStr)
 
 	if err != nil {
-		j.Data["json"] = err
+		j.response = DefaultResponse(404, err, nil)
 	} else {
 		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia)
-		j.Data["json"] = tree
+		j.response = DefaultResponse(200, nil, &tree)
 	}
-
+	j.Data["json"] = j.response
 	j.ServeJSON()
 }

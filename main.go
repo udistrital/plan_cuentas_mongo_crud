@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
+	"github.com/udistrital/utils_oas/customerror"
 )
 
 func main() {
@@ -28,5 +29,6 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	beego.ErrorController(&customerror.CustomErrorController{})
 	beego.Run()
 }
