@@ -450,6 +450,23 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
+  /fuente_financiamientofuente_financiamiento_apropiacion/{rubro_apropiacion_id}:
+    get:
+      tags:
+      - fuente_financiamiento
+      description: Borrar FuenteFinanciamiento
+      operationId: FuenteFinanciamientoController.GetWithRubro
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
   /movimiento/RegistrarMovimientoParameter:
     post:
       tags:
@@ -583,10 +600,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  9944.0xc0004df230.false:
+  9941.0xc0004ebd40.false:
     title: "false"
     type: object
-  10221.rubroFuente:
+  10218.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -599,9 +616,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/10221.rubroFuente'
+        $ref: '#/definitions/10218.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/9944.0xc0004df230.false'
+        $ref: '#/definitions/9941.0xc0004ebd40.false'
       ValorAcumulado:
         type: number
         format: double

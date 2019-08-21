@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -113,7 +112,6 @@ func (j *FuenteFinanciamientoController) Post() {
 func (j *FuenteFinanciamientoController) VincularFuente() {
 	var fuente models.FuenteFinanciamiento
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
-	fmt.Println("fuente:", fuente)
 }
 
 // Put de HTTP
@@ -150,8 +148,28 @@ func (j *FuenteFinanciamientoController) Put() {
 func (j *FuenteFinanciamientoController) Delete() {
 	objectID := j.Ctx.Input.Param(":objectId")
 
-	if err := models.DeleteFuenteFinanciamiento(objectID); err != nil {
+	if err := models.DeleteFuenteFinanciamiento(objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// GetWithRubro ...
+// @Title GetWithRubro
+// @Description Borrar FuenteFinanciamiento
+// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Success 200 {string} ok
+// @Failure 403 objectId is empty
+// @router fuente_financiamiento_apropiacion/:rubro_apropiacion_id [get]
+func (j *FuenteFinanciamientoController) GetWithRubro() {
+	rubroApropiacionID := j.Ctx.Input.Param(":rubro_apropiacion_id")
+
+	if fuentes, err := models.GetFuentesByRubroApropiacion(rubroApropiacionID); err == nil {
+		j.response = DefaultResponse(200, nil, &fuentes)
 	} else {
 		j.response = DefaultResponse(403, err, nil)
 	}
