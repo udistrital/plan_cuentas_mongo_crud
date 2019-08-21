@@ -22,6 +22,15 @@ type NodoRubroController struct {
 	response map[string]interface{}
 }
 
+func (j *NodoRubroController) URLMapping() {
+	j.Mapping("Post", j.Post)
+	j.Mapping("Put", j.Put)
+	j.Mapping("Delete", j.Delete)
+	j.Mapping("Get", j.Get)
+	j.Mapping("GetAll", j.GetAll)
+	j.Mapping("GetHojas", j.GetHojas)
+}
+
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
@@ -209,4 +218,22 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 		}
 	}
 	return hijo
+}
+
+// GetHojas ...
+// @Title GetHojas
+// @Description Devuelve un arreglo con todos los nodos hoja
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /get_hojas [get]
+func (j *NodoRubroController) GetHojas() {
+	leafs, err := models.GetHojasRubro()
+
+	if err != nil {
+		j.response = DefaultResponse(404, err, nil)
+	} else {
+		j.response = DefaultResponse(200, nil, &leafs)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }

@@ -146,3 +146,16 @@ func GetRaices(session *mgo.Session, ue string) ([]NodoRubro, error) {
 	fmt.Println("roots: ", roots)
 	return roots, err
 }
+
+// GetHojasRubro devuelve todos los nodos cuyos hijos sean un arreglo vació
+func GetHojasRubro() (leafs []NodoRubroApropiacion, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+	c := db.Cursor(session, NodoRubroCollection)
+	defer session.Close()
+
+	err = c.Find(bson.M{"hijos": []string{}}).All(&leafs)
+	return
+}

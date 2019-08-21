@@ -31,6 +31,8 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 	j.Mapping("RaicesArbolApropiacion", j.RaicesArbolApropiacion)
 	j.Mapping("FullArbolRubroApropiaciones", j.FullArbolRubroApropiaciones)
 	j.Mapping("FullArbolApropiaciones", j.FullArbolApropiaciones)
+	j.Mapping("GetAllVigencia", j.GetAllVigencia)
+	j.Mapping("GetHojas", j.GetHojas)
 }
 
 // GetAllVigencia función para obtener todos los objetos con una vigencia y una unidad ejecutora
@@ -368,6 +370,28 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	} else {
 		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia)
 		j.response = DefaultResponse(200, nil, &tree)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// GetHojas ...
+// @Title GetHojas
+// @Description Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
+// @Param body body string	true "Código de la raíz"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /get_hojas/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) GetHojas() {
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	vigencia := j.GetString(":vigencia")
+
+	leafs, err := models.GetHojasApropiacion(unidadEjecutora, vigencia)
+
+	if err != nil {
+		j.response = DefaultResponse(404, err, nil)
+	} else {
+		j.response = DefaultResponse(200, nil, &leafs)
 	}
 	j.Data["json"] = j.response
 	j.ServeJSON()
