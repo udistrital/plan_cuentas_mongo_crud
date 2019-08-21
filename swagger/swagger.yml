@@ -118,6 +118,19 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /arbol_rubro/get_hojas:
+    get:
+      tags:
+      - arbol_rubro
+      description: Devuelve un arreglo con todos los nodos hoja
+      operationId: NodoRubroController.GetHojas
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro_apropiacion/:
     get:
       tags:
@@ -299,6 +312,28 @@ paths:
         description: Código de la raíz
         schema:
           $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro_apropiacion/get_hojas/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Devuelve un arreglo con todos los nodos hoja correspondientes a
+        la vigencia y ue
+      operationId: NodoRubroApropiacionController.GetHojas
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        required: true
+        schema:
+          type: string
+        type: string
       responses:
         "200":
           description: ""
@@ -548,10 +583,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  9192.0xc0004bfad0.false:
+  9944.0xc0004df230.false:
     title: "false"
     type: object
-  9469.rubroFuente:
+  10221.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -564,9 +599,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/9469.rubroFuente'
+        $ref: '#/definitions/10221.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/9192.0xc0004bfad0.false'
+        $ref: '#/definitions/9944.0xc0004df230.false'
       ValorAcumulado:
         type: number
         format: double

@@ -123,3 +123,16 @@ func EstrctTransaccionArbolApropiacion(session *mgo.Session, estructuras []*Nodo
 
 	return ops, err
 }
+
+// GetHojasApropiacion devuelve todos los nodos cuyos hijos sean un arreglo vació
+func GetHojasApropiacion(ue, vigencia string) (leafs []NodoRubroApropiacion, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+vigencia+"_"+ue)
+	defer session.Close()
+
+	err = c.Find(bson.M{"nodorubro.hijos": []string{}}).All(&leafs)
+	return
+}
