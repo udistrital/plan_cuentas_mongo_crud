@@ -18,7 +18,7 @@ type dependenciaRubro struct {
 // rubroFuente Relación entre un rubro y una fuente
 type rubroFuente struct {
 	Dependencias []*dependenciaRubro `json:"Dependencias" bson:"dependencias"`
-	Productos    []string               `json:"Productos" bson:"productos`
+	Productos    []string            `json:"Productos" bson:"productos`
 }
 
 // FuenteFinanciamiento ...
@@ -121,4 +121,18 @@ func PostFuentePadreTransaccion(session *mgo.Session, estructura *FuenteFinancia
 		Insert: estructura,
 	}
 	return op, err
+}
+
+// GetFuentesByRubroApropiacion devuelve todas las fuentes que tenga un rubro idRubroApropiacion
+func GetFuentesByRubroApropiacion(idRubroApropiacion string) (fuentes []FuenteFinanciamiento, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	defer session.Close()
+
+	c.Find(bson.M{"rubros." + idRubroApropiacion: bson.M{"$exists": "true"}}).All(&fuentes)
+	return
 }
