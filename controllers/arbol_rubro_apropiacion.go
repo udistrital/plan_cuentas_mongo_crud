@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/astaxie/beego/logs"
+
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
@@ -188,6 +190,15 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			j.Ctx.ResponseWriter.WriteHeader(500)
+			j.Data["json"] = r
+		}
+		j.ServeJSON()
+	}()
+
 	var nodoRubroApropiacion *models.NodoRubroApropiacion
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
@@ -197,7 +208,7 @@ func (j *NodoRubroApropiacionController) Post() {
 		j.response = DefaultResponse(403, err, nil)
 	}
 	j.Data["json"] = j.response
-	j.ServeJSON()
+
 }
 
 // Put de HTTP
