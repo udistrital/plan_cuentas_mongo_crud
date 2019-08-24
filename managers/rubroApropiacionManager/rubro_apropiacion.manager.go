@@ -15,11 +15,12 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	if err != nil {
 		return err
 	}
-
+	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
-	runner := txn.NewRunner(c)
 
+	runner := txn.NewRunner(c)
 	id := bson.NewObjectId()
+	nodoHoja.Estado = models.EstadoRegistrada
 
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
@@ -32,7 +33,6 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 
 	if err == nil {
 		nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
-
 		ops = append(ops, txn.Op{
 			C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 			Id:     nodoPadre.ID,
