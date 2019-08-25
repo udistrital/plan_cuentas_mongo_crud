@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -33,6 +32,7 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 	j.Mapping("FullArbolApropiaciones", j.FullArbolApropiaciones)
 	j.Mapping("GetAllVigencia", j.GetAllVigencia)
 	j.Mapping("GetHojas", j.GetHojas)
+	j.Mapping("AprobacionMasiva", j.AprobacionMasiva)
 }
 
 // GetAllVigencia función para obtener todos los objetos con una vigencia y una unidad ejecutora
@@ -43,11 +43,10 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 // @Failure 403 :unidadEjecutora is empty
 // @router /:vigencia/:unidadEjecutora [get]
 func (j *NodoRubroApropiacionController) GetAllVigencia() {
-	session, _ := db.GetSession()
 	vigencia := j.GetString(":vigencia")
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	var query = make(map[string]interface{})
-	fmt.Println("get all funciton: ", vigencia, unidadEjecutora)
+
 	if v := j.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
@@ -71,7 +70,7 @@ func (j *NodoRubroApropiacionController) GetAllVigencia() {
 
 	response := DefaultResponse(403, err, nil)
 
-	if obs := models.GetAllNodoRubroApropiacion(session, query, unidadEjecutora, vigencia); len(obs) > 0 {
+	if obs := models.GetAllNodoRubroApropiacion(query, unidadEjecutora, vigencia); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
 
@@ -100,11 +99,10 @@ func DefaultResponse(code int, err error, info interface{}) map[string]interface
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *NodoRubroApropiacionController) GetAll() {
-	session, _ := db.GetSession()
 	vigencia := j.GetString(":vigencia")
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	var query = make(map[string]interface{})
-	fmt.Println("get all funciton: ", vigencia, unidadEjecutora)
+
 	if v := j.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
@@ -125,15 +123,13 @@ func (j *NodoRubroApropiacionController) GetAll() {
 	}
 
 	err := errors.New("Bad info response")
-
 	response := DefaultResponse(404, err, nil)
 
-	if obs := models.GetAllNodoRubroApropiacion(session, query, unidadEjecutora, vigencia); len(obs) > 0 {
+	if obs := models.GetAllNodoRubroApropiacion(query, unidadEjecutora, vigencia); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
 
 	j.Data["json"] = response
-
 	j.ServeJSON()
 }
 
@@ -393,6 +389,28 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 	} else {
 		j.response = DefaultResponse(200, nil, &leafs)
 	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// AprobacionMasiva ...
+// @Title AprobacionMasiva
+// @Description Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
+// @Param unidadEjecutora unidadEjecutora string	true "Unidad Ejecutora de la apropiación"
+// @Param vigencia vigencia string	true "Vigencia de la apropiación"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router aprobacion_masiva/:unidadEjecutora/:vigencia [post]
+func (j *NodoRubroApropiacionController) AprobacionMasiva() {
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	vigencia := j.GetString(":vigencia")
+
+	if err := rubroApropiacionManager.TrAprobarApropiaciones(unidadEjecutora, vigencia); err == nil {
+		j.response = DefaultResponse(200, nil, "Ok")
+	} else {
+		j.response = DefaultResponse(404, err, nil)
+	}
+
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
