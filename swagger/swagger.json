@@ -521,6 +521,42 @@
                 }
             }
         },
+        "/arbol_rubro_apropiacionaprobacion_masiva/{unidadEjecutora}/{vigencia}": {
+            "post": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora",
+                "operationId": "NodoRubroApropiacionController.AprobacionMasiva",
+                "parameters": [
+                    {
+                        "in": "unidadEjecutora",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "vigencia",
+                        "name": "vigencia",
+                        "description": "Vigencia de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
         "/fuente_financiamiento/": {
             "get": {
                 "tags": [
@@ -914,12 +950,12 @@
         }
     },
     "definitions": {
-        "10218.rubroFuente": {
-            "title": "rubroFuente",
+        "10328.0xc00053b8c0.false": {
+            "title": "false",
             "type": "object"
         },
-        "9941.0xc0004ebd40.false": {
-            "title": "false",
+        "10605.rubroFuente": {
+            "title": "rubroFuente",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -934,10 +970,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/10218.rubroFuente"
+                    "$ref": "#/definitions/10605.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/9941.0xc0004ebd40.false"
+                    "$ref": "#/definitions/10328.0xc00053b8c0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
