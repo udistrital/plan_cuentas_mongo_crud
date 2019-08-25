@@ -223,11 +223,18 @@ func (j *NodoRubroApropiacionController) Put() {
 	objectID := j.Ctx.Input.Param(":objectId")
 	vigencia := j.Ctx.Input.Param(":vigencia")
 	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			j.Ctx.ResponseWriter.WriteHeader(500)
+			j.Data["json"] = r
+		}
+		j.ServeJSON()
+	}()
 	var arbolrubroapropiacion models.NodoRubroApropiacion
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
-	session, _ := db.GetSession()
 	vigenciaInt, _ := strconv.Atoi(vigencia)
-	err := models.UpdateNodoRubroApropiacion(session, arbolrubroapropiacion, objectID, unidadEjecutora, vigenciaInt)
+	err := rubroApropiacionManager.TrActualizarValorApropiacion(&arbolrubroapropiacion, objectID, unidadEjecutora, vigenciaInt)
 	if err == nil {
 		j.response = DefaultResponse(200, nil, "update success")
 	} else {

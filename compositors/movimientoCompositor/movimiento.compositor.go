@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego/logs"
+	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -17,7 +18,7 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 	)
 
 	for _, element := range movimientoData {
-		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, element)
+		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", element)
 		ops = append(ops, opMov)
 	}
 
@@ -26,7 +27,7 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 
 // BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
 // This method search in "movimientos_parametros" collection for the afectation's config recursively.
-func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface{}) {
+func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
 	var arrMovimientosUpdted []interface{}
 	var runFlag = true
@@ -73,7 +74,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []interface
 		}
 	}
 
-	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, arrMovimientosUpdted...)
+	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", arrMovimientosUpdted...)
 
 	return
 }

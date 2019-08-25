@@ -25,7 +25,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-	// searchRubro(nodoHoja.ID, ue, vigencia)
+	searchRubro(nodoHoja.ID, ue, vigencia)
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 		Id:     nodoHoja.ID,
@@ -38,6 +38,40 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 		ops = append(ops, propOps...)
 	}
 	return runner.Run(ops, id, nil)
+}
+
+// TrActualizarValorApropiacion ... Actualiza el valor de una apropiacion y propaga el cambio en el arbol.
+func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID string, ue string, vigencia int) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	c := db.Cursor(session, models.TransactionCollection)
+	runner := txn.NewRunner(c)
+
+	id := bson.NewObjectId()
+	if nodoOldInfo, err := models.GetNodoRubroApropiacionById(nodo.ID, ue, vigencia); err == nil {
+		collName := models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue
+		logs.Debug("aqui")
+
+		ops := []txn.Op{{
+			C:      collName,
+			Id:     nodo.ID,
+			Assert: bson.M{"_id": nodo.ID},
+			Update: bson.D{{"$set", bson.D{{"apropiacionInicial", nodo.ApropiacionInicial}}}},
+		}}
+		if nodoOldInfo.ApropiacionInicial != nodo.ApropiacionInicial {
+			if propOps, err := PropagarValorApropiacion(nodo, nodo.ApropiacionInicial-nodoOldInfo.ApropiacionInicial, ue, vigencia); err == nil {
+				ops = append(ops, propOps...)
+			}
+		}
+
+		return runner.Run(ops, id, nil)
+	} else {
+		return err
+	}
+
 }
 
 func searchRubro(nodo string, ue string, vigencia int) models.NodoRubro {
