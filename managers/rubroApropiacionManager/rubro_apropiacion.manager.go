@@ -15,16 +15,17 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
+
 	session, err := db.GetSession()
 	if err != nil {
 		return err
 	}
-
+	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-
+	// searchRubro(nodoHoja.ID, ue, vigencia)
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 		Id:     nodoHoja.ID,
@@ -33,36 +34,43 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	}}
 
 	if propOps, err := PropagarValorApropiacion(nodoHoja, nodoHoja.ApropiacionInicial, ue, vigencia); err == nil {
+
 		ops = append(ops, propOps...)
 	}
 	return runner.Run(ops, id, nil)
 }
 
+func searchRubro(nodo string, ue string, vigencia int) models.NodoRubro {
+	rubroPadre, err := models.GetNodoRubroById(nodo)
+	if err != nil {
+		message := err.Error()
+		if message == "not found" {
+			message = "Rubro " + nodo + " Does not exist!"
+		}
+		logs.Error(message)
+		panic(message)
+	}
+	return rubroPadre
+}
+
 // PropagarValorApropiacion ... Propaga valores dentro del arbol de apropiaciones a partir de un nodo. El nodo debe tener los campos vigencia y unidad ejecutora.
 func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagationValue float64, ue string, vigencia int) (ops []txn.Op, err error) {
 	var nodo models.NodoRubroApropiacion
-	var nodoPadre models.NodoRubroApropiacion
 	formatdata.FillStructP(nodoHijo, &nodo)
 
 	for nodo.Padre != "" {
+		var nodoPadre models.NodoRubroApropiacion
+
 		nodoPadrePointer, err := models.GetNodoRubroApropiacionById(nodo.Padre, ue, vigencia)
 		formatdata.FillStructP(nodoPadrePointer, &nodoPadre)
 
 		if err != nil && err.Error() == "not found" {
-			rubroPadre, err := models.GetNodoRubroById(nodo.Padre)
-			if err != nil {
-				message := err.Error()
-				if message == "not found" {
-					message = "Rubro " + nodo.Padre + " Does not exist!"
-				}
-				logs.Error(message)
-				panic(message)
-			}
+			rubroPadre := searchRubro(nodo.Padre, ue, vigencia)
 			nodoPadre = nodo
 			nodoPadre.NodoRubro = &rubroPadre
 			nodoPadre.ID = rubroPadre.ID
 			nodoPadre.Padre = rubroPadre.Padre
-			nodoPadre.NodoRubro.Hijos = []string{nodo.ID}
+			nodoPadre.Hijos = []string{nodo.ID}
 			ops = append(ops, txn.Op{
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
@@ -71,24 +79,24 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 			})
 		} else {
 			nodoPadre.ApropiacionInicial += propagationValue
-			logs.Debug("padre", nodoPadre.ID, "hijos", nodoPadre.Hijos, "agregar", nodo.ID)
 			ops = append(ops, txn.Op{
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
-				Assert: "d+",
+				Assert: bson.M{"_id": nodoPadre.ID},
 				Update: bson.D{{"$set", bson.D{{"apropiacionInicial", nodoPadre.ApropiacionInicial}}}},
 			})
-			if !childrenExist(nodo.ID, nodoPadre.Hijos) {
+			if childrenExist(nodo.ID, nodoPadre.Hijos) != true {
+
 				nodoPadre.Hijos = append(nodoPadre.Hijos, nodo.ID)
+
 				ops = append(ops, txn.Op{
 					C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 					Id:     nodoPadre.ID,
-					Assert: "d+",
+					Assert: bson.M{"_id": nodoPadre.ID},
 					Update: bson.D{{"$set", bson.D{{"nodorubro.hijos", nodoPadre.Hijos}}}},
 				})
 			}
 		}
-
 		nodo = nodoPadre
 	}
 
