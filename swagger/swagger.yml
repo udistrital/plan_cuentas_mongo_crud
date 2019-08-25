@@ -319,6 +319,19 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: ComprobarBalanceArbolApropiaciones
+      operationId: NodoRubroApropiacionController.ComprobarBalanceArbolApropiaciones
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro_apropiacion/get_hojas/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -333,6 +346,31 @@ paths:
         required: true
         schema:
           type: string
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro_apropiacionaprobacion_masiva/{unidadEjecutora}/{vigencia}:
+    post:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una
+        vigencia y unidad ejecutora
+      operationId: NodoRubroApropiacionController.AprobacionMasiva
+      parameters:
+      - in: unidadEjecutora
+        name: unidadEjecutora
+        description: Unidad Ejecutora de la apropiación
+        required: true
+        type: string
+      - in: vigencia
+        name: vigencia
+        description: Vigencia de la apropiación
+        required: true
         type: string
       responses:
         "200":
@@ -600,10 +638,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  9941.0xc0004ebd40.false:
+  6700.0xc0004128a0.false:
     title: "false"
     type: object
-  10218.rubroFuente:
+  6977.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -616,9 +654,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/10218.rubroFuente'
+        $ref: '#/definitions/6977.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/9941.0xc0004ebd40.false'
+        $ref: '#/definitions/6700.0xc0004128a0.false'
       ValorAcumulado:
         type: number
         format: double

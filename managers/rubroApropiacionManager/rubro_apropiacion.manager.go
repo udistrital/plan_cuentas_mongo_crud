@@ -23,7 +23,6 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
-
 	id := bson.NewObjectId()
 	searchRubro(nodoHoja.ID, ue, vigencia)
 	ops := []txn.Op{{
@@ -143,4 +142,31 @@ func childrenExist(childCode string, childrenArray []string) bool {
 		}
 	}
 	return false
+}
+
+// TrAprobarApropiaciones actualiza todas las apropiaciones que tengan el estado registrada por el estado aprobada
+func TrAprobarApropiaciones(ue, vigencia string) error {
+	var ops []txn.Op
+	var query = map[string]interface{}{"estado": "registrada"}
+
+	apropiacionesRegistradas := models.GetAllNodoRubroApropiacion(query, ue, vigencia)
+	for _, apropiacion := range apropiacionesRegistradas {
+		ops = append(ops, txn.Op{
+			C:      models.NodoRubroApropiacionCollection + "_" + vigencia + "_" + ue,
+			Id:     apropiacion.ID,
+			Assert: bson.M{"_id": apropiacion.ID},
+			Update: bson.D{{"$set", bson.D{{"estado", models.EstadoAprobada}}}},
+		})
+	}
+
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	c := db.Cursor(session, models.TransactionCollection)
+	runner := txn.NewRunner(c)
+	id := bson.NewObjectId()
+
+	return runner.Run(ops, id, nil)
 }
