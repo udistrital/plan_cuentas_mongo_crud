@@ -1,7 +1,7 @@
 package models
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/globalsign/mgo"
@@ -12,6 +12,11 @@ import (
 
 // NodoRubroApropiacionCollection constante para la colección
 const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
+
+/* 	EstadoAprobada el estado aprobado de una apropiación, significa que la apropiación ya ha sido aprobada
+EstadoRegistrada el estado registrada de un apropiación, significa que sólo se ha registrado
+EstadoRechazada el estado rechazada de una apropiación, significa que se la apropiación ha sido rechazada */
+const EstadoAprobada, EstadoRegistrada, EstadoRechazada = "aprobada", "registrada", "rechazada"
 
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {
@@ -24,13 +29,20 @@ type NodoRubroApropiacion struct {
 	Estado               string                            `json:"Estado" bson:"estado"`
 }
 
-func GetAllNodoRubroApropiacion(session *mgo.Session, query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
+func GetAllNodoRubroApropiacion(query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
+	var NodoRubroApropiacion []NodoRubroApropiacion
+
+	session, err := db.GetSession()
+	if err != nil {
+		log.Println(err.Error())
+		return NodoRubroApropiacion
+	}
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+vigencia+"_"+ue)
 	defer session.Close()
-	var NodoRubroApropiacion []NodoRubroApropiacion
-	err := c.Find(query).All(&NodoRubroApropiacion)
+
+	err = c.Find(query).All(&NodoRubroApropiacion)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err.Error())
 	}
 	return NodoRubroApropiacion
 }
@@ -39,14 +51,7 @@ func GetAllNodoRubroApropiacion(session *mgo.Session, query map[string]interface
 func UpdateNodoRubroApropiacion(session *mgo.Session, j NodoRubroApropiacion, id, ue string, vigencia int) error {
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
 	defer session.Close()
-	// Update
-	fmt.Println("id update: ", id)
-	err := c.Update(bson.M{"_id": id}, &j)
-	/*if err != nil {
-		fmt.Println("updatw error")
-		panic(err)
-	}*/
-	return err
+	return c.Update(bson.M{"_id": id}, &j)
 }
 
 // InsertNodoRubroApropiacion Register function to NodoRubroApropiacion
