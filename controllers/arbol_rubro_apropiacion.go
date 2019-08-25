@@ -414,3 +414,49 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
+
+// ComprobarBalanceArbolApropiaciones ...
+// @Title ComprobarBalanceArbolApropiaciones
+// @Description ComprobarBalanceArbolApropiaciones
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /comprobar_balance/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
+	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
+	vigenciaStr := j.GetString(":vigencia")
+
+	vigencia, _ := strconv.Atoi(vigenciaStr)
+	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
+
+	var (
+		totalIngresos float64
+		totalEgresos  float64
+	)
+	balanceado := false
+
+	for _, raiz := range raices {
+		if raiz.ID == "2" {
+			totalIngresos += raiz.ApropiacionInicial
+		} else if raiz.ID == "3" {
+			totalEgresos += raiz.ApropiacionInicial
+		}
+	}
+
+	if totalEgresos == totalIngresos && totalEgresos != 0 {
+		balanceado = true
+	}
+
+	response := map[string]interface{}{
+		"totalIngresos": totalIngresos,
+		"totalEgresos":  totalEgresos,
+		"balanceado":    balanceado,
+	}
+
+	if err == nil {
+		j.response = DefaultResponse(200, nil, &response)
+	} else {
+		j.response = DefaultResponse(404, err, nil)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}

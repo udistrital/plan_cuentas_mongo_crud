@@ -53,7 +53,6 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 	id := bson.NewObjectId()
 	if nodoOldInfo, err := models.GetNodoRubroApropiacionById(nodo.ID, ue, vigencia); err == nil {
 		collName := models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue
-		logs.Debug("aqui")
 
 		ops := []txn.Op{{
 			C:      collName,
