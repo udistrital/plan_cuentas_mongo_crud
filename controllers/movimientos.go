@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/astaxie/beego/logs"
+	"github.com/globalsign/mgo/txn"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors/movimientoCompositor"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
@@ -53,7 +54,7 @@ func (j *MovimientosController) RegistrarMovimiento() {
 
 	// Check for required fields in struct
 	for _, movimientoElmnt := range movimientoRequestData {
-		var movimientoData []interface{}
+		var movimientoData []txn.Op
 		var movimientoIntfc interface{}
 		movimientoIntfc = movimientoElmnt
 		if errStrc := formatdata.StructValidation(movimientoElmnt); len(errStrc) > 0 {
@@ -62,7 +63,7 @@ func (j *MovimientosController) RegistrarMovimiento() {
 			return
 		}
 
-		insertMovimientoData := transactionManager.ConvertToTransactionItem(collectionName, movimientoIntfc)
+		insertMovimientoData := transactionManager.ConvertToTransactionItem(collectionName, "", movimientoIntfc)
 		movimientoData = append(movimientoData, insertMovimientoData...)
 		propagacionData := movimientoCompositor.BuildPropagacionValoresTr(movimientoElmnt)
 		if len(propagacionData) > 0 {

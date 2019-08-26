@@ -12,31 +12,26 @@ const TransactionCollection = "transactions"
 
 // ConvertToTransactionItem ... This method manage the Mongo's transaction items from the current orm for registration of new elements in the DB , you should pass
 // the collection name and the model structure. This method will return a transaction elemnt.
-func ConvertToTransactionItem(collectionName string, models ...interface{}) (ops []interface{}) {
-	return buildTransactionArr("d-", collectionName, models)
+func ConvertToTransactionItem(collectionName, uuidKey string, models ...interface{}) (ops []txn.Op) {
+	return buildTransactionArr("d-", collectionName, uuidKey, models)
 }
 
 // ConvertToUpdateTransactionItem ... This method manage the Mongo's transaction items from the current orm for update elements that currently exist in the DB , you should pass
 // the collection name and the model structure. This method will return a transaction elemnt.
-func ConvertToUpdateTransactionItem(collectionName string, models ...interface{}) (ops []interface{}) {
-	return buildTransactionArr("d+", collectionName, models)
+func ConvertToUpdateTransactionItem(collectionName, uuidKey string, models ...interface{}) (ops []txn.Op) {
+	return buildTransactionArr("d+", collectionName, uuidKey, models)
 }
 
 // RunTransaction ... Perform a transaction over the DB with the options element.
-func RunTransaction(collectionName string, options []interface{}) {
+func RunTransaction(collectionName string, ops []txn.Op) {
 
 	session, _ := db.GetSession()
 
 	defer func() {
 		session.Close()
 	}()
-	var ops []txn.Op
 	c := db.Cursor(session, TransactionCollection)
 	runner := txn.NewRunner(c)
-
-	for _, op := range options {
-		ops = append(ops, op.(txn.Op))
-	}
 
 	id := bson.NewObjectId()
 	if err := runner.Run(ops, id, nil); err != nil {
@@ -77,14 +72,17 @@ func buildTransactionItem(assertType, collectionName string, uuid string, model 
 
 }
 
-func buildTransactionArr(assertType, collectionName string, models []interface{}) (ops []interface{}) {
+func buildTransactionArr(assertType, collectionName, uuidKey string, models []interface{}) (ops []txn.Op) {
 	for _, model := range models {
 		uuid := ""
 		if assertType == "d+" {
 			var modelMap map[string]interface{}
 			formatdata.FillStructP(model, &modelMap)
 
-			uuid = modelMap["_id"].(string)
+			if uuidKey == "" {
+				uuidKey = "_id"
+			}
+			uuid = modelMap[uuidKey].(string)
 		}
 
 		ops = append(ops, buildTransactionItem(assertType, collectionName, uuid, model))

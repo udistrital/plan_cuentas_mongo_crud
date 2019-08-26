@@ -379,6 +379,26 @@
                 }
             }
         },
+        "/arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "ComprobarBalanceArbolApropiaciones",
+                "operationId": "NodoRubroApropiacionController.ComprobarBalanceArbolApropiaciones",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
         "/arbol_rubro_apropiacion/get_hojas/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
@@ -950,11 +970,11 @@
         }
     },
     "definitions": {
-        "10328.0xc00053b8c0.false": {
+        "6700.0xc0004128a0.false": {
             "title": "false",
             "type": "object"
         },
-        "10605.rubroFuente": {
+        "6977.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -970,10 +990,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/10605.rubroFuente"
+                    "$ref": "#/definitions/6977.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10328.0xc00053b8c0.false"
+                    "$ref": "#/definitions/6700.0xc0004128a0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

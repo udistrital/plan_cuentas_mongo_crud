@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/astaxie/beego/logs"
+
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
@@ -184,6 +186,15 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			j.Ctx.ResponseWriter.WriteHeader(500)
+			j.Data["json"] = r
+		}
+		j.ServeJSON()
+	}()
+
 	var nodoRubroApropiacion *models.NodoRubroApropiacion
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
@@ -193,7 +204,7 @@ func (j *NodoRubroApropiacionController) Post() {
 		j.response = DefaultResponse(403, err, nil)
 	}
 	j.Data["json"] = j.response
-	j.ServeJSON()
+
 }
 
 // Put de HTTP
@@ -208,11 +219,18 @@ func (j *NodoRubroApropiacionController) Put() {
 	objectID := j.Ctx.Input.Param(":objectId")
 	vigencia := j.Ctx.Input.Param(":vigencia")
 	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			j.Ctx.ResponseWriter.WriteHeader(500)
+			j.Data["json"] = r
+		}
+		j.ServeJSON()
+	}()
 	var arbolrubroapropiacion models.NodoRubroApropiacion
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubroapropiacion)
-	session, _ := db.GetSession()
 	vigenciaInt, _ := strconv.Atoi(vigencia)
-	err := models.UpdateNodoRubroApropiacion(session, arbolrubroapropiacion, objectID, unidadEjecutora, vigenciaInt)
+	err := rubroApropiacionManager.TrActualizarValorApropiacion(&arbolrubroapropiacion, objectID, unidadEjecutora, vigenciaInt)
 	if err == nil {
 		j.response = DefaultResponse(200, nil, "update success")
 	} else {
@@ -388,6 +406,52 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
 		j.response = DefaultResponse(200, nil, &leafs)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// ComprobarBalanceArbolApropiaciones ...
+// @Title ComprobarBalanceArbolApropiaciones
+// @Description ComprobarBalanceArbolApropiaciones
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /comprobar_balance/:unidadEjecutora/:vigencia [get]
+func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
+	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
+	vigenciaStr := j.GetString(":vigencia")
+
+	vigencia, _ := strconv.Atoi(vigenciaStr)
+	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
+
+	var (
+		totalIngresos float64
+		totalEgresos  float64
+	)
+	balanceado := false
+
+	for _, raiz := range raices {
+		if raiz.ID == "2" {
+			totalIngresos += raiz.ApropiacionInicial
+		} else if raiz.ID == "3" {
+			totalEgresos += raiz.ApropiacionInicial
+		}
+	}
+
+	if totalEgresos == totalIngresos && totalEgresos != 0 {
+		balanceado = true
+	}
+
+	response := map[string]interface{}{
+		"totalIngresos": totalIngresos,
+		"totalEgresos":  totalEgresos,
+		"balanceado":    balanceado,
+	}
+
+	if err == nil {
+		j.response = DefaultResponse(200, nil, &response)
+	} else {
+		j.response = DefaultResponse(404, err, nil)
 	}
 	j.Data["json"] = j.response
 	j.ServeJSON()
