@@ -79,6 +79,19 @@ func GetNodoRubroApropiacionById(id, ue string, vigencia int) (*NodoRubroApropia
 	return nodoRubroApropiacion, err
 }
 
+func GetNodoRubroApropiacionByState(id, ue, vigencia, estado string) (*NodoRubroApropiacion, error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return nil, err
+	}
+	defer session.Close()
+	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+vigencia+"_"+ue)
+
+	var nodoRubroApropiacion *NodoRubroApropiacion
+	err = c.Find([]bson.M{bson.M{"estado": estado}, bson.M{"_id": id}}).One(&nodoRubroApropiacion)
+	return nodoRubroApropiacion, err
+}
+
 func DeleteNodoRubroApropiacionById(session *mgo.Session, id string) (string, error) {
 	c := db.Cursor(session, NodoRubroApropiacionCollection)
 	defer session.Close()
