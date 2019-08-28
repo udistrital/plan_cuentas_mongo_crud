@@ -831,6 +831,49 @@
                 }
             }
         },
+        "/necesidades/": {
+            "get": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "get all objects",
+                "operationId": "NecesidadesController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "Necesidades models.Necesidades"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "Post",
+                "operationId": "NecesidadesController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Body para la creacion de Necesidades",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Necesidades"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{int} Necesidades.Id"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
         "/producto/": {
             "get": {
                 "tags": [
@@ -970,11 +1013,11 @@
         }
     },
     "definitions": {
-        "6700.0xc0004128a0.false": {
+        "10328.0xc00055edb0.false": {
             "title": "false",
             "type": "object"
         },
-        "6977.rubroFuente": {
+        "10605.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -990,10 +1033,10 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/6977.rubroFuente"
+                    "$ref": "#/definitions/10605.rubroFuente"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6700.0xc0004128a0.false"
+                    "$ref": "#/definitions/10328.0xc00055edb0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -1035,6 +1078,10 @@
                     "format": "int64"
                 }
             }
+        },
+        "models.Necesidades": {
+            "title": "Necesidades",
+            "type": "object"
         },
         "models.NodoRubro": {
             "title": "NodoRubro",
@@ -1099,6 +1146,10 @@
         {
             "name": "producto",
             "description": "ProductoController operations for FuenteFinanciamiento\n"
+        },
+        {
+            "name": "necesidades",
+            "description": "NecesidadesController estructura para un controlador de beego\n"
         }
     ]
 }

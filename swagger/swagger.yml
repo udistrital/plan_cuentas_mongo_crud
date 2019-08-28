@@ -547,6 +547,34 @@ paths:
           description: '{string} success'
         "403":
           description: error
+  /necesidades/:
+    get:
+      tags:
+      - necesidades
+      description: get all objects
+      operationId: NecesidadesController.GetAll
+      responses:
+        "200":
+          description: Necesidades models.Necesidades
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - necesidades
+      description: Post
+      operationId: NecesidadesController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de Necesidades
+        required: true
+        schema:
+          $ref: '#/definitions/models.Necesidades'
+      responses:
+        "200":
+          description: '{int} Necesidades.Id'
+        "403":
+          description: body is empty
   /producto/:
     get:
       tags:
@@ -638,10 +666,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  6700.0xc0004128a0.false:
+  10328.0xc00055edb0.false:
     title: "false"
     type: object
-  6977.rubroFuente:
+  10605.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -654,9 +682,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/6977.rubroFuente'
+        $ref: '#/definitions/10605.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/6700.0xc0004128a0.false'
+        $ref: '#/definitions/10328.0xc00055edb0.false'
       ValorAcumulado:
         type: number
         format: double
@@ -685,6 +713,9 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.Necesidades:
+    title: Necesidades
+    type: object
   models.NodoRubro:
     title: NodoRubro
     type: object
@@ -730,3 +761,6 @@ tags:
 - name: producto
   description: |
     ProductoController operations for FuenteFinanciamiento
+- name: necesidades
+  description: |
+    NecesidadesController estructura para un controlador de beego
