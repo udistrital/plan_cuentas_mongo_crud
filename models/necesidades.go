@@ -10,23 +10,26 @@ import (
 // NecesidadesCollection es el nombre de la colección en mongo.
 const NecesidadesCollection = "necesidades"
 
+// Actividades asociadas a una meta
 type actividad struct {
 	Codigo string `json:"codigo" bson:"codigo"`
 	Nombre string `json:"nombre" bson:"nombre"`
 }
 
+// Metas de una necesidad
 type meta struct {
 	Nombre      string       `json:"nombre" bson:"nombre"`
 	Descripcion string       `json:"descripcion" bson:"descripcion"`
 	Actividades []*actividad `json:"actividades" bson:"actividades"`
 }
 
+// Rubro de la necesidad (es el que va a tener las metas)
 type rubro struct {
 	Codigo string  `json:"codigo" bson:"codigo"`
 	Metas  []*meta `json:"metas" bson:"metas"`
 }
 
-// Necesidad ...
+// Necesidad información de la necesidad
 type Necesidad struct {
 	ID          bson.ObjectId `json:"_id" bson:"_id,omitempty"`
 	Descripcion string        `json:"descripcion" bson:"descripcion"`
