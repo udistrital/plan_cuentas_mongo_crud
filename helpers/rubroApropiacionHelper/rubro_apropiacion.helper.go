@@ -109,7 +109,7 @@ func getValueChildren(children []string, unidadEjecutora string, vigencia int) (
 	return
 }
 
-// Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
+// GetHijoApropiacion Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
 // Se devuelve un objeto de este tipo y no de models con el fin de utilizar la estructura de json utilizada ya en el cliente
 // y no tener que hacer grandes modificaciones en el
 func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
@@ -133,6 +133,7 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	return hijo
 }
 
+// BuildStateTree construye un árbol de acuerdo al estado de los nodos
 func BuildStateTree(ue, vigencia, estado string) []map[string]interface{} {
 	var tree []map[string]interface{}
 	vigenciaStr, _ := strconv.Atoi(vigencia)
@@ -143,11 +144,13 @@ func BuildStateTree(ue, vigencia, estado string) []map[string]interface{} {
 	}
 
 	for _, root := range roots {
-		forkData := make(map[string]interface{})
-		forkData["Codigo"] = root.ID
-		forkData["data"] = root
-		forkData["children"] = getChildren(root.Hijos, root.UnidadEjecutora, estado, root.Vigencia)
-		tree = append(tree, forkData)
+		if root.Estado == estado {
+			forkData := make(map[string]interface{})
+			forkData["Codigo"] = root.ID
+			forkData["data"] = root
+			forkData["children"] = getChildren(root.Hijos, root.UnidadEjecutora, estado, root.Vigencia)
+			tree = append(tree, forkData)
+		}
 	}
 
 	return tree
