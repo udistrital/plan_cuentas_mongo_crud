@@ -575,6 +575,47 @@ paths:
           description: '{int} Necesidades.Id'
         "403":
           description: body is empty
+  /necesidades/{objectId}:
+    put:
+      tags:
+      - necesidades
+      description: update the Necesidad
+      operationId: NecesidadesController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - necesidades
+      description: Borrar Necesidad
+      operationId: NecesidadesController.Borrar Necesidad
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
   /producto/:
     get:
       tags:
@@ -666,10 +707,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10328.0xc00055edb0.false:
+  15602.0xc0003860f0.false:
     title: "false"
     type: object
-  10605.rubroFuente:
+  15879.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -682,9 +723,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/10605.rubroFuente'
+        $ref: '#/definitions/15879.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10328.0xc00055edb0.false'
+        $ref: '#/definitions/15602.0xc0003860f0.false'
       ValorAcumulado:
         type: number
         format: double

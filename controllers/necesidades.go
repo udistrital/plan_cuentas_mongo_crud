@@ -85,3 +85,48 @@ func (j *NecesidadesController) Post() {
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
+
+// Put de HTTP
+// @Title Update
+// @Description update the Necesidad
+// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	body		body 	models.Object	true		"The body"
+// @Success 200 {object} models.Object
+// @Failure 403 :objectId is empty
+// @router /:objectId [put]
+func (j *NecesidadesController) Put() {
+	objectID := j.Ctx.Input.Param(":objectId")
+	var necesidad models.Necesidad
+
+	json.Unmarshal(j.Ctx.Input.RequestBody, &necesidad)
+
+	if err := models.UpdateNecesidad(&necesidad, objectID); err == nil {
+		j.response = DefaultResponse(200, nil, "update success!")
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+
+// Delete ...
+// @Title Borrar Necesidad
+// @Description Borrar Necesidad
+// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Success 200 {string} ok
+// @Failure 403 objectId is empty
+// @router /:objectId [delete]
+func (j *NecesidadesController) Delete() {
+	objectID := j.Ctx.Input.Param(":objectId")
+
+	if err := models.DeleteNecesidad(objectID); err == nil {
+		j.response = DefaultResponse(200, nil, "delete success!")
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
