@@ -2,7 +2,7 @@ package rubroApropiacionHelper
 
 import (
 	"encoding/json"
-	"fmt"
+	"strconv"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -14,22 +14,29 @@ func BuildTree(raiz *models.NodoRubroApropiacion) []map[string]interface{} {
 	forkData := make(map[string]interface{})
 	forkData["Codigo"] = raiz.ID
 	forkData["data"] = raiz
-	forkData["children"] = getChildren(raiz.Hijos, raiz.UnidadEjecutora, raiz.Vigencia)
+	forkData["children"] = getChildren(raiz.Hijos, raiz.UnidadEjecutora, "", raiz.Vigencia)
 	tree = append(tree, forkData)
 	return tree
 }
 
-func getChildren(children []string, unidadEjecutora string, vigencia int) (childrenTree []map[string]interface{}) {
+func getChildren(children []string, unidadEjecutora, estado string, vigencia int) (childrenTree []map[string]interface{}) {
+	var nodo *models.NodoRubroApropiacion
+	var err error
 	for _, child := range children {
 		forkData := make(map[string]interface{})
-		nodo, err := models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia)
+		if estado == "" {
+			nodo, err = models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia)
+		} else {
+			nodo, err = models.GetNodoRubroApropiacionByState(child, unidadEjecutora, strconv.Itoa(vigencia), estado)
+		}
+
 		if err != nil {
 			return
 		}
 		forkData["data"] = nodo
 		forkData["Codigo"] = nodo.ID
 		if len(nodo.Hijos) > 0 {
-			forkData["children"] = getChildren(nodo.Hijos, unidadEjecutora, vigencia)
+			forkData["children"] = getChildren(nodo.Hijos, unidadEjecutora, estado, vigencia)
 		}
 		childrenTree = append(childrenTree, forkData)
 	}
@@ -51,7 +58,6 @@ func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
 		}
 
 		if apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
-			fmt.Println("por aquí.")
 			raices[i]["ApropiacionInicial"] = 0
 		} else {
 			raices[i]["ApropiacionInicial"] = apropiacion.ApropiacionInicial
@@ -103,7 +109,7 @@ func getValueChildren(children []string, unidadEjecutora string, vigencia int) (
 	return
 }
 
-// Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
+// GetHijoApropiacion Obtiene y devuelve el nodo hijo de la apropiación, devolviendolo en un objeto tipo json (map[string]interface{})
 // Se devuelve un objeto de este tipo y no de models con el fin de utilizar la estructura de json utilizada ya en el cliente
 // y no tener que hacer grandes modificaciones en el
 func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
@@ -125,4 +131,27 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	}
 
 	return hijo
+}
+
+// BuildStateTree construye un árbol de acuerdo al estado de los nodos
+func BuildStateTree(ue, vigencia, estado string) []map[string]interface{} {
+	var tree []map[string]interface{}
+	vigenciaStr, _ := strconv.Atoi(vigencia)
+	roots, err := models.GetRaicesApropiacion(ue, vigenciaStr)
+
+	if err != nil {
+		return tree
+	}
+
+	for _, root := range roots {
+		if root.Estado == estado {
+			forkData := make(map[string]interface{})
+			forkData["Codigo"] = root.ID
+			forkData["data"] = root
+			forkData["children"] = getChildren(root.Hijos, root.UnidadEjecutora, estado, root.Vigencia)
+			tree = append(tree, forkData)
+		}
+	}
+
+	return tree
 }

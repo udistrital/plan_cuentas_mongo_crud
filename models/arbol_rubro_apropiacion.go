@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -76,6 +77,20 @@ func GetNodoRubroApropiacionById(id, ue string, vigencia int) (*NodoRubroApropia
 	err = c.FindId(id).One(&nodoRubroApropiacion)
 
 	defer session.Close()
+	return nodoRubroApropiacion, err
+}
+
+func GetNodoRubroApropiacionByState(id, ue, vigencia, estado string) (*NodoRubroApropiacion, error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return nil, err
+	}
+	defer session.Close()
+	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+vigencia+"_"+ue)
+
+	var nodoRubroApropiacion *NodoRubroApropiacion
+	fmt.Println("id: ", id)
+	err = c.Find(bson.M{"estado": estado, "_id": id}).One(&nodoRubroApropiacion)
 	return nodoRubroApropiacion, err
 }
 
