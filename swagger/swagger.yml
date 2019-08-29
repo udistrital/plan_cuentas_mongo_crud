@@ -319,6 +319,30 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Genera el árbol dependiendo del estado de las apropiaciones
+      operationId: NodoRubroApropiacionController.TreeByState
+      parameters:
+      - in: unidadEjecutora
+        name: unidadEjecutora
+        description: Unidad Ejecutora de la apropiación
+        required: true
+        type: string
+      - in: vigencia
+        name: vigencia
+        description: Vigencia de la apropiación
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -638,10 +662,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10783.0xc0005663f0.false:
+  10797.0xc00058e5a0.false:
     title: "false"
     type: object
-  11060.rubroFuente:
+  11074.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -654,9 +678,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/11060.rubroFuente'
+        $ref: '#/definitions/11074.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10783.0xc0005663f0.false'
+        $ref: '#/definitions/10797.0xc00058e5a0.false'
       ValorAcumulado:
         type: number
         format: double

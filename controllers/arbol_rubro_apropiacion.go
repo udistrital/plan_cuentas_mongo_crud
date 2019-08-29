@@ -35,6 +35,7 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 	j.Mapping("GetAllVigencia", j.GetAllVigencia)
 	j.Mapping("GetHojas", j.GetHojas)
 	j.Mapping("AprobacionMasiva", j.AprobacionMasiva)
+	j.Mapping("TreeByState", j.TreeByState)
 }
 
 // GetAllVigencia función para obtener todos los objetos con una vigencia y una unidad ejecutora
@@ -295,7 +296,7 @@ func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 	j.ServeJSON()
 }
 
-// RaicesArbolApropiacion
+// RaicesArbolApropiacion ...
 // @Title RaicesArbolApropiacion
 // @Description RaicesArbolApropiacion
 // @Success 200 {object} models.Object
@@ -474,6 +475,26 @@ func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 	} else {
 		j.response = DefaultResponse(404, err, nil)
 	}
+
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// TreeByState ...
+// @Title TreeByState
+// @Description Genera el árbol dependiendo del estado de las apropiaciones
+// @Param unidadEjecutora unidadEjecutora string	true "Unidad Ejecutora de la apropiación"
+// @Param vigencia vigencia string	true "Vigencia de la apropiación"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado [get]
+func (j *NodoRubroApropiacionController) TreeByState() {
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	vigencia := j.GetString(":vigencia")
+	estado := j.GetString(":estado")
+
+	tree := rubroApropiacionHelper.BuildStateTree(unidadEjecutora, vigencia, estado)
+	j.response = DefaultResponse(200, nil, &tree)
 
 	j.Data["json"] = j.response
 	j.ServeJSON()
