@@ -225,6 +225,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
         beego.ControllerComments{
+            Method: "TreeByState",
+            Router: `/arbol_por_estado/:unidadEjecutora/:vigencia/:estado`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
+        beego.ControllerComments{
             Method: "ComprobarBalanceArbolApropiaciones",
             Router: `/comprobar_balance/:unidadEjecutora/:vigencia`,
             AllowHTTPMethods: []string{"get"},

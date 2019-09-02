@@ -15,7 +15,6 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
-
 	session, err := db.GetSession()
 	if err != nil {
 		return err
@@ -23,7 +22,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
-	id := bson.NewObjectId()
+	
 	searchRubro(nodoHoja.ID, ue, vigencia)
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
@@ -33,9 +32,9 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	}}
 
 	if propOps, err := PropagarValorApropiacion(nodoHoja, nodoHoja.ApropiacionInicial, ue, vigencia); err == nil {
-
 		ops = append(ops, propOps...)
 	}
+	id := bson.NewObjectId()
 	return runner.Run(ops, id, nil)
 }
 

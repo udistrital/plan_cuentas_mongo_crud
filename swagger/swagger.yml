@@ -319,6 +319,30 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Genera el árbol dependiendo del estado de las apropiaciones
+      operationId: NodoRubroApropiacionController.TreeByState
+      parameters:
+      - in: unidadEjecutora
+        name: unidadEjecutora
+        description: Unidad Ejecutora de la apropiación
+        required: true
+        type: string
+      - in: vigencia
+        name: vigencia
+        description: Vigencia de la apropiación
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}:
     get:
       tags:
