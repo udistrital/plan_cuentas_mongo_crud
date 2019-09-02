@@ -22,7 +22,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
-	
+
 	searchRubro(nodoHoja.ID, ue, vigencia)
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
@@ -102,6 +102,7 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 			nodoPadre.ID = rubroPadre.ID
 			nodoPadre.Padre = rubroPadre.Padre
 			nodoPadre.Hijos = []string{nodo.ID}
+			nodoPadre.Vigencia = vigencia
 			ops = append(ops, txn.Op{
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
