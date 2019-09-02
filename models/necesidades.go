@@ -20,13 +20,15 @@ type actividad struct {
 type meta struct {
 	Codigo 		string 		 `json:"codigo" bson:"codigo"`
 	Actividades []*actividad `json:"actividades" bson:"actividades"`
-	Valor       float64      `json:"valor" bson:"valor"`
 }
 
-// Rubro de la necesidad (es el que va a tener las metas)
-type rubro struct {
-	Codigo string  `json:"codigo" bson:"codigo"`
-	Metas  []*meta `json:"metas" bson:"metas"`
+// Apropiacion de la necesidad (es el que va a tener las metas)
+type apropiacion struct {
+	Codigo 			 string  			`json:"codigo" bson:"codigo"`
+	Metas  			 []*meta 			`json:"metas" bson:"metas"`
+	Fuentes			 []*fuente	   		`json:"fuentes" bson:"fuentes"`
+	Productos		 []*producto   		`json:"productos" bson:"productos"`
+
 }
 
 // Fuentes de la necesidad 
@@ -37,8 +39,8 @@ type fuente struct {
 
 // Productos de la necesidad 
 type producto struct {
-	Codigo string  `json:"codigo" bson:"codigo"`
-	Valor  float64 `json:"valor" bson:"valor"`
+	Codigo bson.ObjectId 		`json:"_id" bson:"_id,omitempty"`
+	Valor  float64 				`json:"valor" bson:"valor"`
 }
 
 // Productos de la necesidad 
@@ -53,9 +55,7 @@ type Necesidad struct {
 	ID               bson.ObjectId 		`json:"_id" bson:"_id,omitempty"`
 	IDAdministrativa int           		`json:"idAdministrativa" bson:"idAdministrativa"`
 	Valor            float64       		`json:"valor" bson:"valor"`
-	Rubros           *rubro        		`json:"rubros" bson:"rubros"`
-	Fuentes			 []*fuente	   		`json:"fuentes" bson:"fuentes"`
-	Productos		 []*producto   		`json:"productos" bson:"productos"`
+	Apropiaciones    []*apropiacion		`json:"apropiaciones" bson:"apropiaciones"`
 	DetalleServicio	 *detalleServicio	`json:"detalleServicio" bson:"detalleServicio"`
 	TipoContrato	 int		   		`json:"tipoContrato" bson:"tipoContrato"`
 }
