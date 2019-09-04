@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "API Aplicacion Voto",
+        "title": "API",
         "description": "API Aplicacion Voto - Entidades Core",
         "version": "1.0.0",
         "termsOfService": "http://oas.udistrital.edu.co/",
@@ -15,18 +15,16 @@
     },
     "basePath": "/v1",
     "paths": {
-        "/candidato/": {
+        "/arbol_rubro/": {
             "get": {
                 "tags": [
-                    "candidato"
+                    "arbol_rubro"
                 ],
                 "description": "get all objects",
-                "operationId": "CandidatoController.GetAll",
+                "operationId": "NodoRubroController.GetAll",
                 "responses": {
                     "200": {
-                        "schema": {
-                            "$ref": "#/definitions/.Candidato"
-                        }
+                        "description": "NodoRubro models.NodoRubro"
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -35,24 +33,24 @@
             },
             "post": {
                 "tags": [
-                    "candidato"
+                    "arbol_rubro"
                 ],
-                "description": "Crear Candidato Jornada Electoral",
-                "operationId": "CandidatoController.Crear Candidato",
+                "description": "Crear NodoRubro",
+                "operationId": "NodoRubroController.Crear NodoRubro",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Body para la creacion de candidato",
+                        "description": "Body para la creacion de NodoRubro",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/.Candidato"
+                            "$ref": "#/definitions/models.NodoRubro"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} candidato.Id"
+                        "description": "{int} NodoRubro.Id"
                     },
                     "403": {
                         "description": "body is empty"
@@ -60,26 +58,77 @@
                 }
             }
         },
-        "/candidato/{nombre}": {
+        "/arbol_rubro/arbol/{raiz}": {
             "get": {
                 "tags": [
-                    "candidato"
+                    "arbol_rubro"
                 ],
-                "description": "get candidato by nombre",
-                "operationId": "CandidatoController.Get",
+                "description": "Construye el árbol a un nivel dependiendo de la raíz",
+                "operationId": "NodoRubroController.FullArbolRubro",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Código de la raíz",
+                        "schema": {
+                            "$ref": "#/definitions/stringtrue"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro/get_hojas": {
+            "get": {
+                "tags": [
+                    "arbol_rubro"
+                ],
+                "description": "Devuelve un arreglo con todos los nodos hoja",
+                "operationId": "NodoRubroController.GetHojas",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro/{id}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro"
+                ],
+                "description": "get NodoRubro by nombre",
+                "operationId": "NodoRubroController.Get",
                 "parameters": [
                     {
                         "in": "path",
                         "name": "nombre",
-                        "description": "El nombre de la jornada a consultar",
+                        "description": "El nombre de la NodoRubro a consultar",
                         "required": true,
                         "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
+                        "description": "",
                         "schema": {
-                            "$ref": "#/definitions/.Candidato"
+                            "$ref": "#/definitions/models.NodoRubro"
                         }
                     },
                     "403": {
@@ -88,13 +137,13 @@
                 }
             }
         },
-        "/candidato/{objectId}": {
+        "/arbol_rubro/{objectId}": {
             "put": {
                 "tags": [
-                    "candidato"
+                    "arbol_rubro"
                 ],
-                "description": "update the Candidato",
-                "operationId": "CandidatoController.Update",
+                "description": "update the NodoRubro",
+                "operationId": "NodoRubroController.Update",
                 "parameters": [
                     {
                         "in": "path",
@@ -109,14 +158,15 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/.Candidato"
+                            "$ref": "#/definitions/models.Object"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
+                        "description": "",
                         "schema": {
-                            "$ref": "#/definitions/.Candidato"
+                            "$ref": "#/definitions/models.Object"
                         }
                     },
                     "403": {
@@ -126,10 +176,10 @@
             },
             "delete": {
                 "tags": [
-                    "candidato"
+                    "arbol_rubro"
                 ],
-                "description": "Borrar Candidato",
-                "operationId": "CandidatoController.Borrar Candidato",
+                "description": "Borrar NodoRubro",
+                "operationId": "NodoRubroController.Borrar NodoRubro",
                 "parameters": [
                     {
                         "in": "path",
@@ -149,18 +199,16 @@
                 }
             }
         },
-        "/jornada/": {
+        "/arbol_rubro_apropiacion/": {
             "get": {
                 "tags": [
-                    "jornada"
+                    "arbol_rubro_apropiacion"
                 ],
                 "description": "get all objects",
-                "operationId": "JornadaController.GetAll",
+                "operationId": "NodoRubroApropiacionController.GetAll",
                 "responses": {
                     "200": {
-                        "schema": {
-                            "$ref": "#/definitions/.Jornada"
-                        }
+                        "description": "NodoRubroApropiacion models.NodoRubroApropiacion"
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -169,24 +217,50 @@
             },
             "post": {
                 "tags": [
-                    "jornada"
+                    "arbol_rubro_apropiacion"
                 ],
-                "description": "Crear Jornada",
-                "operationId": "JornadaController.Crear Jornada Electoral",
+                "description": "Post NodoRubroApropiacion2018",
+                "operationId": "NodoRubroApropiacionController.Post NodoRubroApropiacion2018",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Body para la creacion de jornada de votacion",
+                        "description": "Body para la creacion de NodoRubroApropiacion2018",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/.User"
+                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} jornada.Id"
+                        "description": "{int} NodoRubroApropiacion2018.Id"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            },
+            "options": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Crear NodoRubroApropiacion2018",
+                "operationId": "NodoRubroApropiacionController.Preflight options",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Body para la creacion de NodoRubroApropiacion2018",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{int} NodoRubroApropiacion2018.Id"
                     },
                     "403": {
                         "description": "body is empty"
@@ -194,26 +268,226 @@
                 }
             }
         },
-        "/jornada/{nombre}": {
+        "/arbol_rubro_apropiacion/ArbolApropiacionPadreHijo/{raiz}/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
-                    "jornada"
+                    "arbol_rubro_apropiacion"
                 ],
-                "description": "get jornada by nombre",
-                "operationId": "JornadaController.Get",
+                "description": "Devuelve un nivel del árbol de apropiaciones",
+                "operationId": "NodoRubroApropiacionController.Preflight ArbolApropiacionPadreHijo",
                 "parameters": [
                     {
-                        "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la jornada a consultar",
+                        "in": "body",
+                        "name": "body",
+                        "description": "Body para la creacion de NodoRubroApropiacion2018",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "RaicesArbolApropiacion",
+                "operationId": "NodoRubroApropiacionController.RaicesArbolApropiacion",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/arbol_apropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Construye el árbol dependiendo de la raíz",
+                "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Código de la raíz",
+                        "schema": {
+                            "$ref": "#/definitions/stringtrue"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Construye el árbol completo con valores",
+                "operationId": "NodoRubroApropiacionController.FullArbolApropiaciones",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Código de la raíz",
+                        "schema": {
+                            "$ref": "#/definitions/stringtrue"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Genera el árbol dependiendo del estado de las apropiaciones",
+                "operationId": "NodoRubroApropiacionController.TreeByState",
+                "parameters": [
+                    {
+                        "in": "unidadEjecutora",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "vigencia",
+                        "name": "vigencia",
+                        "description": "Vigencia de la apropiación",
                         "required": true,
                         "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
+                        "description": "",
                         "schema": {
-                            "$ref": "#/definitions/.Jornada"
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "ComprobarBalanceArbolApropiaciones",
+                "operationId": "NodoRubroApropiacionController.ComprobarBalanceArbolApropiaciones",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/get_hojas/{unidadEjecutora}/{vigencia}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue",
+                "operationId": "NodoRubroApropiacionController.GetHojas",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Código de la raíz",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "get NodoRubroApropiacion2018 by nombre",
+                "operationId": "NodoRubroApropiacionController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la NodoRubroApropiacion2018 a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
                         }
                     },
                     "403": {
@@ -222,13 +496,39 @@
                 }
             }
         },
-        "/jornada/{objectId}": {
+        "/arbol_rubro_apropiacion/{objectId}": {
+            "delete": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Borrar NodoRubroApropiacion2018",
+                "operationId": "NodoRubroApropiacionController.Delete NodoRubroApropiacion2018",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/{objectId}/{vigencia}/{unidadEjecutora}": {
             "put": {
                 "tags": [
-                    "jornada"
+                    "arbol_rubro_apropiacion"
                 ],
-                "description": "update the Jornada",
-                "operationId": "JornadaController.Update",
+                "description": "update the NodoRubroApropiacion2018",
+                "operationId": "NodoRubroApropiacionController.Update",
                 "parameters": [
                     {
                         "in": "path",
@@ -243,14 +543,210 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/.Object"
+                            "$ref": "#/definitions/models.Object"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
+                        "description": "",
                         "schema": {
-                            "$ref": "#/definitions/.Object"
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacion/{vigencia}/{unidadEjecutora}": {
+            "get": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "get all objects",
+                "operationId": "NodoRubroApropiacionController.GetAllVigencia",
+                "responses": {
+                    "200": {
+                        "description": "NodoRubroApropiacion models.NodoRubroApropiacion"
+                    },
+                    "403": {
+                        "description": ":unidadEjecutora is empty"
+                    }
+                }
+            }
+        },
+        "/arbol_rubro_apropiacionaprobacion_masiva/{unidadEjecutora}/{vigencia}": {
+            "post": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora",
+                "operationId": "NodoRubroApropiacionController.AprobacionMasiva",
+                "parameters": [
+                    {
+                        "in": "unidadEjecutora",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "vigencia",
+                        "name": "vigencia",
+                        "description": "Vigencia de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/fuente_financiamiento/": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "get all objects",
+                "operationId": "FuenteFinanciamientoController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "FuenteFunanciamiento models.FuenteFinanciamiento"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "create FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for FuenteFinanciamiento content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/fuente_financiamiento/VincularFuente": {
+            "post": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "create FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for FuenteFinanciamiento content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/fuente_financiamiento/{objectId}": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "get FuenteFinancimiento by nombre",
+                "operationId": "FuenteFinanciamientoController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la FuenteFinancimiento a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.FuenteFinancimiento"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "update the FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "The objectid you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
                         }
                     },
                     "403": {
@@ -260,10 +756,340 @@
             },
             "delete": {
                 "tags": [
-                    "jornada"
+                    "fuente_financiamiento"
                 ],
-                "description": "Borrar Jornada Electoral",
-                "operationId": "JornadaController.Borrar Jornada",
+                "description": "Borrar FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.Borrar FuenteFinanciamiento",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
+        "/fuente_financiamientofuente_financiamiento_apropiacion/{rubro_apropiacion_id}": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "Borrar FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.GetWithRubro",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
+        "/movimiento/RegistrarMovimientoParameter": {
+            "post": {
+                "tags": [
+                    "movimiento"
+                ],
+                "description": "Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección",
+                "operationId": "MovimientosController.RegistrarMovimientoParameter",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "json de movimientos enviado desde el api_mid_financiera",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Object"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
+        "/movimiento/RegistrarMovimientos": {
+            "post": {
+                "tags": [
+                    "movimiento"
+                ],
+                "description": "Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección",
+                "operationId": "MovimientosController.RegistrarMovimiento",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "json de movimientos enviado desde el api_mid_financiera",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Object"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
+        "/necesidades/": {
+            "get": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "get all objects",
+                "operationId": "NecesidadesController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "Necesidades models.Necesidades"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "Post",
+                "operationId": "NecesidadesController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Body para la creacion de Necesidades",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Necesidades"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{int} Necesidades.Id"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/necesidades/{objectId}": {
+            "put": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "update the Necesidad",
+                "operationId": "NecesidadesController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "The objectid you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "Borrar Necesidad",
+                "operationId": "NecesidadesController.Borrar Necesidad",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
+        "/producto/": {
+            "get": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "get all objects",
+                "operationId": "ProductoController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "Producto models.Producto"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "create Producto",
+                "operationId": "ProductoController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Producto content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Producto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Producto"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/producto/{id}": {
+            "get": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "get Producto by nombre",
+                "operationId": "ProductoController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la Producto a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Producto"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            }
+        },
+        "/producto/{objectId}": {
+            "put": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "update the Producto",
+                "operationId": "ProductoController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "The objectid you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "producto"
+                ],
+                "description": "Eliminar Producto",
+                "operationId": "ProductoController.Eliminar Producto",
                 "parameters": [
                     {
                         "in": "path",
@@ -285,27 +1111,143 @@
         }
     },
     "definitions": {
-        ".Candidato": {
+        "10797.0xc0005b23c0.false": {
+            "title": "false",
             "type": "object"
         },
-        ".Jornada": {
+        "11074.rubroFuente": {
+            "title": "rubroFuente",
             "type": "object"
         },
-        ".Object": {
+        "bson.ObjectId": {
+            "title": "ObjectId",
             "type": "object"
         },
-        ".User": {
+        "models.FuenteFinanciamiento": {
+            "title": "FuenteFinanciamiento",
+            "type": "object",
+            "properties": {
+                "Codigo": {
+                    "type": "string"
+                },
+                "Rubros": {
+                    "$ref": "#/definitions/11074.rubroFuente"
+                },
+                "TipoFuente": {
+                    "$ref": "#/definitions/10797.0xc0005b23c0.false"
+                },
+                "ValorAcumulado": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "ValorOriginal": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "models.FuenteFinancimiento": {
+            "title": "FuenteFinancimiento",
+            "type": "object"
+        },
+        "models.General": {
+            "title": "General",
+            "type": "object",
+            "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
+                "Descripcion": {
+                    "type": "string"
+                },
+                "FechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "FechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Nombre": {
+                    "type": "string"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.Necesidades": {
+            "title": "Necesidades",
+            "type": "object"
+        },
+        "models.NodoRubro": {
+            "title": "NodoRubro",
+            "type": "object",
+            "properties": {
+                "Codigo": {
+                    "type": "string"
+                },
+                "Hijos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Padre": {
+                    "type": "string"
+                },
+                "UnidadEjecutora": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.NodoRubroApropiacion2018": {
+            "title": "NodoRubroApropiacion2018",
+            "type": "object"
+        },
+        "models.Object": {
+            "title": "Object",
+            "type": "object"
+        },
+        "models.Producto": {
+            "title": "Producto",
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "$ref": "#/definitions/bson.ObjectId"
+                }
+            }
+        },
+        "stringtrue": {
+            "title": "stringtrue",
             "type": "object"
         }
     },
     "tags": [
         {
-            "name": "jornada",
-            "description": "Operaciones Crud Jornada\n"
+            "name": "arbol_rubro",
+            "description": "NodoRubroController estructura para un controlador de beego\n"
         },
         {
-            "name": "candidato",
-            "description": "Operaciones Crud Candidato\n"
+            "name": "arbol_rubro_apropiacion",
+            "description": "NodoRubroApropiacionController struct del controlador, utiliza los atributos y funciones de un controlador de beego\n"
+        },
+        {
+            "name": "fuente_financiamiento",
+            "description": "FuenteFinanciamientoController operations for FuenteFinanciamiento\n"
+        },
+        {
+            "name": "movimiento",
+            "description": "MovimientosController estructura para un controlador de beego\n"
+        },
+        {
+            "name": "producto",
+            "description": "ProductoController operations for FuenteFinanciamiento\n"
+        },
+        {
+            "name": "necesidades",
+            "description": "NecesidadesController estructura para un controlador de beego\n"
         }
     ]
 }

@@ -9,24 +9,39 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/udistrital/financiera_mongo_crud/controllers"
+	"github.com/udistrital/plan_cuentas_mongo_crud/controllers"
 )
 
 func init() {
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/arbol_rubro",
 			beego.NSInclude(
-				&controllers.ArbolRubrosController{},
+				&controllers.NodoRubroController{},
 			),
 		),
-		beego.NSNamespace("/arbol_rubro_apropiaciones",
+		beego.NSNamespace("/arbol_rubro_apropiacion",
 			beego.NSInclude(
-				&controllers.ArbolRubroApropiacionController{},
+				&controllers.NodoRubroApropiacionController{},
 			),
 		),
 		beego.NSNamespace("/fuente_financiamiento",
 			beego.NSInclude(
 				&controllers.FuenteFinanciamientoController{},
+			),
+		),
+		beego.NSNamespace("/movimiento",
+			beego.NSInclude(
+				&controllers.MovimientosController{},
+			),
+		),
+		beego.NSNamespace("/producto",
+			beego.NSInclude(
+				&controllers.ProductoController{},
+			),
+		),
+		beego.NSNamespace("/necesidades",
+			beego.NSInclude(
+				&controllers.NecesidadesController{},
 			),
 		),
 	)

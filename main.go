@@ -1,23 +1,36 @@
 package main
 
 import (
-	_ "github.com/udistrital/financiera_mongo_crud/routers"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/plugins/cors"
+	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
+	"github.com/udistrital/utils_oas/customerror"
+	"github.com/udistrital/utils_oas/apiStatusLib"
 )
 
 func main() {
+
+	// beego.BConfig.RecoverFunc = responseformat.GlobalResponseHandler
+
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	beego.InsertFilter("*", beego.BeforeRouter, func(ctx *context.Context) {
+	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"PUT", "PATCH", "GET", "POST", "OPTIONS", "DELETE"},
+		AllowHeaders: []string{"Origin", "x-requested-with",
+			"content-type",
+			"accept",
+			"origin",
+			"authorization",
+			"x-csrftoken"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
-			ctx.Output.Header("Access-Control-Allow-Origin", "*")
-			ctx.Output.Header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS")
-			ctx.Output.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-	})
-
+	beego.ErrorController(&customerror.CustomErrorController{})
+	apistatus.Init()
 	beego.Run()
 }
