@@ -241,18 +241,6 @@ func (j *NodoRubroApropiacionController) Put() {
 	j.ServeJSON()
 }
 
-// Options options
-// @Title Preflight options
-// @Description Crear NodoRubroApropiacion2018
-// @Param	body		body 	models.NodoRubroApropiacion2018	true		"Body para la creacion de NodoRubroApropiacion2018"
-// @Success 200 {int} NodoRubroApropiacion2018.Id
-// @Failure 403 body is empty
-// @router / [options]
-func (j *NodoRubroApropiacionController) Options() {
-	j.Data["json"] = "success!"
-	j.ServeJSON()
-}
-
 // ArbolApropiacionPadreHijo devuelve un árbol desde la raiz indicada
 // @Title Preflight ArbolApropiacionPadreHijo
 // @Description Devuelve un nivel del árbol de apropiaciones
