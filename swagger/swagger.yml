@@ -731,10 +731,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  15602.0xc0003ba2a0.false:
+  10797.0xc0005b23c0.false:
     title: "false"
     type: object
-  15879.rubroFuente:
+  11074.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -747,9 +747,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/15879.rubroFuente'
+        $ref: '#/definitions/11074.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/15602.0xc0003ba2a0.false'
+        $ref: '#/definitions/10797.0xc0005b23c0.false'
       ValorAcumulado:
         type: number
         format: double
