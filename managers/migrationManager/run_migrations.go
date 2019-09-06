@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	migrate "github.com/miguelramirez93/mongo-migrate"
+	migrate "github.com/udistrital/mongo-migrate"
 
 	// migrtions ... import the migration file.
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/migrations"
