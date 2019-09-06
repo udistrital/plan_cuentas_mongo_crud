@@ -159,23 +159,6 @@ paths:
           description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
-    options:
-      tags:
-      - arbol_rubro_apropiacion
-      description: Crear NodoRubroApropiacion2018
-      operationId: NodoRubroApropiacionController.Preflight options
-      parameters:
-      - in: body
-        name: body
-        description: Body para la creacion de NodoRubroApropiacion2018
-        required: true
-        schema:
-          $ref: '#/definitions/models.NodoRubroApropiacion2018'
-      responses:
-        "200":
-          description: '{int} NodoRubroApropiacion2018.Id'
-        "403":
-          description: body is empty
   /arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
@@ -731,10 +714,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  10797.0xc0005b23c0.false:
+  16637.0xc000374ff0.false:
     title: "false"
     type: object
-  11074.rubroFuente:
+  16914.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -747,9 +730,9 @@ definitions:
       Codigo:
         type: string
       Rubros:
-        $ref: '#/definitions/11074.rubroFuente'
+        $ref: '#/definitions/16914.rubroFuente'
       TipoFuente:
-        $ref: '#/definitions/10797.0xc0005b23c0.false'
+        $ref: '#/definitions/16637.0xc000374ff0.false'
       ValorAcumulado:
         type: number
         format: double
