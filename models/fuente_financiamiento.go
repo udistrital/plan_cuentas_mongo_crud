@@ -24,11 +24,13 @@ type rubroFuente struct {
 // FuenteFinanciamiento ...
 type FuenteFinanciamiento struct {
 	*General
-	ID             string                       `json:"Codigo" bson:"_id,omitempty"`
-	TipoFuente     interface{}                  `json:"TipoFuente" bson"tipoFuente"`
-	ValorOriginal  float64                      `json:"ValorOriginal" bson:"valorOriginal"`
-	ValorAcumulado float64                      `json:"ValorAcumulado" bson"valorAcumulado"`
-	Rubros         map[codigoRubro]*rubroFuente `json:"Rubros" bson:"rubros"`
+	ID              string                       `json:"Codigo" bson:"_id,omitempty"`
+	TipoFuente      interface{}                  `json:"TipoFuente" bson"tipoFuente"`
+	ValorOriginal   float64                      `json:"ValorOriginal" bson:"valorOriginal"`
+	ValorAcumulado  float64                      `json:"ValorAcumulado" bson"valorAcumulado"`
+	Rubros          map[codigoRubro]*rubroFuente `json:"Rubros" bson:"rubros"`
+	NumeroDocumento string                       `json:"NumeroDocumento" bson:"numeroDocumento"`
+	TipoDocumento   string                       `json:"TipoDocumento" bson:"tipoDocumento"`
 }
 
 // FuenteFinanciamientoCollection constante para la colección
