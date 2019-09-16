@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -11,14 +12,14 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-// NecesidadesController estructura para un controlador de beego
-type NecesidadesController struct {
+// SolicitudesCDPController estructura para un controlador de beego
+type SolicitudesCDPController struct {
 	beego.Controller
 	response map[string]interface{}
 }
 
 // URLMapping ...
-func (j *NecesidadesController) URLMapping() {
+func (j *SolicitudesCDPController) URLMapping() {
 	j.Mapping("GetAll", j.GetAll)
 	// j.Mapping("Get", j.Get)
 	j.Mapping("Post", j.Post)
@@ -29,10 +30,10 @@ func (j *NecesidadesController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 Necesidades models.Necesidades
+// @Success 200 SolicitudCDP models.SolicitudCDP
 // @Failure 403 :objectId is empty
 // @router / [get]
-func (j *NecesidadesController) GetAll() {
+func (j *SolicitudesCDPController) GetAll() {
 	var query = make(map[string]interface{})
 
 	if v := j.GetString("query"); v != "" {
@@ -54,11 +55,11 @@ func (j *NecesidadesController) GetAll() {
 		}
 	}
 
-	err := errors.New("Bad info response")
+	err := errors.New("No data")
 
-	response := DefaultResponse(403, err, nil)
+	response := DefaultResponse(204, err, nil)
 
-	if obs := models.GetAllNecesidad(query); len(obs) > 0 {
+	if obs := models.GetAllSolicitudCDP(query); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
 
@@ -69,17 +70,18 @@ func (j *NecesidadesController) GetAll() {
 // Get ...
 // Get obtiene un elemento por su id
 // @Title Get
-// @Description get Necesidad by nombre
-// @Param	nombre		path 	string	true		"El nombre de la Necesidad a consultar"
-// @Success 200 {object} models.Necesidad
+// @Description get SolicitudCDP by nombre
+// @Param	nombre		path 	string	true		"El nombre de la SolicitudCDP a consultar"
+// @Success 200 {object} models.SolicitudCDP
 // @Failure 403 :uid is empty
 // @router /:objectId [get]
-func (j *NecesidadesController) Get() {
+func (j *SolicitudesCDPController) Get() {
 	objectId := j.GetString(":objectId")
+	
 	if objectId != "" {
-		necesidad, err := models.GetNecesidadByID(objectId)
+		SolicitudCDP, err := models.GetSolicitudCDPByID(objectId)
 		if err == nil {
-			j.response = DefaultResponse(200, nil, &necesidad)
+			j.response = DefaultResponse(200, nil, &SolicitudCDP)
 		} else {
 			j.response = DefaultResponse(403, err, nil)
 		}
@@ -90,15 +92,15 @@ func (j *NecesidadesController) Get() {
 
 // @Title Post
 // @Description Post
-// @Param	body		body 	models.Necesidades	true		"Body para la creacion de Necesidades"
-// @Success 200 {int} Necesidades.Id
+// @Param	body		body 	models.SolicitudCDP	true		"Body para la creacion de SolicitudesCDP"
+// @Success 200 {int} SolicitudCDP.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (j *NecesidadesController) Post() {
-	var necesidad models.Necesidad
-	json.Unmarshal(j.Ctx.Input.RequestBody, &necesidad)
-
-	if err := models.InsertNecesidad(&necesidad); err == nil {
+func (j *SolicitudesCDPController) Post() {
+	var SolicitudCDP models.SolicitudCDP
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCDP)
+	fmt.Println(j.Ctx.Input.RequestBody, &SolicitudCDP)
+	if err := models.InsertSolicitudCDP(&SolicitudCDP); err == nil {
 		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -110,19 +112,19 @@ func (j *NecesidadesController) Post() {
 
 // Put de HTTP
 // @Title Update
-// @Description update the Necesidad
+// @Description update the SolicitudCDP
 // @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
-func (j *NecesidadesController) Put() {
+func (j *SolicitudesCDPController) Put() {
 	objectID := j.Ctx.Input.Param(":objectId")
-	var necesidad models.Necesidad
+	var SolicitudCDP models.SolicitudCDP
 
-	json.Unmarshal(j.Ctx.Input.RequestBody, &necesidad)
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCDP)
 
-	if err := models.UpdateNecesidad(&necesidad, objectID); err == nil {
+	if err := models.UpdateSolicitudCDP(&SolicitudCDP, objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -133,16 +135,16 @@ func (j *NecesidadesController) Put() {
 }
 
 // Delete ...
-// @Title Borrar Necesidad
-// @Description Borrar Necesidad
+// @Title Borrar SolicitudCDP
+// @Description Borrar SolicitudCDP
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
-func (j *NecesidadesController) Delete() {
+func (j *SolicitudesCDPController) Delete() {
 	objectID := j.Ctx.Input.Param(":objectId")
 
-	if err := models.DeleteNecesidad(objectID); err == nil {
+	if err := models.DeleteSolicitudCDP(objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)

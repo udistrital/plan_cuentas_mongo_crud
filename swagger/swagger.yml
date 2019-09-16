@@ -731,11 +731,98 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /solicitudesCDP/:
+    get:
+      tags:
+      - solicitudesCDP
+      description: get all objects
+      operationId: SolicitudesCDPController.GetAll
+      responses:
+        "200":
+          description: SolicitudCDP models.SolicitudCDP
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - solicitudesCDP
+      description: Post
+      operationId: SolicitudesCDPController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de SolicitudesCDP
+        required: true
+        schema:
+          $ref: '#/definitions/models.SolicitudCDP'
+      responses:
+        "200":
+          description: '{int} SolicitudCDP.Id'
+        "403":
+          description: body is empty
+  /solicitudesCDP/{objectId}:
+    get:
+      tags:
+      - solicitudesCDP
+      description: get SolicitudCDP by nombre
+      operationId: SolicitudesCDPController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la SolicitudCDP a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.SolicitudCDP'
+        "403":
+          description: :uid is empty
+    put:
+      tags:
+      - solicitudesCDP
+      description: update the SolicitudCDP
+      operationId: SolicitudesCDPController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - solicitudesCDP
+      description: Borrar SolicitudCDP
+      operationId: SolicitudesCDPController.Borrar SolicitudCDP
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
 definitions:
-  14609.0xc0004c4240.false:
+  18826.0xc000456420.false:
     title: "false"
     type: object
-  14889.rubroFuente:
+  19106.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -750,11 +837,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/14889.rubroFuente'
+        $ref: '#/definitions/19106.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/14609.0xc0004c4240.false'
+        $ref: '#/definitions/18826.0xc000456420.false'
       ValorAcumulado:
         type: number
         format: double
@@ -833,6 +920,31 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+  models.SolicitudCDP:
+    title: SolicitudCDP
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/bson.ObjectId'
+      centroGestor:
+        type: integer
+        format: int64
+      consecutivo:
+        type: integer
+        format: int64
+      entidad:
+        type: integer
+        format: int64
+      fechaRegistro:
+        type: string
+        format: datetime
+      infoCdp:
+        $ref: '#/definitions/models.infoCdp'
+      justificacionRechazo:
+        type: string
+      necesidad:
+        type: integer
+        format: int64
   models.actividad:
     title: actividad
     type: object
@@ -880,6 +992,19 @@ definitions:
       valor:
         type: number
         format: double
+  models.infoCdp:
+    title: infoCdp
+    type: object
+    properties:
+      consecutivo:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64
+      fechaExpedicion:
+        type: string
+        format: datetime
   models.meta:
     title: meta
     type: object
@@ -921,3 +1046,6 @@ tags:
 - name: necesidades
   description: |
     NecesidadesController estructura para un controlador de beego
+- name: solicitudesCDP
+  description: |
+    SolicitudesCDPController estructura para un controlador de beego
