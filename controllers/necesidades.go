@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -66,6 +67,29 @@ func (j *NecesidadesController) GetAll() {
 	j.ServeJSON()
 }
 
+// Get ...
+// Get obtiene un elemento por su id
+// @Title Get
+// @Description get Necesidad by nombre
+// @Param	nombre		path 	string	true		"El nombre de la Necesidad a consultar"
+// @Success 200 {object} models.Necesidad
+// @Failure 403 :uid is empty
+// @router /:objectId [get]
+func (j *NecesidadesController) Get() {
+	objectId := j.GetString(":objectId")
+	fmt.Println(objectId, "por un demonio")
+	if objectId != "" {
+		necesidad, err := models.GetNecesidadByID(objectId)
+		if err == nil {
+			j.response = DefaultResponse(200, nil, &necesidad)
+		} else {
+			j.response = DefaultResponse(403, err, nil)
+		}
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
 // @Title Post
 // @Description Post
 // @Param	body		body 	models.Necesidades	true		"Body para la creacion de Necesidades"
@@ -109,7 +133,6 @@ func (j *NecesidadesController) Put() {
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
-
 
 // Delete ...
 // @Title Borrar Necesidad
