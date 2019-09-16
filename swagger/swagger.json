@@ -885,6 +885,33 @@
             }
         },
         "/necesidades/{objectId}": {
+            "get": {
+                "tags": [
+                    "necesidades"
+                ],
+                "description": "get Necesidad by nombre",
+                "operationId": "NecesidadesController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "description": "El nombre de la Necesidad a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Necesidad"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "necesidades"
@@ -1085,11 +1112,11 @@
         }
     },
     "definitions": {
-        "16637.0xc000374ff0.false": {
+        "14609.0xc0004c4240.false": {
             "title": "false",
             "type": "object"
         },
-        "16914.rubroFuente": {
+        "14889.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1104,11 +1131,17 @@
                 "Codigo": {
                     "type": "string"
                 },
+                "NumeroDocumento": {
+                    "type": "string"
+                },
                 "Rubros": {
-                    "$ref": "#/definitions/16914.rubroFuente"
+                    "$ref": "#/definitions/14889.rubroFuente"
+                },
+                "TipoDocumento": {
+                    "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/16637.0xc000374ff0.false"
+                    "$ref": "#/definitions/14609.0xc0004c4240.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -1151,6 +1184,36 @@
                 }
             }
         },
+        "models.Necesidad": {
+            "title": "Necesidad",
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "$ref": "#/definitions/bson.ObjectId"
+                },
+                "apropiaciones": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.apropiacion"
+                    }
+                },
+                "detalleServicio": {
+                    "$ref": "#/definitions/models.detalleServicio"
+                },
+                "idAdministrativa": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tipoContrato": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "valor": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
         "models.Necesidades": {
             "title": "Necesidades",
             "type": "object"
@@ -1190,6 +1253,103 @@
             "properties": {
                 "_id": {
                     "$ref": "#/definitions/bson.ObjectId"
+                }
+            }
+        },
+        "models.actividad": {
+            "title": "actividad",
+            "type": "object",
+            "properties": {
+                "codigo": {
+                    "type": "string"
+                },
+                "valor": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "models.apropiacion": {
+            "title": "apropiacion",
+            "type": "object",
+            "properties": {
+                "codigo": {
+                    "type": "string"
+                },
+                "fuentes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.fuente"
+                    }
+                },
+                "metas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.meta"
+                    }
+                },
+                "productos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.producto"
+                    }
+                }
+            }
+        },
+        "models.detalleServicio": {
+            "title": "detalleServicio",
+            "type": "object",
+            "properties": {
+                "codigo": {
+                    "type": "string"
+                },
+                "descripcion": {
+                    "type": "string"
+                },
+                "valor": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "models.fuente": {
+            "title": "fuente",
+            "type": "object",
+            "properties": {
+                "codigo": {
+                    "type": "string"
+                },
+                "valor": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "models.meta": {
+            "title": "meta",
+            "type": "object",
+            "properties": {
+                "actividades": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.actividad"
+                    }
+                },
+                "codigo": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.producto": {
+            "title": "producto",
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "$ref": "#/definitions/bson.ObjectId"
+                },
+                "valor": {
+                    "type": "number",
+                    "format": "double"
                 }
             }
         },

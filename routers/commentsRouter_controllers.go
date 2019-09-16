@@ -108,6 +108,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NecesidadesController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NecesidadesController"],
         beego.ControllerComments{
+            Method: "Get",
+            Router: `/:objectId`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NecesidadesController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NecesidadesController"],
+        beego.ControllerComments{
             Method: "Put",
             Router: `/:objectId`,
             AllowHTTPMethods: []string{"put"},

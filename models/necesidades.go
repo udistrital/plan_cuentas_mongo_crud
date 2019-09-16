@@ -18,46 +18,45 @@ type actividad struct {
 
 // Metas de una necesidad
 type meta struct {
-	Codigo 		string 		 `json:"codigo" bson:"codigo"`
+	Codigo      string       `json:"codigo" bson:"codigo"`
 	Actividades []*actividad `json:"actividades" bson:"actividades"`
 }
 
 // Apropiacion de la necesidad (es el que va a tener las metas)
 type apropiacion struct {
-	Codigo 			 string  			`json:"codigo" bson:"codigo"`
-	Metas  			 []*meta 			`json:"metas" bson:"metas"`
-	Fuentes			 []*fuente	   		`json:"fuentes" bson:"fuentes"`
-	Productos		 []*producto   		`json:"productos" bson:"productos"`
-
+	Codigo    string      `json:"codigo" bson:"codigo"`
+	Metas     []*meta     `json:"metas" bson:"metas"`
+	Fuentes   []*fuente   `json:"fuentes" bson:"fuentes"`
+	Productos []*producto `json:"productos" bson:"productos"`
 }
 
-// Fuentes de la necesidad 
+// Fuentes de la necesidad
 type fuente struct {
 	Codigo string  `json:"codigo" bson:"codigo"`
 	Valor  float64 `json:"valor" bson:"valor"`
 }
 
-// Productos de la necesidad 
+// Productos de la necesidad
 type producto struct {
-	Codigo bson.ObjectId 		`json:"_id" bson:"_id,omitempty"`
-	Valor  float64 				`json:"valor" bson:"valor"`
+	Codigo bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	Valor  float64       `json:"valor" bson:"valor"`
 }
 
-// Productos de la necesidad 
+// Productos de la necesidad
 type detalleServicio struct {
-	Codigo 			string  `json:"codigo" bson:"codigo"`
-	Valor  			float64 `json:"valor" bson:"valor"`
-	Descripcion 	string  `json:"descripcion" bson:"descripcion"`
+	Codigo      string  `json:"codigo" bson:"codigo"`
+	Valor       float64 `json:"valor" bson:"valor"`
+	Descripcion string  `json:"descripcion" bson:"descripcion"`
 }
 
 // Necesidad información de la necesidad
 type Necesidad struct {
-	ID               bson.ObjectId 		`json:"_id" bson:"_id,omitempty"`
-	IDAdministrativa int           		`json:"idAdministrativa" bson:"idAdministrativa"`
-	Valor            float64       		`json:"valor" bson:"valor"`
-	Apropiaciones    []*apropiacion		`json:"apropiaciones" bson:"apropiaciones"`
-	DetalleServicio	 *detalleServicio	`json:"detalleServicio" bson:"detalleServicio"`
-	TipoContrato	 int		   		`json:"tipoContrato" bson:"tipoContrato"`
+	ID               bson.ObjectId    `json:"_id" bson:"_id,omitempty"`
+	IDAdministrativa int              `json:"idAdministrativa" bson:"idAdministrativa"`
+	Valor            float64          `json:"valor" bson:"valor"`
+	Apropiaciones    []*apropiacion   `json:"apropiaciones" bson:"apropiaciones"`
+	DetalleServicio  *detalleServicio `json:"detalleServicio" bson:"detalleServicio"`
+	TipoContrato     int              `json:"tipoContrato" bson:"tipoContrato"`
 }
 
 // NecesidadCollection constante para la colección
@@ -91,6 +90,20 @@ func GetAllNecesidad(query map[string]interface{}) []Necesidad {
 	return necesidades
 }
 
+// GetNecesidadByID obtiene una necesidad por su _id
+func GetNecesidadByID(id string) (Necesidad, error) {
+	var necesidad Necesidad
+	session, err := db.GetSession()
+	if err != nil {
+		log.Panicln(err.Error())
+	}
+	defer session.Close()
+
+	c := db.Cursor(session, NecesidadesCollection)
+	err = c.FindId(bson.ObjectIdHex(id)).One(&necesidad)
+	return necesidad, err
+}
+
 // UpdateNecesidad actualiza una necesidad
 func UpdateNecesidad(j *Necesidad, id string) error {
 	session, err := db.GetSession()
@@ -101,7 +114,7 @@ func UpdateNecesidad(j *Necesidad, id string) error {
 
 	defer session.Close()
 
-	return c.Update(bson.M{"_id": id}, &j)
+	return c.Update(bson.M{"_id": bson.ObjectIdHex(id)}, &j)
 }
 
 // DeleteNecesidad elimina una necesidad con su ID
