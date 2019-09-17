@@ -12,14 +12,14 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-// SolicitudesCDPController estructura para un controlador de beego
-type SolicitudesCDPController struct {
+// SolicitudesCRPController estructura para un controlador de beego
+type SolicitudesCRPController struct {
 	beego.Controller
 	response map[string]interface{}
 }
 
 // URLMapping ...
-func (j *SolicitudesCDPController) URLMapping() {
+func (j *SolicitudesCRPController) URLMapping() {
 	j.Mapping("GetAll", j.GetAll)
 	j.Mapping("Get", j.Get)
 	j.Mapping("Post", j.Post)
@@ -30,10 +30,10 @@ func (j *SolicitudesCDPController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 SolicitudCDP models.SolicitudCDP
+// @Success 200 SolicitudCRP models.SolicitudCRP
 // @Failure 403 :objectId is empty
 // @router / [get]
-func (j *SolicitudesCDPController) GetAll() {
+func (j *SolicitudesCRPController) GetAll() {
 	var query = make(map[string]interface{})
 
 	if v := j.GetString("query"); v != "" {
@@ -59,7 +59,7 @@ func (j *SolicitudesCDPController) GetAll() {
 
 	response := DefaultResponse(204, err, nil)
 
-	if obs := models.GetAllSolicitudCDP(query); len(obs) > 0 {
+	if obs := models.GetAllSolicitudCRP(query); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
 
@@ -70,18 +70,18 @@ func (j *SolicitudesCDPController) GetAll() {
 // Get ...
 // Get obtiene un elemento por su id
 // @Title Get
-// @Description get SolicitudCDP by nombre
-// @Param	nombre		path 	string	true		"El nombre de la SolicitudCDP a consultar"
-// @Success 200 {object} models.SolicitudCDP
+// @Description get SolicitudCRP by nombre
+// @Param	nombre		path 	string	true		"El nombre de la SolicitudCRP a consultar"
+// @Success 200 {object} models.SolicitudCRP
 // @Failure 403 :uid is empty
 // @router /:objectId [get]
-func (j *SolicitudesCDPController) Get() {
+func (j *SolicitudesCRPController) Get() {
 	objectId := j.GetString(":objectId")
 
 	if objectId != "" {
-		SolicitudCDP, err := models.GetSolicitudCDPByID(objectId)
+		SolicitudCRP, err := models.GetSolicitudCRPByID(objectId)
 		if err == nil {
-			j.response = DefaultResponse(200, nil, &SolicitudCDP)
+			j.response = DefaultResponse(200, nil, &SolicitudCRP)
 		} else {
 			j.response = DefaultResponse(403, err, nil)
 		}
@@ -92,15 +92,15 @@ func (j *SolicitudesCDPController) Get() {
 
 // @Title Post
 // @Description Post
-// @Param	body		body 	models.SolicitudCDP	true		"Body para la creacion de SolicitudesCDP"
-// @Success 200 {int} SolicitudCDP.Id
+// @Param	body		body 	models.SolicitudCRP	true		"Body para la creacion de SolicitudesCRP"
+// @Success 200 {int} SolicitudCRP.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (j *SolicitudesCDPController) Post() {
-	var SolicitudCDP models.SolicitudCDP
-	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCDP)
-	fmt.Println(j.Ctx.Input.RequestBody, &SolicitudCDP)
-	if err := models.InsertSolicitudCDP(&SolicitudCDP); err == nil {
+func (j *SolicitudesCRPController) Post() {
+	var SolicitudCRP models.SolicitudCRP
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCRP)
+	fmt.Println(j.Ctx.Input.RequestBody, &SolicitudCRP)
+	if err := models.InsertSolicitudCRP(&SolicitudCRP); err == nil {
 		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -112,19 +112,19 @@ func (j *SolicitudesCDPController) Post() {
 
 // Put de HTTP
 // @Title Update
-// @Description update the SolicitudCDP
+// @Description update the SolicitudCRP
 // @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
-func (j *SolicitudesCDPController) Put() {
+func (j *SolicitudesCRPController) Put() {
 	objectID := j.Ctx.Input.Param(":objectId")
-	var SolicitudCDP models.SolicitudCDP
+	var SolicitudCRP models.SolicitudCRP
 
-	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCDP)
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCRP)
 
-	if err := models.UpdateSolicitudCDP(&SolicitudCDP, objectID); err == nil {
+	if err := models.UpdateSolicitudCRP(&SolicitudCRP, objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -135,16 +135,16 @@ func (j *SolicitudesCDPController) Put() {
 }
 
 // Delete ...
-// @Title Borrar SolicitudCDP
-// @Description Borrar SolicitudCDP
+// @Title Borrar SolicitudCRP
+// @Description Borrar SolicitudCRP
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
-func (j *SolicitudesCDPController) Delete() {
+func (j *SolicitudesCRPController) Delete() {
 	objectID := j.Ctx.Input.Param(":objectId")
 
-	if err := models.DeleteSolicitudCDP(objectID); err == nil {
+	if err := models.DeleteSolicitudCRP(objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)

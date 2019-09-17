@@ -49,6 +49,11 @@ func init() {
 				&controllers.SolicitudesCDPController{},
 			),
 		),
+		beego.NSNamespace("/solicitudesCRP",
+			beego.NSInclude(
+				&controllers.SolicitudesCRPController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
