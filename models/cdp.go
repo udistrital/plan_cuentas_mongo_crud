@@ -3,6 +3,7 @@ package models
 import (
 	"log"
 	"time"
+
 	"github.com/globalsign/mgo/bson"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
@@ -10,28 +11,29 @@ import (
 // CDPCollection es el nombre de la colección en mongo.
 const SolicitudCDPCollection = "cdp"
 
-
-
 // infoCdp asociado a una solicitud de CDP
 type infoCdp struct {
-	Consecutivo	int  `json:"consecutivo" bson:"consecutivo"`
-	FechaExpedicion  time.Time `json:"fechaExpedicion" bson:"fechaExpedicion"`
-	Estado int  `json:"estado" bson:"estado"`
+	Consecutivo     int       `json:"consecutivo" bson:"consecutivo"`
+	FechaExpedicion time.Time `json:"fechaExpedicion" bson:"fechaExpedicion"`
+	Estado          int       `json:"estado" bson:"estado"`
 }
-
 
 // SolicitudCDP información de la solicitud de un CDP
 type SolicitudCDP struct {
-	ID               bson.ObjectId    `json:"_id" bson:"_id,omitempty"`
-	Consecutivo	int  `json:"consecutivo" bson:"consecutivo"`
-	Entidad int  `json:"entidad" bson:"entidad"`
-	CentroGestor int  `json:"centroGestor" bson:"centroGestor"`
-	Necesidad int `json:"necesidad" bson:"necesidad"`
-	FechaRegistro  time.Time `json:"fechaRegistro" bson:"fechaRegistro"`
-	JustificacionRechazo     string   `json:"justificacionRechazo" bson:"justificacionRechazo"`
-	InfoCDP *infoCdp `json:"infoCdp" bson:"infoCdp"`
+	ID                   bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	Consecutivo          int           `json:"consecutivo" bson:"consecutivo"`
+	Entidad              int           `json:"entidad" bson:"entidad"`
+	CentroGestor         int           `json:"centroGestor" bson:"centroGestor"`
+	Necesidad            int           `json:"necesidad" bson:"necesidad"`
+	Vigencia             string        `json:"vigencia" bson:"vigencia"`
+	FechaRegistro        time.Time     `json:"fechaRegistro" bson:"fechaRegistro"`
+	Estado               int           `json:"estado" bson:"estado"`
+	JustificacionRechazo string        `json:"justificacionRechazo" bson:"justificacionRechazo"`
+	InfoCDP              *infoCdp      `json:"infoCdp" bson:"infoCdp"`
+	Activo               bool          `json:"activo" bson:"activo"`
+	FechaCreacion        time.Time     `json:"fechaCreacion" bson:"fechaCreacion"`
+	FechaModificacion    time.Time     `json:"fechaModificacion" bson:"fechaModificacion"`
 }
-
 
 // InsertSolicitudCDP registra una SolicitudCDP en la bd
 func InsertSolicitudCDP(j *SolicitudCDP) error {

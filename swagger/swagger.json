@@ -1376,11 +1376,11 @@
         }
     },
     "definitions": {
-        "21784.0xc0004c27e0.false": {
+        "22594.0xc000498ba0.false": {
             "title": "false",
             "type": "object"
         },
-        "22064.rubroFuente": {
+        "22874.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1413,13 +1413,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/22064.rubroFuente"
+                    "$ref": "#/definitions/22874.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/21784.0xc0004c27e0.false"
+                    "$ref": "#/definitions/22594.0xc000498ba0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -1541,6 +1541,9 @@
                 "_id": {
                     "$ref": "#/definitions/bson.ObjectId"
                 },
+                "activo": {
+                    "type": "boolean"
+                },
                 "centroGestor": {
                     "type": "integer",
                     "format": "int64"
@@ -1552,6 +1555,18 @@
                 "entidad": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "estado": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "fechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
                 },
                 "fechaRegistro": {
                     "type": "string",
@@ -1566,6 +1581,9 @@
                 "necesidad": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "vigencia": {
+                    "type": "string"
                 }
             }
         },
@@ -1575,6 +1593,9 @@
             "properties": {
                 "_id": {
                     "$ref": "#/definitions/bson.ObjectId"
+                },
+                "activo": {
+                    "type": "boolean"
                 },
                 "beneficiario": {
                     "type": "string"
@@ -1590,12 +1611,23 @@
                     "type": "integer",
                     "format": "int64"
                 },
+                "fechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
                 "infoCrp": {
                     "$ref": "#/definitions/models.infoCrp"
                 },
                 "valor": {
                     "type": "number",
                     "format": "double"
+                },
+                "vigencia": {
+                    "type": "string"
                 }
             }
         },
