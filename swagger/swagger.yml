@@ -583,6 +583,24 @@ paths:
         "403":
           description: body is empty
   /necesidades/{objectId}:
+    get:
+      tags:
+      - necesidades
+      description: get Necesidad by nombre
+      operationId: NecesidadesController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la Necesidad a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Necesidad'
+        "403":
+          description: :uid is empty
     put:
       tags:
       - necesidades
@@ -713,26 +731,214 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /solicitudesCDP/:
+    get:
+      tags:
+      - solicitudesCDP
+      description: get all objects
+      operationId: SolicitudesCDPController.GetAll
+      responses:
+        "200":
+          description: SolicitudCDP models.SolicitudCDP
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - solicitudesCDP
+      description: Post
+      operationId: SolicitudesCDPController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de SolicitudesCDP
+        required: true
+        schema:
+          $ref: '#/definitions/models.SolicitudCDP'
+      responses:
+        "200":
+          description: '{int} SolicitudCDP.Id'
+        "403":
+          description: body is empty
+  /solicitudesCDP/{objectId}:
+    get:
+      tags:
+      - solicitudesCDP
+      description: get SolicitudCDP by nombre
+      operationId: SolicitudesCDPController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la SolicitudCDP a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.SolicitudCDP'
+        "403":
+          description: :uid is empty
+    put:
+      tags:
+      - solicitudesCDP
+      description: update the SolicitudCDP
+      operationId: SolicitudesCDPController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - solicitudesCDP
+      description: Borrar SolicitudCDP
+      operationId: SolicitudesCDPController.Borrar SolicitudCDP
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
+  /solicitudesCRP/:
+    get:
+      tags:
+      - solicitudesCRP
+      description: get all objects
+      operationId: SolicitudesCRPController.GetAll
+      responses:
+        "200":
+          description: SolicitudCRP models.SolicitudCRP
+        "403":
+          description: :objectId is empty
+    post:
+      tags:
+      - solicitudesCRP
+      description: Post
+      operationId: SolicitudesCRPController.Post
+      parameters:
+      - in: body
+        name: body
+        description: Body para la creacion de SolicitudesCRP
+        required: true
+        schema:
+          $ref: '#/definitions/models.SolicitudCRP'
+      responses:
+        "200":
+          description: '{int} SolicitudCRP.Id'
+        "403":
+          description: body is empty
+  /solicitudesCRP/{objectId}:
+    get:
+      tags:
+      - solicitudesCRP
+      description: get SolicitudCRP by nombre
+      operationId: SolicitudesCRPController.Get
+      parameters:
+      - in: path
+        name: nombre
+        description: El nombre de la SolicitudCRP a consultar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.SolicitudCRP'
+        "403":
+          description: :uid is empty
+    put:
+      tags:
+      - solicitudesCRP
+      description: update the SolicitudCRP
+      operationId: SolicitudesCRPController.Update
+      parameters:
+      - in: path
+        name: objectId
+        description: The objectid you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :objectId is empty
+    delete:
+      tags:
+      - solicitudesCRP
+      description: Borrar SolicitudCRP
+      operationId: SolicitudesCRPController.Borrar SolicitudCRP
+      parameters:
+      - in: path
+        name: objectId
+        description: El ObjectId del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: objectId is empty
 definitions:
-  16637.0xc000374ff0.false:
+  22594.0xc000498ba0.false:
     title: "false"
     type: object
-  16914.rubroFuente:
+  22874.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
     title: ObjectId
     type: object
+  models.Compromiso:
+    title: Compromiso
+    type: object
+    properties:
+      numeroCompromiso:
+        type: integer
+        format: int64
+      tipoCompromiso:
+        type: integer
+        format: int64
   models.FuenteFinanciamiento:
     title: FuenteFinanciamiento
     type: object
     properties:
       Codigo:
         type: string
+      NumeroDocumento:
+        type: string
       Rubros:
-        $ref: '#/definitions/16914.rubroFuente'
+        $ref: '#/definitions/22874.rubroFuente'
+      TipoDocumento:
+        type: string
       TipoFuente:
-        $ref: '#/definitions/16637.0xc000374ff0.false'
+        $ref: '#/definitions/22594.0xc000498ba0.false'
       ValorAcumulado:
         type: number
         format: double
@@ -761,6 +967,27 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.Necesidad:
+    title: Necesidad
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/bson.ObjectId'
+      apropiaciones:
+        type: array
+        items:
+          $ref: '#/definitions/models.apropiacion'
+      detalleServicio:
+        $ref: '#/definitions/models.detalleServicio'
+      idAdministrativa:
+        type: integer
+        format: int64
+      tipoContrato:
+        type: integer
+        format: int64
+      valor:
+        type: number
+        format: double
   models.Necesidades:
     title: Necesidades
     type: object
@@ -790,6 +1017,167 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+  models.SolicitudCDP:
+    title: SolicitudCDP
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/bson.ObjectId'
+      activo:
+        type: boolean
+      centroGestor:
+        type: integer
+        format: int64
+      consecutivo:
+        type: integer
+        format: int64
+      entidad:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64
+      fechaCreacion:
+        type: string
+        format: datetime
+      fechaModificacion:
+        type: string
+        format: datetime
+      fechaRegistro:
+        type: string
+        format: datetime
+      infoCdp:
+        $ref: '#/definitions/models.infoCdp'
+      justificacionRechazo:
+        type: string
+      necesidad:
+        type: integer
+        format: int64
+      vigencia:
+        type: string
+  models.SolicitudCRP:
+    title: SolicitudCRP
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/bson.ObjectId'
+      activo:
+        type: boolean
+      beneficiario:
+        type: string
+      compromiso:
+        $ref: '#/definitions/models.Compromiso'
+      consecutivo:
+        type: integer
+        format: int64
+      consecutivoCdp:
+        type: integer
+        format: int64
+      fechaCreacion:
+        type: string
+        format: datetime
+      fechaModificacion:
+        type: string
+        format: datetime
+      infoCrp:
+        $ref: '#/definitions/models.infoCrp'
+      valor:
+        type: number
+        format: double
+      vigencia:
+        type: string
+  models.actividad:
+    title: actividad
+    type: object
+    properties:
+      codigo:
+        type: string
+      valor:
+        type: number
+        format: double
+  models.apropiacion:
+    title: apropiacion
+    type: object
+    properties:
+      codigo:
+        type: string
+      fuentes:
+        type: array
+        items:
+          $ref: '#/definitions/models.fuente'
+      metas:
+        type: array
+        items:
+          $ref: '#/definitions/models.meta'
+      productos:
+        type: array
+        items:
+          $ref: '#/definitions/models.producto'
+  models.detalleServicio:
+    title: detalleServicio
+    type: object
+    properties:
+      codigo:
+        type: string
+      descripcion:
+        type: string
+      valor:
+        type: number
+        format: double
+  models.fuente:
+    title: fuente
+    type: object
+    properties:
+      codigo:
+        type: string
+      valor:
+        type: number
+        format: double
+  models.infoCdp:
+    title: infoCdp
+    type: object
+    properties:
+      consecutivo:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64
+      fechaExpedicion:
+        type: string
+        format: datetime
+  models.infoCrp:
+    title: infoCrp
+    type: object
+    properties:
+      consecutivo:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64
+      fechaExpedicion:
+        type: string
+        format: datetime
+  models.meta:
+    title: meta
+    type: object
+    properties:
+      actividades:
+        type: array
+        items:
+          $ref: '#/definitions/models.actividad'
+      codigo:
+        type: string
+  models.producto:
+    title: producto
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/bson.ObjectId'
+      valor:
+        type: number
+        format: double
   stringtrue:
     title: stringtrue
     type: object
@@ -812,3 +1200,9 @@ tags:
 - name: necesidades
   description: |
     NecesidadesController estructura para un controlador de beego
+- name: solicitudesCDP
+  description: |
+    SolicitudesCDPController estructura para un controlador de beego
+- name: solicitudesCRP
+  description: |
+    SolicitudesCRPController estructura para un controlador de beego
