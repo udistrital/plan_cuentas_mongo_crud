@@ -495,7 +495,7 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamientofuente_financiamiento_apropiacion/{rubro_apropiacion_id}:
+  /fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}:
     get:
       tags:
       - fuente_financiamiento
@@ -906,7 +906,7 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  22594.0xc000498ba0.false:
+  22594.0xc0004ef0b0.false:
     title: "false"
     type: object
   22874.rubroFuente:
@@ -938,7 +938,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/22594.0xc000498ba0.false'
+        $ref: '#/definitions/22594.0xc0004ef0b0.false'
       ValorAcumulado:
         type: number
         format: double
