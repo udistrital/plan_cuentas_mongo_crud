@@ -664,6 +664,32 @@
                 }
             }
         },
+        "/fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "Borrar FuenteFinanciamiento",
+                "operationId": "FuenteFinanciamientoController.GetWithRubro",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "objectId",
+                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "objectId is empty"
+                    }
+                }
+            }
+        },
         "/fuente_financiamiento/{objectId}": {
             "get": {
                 "tags": [
@@ -734,32 +760,6 @@
                 ],
                 "description": "Borrar FuenteFinanciamiento",
                 "operationId": "FuenteFinanciamientoController.Borrar FuenteFinanciamiento",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} ok"
-                    },
-                    "403": {
-                        "description": "objectId is empty"
-                    }
-                }
-            }
-        },
-        "/fuente_financiamientofuente_financiamiento_apropiacion/{rubro_apropiacion_id}": {
-            "get": {
-                "tags": [
-                    "fuente_financiamiento"
-                ],
-                "description": "Borrar FuenteFinanciamiento",
-                "operationId": "FuenteFinanciamientoController.GetWithRubro",
                 "parameters": [
                     {
                         "in": "path",
@@ -1376,7 +1376,7 @@
         }
     },
     "definitions": {
-        "22594.0xc000498ba0.false": {
+        "22594.0xc0004ef0b0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1419,7 +1419,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/22594.0xc000498ba0.false"
+                    "$ref": "#/definitions/22594.0xc0004ef0b0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
