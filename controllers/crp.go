@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -11,28 +12,28 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-// NecesidadesController estructura para un controlador de beego
-type NecesidadesController struct {
+// SolicitudesCRPController estructura para un controlador de beego
+type SolicitudesCRPController struct {
 	beego.Controller
 	response map[string]interface{}
 }
 
 // URLMapping ...
-func (j *NecesidadesController) URLMapping() {
+func (j *SolicitudesCRPController) URLMapping() {
 	j.Mapping("GetAll", j.GetAll)
-	// j.Mapping("Get", j.Get)
+	j.Mapping("Get", j.Get)
 	j.Mapping("Post", j.Post)
-	// j.Mapping("Put", j.Put)
-	// j.Mapping("Delete", j.Delete)
+	j.Mapping("Put", j.Put)
+	j.Mapping("Delete", j.Delete)
 }
 
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 Necesidades models.Necesidades
+// @Success 200 SolicitudCRP models.SolicitudCRP
 // @Failure 403 :objectId is empty
 // @router / [get]
-func (j *NecesidadesController) GetAll() {
+func (j *SolicitudesCRPController) GetAll() {
 	var query = make(map[string]interface{})
 
 	if v := j.GetString("query"); v != "" {
@@ -54,11 +55,11 @@ func (j *NecesidadesController) GetAll() {
 		}
 	}
 
-	err := errors.New("Bad info response")
+	err := errors.New("No data")
 
-	response := DefaultResponse(403, err, nil)
+	response := DefaultResponse(204, err, nil)
 
-	if obs := models.GetAllNecesidad(query); len(obs) > 0 {
+	if obs := models.GetAllSolicitudCRP(query); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
 
@@ -69,17 +70,18 @@ func (j *NecesidadesController) GetAll() {
 // Get ...
 // Get obtiene un elemento por su id
 // @Title Get
-// @Description get Necesidad by nombre
-// @Param	nombre		path 	string	true		"El nombre de la Necesidad a consultar"
-// @Success 200 {object} models.Necesidad
+// @Description get SolicitudCRP by nombre
+// @Param	nombre		path 	string	true		"El nombre de la SolicitudCRP a consultar"
+// @Success 200 {object} models.SolicitudCRP
 // @Failure 403 :uid is empty
 // @router /:objectId [get]
-func (j *NecesidadesController) Get() {
+func (j *SolicitudesCRPController) Get() {
 	objectId := j.GetString(":objectId")
+
 	if objectId != "" {
-		necesidad, err := models.GetNecesidadByID(objectId)
+		SolicitudCRP, err := models.GetSolicitudCRPByID(objectId)
 		if err == nil {
-			j.response = DefaultResponse(200, nil, &necesidad)
+			j.response = DefaultResponse(200, nil, &SolicitudCRP)
 		} else {
 			j.response = DefaultResponse(403, err, nil)
 		}
@@ -90,15 +92,15 @@ func (j *NecesidadesController) Get() {
 
 // @Title Post
 // @Description Post
-// @Param	body		body 	models.Necesidades	true		"Body para la creacion de Necesidades"
-// @Success 200 {int} Necesidades.Id
+// @Param	body		body 	models.SolicitudCRP	true		"Body para la creacion de SolicitudesCRP"
+// @Success 200 {int} SolicitudCRP.Id
 // @Failure 403 body is empty
 // @router / [post]
-func (j *NecesidadesController) Post() {
-	var necesidad models.Necesidad
-	json.Unmarshal(j.Ctx.Input.RequestBody, &necesidad)
-
-	if err := models.InsertNecesidad(&necesidad); err == nil {
+func (j *SolicitudesCRPController) Post() {
+	var SolicitudCRP models.SolicitudCRP
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCRP)
+	fmt.Println(j.Ctx.Input.RequestBody, &SolicitudCRP)
+	if err := models.InsertSolicitudCRP(&SolicitudCRP); err == nil {
 		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -110,19 +112,19 @@ func (j *NecesidadesController) Post() {
 
 // Put de HTTP
 // @Title Update
-// @Description update the Necesidad
+// @Description update the SolicitudCRP
 // @Param	objectId		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /:objectId [put]
-func (j *NecesidadesController) Put() {
+func (j *SolicitudesCRPController) Put() {
 	objectID := j.Ctx.Input.Param(":objectId")
-	var necesidad models.Necesidad
+	var SolicitudCRP models.SolicitudCRP
 
-	json.Unmarshal(j.Ctx.Input.RequestBody, &necesidad)
+	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCRP)
 
-	if err := models.UpdateNecesidad(&necesidad, objectID); err == nil {
+	if err := models.UpdateSolicitudCRP(&SolicitudCRP, objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -133,16 +135,16 @@ func (j *NecesidadesController) Put() {
 }
 
 // Delete ...
-// @Title Borrar Necesidad
-// @Description Borrar Necesidad
+// @Title Borrar SolicitudCRP
+// @Description Borrar SolicitudCRP
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
 // @router /:objectId [delete]
-func (j *NecesidadesController) Delete() {
+func (j *SolicitudesCRPController) Delete() {
 	objectID := j.Ctx.Input.Param(":objectId")
 
-	if err := models.DeleteNecesidad(objectID); err == nil {
+	if err := models.DeleteSolicitudCRP(objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
