@@ -164,7 +164,7 @@ func (j *FuenteFinanciamientoController) Delete() {
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
-// @router fuente_financiamiento_apropiacion/:rubro_apropiacion_id [get]
+// @router /fuente_financiamiento_apropiacion/:rubro_apropiacion_id [get]
 func (j *FuenteFinanciamientoController) GetWithRubro() {
 	rubroApropiacionID := j.Ctx.Input.Param(":rubro_apropiacion_id")
 
