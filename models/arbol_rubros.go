@@ -65,6 +65,22 @@ func GetNodoRubroById(id string) (NodoRubro, error) {
 	return nodoRubro, err
 }
 
+/*
+ Obtiene un nodo del arbol a partir de su id y su unidad ejecutora
+*/
+func GetNodoRubroByIdAndUE(id, ue string) (NodoRubro, error) {
+	var nodoRubro NodoRubro
+	session, err := db.GetSession()
+	if err != nil {
+		return nodoRubro, err
+	}
+	c := db.Cursor(session, NodoRubroCollection)
+	defer session.Close()
+	var nodo NodoRubro
+	err = c.Find(bson.M{"_id": id, "unidad_ejecutora": bson.M{"$in": []string{"0", ue}}}).One(&nodoRubro)
+	return nodo, err
+}
+
 func DeleteNodoRubroById(session *mgo.Session, id string) (string, error) {
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
