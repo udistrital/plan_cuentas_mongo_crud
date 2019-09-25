@@ -85,6 +85,10 @@ func GetNodo(id, ue string) map[string]interface{} {
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
+	_, exist := SearchRubro(nodoHoja.ID, nodoHoja.UnidadEjecutora)
+	if exist {
+		panic("Rubro Code Already exist for this cg")
+	}
 	session, err := db.GetSession()
 	if err != nil {
 		return err
@@ -169,4 +173,13 @@ func remove(slice []string, element string) []string {
 		}
 	}
 	return *newSlice
+}
+
+// SearchRubro ...  find rubro by code
+func SearchRubro(nodo string, ue string) (models.NodoRubro, bool) {
+	rubro, err := models.GetNodoRubroByIdAndUE(nodo, ue)
+	if err != nil {
+		return rubro, false
+	}
+	return rubro, true
 }
