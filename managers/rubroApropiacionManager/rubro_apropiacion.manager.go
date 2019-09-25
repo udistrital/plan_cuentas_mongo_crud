@@ -72,7 +72,7 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 }
 
 func searchRubro(nodo string, ue string, vigencia int) models.NodoRubro {
-	rubroPadre, err := models.GetNodoRubroById(nodo)
+	rubroPadre, err := models.GetNodoRubroByIdAndUE(nodo, ue)
 	if err != nil {
 		message := err.Error()
 		if message == "not found" {

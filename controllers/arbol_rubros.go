@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -121,15 +122,19 @@ func (j *NodoRubroController) Delete() {
 func (j *NodoRubroController) Post() {
 	var nodoRubro models.NodoRubro
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubro)
-
+	defer func() {
+		if r := recover(); r != nil {
+			j.response = DefaultResponse(500, fmt.Errorf(fmt.Sprintf("%s", r)), "insert error!")
+		}
+		j.Data["json"] = j.response
+		j.ServeJSON()
+	}()
 	if err := rubroManager.TrRegistrarNodoHoja(&nodoRubro, models.NodoRubroCollection); err == nil {
 		j.response = DefaultResponse(200, nil, "insert success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
 	}
 
-	j.Data["json"] = j.response
-	j.ServeJSON()
 }
 
 // @Title Update
