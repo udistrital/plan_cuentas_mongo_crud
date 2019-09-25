@@ -53,11 +53,7 @@ pipeline:
 
   Notify_telegram:
     image: appleboy/drone-telegram
-    settings:
-      token:
-        from_secret: telegram_token
-      to:
-        from_secret: telegram_to
+    secrets: [ telegram_token, telegram_to ]
     format: html
     message: >
       {{#success build.status}} With Drone 1.0
