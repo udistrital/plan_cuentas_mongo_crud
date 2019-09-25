@@ -43,7 +43,11 @@ func (j *MovimientosController) RegistrarMovimiento() {
 	)
 
 	defer func() {
-		j.Data["json"] = body
+		if r := recover(); r != nil {
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, body, "", 200)
+
 	}()
 
 	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &movimientoRequestData); err != nil {
@@ -95,7 +99,10 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 	)
 
 	defer func() {
-		j.Data["json"] = body
+		if r := recover(); r != nil {
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, body, "", 200)
 	}()
 
 	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &movimientoParamRequestData); err != nil {

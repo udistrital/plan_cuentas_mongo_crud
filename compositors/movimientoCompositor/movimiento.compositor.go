@@ -1,8 +1,6 @@
 package movimientoCompositor
 
 import (
-	"fmt"
-
 	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
@@ -36,15 +34,16 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 		logs.Error("1", err)
 		return
 	}
+	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.Padre, movimientoParameter.TipoMovimientoPadre)
+	logs.Debug(movimiento.Padre, movimientoParameter.TipoMovimientoPadre, err)
 
-	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.DocumentoPadre, movimientoParameter.TipoMovimientoPadre)
 	movimientoHijo := movimiento
+	var propagationName = movimientoHijo.Tipo
 
 	if err != nil {
 		runFlag = false
 	}
-	fmt.Println("Documento padre: ", movimientoPadre)
-	fmt.Println("Movimiento parameter: ", movimientoParameter)
+
 	for runFlag {
 
 		if len(movimientoPadre.Movimientos) == 0 {
@@ -52,10 +51,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 		}
 
 		if movimientoPadre.Movimientos[movimientoHijo.Tipo] == 0 {
-			movimientoPadre.Movimientos[movimientoHijo.Tipo] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
-			fmt.Println("debio irse por aquí....")
+			movimientoPadre.Movimientos[propagationName] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
 		} else {
-			movimientoPadre.Movimientos[movimientoHijo.Tipo] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
+			movimientoPadre.Movimientos[propagationName] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
 		}
 
 		arrMovimientosUpdted = append(arrMovimientosUpdted, movimientoPadre)
@@ -64,14 +62,20 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 		movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimientoHijo.Tipo)
 
 		if err != nil {
-			logs.Error("2", err)
-			panic(err)
+			if err.Error() == "not found" {
+				runFlag = false
+			} else {
+				logs.Error("2", err)
+				panic(err)
+			}
+		} else {
+			movimientoPadre.Movimientos = make(map[string]float64)
+			movimientoPadre, err = movimientoManager.GetOneMovimientoByTipo(movimientoHijo.Padre, movimientoParameter.TipoMovimientoPadre)
+			if err != nil {
+				runFlag = false
+			}
 		}
-		movimientoPadre.Movimientos = make(map[string]float64)
-		movimientoPadre, err = movimientoManager.GetOneMovimientoByTipo(movimientoHijo.DocumentoPadre, movimientoParameter.TipoMovimientoPadre)
-		if err != nil {
-			runFlag = false
-		}
+
 	}
 
 	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", arrMovimientosUpdted...)
