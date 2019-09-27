@@ -89,3 +89,11 @@ func buildTransactionArr(assertType, collectionName, uuidKey string, models []in
 	}
 	return
 }
+
+// GetTrStructIds ... Returns the IDs of a txn.Op struct.
+func GetTrStructIds(trValues []txn.Op) (idsArray []string) {
+	for _, tr := range trValues {
+		idsArray = append(idsArray, tr.Id.(string))
+	}
+	return
+}

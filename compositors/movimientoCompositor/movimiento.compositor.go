@@ -8,6 +8,30 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
+func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.DocumentoPresupuestal) {
+	var (
+		movimientoData         []txn.Op
+		movimientoDataInserted []txn.Op
+	)
+	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
+
+		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", movimientoElmnt)
+		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
+		movimientoData = append(movimientoData, insertMovimientoData...)
+		propagacionData := BuildPropagacionValoresTr(movimientoElmnt)
+		if len(propagacionData) > 0 {
+			movimientoData = append(movimientoData, propagacionData...)
+		}
+	}
+
+	documentoPresupuestalRequestData.AfectacionIds = transactionManager.GetTrStructIds(movimientoDataInserted)
+	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", documentoPresupuestalRequestData)
+	movimientoData = append(movimientoData, documentoPresupuestalOpStruct...)
+	// Perform Mongo's Transaction.
+	transactionManager.RunTransaction(models.MovimientosCollection, movimientoData)
+	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)
+}
+
 // AddMovimientoTransaction ... Add Movimiento's document to mongo db and it's afectation
 // over the apropiation's tree.
 func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{} {
@@ -35,7 +59,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 		return
 	}
 	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.Padre, movimientoParameter.TipoMovimientoPadre)
-	logs.Debug(movimiento.Padre, movimientoParameter.TipoMovimientoPadre, err)
 
 	movimientoHijo := movimiento
 	var propagationName = movimientoHijo.Tipo
@@ -79,6 +102,5 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
 	}
 
 	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", arrMovimientosUpdted...)
-
 	return
 }
