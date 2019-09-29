@@ -79,7 +79,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 				} else {
 					documentoPresupuestal.Estado = "parcial_comprometido"
 				}
-				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", documentoPresupuestal)...)
+				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", "", documentoPresupuestal)...)
 			}
 		}
 
@@ -105,6 +105,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 	}
 
-	trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", arrMovimientosUpdted...)...)
+	trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", "", arrMovimientosUpdted...)...)
 	return
 }

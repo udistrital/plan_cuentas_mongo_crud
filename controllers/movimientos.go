@@ -49,10 +49,9 @@ func (j *MovimientosController) RegistrarMovimiento() {
 
 	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &documentoPresupuestalRequestData); err != nil {
 		logManager.LogError(err.Error())
-		body = err
-		return
+		panic(err.Error())
 	}
-	if errStrc := formatdata.StructValidation(documentoPresupuestalRequestData); len(errStrc) > 0 {
+	if errStrc := formatdata.StructValidation(&documentoPresupuestalRequestData); len(errStrc) > 0 {
 		logs.Error(errStrc)
 		responseformat.SetResponseFormat(&j.Controller, errStrc, "", 422)
 		return

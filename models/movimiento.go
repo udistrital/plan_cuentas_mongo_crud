@@ -2,19 +2,20 @@ package models
 
 // MovimientosCollection es el nombre de la colección en mongo.
 const MovimientosCollection = "movimientos"
+
+// MovimientoParameterCollection nombre de la coleccion para guardar los parametros de los movmientos.
 const MovimientoParameterCollection = "movimientos_parametros"
 
 // Movimiento es una estructura generica para los tipos de movimiento registados.
 type Movimiento struct {
+	*GeneralAfectationFileds  `bson:"GeneralAfectationFileds"`
 	ID                        string             `json:"_id" bson:"_id,omitempty"`
 	IDPsql                    int                `json:"IDPsql" bson:"IDPsql" validate:"required"`
-	ValorInicial              float64            `json:"ValorInicial" bson:"ValorInicial" validate:"required"`
 	Tipo                      string             `json:"Tipo" bson:"Tipo" validate:"required"`
 	DocumentoPresupuestalUUID string             `json:"DocumentoPresupuestalUUID" bson:"DocumentoPresupuestalUUID"`
 	Padre                     string             `json:"Padre" bson:"Padre"`
 	FechaRegistro             string             `json:"FechaRegistro" bson:"FechaRegistro" validate:"required"`
 	Movimientos               map[string]float64 `json:"Movimientos" bson:"Movimientos"`
-	ValorActual               float64            `json:"ValorActual" bson:"ValorActual"`
 	Estado                    string             `json:"Estado" bson:"Estado"`
 }
 

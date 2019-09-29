@@ -22,17 +22,16 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
 	}
 
-	documentoPresupuestalRequestData.ValorActual = valorActualDocumentoPres
-	documentoPresupuestalRequestData.ValorInicial = valorActualDocumentoPres
+	documentoPresupuestalRequestData.GeneralAfectationFileds = &models.GeneralAfectationFileds{ValorActual: valorActualDocumentoPres, ValorInicial: valorActualDocumentoPres}
 	documentoPresupuestalRequestData.Estado = initialState
-	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", documentoPresupuestalRequestData)
+	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", "Afectacion", documentoPresupuestalRequestData)
 	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
 
 		movimientoElmnt.DocumentoPresupuestalUUID = documentoPresupuestalOpStruct[0].Id.(string)
 		movimientoElmnt.ValorActual = movimientoElmnt.ValorInicial
 		movimientoElmnt.Estado = initialState
-		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", movimientoElmnt)
+		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", "", movimientoElmnt)
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
 		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balanceMap)
@@ -49,7 +48,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	movimientoData = append(movimientoData, documentoPresupuestalOpStruct...)
 	// Perform Mongo's Transaction.
 	transactionManager.RunTransaction(models.MovimientosCollection, movimientoData)
-	updateAfectationData := transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", *documentoPresupuestalRequestData)
+	updateAfectationData := transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", "AfectacionIds", *documentoPresupuestalRequestData)
 	transactionManager.RunTransaction(models.DocumentoPresupuestalCollection, updateAfectationData)
 }
 
@@ -61,7 +60,7 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 	)
 
 	for _, element := range movimientoData {
-		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", element)
+		opMov := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", "", element)
 		ops = append(ops, opMov)
 	}
 
