@@ -6,13 +6,16 @@ const MovimientoParameterCollection = "movimientos_parametros"
 
 // Movimiento es una estructura generica para los tipos de movimiento registados.
 type Movimiento struct {
-	ID            string             `json:"_id" bson:"_id,omitempty"`
-	IDPsql        int                `json:"IDPsql" bson:"IDPsql" validate:"required"`
-	Valor         float64            `json:"Valor" bson:"Valor" validate:"required"`
-	Tipo          string             `json:"Tipo" bson:"Tipo" validate:"required"`
-	Padre         string             `json:"Padre" bson:"Padre"`
-	FechaRegistro string             `json:"FechaRegistro" bson:"FechaRegistro" validate:"required"`
-	Movimientos   map[string]float64 `json:"Movimientos" bson:"Movimientos"`
+	ID                        string             `json:"_id" bson:"_id,omitempty"`
+	IDPsql                    int                `json:"IDPsql" bson:"IDPsql" validate:"required"`
+	ValorInicial              float64            `json:"ValorInicial" bson:"ValorInicial" validate:"required"`
+	Tipo                      string             `json:"Tipo" bson:"Tipo" validate:"required"`
+	DocumentoPresupuestalUUID string             `json:"DocumentoPresupuestalUUID" bson:"DocumentoPresupuestalUUID"`
+	Padre                     string             `json:"Padre" bson:"Padre"`
+	FechaRegistro             string             `json:"FechaRegistro" bson:"FechaRegistro" validate:"required"`
+	Movimientos               map[string]float64 `json:"Movimientos" bson:"Movimientos"`
+	ValorActual               float64            `json:"ValorActual" bson:"ValorActual"`
+	Estado                    string             `json:"Estado" bson:"Estado"`
 }
 
 // MovimientoParameter this struct represent a "movmientos_parametros" collection item.

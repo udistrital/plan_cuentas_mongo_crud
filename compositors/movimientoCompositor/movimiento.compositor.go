@@ -1,35 +1,56 @@
 package movimientoCompositor
 
 import (
-	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo/txn"
-	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
+	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
+// DocumentoPresupuestalRegister ... Add a new DocumentoPresuuestal document and it's propagation.
 func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.DocumentoPresupuestal) {
 	var (
-		movimientoData         []txn.Op
-		movimientoDataInserted []txn.Op
+		movimientoData           []txn.Op
+		movimientoDataInserted   []txn.Op
+		valorActualDocumentoPres float64
 	)
+	initialState := "expedido"
+	balanceMap := make(map[string]models.DocumentoPresupuestal)
+
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
 
+		valorActualDocumentoPres += movimientoElmnt.ValorInicial
+	}
+
+	documentoPresupuestalRequestData.ValorActual = valorActualDocumentoPres
+	documentoPresupuestalRequestData.ValorInicial = valorActualDocumentoPres
+	documentoPresupuestalRequestData.Estado = initialState
+	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", documentoPresupuestalRequestData)
+	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)
+	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
+
+		movimientoElmnt.DocumentoPresupuestalUUID = documentoPresupuestalOpStruct[0].Id.(string)
+		movimientoElmnt.ValorActual = movimientoElmnt.ValorInicial
+		movimientoElmnt.Estado = initialState
 		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection, "", movimientoElmnt)
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
-		propagacionData := BuildPropagacionValoresTr(movimientoElmnt)
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balanceMap)
+
 		if len(propagacionData) > 0 {
 			movimientoData = append(movimientoData, propagacionData...)
 		}
+
+		valorActualDocumentoPres += movimientoElmnt.ValorInicial
+
 	}
 
 	documentoPresupuestalRequestData.AfectacionIds = transactionManager.GetTrStructIds(movimientoDataInserted)
-	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", documentoPresupuestalRequestData)
 	movimientoData = append(movimientoData, documentoPresupuestalOpStruct...)
 	// Perform Mongo's Transaction.
 	transactionManager.RunTransaction(models.MovimientosCollection, movimientoData)
-	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)
+	updateAfectationData := transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", *documentoPresupuestalRequestData)
+	transactionManager.RunTransaction(models.DocumentoPresupuestalCollection, updateAfectationData)
 }
 
 // AddMovimientoTransaction ... Add Movimiento's document to mongo db and it's afectation
@@ -45,62 +66,4 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 	}
 
 	return ops
-}
-
-// BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
-// This method search in "movimientos_parametros" collection for the afectation's config recursively.
-func BuildPropagacionValoresTr(movimiento models.Movimiento) (trData []txn.Op) {
-	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
-	var arrMovimientosUpdted []interface{}
-	var runFlag = true
-
-	if err != nil {
-		logs.Error("1", err)
-		return
-	}
-	movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.Padre, movimientoParameter.TipoMovimientoPadre)
-
-	movimientoHijo := movimiento
-	var propagationName = movimientoHijo.Tipo
-
-	if err != nil {
-		runFlag = false
-	}
-
-	for runFlag {
-
-		if len(movimientoPadre.Movimientos) == 0 {
-			movimientoPadre.Movimientos = make(map[string]float64)
-		}
-
-		if movimientoPadre.Movimientos[movimientoHijo.Tipo] == 0 {
-			movimientoPadre.Movimientos[propagationName] = movimientoHijo.Valor * float64(movimientoParameter.Multiplicador)
-		} else {
-			movimientoPadre.Movimientos[propagationName] += (movimientoHijo.Valor * float64(movimientoParameter.Multiplicador))
-		}
-
-		arrMovimientosUpdted = append(arrMovimientosUpdted, movimientoPadre)
-
-		movimientoHijo = movimientoPadre
-		movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimientoHijo.Tipo)
-
-		if err != nil {
-			if err.Error() == "not found" {
-				runFlag = false
-			} else {
-				logs.Error("2", err)
-				panic(err)
-			}
-		} else {
-			movimientoPadre.Movimientos = make(map[string]float64)
-			movimientoPadre, err = movimientoManager.GetOneMovimientoByTipo(movimientoHijo.Padre, movimientoParameter.TipoMovimientoPadre)
-			if err != nil {
-				runFlag = false
-			}
-		}
-
-	}
-
-	trData = transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", arrMovimientosUpdted...)
-	return
 }
