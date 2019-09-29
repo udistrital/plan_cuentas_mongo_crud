@@ -51,9 +51,14 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			movimientoPadre.ValorActual += movimientoHijo.ValorInicial * float64(movimientoParameter.Multiplicador)
 			if movimientoPadre.ValorActual == 0 {
 				movimientoPadre.Estado = "total_comprometido"
-			} else {
+			} else if movimientoPadre.ValorActual > 0 {
 				movimientoPadre.Estado = "parcial_comprometido"
+			} else {
+				errorMessage := "Cannot Perform operation, presupuestal document " + movimientoPadre.DocumentoPresupuestalUUID + " for bag " + movimientoPadre.ID + " has no balance left!"
+				logs.Error(errorMessage)
+				panic(errorMessage)
 			}
+
 			documentoPresupuestal := models.DocumentoPresupuestal{}
 
 			if balance[movimientoPadre.DocumentoPresupuestalUUID].ID == "" {
@@ -79,7 +84,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 				} else {
 					documentoPresupuestal.Estado = "parcial_comprometido"
 				}
-				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", "", documentoPresupuestal)...)
+				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", "Estado,ValorActual", documentoPresupuestal)...)
 			}
 		}
 
@@ -105,6 +110,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 	}
 
-	trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", "", arrMovimientosUpdted...)...)
+	trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.MovimientosCollection, "", "Estado,Movimientos,ValorActual", arrMovimientosUpdted...)...)
 	return
 }

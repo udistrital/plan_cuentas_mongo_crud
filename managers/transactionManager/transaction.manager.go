@@ -86,10 +86,14 @@ func buildTransactionArr(assertType, collectionName, uuidKey string, models []in
 			if filedsToUpdate != "" {
 				filedsArr := strings.Split(filedsToUpdate, ",")
 				for field := range modelMap {
+					var deleteField = true
 					for _, fieldToUpdate := range filedsArr {
-						if fieldToUpdate != field && field != uuidKey {
-							delete(modelMap, field)
+						if fieldToUpdate == field || field == uuidKey {
+							deleteField = false
 						}
+					}
+					if deleteField {
+						delete(modelMap, field)
 					}
 				}
 			}

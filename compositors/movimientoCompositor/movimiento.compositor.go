@@ -22,7 +22,8 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
 	}
 
-	documentoPresupuestalRequestData.GeneralAfectationFileds = &models.GeneralAfectationFileds{ValorActual: valorActualDocumentoPres, ValorInicial: valorActualDocumentoPres}
+	documentoPresupuestalRequestData.ValorInicial = valorActualDocumentoPres
+	documentoPresupuestalRequestData.ValorActual = valorActualDocumentoPres
 	documentoPresupuestalRequestData.Estado = initialState
 	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection, "", "Afectacion", documentoPresupuestalRequestData)
 	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)

@@ -8,7 +8,6 @@ const MovimientoParameterCollection = "movimientos_parametros"
 
 // Movimiento es una estructura generica para los tipos de movimiento registados.
 type Movimiento struct {
-	*GeneralAfectationFileds  `bson:"GeneralAfectationFileds"`
 	ID                        string             `json:"_id" bson:"_id,omitempty"`
 	IDPsql                    int                `json:"IDPsql" bson:"IDPsql" validate:"required"`
 	Tipo                      string             `json:"Tipo" bson:"Tipo" validate:"required"`
@@ -17,6 +16,8 @@ type Movimiento struct {
 	FechaRegistro             string             `json:"FechaRegistro" bson:"FechaRegistro" validate:"required"`
 	Movimientos               map[string]float64 `json:"Movimientos" bson:"Movimientos"`
 	Estado                    string             `json:"Estado" bson:"Estado"`
+	ValorActual               float64            `json:"ValorActual" bson:"ValorActual"`
+	ValorInicial              float64            `json:"ValorInicial" bson:"ValorInicial"`
 }
 
 // MovimientoParameter this struct represent a "movmientos_parametros" collection item.
