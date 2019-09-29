@@ -12,13 +12,16 @@ import (
 
 // BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
 // This method search in "movimientos_parametros" collection for the afectation's config recursively.
-func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]models.DocumentoPresupuestal) (trData []txn.Op) {
+func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]models.DocumentoPresupuestal, collectionPostFixName string) (trData []txn.Op) {
 	propagationCollectionName := models.MovimientosCollection
 	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
 
 	if err == nil && movimientoParameter.CollectionName != "" {
 		propagationCollectionName = movimientoParameter.CollectionName
 	}
+
+	propagationCollectionName += collectionPostFixName
+	documentoPresupuestalFixedCollectionName := models.DocumentoPresupuestalCollection + collectionPostFixName
 
 	var (
 		treeActualLevel int
@@ -30,9 +33,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 		return
 	}
 	documentoPadre := make(map[string]interface{})
-	if propagationCollectionName == models.MovimientosCollection {
+	if propagationCollectionName == models.MovimientosCollection+collectionPostFixName {
 
-		movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.Padre, movimientoParameter.TipoMovimientoPadre)
+		movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimiento.Padre, movimientoParameter.TipoMovimientoPadre, collectionPostFixName)
 		formatdata.FillStructP(movimientoPadre, &documentoPadre)
 		if err != nil {
 			runFlag = false
@@ -51,7 +54,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 		movimientosPadreData := documentoPadre["Movimientos"].(map[string]interface{})
 
-		if movimientosPadreData[movimientoHijo["Tipo"].(string)] == 0 {
+		if movimientosPadreData[propagationName] == nil {
 			movimientosPadreData[propagationName] = movimientoHijo["ValorInicial"].(float64) * float64(movimientoParameter.Multiplicador)
 		} else {
 			newMovimeintoPadreValorActual := movimientosPadreData[propagationName].(float64) + (movimientoHijo["ValorInicial"].(float64) * float64(movimientoParameter.Multiplicador))
@@ -66,9 +69,12 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			} else if documentoPadreValorActual > 0 {
 				documentoPadre["Estado"] = "parcial_comprometido"
 			} else {
-				formatdata.JsonPrint(documentoPadre)
-
-				errorMessage := "Cannot Perform operation, presupuestal document " + documentoPadre["DocumentoPresupuestalUUID"].(string) + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
+				errorMessage := ""
+				if documentoPadre["DocumentoPresupuestalUUID"] == nil {
+					errorMessage = "Cannot Perform operation, bag " + documentoPadre["_id"].(string) + " has no balance left!"
+				} else {
+					errorMessage = "Cannot Perform operation, presupuestal document " + documentoPadre["DocumentoPresupuestalUUID"].(string) + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
+				}
 				logs.Error(errorMessage)
 				panic(errorMessage)
 			}
@@ -76,31 +82,31 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			documentoPadre["ValorActual"] = documentoPadreValorActual
 
 			documentoPresupuestal := models.DocumentoPresupuestal{}
-
-			if balance[documentoPadre["DocumentoPresupuestalUUID"].(string)].ID == "" {
-				documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre["DocumentoPresupuestalUUID"].(string), models.DocumentoPresupuestalCollection)
-				if err == nil {
-					formatdata.FillStructP(documentoPresupuestalIntfc, &documentoPresupuestal)
+			if documentoPadre["DocumentoPresupuestalUUID"] != nil {
+				if balance[documentoPadre["DocumentoPresupuestalUUID"].(string)].ID == "" {
+					documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre["DocumentoPresupuestalUUID"].(string), documentoPresupuestalFixedCollectionName)
+					if err == nil {
+						formatdata.FillStructP(documentoPresupuestalIntfc, &documentoPresupuestal)
+						documentoPresupuestal.ValorActual += (movimientoHijo["ValorInicial"].(float64) * float64(movimientoParameter.Multiplicador))
+						balance[documentoPadre["DocumentoPresupuestalUUID"].(string)] = documentoPresupuestal
+					}
+				} else {
+					documentoPresupuestal = balance[documentoPadre["DocumentoPresupuestalUUID"].(string)]
 					documentoPresupuestal.ValorActual += (movimientoHijo["ValorInicial"].(float64) * float64(movimientoParameter.Multiplicador))
 					balance[documentoPadre["DocumentoPresupuestalUUID"].(string)] = documentoPresupuestal
 				}
-			} else {
-				documentoPresupuestal = balance[documentoPadre["DocumentoPresupuestalUUID"].(string)]
-				documentoPresupuestal.ValorActual += (movimientoHijo["ValorInicial"].(float64) * float64(movimientoParameter.Multiplicador))
-				balance[documentoPadre["DocumentoPresupuestalUUID"].(string)] = documentoPresupuestal
-			}
-
-			if balance[documentoPadre["DocumentoPresupuestalUUID"].(string)].ValorActual < 0 {
-				errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal.ID + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
-				logs.Error(errorMessage)
-				panic(errorMessage)
-			} else {
-				if documentoPresupuestal.ValorActual == 0 {
-					documentoPresupuestal.Estado = "total_comprometido"
+				if balance[documentoPadre["DocumentoPresupuestalUUID"].(string)].ValorActual < 0 {
+					errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal.ID + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
+					logs.Error(errorMessage)
+					panic(errorMessage)
 				} else {
-					documentoPresupuestal.Estado = "parcial_comprometido"
+					if documentoPresupuestal.ValorActual == 0 {
+						documentoPresupuestal.Estado = "total_comprometido"
+					} else {
+						documentoPresupuestal.Estado = "parcial_comprometido"
+					}
+					trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(documentoPresupuestalFixedCollectionName, "", "Estado,ValorActual", documentoPresupuestal)...)
 				}
-				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection, "", "Estado,ValorActual", documentoPresupuestal)...)
 			}
 		}
 
@@ -121,7 +127,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			documentoPadre = make(map[string]interface{})
 			if propagationCollectionName == models.MovimientosCollection {
 
-				movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimientoHijo["Padre"].(string), movimientoParameter.TipoMovimientoPadre)
+				movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimientoHijo["Padre"].(string), movimientoParameter.TipoMovimientoPadre, collectionPostFixName)
 
 				formatdata.FillStructP(movimientoPadre, &documentoPadre)
 

@@ -7,9 +7,9 @@ import (
 )
 
 // GetOneMovimientoByTipo ... Get Mpvimiento information by id and tipo fileds.
-func GetOneMovimientoByTipo(id string, tipo string) (res models.Movimiento, err error) {
+func GetOneMovimientoByTipo(id, tipo, collectionPostFixName string) (res models.Movimiento, err error) {
 	session, err := db.GetSession()
-	c := db.Cursor(session, models.MovimientosCollection)
+	c := db.Cursor(session, models.MovimientosCollection+collectionPostFixName)
 	defer session.Close()
 	err = c.Find(bson.M{"_id": id, "Tipo": tipo}).One(&res)
 	return
