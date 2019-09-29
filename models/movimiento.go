@@ -26,4 +26,5 @@ type MovimientoParameter struct {
 	TipoMovimientoHijo  string `json:"TipoMovimientoHijo" bson:"TipoMovimientoHijo"`
 	TipoMovimientoPadre string `json:"TipoMovimientoPadre" bson:"TipoMovimientoPadre"`
 	Multiplicador       int    `json:"Multiplicador" bson:"Multiplicador"`
+	CollectionName      string `json:"CollectionName" bson:"CollectionName"`
 }
