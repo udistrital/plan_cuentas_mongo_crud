@@ -28,4 +28,5 @@ type MovimientoParameter struct {
 	Multiplicador        int    `json:"Multiplicador" bson:"Multiplicador"`
 	FatherCollectionName string `json:"FatherCollectionName" bson:"FatherCollectionName"`
 	FatherUUIKeyName     string `json:"FatherUUIKeyName" bson:"FatherUUIKeyName"`
+	Initial              bool   `json:"Initial" bson:"Initial"`
 }
