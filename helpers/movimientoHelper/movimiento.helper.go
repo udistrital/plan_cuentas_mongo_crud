@@ -14,10 +14,14 @@ import (
 // This method search in "movimientos_parametros" collection for the afectation's config recursively.
 func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]models.DocumentoPresupuestal, collectionPostFixName string) (trData []txn.Op) {
 	propagationCollectionName := models.MovimientosCollection
+	fatherUUIKey := "_id"
 	movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimiento.Tipo)
 
-	if err == nil && movimientoParameter.CollectionName != "" {
-		propagationCollectionName = movimientoParameter.CollectionName
+	if err == nil && movimientoParameter.FatherCollectionName != "" {
+		propagationCollectionName = movimientoParameter.FatherCollectionName
+		if movimientoParameter.FatherUUIKeyName != "" {
+			fatherUUIKey = movimientoParameter.FatherUUIKeyName
+		}
 	}
 
 	propagationCollectionName += collectionPostFixName
@@ -40,12 +44,18 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 		if err != nil {
 			runFlag = false
 		}
+	} else {
+		movimientoPadre, err := crudmanager.GetDocumentByID(movimiento.Padre, propagationCollectionName)
+		formatdata.FillStructP(movimientoPadre, &documentoPadre)
+		if err != nil {
+			logs.Error(err.Error(), movimiento.Padre, propagationCollectionName)
+			runFlag = false
+		}
 	}
 
 	movimientoHijo := make(map[string]interface{})
 	formatdata.FillStructP(movimiento, &movimientoHijo)
 	var propagationName = movimientoHijo["Tipo"].(string)
-
 	for runFlag {
 		treeActualLevel++
 		if documentoPadre["Movimientos"] == nil {
@@ -71,9 +81,10 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			} else {
 				errorMessage := ""
 				if documentoPadre["DocumentoPresupuestalUUID"] == nil {
-					errorMessage = "Cannot Perform operation, bag " + documentoPadre["_id"].(string) + " has no balance left!"
+					errorMessage = "Cannot Perform operation, bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 				} else {
-					errorMessage = "Cannot Perform operation, presupuestal document " + documentoPadre["DocumentoPresupuestalUUID"].(string) + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
+					formatdata.JsonPrint(documentoPadre)
+					errorMessage = "Cannot Perform operation, presupuestal document " + documentoPadre["DocumentoPresupuestalUUID"].(string) + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 				}
 				logs.Error(errorMessage)
 				panic(errorMessage)
@@ -96,7 +107,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 					balance[documentoPadre["DocumentoPresupuestalUUID"].(string)] = documentoPresupuestal
 				}
 				if balance[documentoPadre["DocumentoPresupuestalUUID"].(string)].ValorActual < 0 {
-					errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal.ID + " for bag " + documentoPadre["_id"].(string) + " has no balance left!"
+					errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal.ID + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 					logs.Error(errorMessage)
 					panic(errorMessage)
 				} else {
@@ -111,21 +122,21 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 		}
 
 		documentoPadre["Movimientos"] = movimientosPadreData
-
-		trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(propagationCollectionName, "", "Estado,Movimientos,ValorActual", documentoPadre)...)
+		trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(propagationCollectionName, fatherUUIKey, "Estado,Movimientos,ValorActual", documentoPadre)...)
+		formatdata.JsonPrint(trData)
 		movimientoHijo = documentoPadre
-		movimientoParameter, err := movimientoManager.GetOneMovimientoParameterByHijo(movimientoHijo["Tipo"].(string))
+		if propagationCollectionName == models.MovimientosCollection+collectionPostFixName {
 
-		if err != nil {
-			if err.Error() == "not found" {
-				runFlag = false
+			movimientoParameter, err = movimientoManager.GetOneMovimientoParameterByHijo(movimientoHijo["Tipo"].(string))
+			if err != nil {
+				if err.Error() == "not found" {
+					runFlag = false
+				} else {
+					logs.Error("2", err)
+					panic(err)
+				}
 			} else {
-				logs.Error("2", err)
-				panic(err)
-			}
-		} else {
-			documentoPadre = make(map[string]interface{})
-			if propagationCollectionName == models.MovimientosCollection {
+				documentoPadre = make(map[string]interface{})
 
 				movimientoPadre, err := movimientoManager.GetOneMovimientoByTipo(movimientoHijo["Padre"].(string), movimientoParameter.TipoMovimientoPadre, collectionPostFixName)
 
@@ -134,11 +145,22 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 				if err != nil {
 					runFlag = false
 				}
-			}
 
+			}
+		} else {
+			movimientoParameter, err = movimientoManager.GetOneMovimientoParameterByHijo(movimientoParameter.TipoMovimientoPadre)
+			if err != nil {
+				runFlag = false
+			} else {
+				documentoPadre = make(map[string]interface{})
+				movimientoPadre, err := crudmanager.GetDocumentByID(movimientoHijo["Padre"].(string), propagationCollectionName)
+				formatdata.FillStructP(movimientoPadre, &documentoPadre)
+				if err != nil {
+					runFlag = false
+				}
+			}
 		}
 
 	}
-
 	return
 }

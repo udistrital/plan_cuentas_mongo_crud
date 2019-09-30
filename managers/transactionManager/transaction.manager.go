@@ -7,10 +7,9 @@ import (
 	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 	"github.com/udistrital/utils_oas/formatdata"
 )
-
-const TransactionCollection = "transactions"
 
 // ConvertToTransactionItem ... This method manage the Mongo's transaction items from the current orm for registration of new elements in the DB , you should pass
 // the collection name and the model structure. This method will return a transaction elemnt.
@@ -25,14 +24,14 @@ func ConvertToUpdateTransactionItem(collectionName, uuidKey, fields string, mode
 }
 
 // RunTransaction ... Perform a transaction over the DB with the options element.
-func RunTransaction(collectionName string, ops []txn.Op) {
+func RunTransaction(ops []txn.Op) {
 
 	session, _ := db.GetSession()
 
 	defer func() {
 		session.Close()
 	}()
-	c := db.Cursor(session, TransactionCollection)
+	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
@@ -93,7 +92,9 @@ func buildTransactionArr(assertType, collectionName, uuidKey string, models []in
 						}
 					}
 					if deleteField {
-						delete(modelMap, field)
+						if modelMap[field] != nil {
+							delete(modelMap, field)
+						}
 					}
 				}
 			}

@@ -22,9 +22,10 @@ type Movimiento struct {
 
 // MovimientoParameter this struct represent a "movmientos_parametros" collection item.
 type MovimientoParameter struct {
-	ID                  string `json:"_id" bson:"_id,omitempty"`
-	TipoMovimientoHijo  string `json:"TipoMovimientoHijo" bson:"TipoMovimientoHijo"`
-	TipoMovimientoPadre string `json:"TipoMovimientoPadre" bson:"TipoMovimientoPadre"`
-	Multiplicador       int    `json:"Multiplicador" bson:"Multiplicador"`
-	CollectionName      string `json:"CollectionName" bson:"CollectionName"`
+	ID                   string `json:"_id" bson:"_id,omitempty"`
+	TipoMovimientoHijo   string `json:"TipoMovimientoHijo" bson:"TipoMovimientoHijo"`
+	TipoMovimientoPadre  string `json:"TipoMovimientoPadre" bson:"TipoMovimientoPadre"`
+	Multiplicador        int    `json:"Multiplicador" bson:"Multiplicador"`
+	FatherCollectionName string `json:"FatherCollectionName" bson:"FatherCollectionName"`
+	FatherUUIKeyName     string `json:"FatherUUIKeyName" bson:"FatherUUIKeyName"`
 }

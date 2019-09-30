@@ -76,9 +76,8 @@ func GetNodoRubroByIdAndUE(id, ue string) (NodoRubro, error) {
 	}
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	var nodo NodoRubro
 	err = c.Find(bson.M{"_id": id, "unidad_ejecutora": bson.M{"$in": []string{"0", ue}}}).One(&nodoRubro)
-	return nodo, err
+	return nodoRubro, err
 }
 
 func DeleteNodoRubroById(session *mgo.Session, id string) (string, error) {

@@ -264,7 +264,7 @@ func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 		arbolApropiaciones["Nombre"] = raiz.General.Nombre
 		arbolApropiaciones["IsLeaf"] = true
 		arbolApropiaciones["UnidadEjecutora"] = raiz.NodoRubro.UnidadEjecutora
-		arbolApropiaciones["ApropiacionInicial"] = raiz.ApropiacionInicial
+		arbolApropiaciones["ValorInicial"] = raiz.ValorInicial
 
 		var hijos []interface{}
 		for j := 0; j < len(raiz.Hijos); j++ {
@@ -300,12 +300,12 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
 	for i := 0; i < len(raices); i++ {
 		root := map[string]interface{}{
-			"Codigo":             raices[i].ID,
-			"Nombre":             raices[i].General.Nombre,
-			"Hijos":              raices[i].NodoRubro.Hijos,
-			"IsLeaf":             true,
-			"UnidadEjecutora":    raices[i].NodoRubro.UnidadEjecutora,
-			"ApropiacionInicial": raices[i].ApropiacionInicial,
+			"Codigo":          raices[i].ID,
+			"Nombre":          raices[i].General.Nombre,
+			"Hijos":           raices[i].NodoRubro.Hijos,
+			"IsLeaf":          true,
+			"UnidadEjecutora": raices[i].NodoRubro.UnidadEjecutora,
+			"ValorInicial":    raices[i].ValorInicial,
 		}
 		if len(raices[i].Hijos) > 0 {
 			var hijos []map[string]interface{}
@@ -422,9 +422,9 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 
 	for _, raiz := range raices {
 		if raiz.ID == "2" {
-			totalIngresos += raiz.ApropiacionInicial
+			totalIngresos += raiz.ValorInicial
 		} else if raiz.ID == "3" {
-			totalEgresos += raiz.ApropiacionInicial
+			totalEgresos += raiz.ValorInicial
 		}
 	}
 

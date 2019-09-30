@@ -51,9 +51,9 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	documentoPresupuestalRequestData.AfectacionIds = transactionManager.GetTrStructIds(movimientoDataInserted)
 	movimientoData = append(movimientoData, documentoPresupuestalOpStruct...)
 	// Perform Mongo's Transaction.
-	transactionManager.RunTransaction(models.MovimientosCollection+collectionPostFixName, movimientoData)
+	transactionManager.RunTransaction(movimientoData)
 	updateAfectationData := transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "AfectacionIds", *documentoPresupuestalRequestData)
-	transactionManager.RunTransaction(models.DocumentoPresupuestalCollection+collectionPostFixName, updateAfectationData)
+	transactionManager.RunTransaction(updateAfectationData)
 }
 
 // AddMovimientoTransaction ... Add Movimiento's document to mongo db and it's afectation
