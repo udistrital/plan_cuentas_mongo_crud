@@ -4,12 +4,9 @@ import (
 	"encoding/json"
 
 	"github.com/astaxie/beego/logs"
-	"github.com/globalsign/mgo/txn"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors/movimientoCompositor"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
-
-	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 	"github.com/udistrital/utils_oas/formatdata"
@@ -36,46 +33,41 @@ type MovimientosController struct {
 // @router /RegistrarMovimientos [post]
 func (j *MovimientosController) RegistrarMovimiento() {
 	var body interface{}
-	collectionName := models.MovimientosCollection
 
 	var (
-		movimientoRequestData []models.Movimiento
+		documentoPresupuestalRequestData models.DocumentoPresupuestal
 	)
 
 	defer func() {
-		j.Data["json"] = body
+		if r := recover(); r != nil {
+			logs.Error(r)
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, body, "", 200)
+
 	}()
 
-	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &movimientoRequestData); err != nil {
+	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &documentoPresupuestalRequestData); err != nil {
 		logManager.LogError(err.Error())
-		body = err
+		panic(err.Error())
+	}
+	if errStrc := formatdata.StructValidation(&documentoPresupuestalRequestData); len(errStrc) > 0 {
+		logs.Error(errStrc)
+		responseformat.SetResponseFormat(&j.Controller, errStrc, "", 422)
 		return
 	}
 
-	// Check for required fields in struct
-	for _, movimientoElmnt := range movimientoRequestData {
-		var movimientoData []txn.Op
-		var movimientoIntfc interface{}
-		movimientoIntfc = movimientoElmnt
+	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
+
 		if errStrc := formatdata.StructValidation(movimientoElmnt); len(errStrc) > 0 {
 			logs.Error(errStrc)
 			responseformat.SetResponseFormat(&j.Controller, errStrc, "", 422)
 			return
 		}
-
-		insertMovimientoData := transactionManager.ConvertToTransactionItem(collectionName, "", movimientoIntfc)
-		movimientoData = append(movimientoData, insertMovimientoData...)
-		propagacionData := movimientoCompositor.BuildPropagacionValoresTr(movimientoElmnt)
-		if len(propagacionData) > 0 {
-			movimientoData = append(movimientoData, propagacionData...)
-			logs.Debug(movimientoData)
-
-		}
-		transactionManager.RunTransaction(collectionName, movimientoData)
 	}
-	// Perform Mongo's Transaction.
 
-	body = movimientoRequestData
+	movimientoCompositor.DocumentoPresupuestalRegister(&documentoPresupuestalRequestData)
+	body = documentoPresupuestalRequestData
 }
 
 // RegistrarMovimientoParameter ...
@@ -95,7 +87,10 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 	)
 
 	defer func() {
-		j.Data["json"] = body
+		if r := recover(); r != nil {
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, body, "", 200)
 	}()
 
 	if err := json.Unmarshal(j.Ctx.Input.RequestBody, &movimientoParamRequestData); err != nil {
