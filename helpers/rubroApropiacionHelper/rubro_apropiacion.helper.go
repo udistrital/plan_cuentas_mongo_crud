@@ -58,9 +58,9 @@ func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
 		}
 
 		if apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
-			raices[i]["ApropiacionInicial"] = 0
+			raices[i]["ValorInicial"] = 0
 		} else {
-			raices[i]["ApropiacionInicial"] = apropiacion.ApropiacionInicial
+			raices[i]["ValorInicial"] = apropiacion.ValorInicial
 		}
 
 		forkData["Codigo"] = raices[i]["Codigo"]
@@ -94,9 +94,9 @@ func getValueChildren(children []string, unidadEjecutora string, vigencia int) (
 		forkData["Codigo"] = nodo.ID
 
 		if apropiacion, err := models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia); err != nil {
-			forkData["data"].(map[string]interface{})["ApropiacionInicial"] = 0
+			forkData["data"].(map[string]interface{})["ValorInicial"] = 0
 		} else {
-			forkData["data"].(map[string]interface{})["ApropiacionInicial"] = apropiacion.ApropiacionInicial
+			forkData["data"].(map[string]interface{})["ValorInicial"] = apropiacion.ValorInicial
 		}
 
 		if len(nodo.Hijos) > 0 {
@@ -121,7 +121,7 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 			hijo["Nombre"] = rubroHijo.General.Nombre
 			hijo["IsLeaf"] = false
 			hijo["UnidadEjecutora"] = rubroHijo.NodoRubro.UnidadEjecutora
-			hijo["ApropiacionInicial"] = rubroHijo.ApropiacionInicial
+			hijo["ValorInicial"] = rubroHijo.ValorInicial
 			if len(rubroHijo.Hijos) == 0 {
 				hijo["IsLeaf"] = true
 				hijo["Hijos"] = nil

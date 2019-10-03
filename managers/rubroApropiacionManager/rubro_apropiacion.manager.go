@@ -24,6 +24,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 	runner := txn.NewRunner(c)
 
 	searchRubro(nodoHoja.ID, ue, vigencia)
+	nodoHoja.ValorActual = nodoHoja.ValorInicial
 	ops := []txn.Op{{
 		C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 		Id:     nodoHoja.ID,
@@ -31,7 +32,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 		Insert: nodoHoja,
 	}}
 
-	if propOps, err := PropagarValorApropiacion(nodoHoja, nodoHoja.ApropiacionInicial, ue, vigencia); err == nil {
+	if propOps, err := PropagarValorApropiacion(nodoHoja, nodoHoja.ValorInicial, ue, vigencia); err == nil {
 		ops = append(ops, propOps...)
 	}
 	id := bson.NewObjectId()
@@ -56,10 +57,10 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 			C:      collName,
 			Id:     nodo.ID,
 			Assert: bson.M{"_id": nodo.ID},
-			Update: bson.D{{"$set", bson.D{{"apropiacionInicial", nodo.ApropiacionInicial}}}},
+			Update: bson.D{{"$set", bson.D{{"ValorInicial", nodo.ValorInicial}}}},
 		}}
-		if nodoOldInfo.ApropiacionInicial != nodo.ApropiacionInicial {
-			if propOps, err := PropagarValorApropiacion(nodo, nodo.ApropiacionInicial-nodoOldInfo.ApropiacionInicial, ue, vigencia); err == nil {
+		if nodoOldInfo.ValorInicial != nodo.ValorInicial {
+			if propOps, err := PropagarValorApropiacion(nodo, nodo.ValorInicial-nodoOldInfo.ValorInicial, ue, vigencia); err == nil {
 				ops = append(ops, propOps...)
 			}
 		}
@@ -73,6 +74,7 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 
 func searchRubro(nodo string, ue string, vigencia int) models.NodoRubro {
 	rubroPadre, err := models.GetNodoRubroByIdAndUE(nodo, ue)
+	formatdata.JsonPrint(err)
 	if err != nil {
 		message := err.Error()
 		if message == "not found" {
@@ -102,7 +104,8 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 			nodoPadre.ID = rubroPadre.ID
 			nodoPadre.Padre = rubroPadre.Padre
 			nodoPadre.Hijos = []string{nodo.ID}
-			nodoPadre.Vigencia = vigencia
+			nodoPadre.NodoRubro.General = &models.General{Vigencia: vigencia}
+			nodoPadre.ValorActual = nodoPadre.ValorInicial
 			ops = append(ops, txn.Op{
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
@@ -110,12 +113,13 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 				Insert: nodoPadre,
 			})
 		} else {
-			nodoPadre.ApropiacionInicial += propagationValue
+			nodoPadre.ValorInicial += propagationValue
+			nodoPadre.ValorActual = nodoPadre.ValorInicial
 			ops = append(ops, txn.Op{
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
 				Assert: bson.M{"_id": nodoPadre.ID},
-				Update: bson.D{{"$set", bson.D{{"apropiacionInicial", nodoPadre.ApropiacionInicial}}}},
+				Update: bson.D{{"$set", bson.D{{"ValorInicial", nodoPadre.ValorInicial}}}},
 			})
 			if childrenExist(nodo.ID, nodoPadre.Hijos) != true {
 
