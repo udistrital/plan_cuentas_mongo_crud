@@ -14,6 +14,6 @@ type DocumentoPresupuestal struct {
 	Estado        string       `json:"Estado" bson:"estado"`
 	ValorActual   float64      `json:"ValorActual" bson:"valor_actual"`
 	ValorInicial  float64      `json:"ValorInicial" bson:"valor_inicial"`
-	Vigencia      int          `json:"Vigencia" bson:"vigencia" validate:"required"`
+	Vigencia      int          `json:"Vigencia" bson:"-" validate:"required"`
 	CentroGestor  string       `json:"CentroGestor" bson:"centro_gestor" validate:"required"`
 }
