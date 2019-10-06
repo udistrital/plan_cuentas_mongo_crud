@@ -6,6 +6,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/logManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 	"github.com/udistrital/utils_oas/formatdata"
@@ -75,8 +76,11 @@ func buildTransactionItem(assertType, collectionName string, uuid string, model 
 
 func buildTransactionArr(assertType, collectionName, uuidKey string, models []interface{}, filedsToUpdate, fieldsToIgnore string) (ops []txn.Op) {
 	for _, model := range models {
-		var modelMap map[string]interface{}
-		formatdata.FillStructP(model, &modelMap)
+		modelMap, err := commonhelper.ToMap(model, "bson")
+		if err != nil {
+			panic(err.Error())
+		}
+
 		uuid := ""
 		if uuidKey == "" {
 			uuidKey = "_id"
