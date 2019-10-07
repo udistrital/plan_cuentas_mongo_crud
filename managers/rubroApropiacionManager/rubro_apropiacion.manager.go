@@ -57,7 +57,7 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 			C:      collName,
 			Id:     nodo.ID,
 			Assert: bson.M{"_id": nodo.ID},
-			Update: bson.D{{"$set", bson.D{{"ValorInicial", nodo.ValorInicial}}}},
+			Update: bson.D{{"$set", bson.D{{"valor_inicial", nodo.ValorInicial}}}},
 		}}
 		if nodoOldInfo.ValorInicial != nodo.ValorInicial {
 			if propOps, err := PropagarValorApropiacion(nodo, nodo.ValorInicial-nodoOldInfo.ValorInicial, ue, vigencia); err == nil {
@@ -119,7 +119,7 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
 				Assert: bson.M{"_id": nodoPadre.ID},
-				Update: bson.D{{"$set", bson.D{{"ValorInicial", nodoPadre.ValorInicial}}}},
+				Update: bson.D{{"$set", bson.D{{"valor_inicial", nodoPadre.ValorInicial}}}},
 			})
 			if childrenExist(nodo.ID, nodoPadre.Hijos) != true {
 
