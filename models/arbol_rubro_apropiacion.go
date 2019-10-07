@@ -23,12 +23,12 @@ const EstadoAprobada, EstadoRegistrada, EstadoRechazada = "aprobada", "registrad
 type NodoRubroApropiacion struct {
 	*NodoRubro
 	ID           string                            `json:"Codigo" bson:"_id,omitempty"`
-	ValorInicial float64                           `json:"ValorInicial" bson:"ValorInicial"`
-	ValorActual  float64                           `json:"ValorActual" bson:"ValorActual"`
-	Movimientos  map[string]float64                `json:"Movimientos" bson:"Movimientos"`
-	Productos    map[string]map[string]interface{} `json:"Productos" bson:"Productos"`
-	Estado       string                            `json:"Estado" bson:"Estado"`
-	Padre        string                            `json:"Padre" bson:"Padre"`
+	ValorInicial float64                           `json:"ValorInicial" bson:"valor_inicial"`
+	ValorActual  float64                           `json:"ValorActual" bson:"valor_actual"`
+	Movimientos  map[string]float64                `json:"Movimientos" bson:"movimientos"`
+	Productos    map[string]map[string]interface{} `json:"Productos" bson:"productos"`
+	Estado       string                            `json:"Estado" bson:"estado"`
+	Padre        string                            `json:"Padre" bson:"padre"`
 }
 
 func GetAllNodoRubroApropiacion(query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
