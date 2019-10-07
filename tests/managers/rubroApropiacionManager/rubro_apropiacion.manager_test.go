@@ -28,8 +28,8 @@ func TestTrRegistrarNodoHoja(t *testing.T) {
 	raiz := models.NodoRubroApropiacion{
 		NodoRubro:            &nodoRubro,
 		ID:                   "4",
-		ApropiacionInicial:   30000,
-		ApropiacionUtilizada: 0,
+		ValorInicial:   30000,
+		ValorActual: 0,
 		Movimientos:          []string{},
 		Productos:            map[string]map[string]interface{}{},
 		Estado:               "Aprobado",

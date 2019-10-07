@@ -7,21 +7,41 @@ import (
 )
 
 // GetOneMovimientoByTipo ... Get Mpvimiento information by id and tipo fileds.
-func GetOneMovimientoByTipo(idPsql int, tipo string) (res models.Movimiento, err error) {
+func GetOneMovimientoByTipo(id, tipo, collectionPostFixName string) (res models.Movimiento, err error) {
 	session, err := db.GetSession()
-	c := db.Cursor(session, models.MovimientosCollection)
+	c := db.Cursor(session, models.MovimientosCollection+collectionPostFixName)
 	defer session.Close()
-	err = c.Find(bson.M{"IDPsql": idPsql, "Tipo": tipo}).One(&res)
+	err = c.Find(bson.M{"_id": id, "tipo": tipo}).One(&res)
 	return
 
 }
 
-// GetOneMovimientoParameterByHijo ... Get Movimiento parameter information by TipoMovimientoHijo fileds.
+// GetOneMovimientoParameterByHijo ... Get Movimiento parameter information by tipo_movimiento_hijo fileds.
 func GetOneMovimientoParameterByHijo(tipo string) (res models.MovimientoParameter, err error) {
 	session, err := db.GetSession()
 	c := db.Cursor(session, models.MovimientoParameterCollection)
 	defer session.Close()
-	err = c.Find(bson.M{"TipoMovimientoHijo": tipo}).One(&res)
+	err = c.Find(bson.M{"tipo_movimiento_hijo": tipo}).One(&res)
+	return
+
+}
+
+// GetInitialMovimientoParameterByHijo ... Get Movimiento parameter information by tipo_movimiento_hijo fileds, the first in the chain.
+func GetInitialMovimientoParameterByHijo(tipo string) (res models.MovimientoParameter, err error) {
+	session, err := db.GetSession()
+	c := db.Cursor(session, models.MovimientoParameterCollection)
+	defer session.Close()
+	err = c.Find(bson.M{"tipo_movimiento_hijo": tipo, "initial": true}).One(&res)
+	return
+
+}
+
+// GetOneMovimientoParameterByHijoAndPadre ... Get Movimiento parameter information by tipo_movimiento_hijo and Padre fileds.
+func GetOneMovimientoParameterByHijoAndPadre(tipoHijo, tipoPadre string) (res models.MovimientoParameter, err error) {
+	session, err := db.GetSession()
+	c := db.Cursor(session, models.MovimientoParameterCollection)
+	defer session.Close()
+	err = c.Find(bson.M{"tipo_movimiento_hijo": tipoHijo, "tipo_movimiento_padre": tipoPadre}).One(&res)
 	return
 
 }

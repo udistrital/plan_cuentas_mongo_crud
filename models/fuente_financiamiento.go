@@ -19,6 +19,7 @@ type dependenciaRubro struct {
 type rubroFuente struct {
 	Dependencias []*dependenciaRubro `json:"Dependencias" bson:"dependencias"`
 	Productos    []string            `json:"Productos" bson:"productos`
+	ValorTotal   float64             `json:"ValorTotal" bson:"ValorTotal"`
 }
 
 // FuenteFinanciamiento ...

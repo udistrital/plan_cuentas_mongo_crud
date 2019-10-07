@@ -22,12 +22,13 @@ const EstadoAprobada, EstadoRegistrada, EstadoRechazada = "aprobada", "registrad
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {
 	*NodoRubro
-	ID                   string                            `json:"Codigo" bson:"_id,omitempty"`
-	ApropiacionInicial   float64                           `json:"ApropiacionInicial" bson:"apropiacionInicial"`
-	ApropiacionUtilizada float64                           `json:"ApropiacionUtilizada" bson:"apropiacionUtilizada"`
-	Movimientos          []string                          `json:"Movimientos" bson:"movimientos"`
-	Productos            map[string]map[string]interface{} `json:"Productos" bson:"productos"`
-	Estado               string                            `json:"Estado" bson:"estado"`
+	ID           string                            `json:"Codigo" bson:"_id,omitempty"`
+	ValorInicial float64                           `json:"ValorInicial" bson:"valor_inicial"`
+	ValorActual  float64                           `json:"ValorActual" bson:"valor_actual"`
+	Movimientos  map[string]float64                `json:"Movimientos" bson:"movimientos"`
+	Productos    map[string]map[string]interface{} `json:"Productos" bson:"productos"`
+	Estado       string                            `json:"Estado" bson:"estado"`
+	Padre        string                            `json:"Padre" bson:"padre"`
 }
 
 func GetAllNodoRubroApropiacion(query map[string]interface{}, ue, vigencia string) []NodoRubroApropiacion {
