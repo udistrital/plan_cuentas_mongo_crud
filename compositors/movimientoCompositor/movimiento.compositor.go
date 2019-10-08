@@ -17,7 +17,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		valorActualDocumentoPres float64
 	)
 	initialState := "expedido"
-	balanceMap := make(map[string]models.DocumentoPresupuestal)
+	balanceMap := make(map[string]map[string]interface{})
 	collectionPostFixName := "_" + strconv.Itoa(documentoPresupuestalRequestData.Vigencia) + "_" + documentoPresupuestalRequestData.CentroGestor
 
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {

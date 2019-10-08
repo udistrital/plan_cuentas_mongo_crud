@@ -13,7 +13,7 @@ import (
 
 // BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
 // This method search in "movimientos_parametros" collection for the afectation's config recursively.
-func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]models.DocumentoPresupuestal, collectionPostFixName string) (trData []txn.Op) {
+func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]map[string]interface{}, collectionPostFixName string) (trData []txn.Op) {
 	propagationCollectionName := models.MovimientosCollection
 	fatherUUIKey := "_id"
 	movimientoParameter, err := movimientoManager.GetInitialMovimientoParameterByHijo(movimiento.Tipo)
@@ -89,29 +89,30 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 		documentoPadre["valor_actual"] = documentoPadreValorActual
 
-		documentoPresupuestal := models.DocumentoPresupuestal{}
+		documentoPresupuestal := make(map[string]interface{})
 		if documentoPadre["documento_presupuestal_uuid"] != nil {
-			if balance[documentoPadre["documento_presupuestal_uuid"].(string)].ID == "" {
+			if balance[documentoPadre["documento_presupuestal_uuid"].(string)] == nil {
+				balance[documentoPadre["documento_presupuestal_uuid"].(string)] = make(map[string]interface{})
 				documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre["documento_presupuestal_uuid"].(string), documentoPresupuestalFixedCollectionName)
 				if err == nil {
 					formatdata.FillStructP(documentoPresupuestalIntfc, &documentoPresupuestal)
-					documentoPresupuestal.ValorActual += (propagationValue * float64(movimientoParameter.Multiplicador))
+					documentoPresupuestal["valor_actual"] = documentoPresupuestal["valor_actual"].(float64) + (propagationValue * float64(movimientoParameter.Multiplicador))
 					balance[documentoPadre["documento_presupuestal_uuid"].(string)] = documentoPresupuestal
 				}
 			} else {
 				documentoPresupuestal = balance[documentoPadre["documento_presupuestal_uuid"].(string)]
-				documentoPresupuestal.ValorActual += (propagationValue * float64(movimientoParameter.Multiplicador))
+				documentoPresupuestal["valor_actual"] = documentoPresupuestal["valor_actual"].(float64) + (propagationValue * float64(movimientoParameter.Multiplicador))
 				balance[documentoPadre["documento_presupuestal_uuid"].(string)] = documentoPresupuestal
 			}
-			if balance[documentoPadre["documento_presupuestal_uuid"].(string)].ValorActual < 0 {
-				errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal.ID + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
+			if balance[documentoPadre["documento_presupuestal_uuid"].(string)]["valor_actual"].(float64) < 0 {
+				errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal["_id"].(string) + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 				logs.Error(errorMessage)
 				panic(errorMessage)
 			} else {
-				if documentoPresupuestal.ValorActual == 0 {
-					documentoPresupuestal.Estado = "total_comprometido"
+				if documentoPresupuestal["valor_actual"].(float64) == 0 {
+					documentoPresupuestal["estado"] = "total_comprometido"
 				} else {
-					documentoPresupuestal.Estado = "parcial_comprometido"
+					documentoPresupuestal["estado"] = "parcial_comprometido"
 				}
 				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(documentoPresupuestalFixedCollectionName, "", "estado,valor_actual", documentoPresupuestal)...)
 			}
