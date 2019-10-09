@@ -3,7 +3,6 @@ package movimientohelper
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo/txn"
-	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
@@ -13,7 +12,7 @@ import (
 
 // BuildPropagacionValoresTr ... Build a mgo transaction item as Array of interfaces .
 // This method search in "movimientos_parametros" collection for the afectation's config recursively.
-func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]map[string]interface{}, collectionPostFixName string) (trData []txn.Op) {
+func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectationIndex map[string]map[string]interface{}, collectionPostFixName string) (trData []txn.Op) {
 	propagationCollectionName := models.MovimientosCollection
 	fatherUUIKey := "_id"
 	movimientoParameter, err := movimientoManager.GetInitialMovimientoParameterByHijo(movimiento.Tipo)
@@ -35,21 +34,26 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 		return
 	}
 	documentoPadre := make(map[string]interface{})
-	movimientoPadre, err := crudmanager.GetDocumentByID(movimiento.Padre, propagationCollectionName)
-	documentoPadre, errMap := commonhelper.ToMap(movimientoPadre, "bson")
-
-	if errMap != nil {
-		panic(errMap.Error())
+	var movimientoPadre interface{}
+	var errMap error
+	if afectationIndex[movimiento.Padre] != nil {
+		documentoPadre = afectationIndex[movimiento.Padre]
+	} else {
+		movimientoPadre, err = crudmanager.GetDocumentByID(movimiento.Padre, propagationCollectionName)
+		if err != nil {
+			logs.Error(err.Error(), movimiento.Padre, propagationCollectionName)
+			runFlag = false
+		}
+		documentoPadre, errMap = formatdata.ToMap(movimientoPadre, "bson")
+		if errMap != nil {
+			panic(errMap.Error())
+		}
 	}
-
-	if err != nil {
-		logs.Error(err.Error(), movimiento.Padre, propagationCollectionName)
-		runFlag = false
-	}
+	formatdata.JsonPrint(afectationIndex)
 
 	movimientoHijo := make(map[string]interface{})
 
-	movimientoHijo, errMap = commonhelper.ToMap(movimiento, "bson")
+	movimientoHijo, errMap = formatdata.ToMap(movimiento, "bson")
 	if errMap != nil {
 		panic(errMap.Error())
 	}
@@ -72,10 +76,11 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 		documentoPadreValorActual := documentoPadre["valor_actual"].(float64)
 		documentoPadreValorActual += propagationValue * float64(movimientoParameter.Multiplicador)
+		documentoPadreNewState := documentoPadre["estado"].(string)
 		if documentoPadreValorActual == 0 {
-			documentoPadre["estado"] = "total_comprometido"
+			documentoPadreNewState = "total_comprometido"
 		} else if documentoPadreValorActual > 0 {
-			documentoPadre["estado"] = "parcial_comprometido"
+			documentoPadreNewState = "parcial_comprometido"
 		} else {
 			errorMessage := ""
 			if documentoPadre["documento_presupuestal_uuid"] == nil {
@@ -86,39 +91,60 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 			logs.Error(errorMessage)
 			panic(errorMessage)
 		}
+		if !movimientoParameter.WithOutChangeState {
+			documentoPadre["estado"] = documentoPadreNewState
+		}
 
 		documentoPadre["valor_actual"] = documentoPadreValorActual
 
 		documentoPresupuestal := make(map[string]interface{})
+		balanceKey := ""
 		if documentoPadre["documento_presupuestal_uuid"] != nil {
-			if balance[documentoPadre["documento_presupuestal_uuid"].(string)] == nil {
-				balance[documentoPadre["documento_presupuestal_uuid"].(string)] = make(map[string]interface{})
-				documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre["documento_presupuestal_uuid"].(string), documentoPresupuestalFixedCollectionName)
+			balanceKey = "documento_presupuestal_uuid"
+		} else if documentoPadre["_id"] != nil {
+			balanceKey = "_id"
+		}
+
+		if balanceKey != "" {
+			balanceCollectionName := documentoPresupuestalFixedCollectionName
+			if movimientoParameter.FatherCollectionName != "" {
+				balanceCollectionName = movimientoParameter.FatherCollectionName + collectionPostFixName
+			}
+			if balance[documentoPadre[balanceKey].(string)] == nil {
+				balance[documentoPadre[balanceKey].(string)] = make(map[string]interface{})
+
+				documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre[balanceKey].(string), balanceCollectionName)
 				if err == nil {
 					formatdata.FillStructP(documentoPresupuestalIntfc, &documentoPresupuestal)
 					documentoPresupuestal["valor_actual"] = documentoPresupuestal["valor_actual"].(float64) + (propagationValue * float64(movimientoParameter.Multiplicador))
-					balance[documentoPadre["documento_presupuestal_uuid"].(string)] = documentoPresupuestal
+					balance[documentoPadre[balanceKey].(string)] = documentoPresupuestal
 				}
 			} else {
-				documentoPresupuestal = balance[documentoPadre["documento_presupuestal_uuid"].(string)]
+				documentoPresupuestal = balance[documentoPadre[balanceKey].(string)]
 				documentoPresupuestal["valor_actual"] = documentoPresupuestal["valor_actual"].(float64) + (propagationValue * float64(movimientoParameter.Multiplicador))
-				balance[documentoPadre["documento_presupuestal_uuid"].(string)] = documentoPresupuestal
+				balance[documentoPadre[balanceKey].(string)] = documentoPresupuestal
 			}
-			if balance[documentoPadre["documento_presupuestal_uuid"].(string)]["valor_actual"].(float64) < 0 {
+
+			if balance[documentoPadre[balanceKey].(string)]["valor_actual"].(float64) < 0 {
 				errorMessage := "Cannot Perform operation, presupuestal document " + documentoPresupuestal["_id"].(string) + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 				logs.Error(errorMessage)
 				panic(errorMessage)
 			} else {
-				if documentoPresupuestal["valor_actual"].(float64) == 0 {
-					documentoPresupuestal["estado"] = "total_comprometido"
-				} else {
-					documentoPresupuestal["estado"] = "parcial_comprometido"
+				if !movimientoParameter.WithOutChangeState {
+					if documentoPresupuestal["valor_actual"].(float64) == 0 {
+						documentoPresupuestal["estado"] = "total_comprometido"
+					} else {
+						documentoPresupuestal["estado"] = "parcial_comprometido"
+					}
+					trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(balanceCollectionName, "", "estado,valor_actual", documentoPresupuestal)...)
+
 				}
-				trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(documentoPresupuestalFixedCollectionName, "", "estado,valor_actual", documentoPresupuestal)...)
+
 			}
 		}
 
 		documentoPadre["movimientos"] = movimientosPadreData
+		afectationIndex[documentoPadre["_id"].(string)] = documentoPadre
 		trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(propagationCollectionName, fatherUUIKey, "estado,movimientos,valor_actual", documentoPadre)...)
 		movimientoHijo = documentoPadre
 		nextMovimientoParameter, _ := movimientoManager.GetInitialMovimientoParameterByHijo(movimientoParameter.TipoMovimientoPadre)
@@ -139,14 +165,24 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance map[string]
 
 			propagationCollectionName += collectionPostFixName
 			documentoPadre = make(map[string]interface{})
-			movimientoPadre, err = crudmanager.GetDocumentByID(movimientoHijo["padre"].(string), propagationCollectionName)
-			documentoPadre, errMap = commonhelper.ToMap(movimientoPadre, "bson")
-			if errMap != nil {
-				panic(errMap.Error())
+			if afectationIndex[movimientoHijo["padre"].(string)] != nil {
+				documentoPadre = afectationIndex[movimientoHijo["padre"].(string)]
+			} else {
+				movimientoPadre, err = crudmanager.GetDocumentByID(movimientoHijo["padre"].(string), propagationCollectionName)
+				if err != nil {
+					logs.Error(err.Error(), movimientoHijo["padre"].(string), propagationCollectionName)
+					runFlag = false
+				}
+				documentoPadre, errMap = formatdata.ToMap(movimientoPadre, "bson")
+				if errMap != nil {
+					panic(errMap.Error())
+				}
+
 			}
-			if err != nil {
-				runFlag = false
-			}
+
+		}
+		if err != nil {
+			runFlag = false
 		}
 
 	}

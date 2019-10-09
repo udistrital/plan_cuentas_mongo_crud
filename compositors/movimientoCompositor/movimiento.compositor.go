@@ -17,7 +17,8 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		valorActualDocumentoPres float64
 	)
 	initialState := "expedido"
-	balanceMap := make(map[string]map[string]interface{})
+	balance := make(map[string]map[string]interface{})
+	afectationIndex := make(map[string]map[string]interface{})
 	collectionPostFixName := "_" + strconv.Itoa(documentoPresupuestalRequestData.Vigencia) + "_" + documentoPresupuestalRequestData.CentroGestor
 
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
@@ -38,7 +39,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection+collectionPostFixName, "", "", movimientoElmnt)
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
-		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balanceMap, collectionPostFixName)
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt,balance, afectationIndex, collectionPostFixName)
 
 		if len(propagacionData) > 0 {
 			movimientoData = append(movimientoData, propagacionData...)
