@@ -30,6 +30,11 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 		Id:     nodoHoja.ID,
 		Assert: "d-",
 		Insert: nodoHoja,
+	}, {
+		C:      models.NodoRubroCollection,
+		Id:     nodoHoja.ID,
+		Assert: bson.M{"_id": nodoHoja.ID},
+		Update: bson.D{{"$set", bson.D{{"bloqueado", true}}}},
 	}}
 
 	if propOps, err := PropagarValorApropiacion(nodoHoja, nodoHoja.ValorInicial, ue, vigencia); err == nil {

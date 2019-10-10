@@ -21,6 +21,7 @@ type NodoRubro struct {
 	Hijos           []string `json:"Hijos" bson:"hijos"`
 	Padre           string   `json:"Padre" bson:"padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
+	Bloqueado       bool     `json:"Bloqueado" bson:"bloqueado"`
 }
 
 func UpdateNodoRubro(j NodoRubro, id string) error {
