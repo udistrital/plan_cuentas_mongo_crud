@@ -2,6 +2,7 @@ package models
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -21,6 +22,7 @@ type NodoRubro struct {
 	Hijos           []string `json:"Hijos" bson:"hijos"`
 	Padre           string   `json:"Padre" bson:"padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
+	Bloqueado       bool     `json:"Bloqueado" bson:"bloqueado"`
 }
 
 func UpdateNodoRubro(j NodoRubro, id string) error {
@@ -179,14 +181,18 @@ func GetHojasRubro() (leafs []NodoRubroApropiacion, err error) {
 }
 
 // GetRubroCode devuelve el codigo normalizado del Rubro
-func GetRubroCode(rubro string) string {
+func GetRubroCode(rubro string) (string, error) {
 	if len(rubro) > 1 {
 		var b bytes.Buffer
 		numcaracters := getNumHyphen(rubro)
-		b.WriteString(concatRubro(numcaracters, rubro))
-		return b.String()
+		newRubro, err := concatRubro(numcaracters, rubro)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(newRubro)
+		return b.String(), nil
 	}
-	return rubro
+	return rubro, nil
 }
 
 func getNumHyphen(rubro string) (num int) {
@@ -195,13 +201,15 @@ func getNumHyphen(rubro string) (num int) {
 	return
 }
 
-func concatRubro(numcaracters int, rubro string) (newrubro string) {
+func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
 	// Pretend to return a rubro builded
 	i := strings.LastIndex(rubro, "-")
 	digits := len(strings.Replace(rubro[i:], "-", "", 1))
 	switch numcaracters {
 	case 2:
-		if digits < 2 {
+		if digits > 3 {
+			return "", errors.New("No se Puede Ingresar el Rubro, supera el máximo permitido")
+		} else if digits < 2 {
 			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-00", 1)
 		} else if digits == 2 {
 			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
@@ -210,7 +218,9 @@ func concatRubro(numcaracters int, rubro string) (newrubro string) {
 		}
 		break
 	case 6:
-		if digits < 2 {
+		if digits > 4 {
+			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
+		} else if digits < 2 {
 			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-000", 1)
 		} else if digits == 2 {
 			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-00", 1)
@@ -221,7 +231,9 @@ func concatRubro(numcaracters int, rubro string) (newrubro string) {
 		}
 		break
 	default:
-		if digits < 2 {
+		if digits > 2 {
+			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
+		} else if digits < 2 {
 			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
 		} else {
 			newrubro = rubro

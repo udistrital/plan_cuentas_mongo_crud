@@ -1376,11 +1376,11 @@
         }
     },
     "definitions": {
-        "22594.0xc0004ef0b0.false": {
+        "6511.0xc000614bd0.false": {
             "title": "false",
             "type": "object"
         },
-        "22874.rubroFuente": {
+        "6791.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1413,13 +1413,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/22874.rubroFuente"
+                    "$ref": "#/definitions/6791.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/22594.0xc0004ef0b0.false"
+                    "$ref": "#/definitions/6511.0xc000614bd0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",
@@ -1500,6 +1500,9 @@
             "title": "NodoRubro",
             "type": "object",
             "properties": {
+                "Bloqueado": {
+                    "type": "boolean"
+                },
                 "Codigo": {
                     "type": "string"
                 },

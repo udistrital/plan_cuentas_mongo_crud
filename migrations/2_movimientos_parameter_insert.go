@@ -40,12 +40,14 @@ func init() {
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
+			WithOutChangeState:   true,
 		}
 		AnulacionCdpToApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
 			TipoMovimientoHijo:   "anul_cdp",
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
+			WithOutChangeState:   true,
 		}
 
 		parameters := []interface{}{

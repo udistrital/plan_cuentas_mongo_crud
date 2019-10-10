@@ -29,4 +29,5 @@ type MovimientoParameter struct {
 	FatherCollectionName string `json:"FatherCollectionName" bson:"father_collection_name"`
 	FatherUUIKeyName     string `json:"FatherUUIKeyName" bson:"father_uuikey_name"`
 	Initial              bool   `json:"Initial" bson:"initial"`
+	WithOutChangeState   bool   `json:"WithOutChangeState" bson:"without_change_state"`
 }
