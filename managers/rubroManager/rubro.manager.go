@@ -100,7 +100,10 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-	nodoHoja.ID = models.GetRubroCode(nodoHoja.ID)
+	nodoHoja.ID, err = models.GetRubroCode(nodoHoja.ID)
+	if err != nil {
+		return err
+	}
 	ops := []txn.Op{{
 		C:      collection,
 		Id:     nodoHoja.ID,
@@ -137,7 +140,7 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	id := bson.NewObjectId()
 	nodo, _ := SearchRubro(idNodoHoja, "1")
 	if nodo.Bloqueado {
-		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Desiganadas")
+		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Designadas")
 	}
 	ops := []txn.Op{{
 		C:      collection,
