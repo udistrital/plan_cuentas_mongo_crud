@@ -1,6 +1,8 @@
 package rubroManager
 
 import (
+	"errors"
+
 	"github.com/astaxie/beego/logs"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -115,7 +117,7 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 			C:      collection,
 			Id:     nodoPadre.ID,
 			Assert: bson.M{"_id": nodoPadre.ID},
-			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}},
+			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", true}}}},
 		})
 	}
 
@@ -133,7 +135,10 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-
+	nodo, _ := SearchRubro(idNodoHoja, "1")
+	if nodo.Bloqueado {
+		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Desiganadas")
+	}
 	ops := []txn.Op{{
 		C:      collection,
 		Id:     idNodoHoja,
