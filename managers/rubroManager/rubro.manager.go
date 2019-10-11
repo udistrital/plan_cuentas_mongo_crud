@@ -3,6 +3,9 @@ package rubroManager
 import (
 	"errors"
 
+	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
+	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
+
 	"github.com/astaxie/beego/logs"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -89,7 +92,7 @@ func GetNodo(id, ue string) map[string]interface{} {
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 	_, exist := SearchRubro(nodoHoja.ID, nodoHoja.UnidadEjecutora)
 	if exist {
-		panic("Rubro Code Already exist for this cg")
+		panic("Este Rubro ya existe para este CG")
 	}
 	session, err := db.GetSession()
 	if err != nil {
@@ -119,6 +122,15 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 			Assert: bson.M{"_id": nodoPadre.ID},
 			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", true}}}},
 		})
+	} else {
+
+		roots := GetRootParams(nodoHoja.UnidadEjecutora)
+		rootsInterfaceArr := commonhelper.ConvertToInterfaceArr(roots)
+		rootParamsIndexed := commonhelper.ArrToMapByKey("Valor", rootsInterfaceArr...)
+		if rootParamsIndexed[nodoHoja.ID] == nil {
+			panic("Este Código no esta admitido")
+		}
+
 	}
 
 	return runner.Run(ops, id, nil)
@@ -191,4 +203,12 @@ func SearchRubro(nodo string, ue string) (models.NodoRubro, bool) {
 		return rubro, false
 	}
 	return rubro, true
+}
+
+func GetRootParams(cg string) (roots []models.ArbolRubroParameter) {
+	crudmanager.GetAllFromDB(map[string]interface{}{
+		"tipo":             "raiz",
+		"unidad_ejecutora": bson.M{"$in": []string{"0", cg}},
+	}, models.ArbolRubroParameterCollection, &roots)
+	return
 }

@@ -6,6 +6,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
+
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
+
 	"github.com/astaxie/beego/logs"
 
 	"github.com/astaxie/beego"
@@ -417,26 +421,38 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	var (
 		totalIngresos float64
 		totalEgresos  float64
+		rootCompValue float64
 	)
-	balanceado := false
+	values := make(map[string]models.NodoRubroApropiacion)
+	balanceado := true
+	rootsParamsIndexed := rubroHelper.GetRubroParamsIndexedByKey(ueStr, "Valor")
 
 	for _, raiz := range raices {
-		if raiz.ID == "2" {
-			totalIngresos += raiz.ValorInicial
-		} else if raiz.ID == "3" {
-			totalEgresos += raiz.ValorInicial
+		if rootsParamsIndexed[raiz.ID] != nil {
+			values[raiz.ID] = raiz
 		}
+	}
+	var indexValue int
+	response := make(map[string]interface{})
+	for _, rootValue := range values {
+		if indexValue == 0 {
+			rootCompValue = rootValue.ValorActual
+		}
+		if rootCompValue != rootValue.ValorActual {
+			balanceado = false
+		}
+		if rubroInfo, e := rubroManager.SearchRubro(rootValue.ID, ueStr); e {
+			response["total"+rubroInfo.Nombre] = rootValue.ValorActual
+
+		}
+		indexValue++
 	}
 
 	if totalEgresos == totalIngresos && totalEgresos != 0 {
 		balanceado = true
 	}
 
-	response := map[string]interface{}{
-		"totalIngresos": totalIngresos,
-		"totalEgresos":  totalEgresos,
-		"balanceado":    balanceado,
-	}
+	response["balanceado"] = balanceado
 
 	if err == nil {
 		j.response = DefaultResponse(200, nil, &response)
