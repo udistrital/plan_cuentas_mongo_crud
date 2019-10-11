@@ -211,6 +211,7 @@ func SearchRubro(nodo string, ue string) (models.NodoRubro, bool) {
 func GetRootParams(cg string) (roots []models.ArbolRubroParameter) {
 	crudmanager.GetAllFromDB(map[string]interface{}{
 		"tipo":             "raiz",
+		"activo": true,
 		"unidad_ejecutora": bson.M{"$in": []string{"0", cg}},
 	}, models.ArbolRubroParameterCollection, &roots)
 	return
