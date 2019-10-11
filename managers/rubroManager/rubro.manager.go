@@ -3,6 +3,9 @@ package rubroManager
 import (
 	"errors"
 
+	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
+	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
+
 	"github.com/astaxie/beego/logs"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -89,7 +92,7 @@ func GetNodo(id, ue string) map[string]interface{} {
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 	_, exist := SearchRubro(nodoHoja.ID, nodoHoja.UnidadEjecutora)
 	if exist {
-		panic("Rubro Code Already exist for this cg")
+		panic("Este Rubro ya existe para este CG")
 	}
 	session, err := db.GetSession()
 	if err != nil {
@@ -122,6 +125,15 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 			Assert: bson.M{"_id": nodoPadre.ID},
 			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", true}}}},
 		})
+	} else {
+
+		roots := GetRootParams(nodoHoja.UnidadEjecutora)
+		rootsInterfaceArr := commonhelper.ConvertToInterfaceArr(roots)
+		rootParamsIndexed := commonhelper.ArrToMapByKey("Valor", rootsInterfaceArr...)
+		if rootParamsIndexed[nodoHoja.ID] == nil {
+			panic("Este Código no esta admitido")
+		}
+
 	}
 
 	return runner.Run(ops, id, nil)
@@ -138,9 +150,9 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-	nodo, _ := SearchRubro(idNodoHoja, "1")
-	if nodo.Bloqueado {
-		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Designadas")
+	nodo, e := SearchRubro(idNodoHoja, "1")
+	if e && nodo.Bloqueado {
+		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Desiganadas")
 	}
 	ops := []txn.Op{{
 		C:      collection,
@@ -160,11 +172,15 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	if err == nil {
 		// nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
 		nodoPadre.Hijos = remove(nodoPadre.Hijos, idNodoHoja)
+		updateFields := bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}}
+		if len(nodoPadre.Hijos) == 0 {
+			updateFields = bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", false}}}}
+		}
 		ops = append(ops, txn.Op{
 			C:      collection,
 			Id:     nodoPadre.ID,
 			Assert: bson.M{"_id": nodoPadre.ID},
-			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}},
+			Update: updateFields,
 		})
 	}
 
@@ -190,4 +206,12 @@ func SearchRubro(nodo string, ue string) (models.NodoRubro, bool) {
 		return rubro, false
 	}
 	return rubro, true
+}
+
+func GetRootParams(cg string) (roots []models.ArbolRubroParameter) {
+	crudmanager.GetAllFromDB(map[string]interface{}{
+		"tipo":             "raiz",
+		"unidad_ejecutora": bson.M{"$in": []string{"0", cg}},
+	}, models.ArbolRubroParameterCollection, &roots)
+	return
 }
