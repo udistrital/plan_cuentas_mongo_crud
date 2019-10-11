@@ -470,7 +470,7 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 // @Param vigencia vigencia string	true "Vigencia de la apropiación"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router aprobacion_masiva/:unidadEjecutora/:vigencia [post]
+// @router /aprobacion_masiva/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	vigencia := j.GetString(":vigencia")

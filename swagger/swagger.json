@@ -293,6 +293,42 @@
                 }
             }
         },
+        "/arbol_rubro_apropiacion/aprobacion_masiva/{unidadEjecutora}/{vigencia}": {
+            "post": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora",
+                "operationId": "NodoRubroApropiacionController.AprobacionMasiva",
+                "parameters": [
+                    {
+                        "in": "unidadEjecutora",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "vigencia",
+                        "name": "vigencia",
+                        "description": "Vigencia de la apropiación",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Object"
+                        }
+                    },
+                    "404": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
         "/arbol_rubro_apropiacion/arbol_apropiacion/{raiz}/{unidadEjecutora}/{vigencia}": {
             "get": {
                 "tags": [
@@ -547,42 +583,6 @@
                     },
                     "403": {
                         "description": ":unidadEjecutora is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro_apropiacionaprobacion_masiva/{unidadEjecutora}/{vigencia}": {
-            "post": {
-                "tags": [
-                    "arbol_rubro_apropiacion"
-                ],
-                "description": "Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora",
-                "operationId": "NodoRubroApropiacionController.AprobacionMasiva",
-                "parameters": [
-                    {
-                        "in": "unidadEjecutora",
-                        "name": "unidadEjecutora",
-                        "description": "Unidad Ejecutora de la apropiación",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "vigencia",
-                        "name": "vigencia",
-                        "description": "Vigencia de la apropiación",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.Object"
-                        }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -1376,7 +1376,7 @@
         }
     },
     "definitions": {
-        "6511.0xc000614bd0.false": {
+        "6511.0xc0006341e0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1419,7 +1419,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6511.0xc000614bd0.false"
+                    "$ref": "#/definitions/6511.0xc0006341e0.false"
                 },
                 "ValorAcumulado": {
                     "type": "number",

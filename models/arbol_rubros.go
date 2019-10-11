@@ -1,7 +1,11 @@
 package models
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
@@ -186,5 +190,67 @@ func GetHojasRubro() (leafs []NodoRubroApropiacion, err error) {
 	defer session.Close()
 
 	err = c.Find(bson.M{"hijos": []string{}}).All(&leafs)
+	return
+}
+
+// GetRubroCode devuelve el codigo normalizado del Rubro
+func GetRubroCode(rubro string) (string, error) {
+	if len(rubro) > 1 {
+		var b bytes.Buffer
+		numcaracters := getNumHyphen(rubro)
+		newRubro, err := concatRubro(numcaracters, rubro)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(newRubro)
+		return b.String(), nil
+	}
+	return rubro, nil
+}
+
+func getNumHyphen(rubro string) (num int) {
+	re := regexp.MustCompile(`\-`)
+	num = len(re.FindAllString(rubro, -1))
+	return
+}
+
+func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
+	// Pretend to return a rubro builded
+	i := strings.LastIndex(rubro, "-")
+	digits := len(strings.Replace(rubro[i:], "-", "", 1))
+	switch numcaracters {
+	case 2:
+		if digits > 3 {
+			return "", errors.New("No se Puede Ingresar el Rubro, supera el máximo permitido")
+		} else if digits < 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-00", 1)
+		} else if digits == 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
+		} else {
+			newrubro = rubro
+		}
+		break
+	case 6:
+		if digits > 4 {
+			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
+		} else if digits < 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-000", 1)
+		} else if digits == 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-00", 1)
+		} else if digits == 3 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
+		} else {
+			newrubro = rubro
+		}
+		break
+	default:
+		if digits > 2 {
+			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
+		} else if digits < 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
+		} else {
+			newrubro = rubro
+		}
+	}
 	return
 }

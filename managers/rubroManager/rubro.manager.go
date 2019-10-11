@@ -103,7 +103,10 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubro, collection string) error {
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-
+	nodoHoja.ID, err = models.GetRubroCode(nodoHoja.ID)
+	if err != nil {
+		return err
+	}
 	ops := []txn.Op{{
 		C:      collection,
 		Id:     nodoHoja.ID,
