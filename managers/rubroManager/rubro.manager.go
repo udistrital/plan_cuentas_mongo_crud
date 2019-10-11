@@ -135,8 +135,8 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	runner := txn.NewRunner(c)
 
 	id := bson.NewObjectId()
-	nodo, _ := SearchRubro(idNodoHoja, "1")
-	if nodo.Bloqueado {
+	nodo, e := SearchRubro(idNodoHoja, "1")
+	if e && nodo.Bloqueado {
 		return errors.New("No se Puede ELiminar Este Rubro, Puede Que Tenga Rubros Hijo o Que Posea Apropiaciones Desiganadas")
 	}
 	ops := []txn.Op{{
@@ -157,11 +157,15 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	if err == nil {
 		// nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
 		nodoPadre.Hijos = remove(nodoPadre.Hijos, idNodoHoja)
+		updateFields := bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}}
+		if len(nodoPadre.Hijos) == 0 {
+			updateFields = bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", false}}}}
+		}
 		ops = append(ops, txn.Op{
 			C:      collection,
 			Id:     nodoPadre.ID,
 			Assert: bson.M{"_id": nodoPadre.ID},
-			Update: bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}},
+			Update: updateFields,
 		})
 	}
 
