@@ -1,6 +1,7 @@
 package rubroApropiacionManager
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -15,10 +16,16 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
+	if nodoHoja.ValorInicial <= 0 {
+		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
+		return err
+	}
+
 	session, err := db.GetSession()
 	if err != nil {
 		return err
 	}
+
 	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
@@ -46,6 +53,12 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 
 // TrActualizarValorApropiacion ... Actualiza el valor de una apropiacion y propaga el cambio en el arbol.
 func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID string, ue string, vigencia int) error {
+	formatdata.JsonPrint(nodo)
+	if nodo.ValorInicial <= 0 {
+		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
+		return err
+	}
+
 	session, err := db.GetSession()
 	if err != nil {
 		return err
