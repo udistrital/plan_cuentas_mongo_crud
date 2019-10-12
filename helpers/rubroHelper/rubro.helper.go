@@ -1,6 +1,10 @@
 package rubroHelper
 
-import "github.com/udistrital/plan_cuentas_mongo_crud/models"
+import (
+	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
+)
 
 func BuildTree(raiz *models.NodoRubro) []map[string]interface{} {
 	var tree []map[string]interface{}
@@ -27,4 +31,11 @@ func getChildren(children []string) (childrenTree []map[string]interface{}) {
 		childrenTree = append(childrenTree, forkData)
 	}
 	return
+}
+
+func GetRubroParamsIndexedByKey(cg, key string) map[string]interface{} {
+	roots := rubroManager.GetRootParams(cg)
+	rootsInterfaceArr := commonhelper.ConvertToInterfaceArr(roots)
+	rootParamsIndexed := commonhelper.ArrToMapByKey(key, rootsInterfaceArr...)
+	return rootParamsIndexed
 }

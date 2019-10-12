@@ -1,6 +1,7 @@
 package rubroApropiacionManager
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -15,10 +16,16 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
+	if nodoHoja.ValorInicial <= 0 {
+		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
+		return err
+	}
+
 	session, err := db.GetSession()
 	if err != nil {
 		return err
 	}
+
 	defer session.Close()
 	c := db.Cursor(session, models.TransactionCollection)
 	runner := txn.NewRunner(c)
@@ -46,6 +53,12 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 
 // TrActualizarValorApropiacion ... Actualiza el valor de una apropiacion y propaga el cambio en el arbol.
 func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID string, ue string, vigencia int) error {
+	formatdata.JsonPrint(nodo)
+	if nodo.ValorInicial <= 0 {
+		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
+		return err
+	}
+
 	session, err := db.GetSession()
 	if err != nil {
 		return err
@@ -62,7 +75,7 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 			C:      collName,
 			Id:     nodo.ID,
 			Assert: bson.M{"_id": nodo.ID},
-			Update: bson.D{{"$set", bson.D{{"valor_inicial", nodo.ValorInicial}}}},
+			Update: bson.D{{"$set", bson.D{{"valor_inicial", nodo.ValorInicial}, {"valor_actual", nodo.ValorInicial}}}},
 		}}
 		if nodoOldInfo.ValorInicial != nodo.ValorInicial {
 			if propOps, err := PropagarValorApropiacion(nodo, nodo.ValorInicial-nodoOldInfo.ValorInicial, ue, vigencia); err == nil {
@@ -124,7 +137,7 @@ func PropagarValorApropiacion(nodoHijo *models.NodoRubroApropiacion, propagation
 				C:      models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue,
 				Id:     nodoPadre.ID,
 				Assert: bson.M{"_id": nodoPadre.ID},
-				Update: bson.D{{"$set", bson.D{{"valor_inicial", nodoPadre.ValorInicial}}}},
+				Update: bson.D{{"$set", bson.D{{"valor_inicial", nodoPadre.ValorInicial}, {"valor_actual", nodoPadre.ValorInicial}}}},
 			})
 			if childrenExist(nodo.ID, nodoPadre.Hijos) != true {
 

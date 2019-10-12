@@ -13,7 +13,11 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
+// NodoRubroCollection Nombre de la colleccion principal del arbol de rubros.
 const NodoRubroCollection = "arbol_rubro"
+
+// ArbolRubroParameterCollection Nombre de la colleccion principal de los parametros del arbol de rubros.
+const ArbolRubroParameterCollection = "arbol_rubro_parametros"
 
 // NodoRubro es la estructura de un Rubro, es un nodo puesto que forma parte del árbol
 type NodoRubro struct {
@@ -23,6 +27,15 @@ type NodoRubro struct {
 	Padre           string   `json:"Padre" bson:"padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 	Bloqueado       bool     `json:"Bloqueado" bson:"bloqueado"`
+}
+
+// ArbolRubroParameter ... estructura de los parametros para el arbol de rubros.
+type ArbolRubroParameter struct {
+	Id              string      `json:"Id" bson:"_id,omitempty"`
+	Activo          bool        `json:"Activo" bson:"activo"`
+	Tipo            string      `json:"Tipo" bson:"tipo"`
+	Valor           interface{} `json:"Valor" bson:"valor"`
+	UnidadEjecutora string      `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 }
 
 func UpdateNodoRubro(j NodoRubro, id string) error {
