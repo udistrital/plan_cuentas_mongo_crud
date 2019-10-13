@@ -44,7 +44,7 @@ func getChildren(children []string, unidadEjecutora, estado string, vigencia int
 }
 
 // ValuesTree árbol que contiene todos los rubros y le asgina un valor 0 cuando no tienen una apropiación
-func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
+func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[string]interface{} {
 	var tree []map[string]interface{}
 	raices := rubroManager.GetRaices(unidadEjecutora)
 
@@ -56,20 +56,25 @@ func ValuesTree(unidadEjecutora string, vigencia int) []map[string]interface{} {
 		if err != nil {
 			return nil
 		}
-
-		if apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
+		apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia)
+		if err != nil {
 			raices[i]["ValorInicial"] = 0
 		} else {
 			raices[i]["ValorInicial"] = apropiacion.ValorInicial
 		}
-
-		forkData["Codigo"] = raices[i]["Codigo"]
-		forkData["data"] = raices[i]
-		forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
-
-		tree = append(tree, forkData)
+		if apropiacion.Estado == estado {
+			forkData := make(map[string]interface{})
+			forkData["Codigo"] = apropiacion.ID
+			forkData["data"] = apropiacion
+			forkData["children"] = getChildren(apropiacion.Hijos, apropiacion.UnidadEjecutora, estado, apropiacion.Vigencia)
+			tree = append(tree, forkData)
+		} else if estado == "" {
+			forkData["Codigo"] = raices[i]["Codigo"]
+			forkData["data"] = raices[i]
+			forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
+			tree = append(tree, forkData)
+		}
 	}
-
 	return tree
 }
 
@@ -131,27 +136,4 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	}
 
 	return hijo
-}
-
-// BuildStateTree construye un árbol de acuerdo al estado de los nodos
-func BuildStateTree(ue, vigencia, estado string) []map[string]interface{} {
-	var tree []map[string]interface{}
-	vigenciaStr, _ := strconv.Atoi(vigencia)
-	roots, err := models.GetRaicesApropiacion(ue, vigenciaStr)
-
-	if err != nil {
-		return tree
-	}
-
-	for _, root := range roots {
-		if root.Estado == estado {
-			forkData := make(map[string]interface{})
-			forkData["Codigo"] = root.ID
-			forkData["data"] = root
-			forkData["children"] = getChildren(root.Hijos, root.UnidadEjecutora, estado, root.Vigencia)
-			tree = append(tree, forkData)
-		}
-	}
-
-	return tree
 }

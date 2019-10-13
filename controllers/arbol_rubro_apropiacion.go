@@ -376,7 +376,7 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	if err != nil {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
-		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia)
+		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, "")
 		j.response = DefaultResponse(200, nil, &tree)
 	}
 	j.Data["json"] = j.response
@@ -495,12 +495,15 @@ func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 // @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado [get]
 func (j *NodoRubroApropiacionController) TreeByState() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
-	vigencia := j.GetString(":vigencia")
+	vigenciaStr := j.GetString(":vigencia")
 	estado := j.GetString(":estado")
-
-	tree := rubroApropiacionHelper.BuildStateTree(unidadEjecutora, vigencia, estado)
-	j.response = DefaultResponse(200, nil, &tree)
-
+	vigencia, err := strconv.Atoi(vigenciaStr)
+	if err != nil {
+		j.response = DefaultResponse(404, err, nil)
+	} else {
+		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, estado)
+		j.response = DefaultResponse(200, nil, &tree)
+	}
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
