@@ -46,6 +46,7 @@ func getChildren(children []string, unidadEjecutora, estado string, vigencia int
 // ValuesTree árbol que contiene todos los rubros y le asgina un valor 0 cuando no tienen una apropiación
 func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[string]interface{} {
 	var tree []map[string]interface{}
+	var apropiacion *models.NodoRubroApropiacion
 	raices := rubroManager.GetRaices(unidadEjecutora)
 
 	for i := 0; i < len(raices); i++ {
@@ -56,19 +57,20 @@ func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[strin
 		if err != nil {
 			return nil
 		}
-		apropiacion, err := models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia)
-		if err != nil {
+
+		if apropiacion, err = models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
 			raices[i]["ValorInicial"] = 0
 		} else {
 			raices[i]["ValorInicial"] = apropiacion.ValorInicial
+			if apropiacion.Estado == estado {
+				forkData := make(map[string]interface{})
+				forkData["Codigo"] = apropiacion.ID
+				forkData["data"] = apropiacion
+				forkData["children"] = getChildren(apropiacion.Hijos, apropiacion.UnidadEjecutora, estado, apropiacion.Vigencia)
+				tree = append(tree, forkData)
+			}
 		}
-		if apropiacion.Estado == estado {
-			forkData := make(map[string]interface{})
-			forkData["Codigo"] = apropiacion.ID
-			forkData["data"] = apropiacion
-			forkData["children"] = getChildren(apropiacion.Hijos, apropiacion.UnidadEjecutora, estado, apropiacion.Vigencia)
-			tree = append(tree, forkData)
-		} else if estado == "" {
+		if estado == "" {
 			forkData["Codigo"] = raices[i]["Codigo"]
 			forkData["data"] = raices[i]
 			forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
