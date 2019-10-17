@@ -49,7 +49,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 			panic(errMap.Error())
 		}
 	}
-	formatdata.JsonPrint(afectationIndex)
 
 	movimientoHijo := make(map[string]interface{})
 

@@ -6,8 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/udistrital/utils_oas/formatdata"
-
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
@@ -423,9 +421,9 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	var movimientos []models.Movimiento
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
-	formatdata.JsonPrint(movimientos)
+	balance := make(map[string]map[string]interface{})
 	if len(movimientos) > 0 {
-		rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
+		balance = rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
 	}
 
 	var rootCompValue float64
@@ -436,6 +434,11 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	for _, raiz := range raices {
 		if rootsParamsIndexed[raiz.ID] != nil {
 			values[raiz.ID] = raiz
+		}
+		if rootsParamsIndexed[raiz.ID] != nil && balance[raiz.ID] != nil {
+			actualRaiz := raiz
+			actualRaiz.ValorActual = balance[raiz.ID]["valor_actual"].(float64)
+			values[raiz.ID] = actualRaiz
 		}
 	}
 	var indexValue int

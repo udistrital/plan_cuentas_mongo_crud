@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/globalsign/mgo/txn"
-	"github.com/udistrital/utils_oas/formatdata"
 
 	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
@@ -144,7 +143,7 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	return hijo
 }
 
-func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centroGestor string) {
+func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centroGestor string) map[string]map[string]interface{} {
 	balance := make(map[string]map[string]interface{})
 	afectationIndex := make(map[string]map[string]interface{})
 	collectionPostFixName := "_" + vigencia + "_" + centroGestor
@@ -153,5 +152,5 @@ func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centro
 		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
 		movimientoData = append(movimientoData, propagacionData...)
 	}
-	formatdata.JsonPrint(movimientoData)
+	return balance
 }
