@@ -245,7 +245,7 @@ func init() {
         beego.ControllerComments{
             Method: "ComprobarBalanceArbolApropiaciones",
             Router: `/comprobar_balance/:unidadEjecutora/:vigencia`,
-            AllowHTTPMethods: []string{"get"},
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

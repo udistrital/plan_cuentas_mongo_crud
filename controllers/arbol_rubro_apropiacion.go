@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/udistrital/utils_oas/formatdata"
+
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
@@ -410,7 +412,7 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 // @Description ComprobarBalanceArbolApropiaciones
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /comprobar_balance/:unidadEjecutora/:vigencia [get]
+// @router /comprobar_balance/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
@@ -418,11 +420,15 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	vigencia, _ := strconv.Atoi(vigenciaStr)
 	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
 
-	var (
-		totalIngresos float64
-		totalEgresos  float64
-		rootCompValue float64
-	)
+	var movimientos []models.Movimiento
+
+	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
+	formatdata.JsonPrint(movimientos)
+	if len(movimientos) > 0 {
+		rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
+	}
+
+	var rootCompValue float64
 	values := make(map[string]models.NodoRubroApropiacion)
 	balanceado := true
 	rootsParamsIndexed := rubroHelper.GetRubroParamsIndexedByKey(ueStr, "Valor")
@@ -446,10 +452,6 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 
 		}
 		indexValue++
-	}
-
-	if totalEgresos == totalIngresos && totalEgresos != 0 {
-		balanceado = true
 	}
 
 	response["balanceado"] = balanceado
