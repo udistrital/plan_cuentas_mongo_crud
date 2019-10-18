@@ -69,7 +69,7 @@ func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[strin
 				forkData := make(map[string]interface{})
 				forkData["Codigo"] = apropiacion.ID
 				forkData["data"] = apropiacion
-				forkData["children"] = getChildren(apropiacion.Hijos, apropiacion.UnidadEjecutora, estado, apropiacion.Vigencia)
+				forkData["children"] = getChildren(apropiacion.Hijos, unidadEjecutora, estado, vigencia)
 				tree = append(tree, forkData)
 			}
 		}

@@ -451,10 +451,18 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 			balanceado = false
 		}
 		if rubroInfo, e := rubroManager.SearchRubro(rootValue.ID, ueStr); e {
-			response["total"+rubroInfo.Nombre] = rootValue.ValorActual
+			if rubroInfo.ID == "2" {
+				response["totalIngresos"] = rootValue.ValorActual
+			} else if rubroInfo.ID == "3" {
+				response["totalGastos"] = rootValue.ValorActual
+			}
 
 		}
 		indexValue++
+	}
+
+	if rootCompValue == 0 {
+		balanceado = false
 	}
 
 	response["balanceado"] = balanceado

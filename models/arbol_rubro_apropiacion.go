@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -90,7 +89,6 @@ func GetNodoRubroApropiacionByState(id, ue, vigencia, estado string) (*NodoRubro
 	c := db.Cursor(session, NodoRubroApropiacionCollection+"_"+vigencia+"_"+ue)
 
 	var nodoRubroApropiacion *NodoRubroApropiacion
-	fmt.Println("id: ", id)
 	err = c.Find(bson.M{"estado": estado, "_id": id}).One(&nodoRubroApropiacion)
 	return nodoRubroApropiacion, err
 }
