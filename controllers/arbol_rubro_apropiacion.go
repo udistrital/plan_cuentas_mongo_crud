@@ -410,7 +410,7 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 // @Description ComprobarBalanceArbolApropiaciones
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /comprobar_balance/:unidadEjecutora/:vigencia [get]
+// @router /comprobar_balance/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
@@ -418,11 +418,15 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	vigencia, _ := strconv.Atoi(vigenciaStr)
 	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
 
-	var (
-		totalIngresos float64
-		totalEgresos  float64
-		rootCompValue float64
-	)
+	var movimientos []models.Movimiento
+
+	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
+	balance := make(map[string]map[string]interface{})
+	if len(movimientos) > 0 {
+		balance = rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
+	}
+
+	var rootCompValue float64
 	values := make(map[string]models.NodoRubroApropiacion)
 	balanceado := true
 	rootsParamsIndexed := rubroHelper.GetRubroParamsIndexedByKey(ueStr, "Valor")
@@ -430,6 +434,11 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	for _, raiz := range raices {
 		if rootsParamsIndexed[raiz.ID] != nil {
 			values[raiz.ID] = raiz
+		}
+		if rootsParamsIndexed[raiz.ID] != nil && balance[raiz.ID] != nil {
+			actualRaiz := raiz
+			actualRaiz.ValorActual = balance[raiz.ID]["valor_actual"].(float64)
+			values[raiz.ID] = actualRaiz
 		}
 	}
 	var indexValue int
@@ -442,14 +451,18 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 			balanceado = false
 		}
 		if rubroInfo, e := rubroManager.SearchRubro(rootValue.ID, ueStr); e {
-			response["total"+rubroInfo.Nombre] = rootValue.ValorActual
+			if rubroInfo.ID == "2" {
+				response["totalIngresos"] = rootValue.ValorActual
+			} else if rubroInfo.ID == "3" {
+				response["totalGastos"] = rootValue.ValorActual
+			}
 
 		}
 		indexValue++
 	}
 
-	if totalEgresos == totalIngresos && totalEgresos != 0 {
-		balanceado = true
+	if rootCompValue == 0 {
+		balanceado = false
 	}
 
 	response["balanceado"] = balanceado
