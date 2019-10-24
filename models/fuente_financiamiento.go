@@ -27,8 +27,9 @@ type FuenteFinanciamiento struct {
 	*General
 	ID              string                       `json:"Codigo" bson:"_id,omitempty"`
 	TipoFuente      interface{}                  `json:"TipoFuente" bson"tipoFuente"`
-	ValorOriginal   float64                      `json:"ValorOriginal" bson:"valorOriginal"`
-	ValorAcumulado  float64                      `json:"ValorAcumulado" bson"valorAcumulado"`
+	ValorInicial    float64                      `json:"ValorInicial" bson:"valor_inicial"`
+	ValorActual     float64                      `json:"ValorActual" bson:"valor_actual"`
+	Estado          string                       `json:"Estado" bson:"estado"`
 	Rubros          map[codigoRubro]*rubroFuente `json:"Rubros" bson:"rubros"`
 	NumeroDocumento string                       `json:"NumeroDocumento" bson:"numeroDocumento"`
 	TipoDocumento   string                       `json:"TipoDocumento" bson:"tipoDocumento"`
