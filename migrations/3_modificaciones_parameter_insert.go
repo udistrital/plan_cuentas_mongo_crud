@@ -36,10 +36,30 @@ func init() {
 			WithOutChangeState:   true,
 		}
 
+		TrasladoOrigenApropiacion := models.MovimientoParameter{
+			Multiplicador:        -1,
+			TipoMovimientoHijo:   "traslado",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
+			Initial:              true,
+			WithOutChangeState:   true,
+		}
+
+		TrasladoDestinoApropiacion := models.MovimientoParameter{
+			Multiplicador:        1,
+			TipoMovimientoHijo:   "traslado_destino",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
+			Initial:              true,
+			WithOutChangeState:   true,
+		}
+
 		parameters := []interface{}{
 			AdicionApropiacion,
 			ReduccionApropiacion,
 			SuspencionApropiacion,
+			TrasladoOrigenApropiacion,
+			TrasladoDestinoApropiacion,
 		}
 		_, err := db.Collection(models.MovimientoParameterCollection).InsertMany(context.TODO(), parameters)
 		if err != nil {

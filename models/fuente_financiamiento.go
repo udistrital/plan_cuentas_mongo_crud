@@ -1,6 +1,8 @@
 package models
 
 import (
+	"strconv"
+
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
@@ -27,11 +29,13 @@ type FuenteFinanciamiento struct {
 	*General
 	ID              string                       `json:"Codigo" bson:"_id,omitempty"`
 	TipoFuente      interface{}                  `json:"TipoFuente" bson"tipoFuente"`
-	ValorOriginal   float64                      `json:"ValorOriginal" bson:"valorOriginal"`
-	ValorAcumulado  float64                      `json:"ValorAcumulado" bson"valorAcumulado"`
+	ValorInicial    float64                      `json:"ValorInicial" bson:"valor_inicial"`
+	ValorActual     float64                      `json:"ValorActual" bson:"valor_actual"`
+	Estado          string                       `json:"Estado" bson:"estado"`
 	Rubros          map[codigoRubro]*rubroFuente `json:"Rubros" bson:"rubros"`
 	NumeroDocumento string                       `json:"NumeroDocumento" bson:"numeroDocumento"`
 	TipoDocumento   string                       `json:"TipoDocumento" bson:"tipoDocumento"`
+	UnidadEjecutora string                       `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 }
 
 // FuenteFinanciamientoCollection constante para la colección
@@ -49,14 +53,14 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 	if err != nil {
 		return err
 	}
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+strconv.Itoa(j.Vigencia)+"_"+j.UnidadEjecutora)
 
 	defer session.Close()
 	return c.Insert(&j)
 }
 
 // GetFuenteFinanciamientoByID Obtener un documento por el id
-func GetFuenteFinanciamientoByID(id string) (*FuenteFinanciamiento, error) {
+func GetFuenteFinanciamientoByID(id string, ue string, vigencia string) (*FuenteFinanciamiento, error) {
 	var fuenteFinanciamiento FuenteFinanciamiento
 
 	session, err := db.GetSession()
@@ -64,7 +68,7 @@ func GetFuenteFinanciamientoByID(id string) (*FuenteFinanciamiento, error) {
 		return nil, err
 	}
 	defer session.Close()
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 
 	err = c.FindId(id).One(&fuenteFinanciamiento)
 
@@ -72,12 +76,12 @@ func GetFuenteFinanciamientoByID(id string) (*FuenteFinanciamiento, error) {
 }
 
 // UpdateFuenteFinanciamiento actualiza una fuente de financiamiento
-func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string) error {
+func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string, ue string, vigencia string) error {
 	session, err := db.GetSession()
 	if err != nil {
 		return err
 	}
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 
 	defer session.Close()
 
@@ -85,26 +89,26 @@ func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string) error {
 }
 
 // DeleteFuenteFinanciamiento elimina una fuente de financiamiento con su ID
-func DeleteFuenteFinanciamiento(id string) error {
+func DeleteFuenteFinanciamiento(id string, ue string, vigencia string) error {
 	session, err := db.GetSession()
 	if err != nil {
 		return err
 	}
 
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 	defer session.Close()
 
 	return c.RemoveId(id)
 }
 
 // GetAllFuenteFinanciamiento obtiene todos los registros de fuente de financiamiento
-func GetAllFuenteFinanciamiento(query map[string]interface{}) ([]FuenteFinanciamiento, error) {
+func GetAllFuenteFinanciamiento(query map[string]interface{}, ue, vigencia string) ([]FuenteFinanciamiento, error) {
 	session, err := db.GetSession()
 	if err != nil {
 		return nil, err
 	}
 
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 	defer session.Close()
 
 	var fuentesFinanciamiento []FuenteFinanciamiento
@@ -127,13 +131,13 @@ func PostFuentePadreTransaccion(session *mgo.Session, estructura *FuenteFinancia
 }
 
 // GetFuentesByRubroApropiacion devuelve todas las fuentes que tenga un rubro idRubroApropiacion
-func GetFuentesByRubroApropiacion(idRubroApropiacion string) (fuentes []FuenteFinanciamiento, err error) {
+func GetFuentesByRubroApropiacion(idRubroApropiacion string, ue string, vigencia string) (fuentes []FuenteFinanciamiento, err error) {
 	session, err := db.GetSession()
 	if err != nil {
 		return
 	}
 
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 	defer session.Close()
 
 	c.Find(bson.M{"rubros." + idRubroApropiacion: bson.M{"$exists": "true"}}).All(&fuentes)

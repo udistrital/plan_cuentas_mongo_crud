@@ -13,7 +13,8 @@ const ProductosCollection = "productos"
 // Producto ...
 type Producto struct {
 	*General
-	ID bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	ID     bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	Codigo float64       `json:"Codigo" bson:"codigo"`
 }
 
 // InsertProducto registra un producto en la bd

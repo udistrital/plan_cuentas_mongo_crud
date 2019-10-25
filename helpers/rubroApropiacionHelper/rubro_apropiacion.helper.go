@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"github.com/globalsign/mgo/txn"
+
+	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -66,7 +69,7 @@ func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[strin
 				forkData := make(map[string]interface{})
 				forkData["Codigo"] = apropiacion.ID
 				forkData["data"] = apropiacion
-				forkData["children"] = getChildren(apropiacion.Hijos, apropiacion.UnidadEjecutora, estado, apropiacion.Vigencia)
+				forkData["children"] = getChildren(apropiacion.Hijos, unidadEjecutora, estado, vigencia)
 				tree = append(tree, forkData)
 			}
 		}
@@ -138,4 +141,16 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	}
 
 	return hijo
+}
+
+func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centroGestor string) map[string]map[string]interface{} {
+	balance := make(map[string]map[string]interface{})
+	afectationIndex := make(map[string]map[string]interface{})
+	collectionPostFixName := "_" + vigencia + "_" + centroGestor
+	var movimientoData []txn.Op
+	for _, movimientoElmnt := range movimientos {
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
+		movimientoData = append(movimientoData, propagacionData...)
+	}
+	return balance
 }
