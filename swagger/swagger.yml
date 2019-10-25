@@ -58,6 +58,22 @@ paths:
             $ref: '#/definitions/models.NodoRubro'
         "403":
           description: :uid is empty
+    delete:
+      tags:
+      - arbol_rubro
+      description: Borrar NodoRubro
+      operationId: NodoRubroController.Borrar NodoRubro
+      parameters:
+      - in: path
+        name: id
+        description: El id del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: id is empty
   /arbol_rubro/{objectId}:
     put:
       tags:
@@ -83,22 +99,6 @@ paths:
             $ref: '#/definitions/models.Object'
         "403":
           description: :objectId is empty
-    delete:
-      tags:
-      - arbol_rubro
-      description: Borrar NodoRubro
-      operationId: NodoRubroController.Borrar NodoRubro
-      parameters:
-      - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
-        required: true
-        type: string
-      responses:
-        "200":
-          description: '{string} ok'
-        "403":
-          description: objectId is empty
   /arbol_rubro/arbol/{raiz}:
     get:
       tags:
@@ -387,16 +387,6 @@ paths:
         "404":
           description: body is empty
   /fuente_financiamiento/:
-    get:
-      tags:
-      - fuente_financiamiento
-      description: get all objects
-      operationId: FuenteFinanciamientoController.GetAll
-      responses:
-        "200":
-          description: FuenteFunanciamiento models.FuenteFinanciamiento
-        "403":
-          description: :objectId is empty
     post:
       tags:
       - fuente_financiamiento
@@ -416,7 +406,7 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/{objectId}:
+  /fuente_financiamiento/{id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
       - fuente_financiamiento
@@ -434,7 +424,7 @@ paths:
           schema:
             $ref: '#/definitions/models.FuenteFinancimiento'
         "403":
-          description: :uid is empty
+          description: :id is empty
     put:
       tags:
       - fuente_financiamiento
@@ -442,7 +432,7 @@ paths:
       operationId: FuenteFinanciamientoController.Update
       parameters:
       - in: path
-        name: objectId
+        name: id
         description: The objectid you want to update
         required: true
         type: string
@@ -458,7 +448,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
     delete:
       tags:
       - fuente_financiamiento
@@ -466,7 +456,7 @@ paths:
       operationId: FuenteFinanciamientoController.Borrar FuenteFinanciamiento
       parameters:
       - in: path
-        name: objectId
+        name: id
         description: El ObjectId del objeto que se quiere borrar
         required: true
         type: string
@@ -475,6 +465,17 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /fuente_financiamiento/{vigencia}/{unidadEjecutora}:
+    get:
+      tags:
+      - fuente_financiamiento
+      description: get all objects
+      operationId: FuenteFinanciamientoController.GetAll
+      responses:
+        "200":
+          description: FuenteFinanciamiento models.FuenteFinanciamiento
+        "403":
+          description: :unidadEjecutora is empty
   /fuente_financiamiento/VincularFuente:
     post:
       tags:
@@ -495,7 +496,7 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}:
+  /fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
       - fuente_financiamiento
@@ -906,10 +907,10 @@ paths:
         "403":
           description: objectId is empty
 definitions:
-  20353.0xc0006fe8d0.false:
+  20421.0xc000754510.false:
     title: "false"
     type: object
-  20633.rubroFuente:
+  20772.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -931,18 +932,22 @@ definitions:
     properties:
       Codigo:
         type: string
+      Estado:
+        type: string
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/20633.rubroFuente'
+        $ref: '#/definitions/20772.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/20353.0xc0006fe8d0.false'
-      ValorAcumulado:
+        $ref: '#/definitions/20421.0xc000754510.false'
+      UnidadEjecutora:
+        type: string
+      ValorActual:
         type: number
         format: double
-      ValorOriginal:
+      ValorInicial:
         type: number
         format: double
   models.FuenteFinancimiento:
@@ -1019,6 +1024,9 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+      Codigo:
+        type: number
+        format: double
   models.SolicitudCDP:
     title: SolicitudCDP
     type: object

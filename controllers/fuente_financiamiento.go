@@ -28,10 +28,13 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 FuenteFunanciamiento models.FuenteFinanciamiento
-// @Failure 403 :objectId is empty
-// @router / [get]
+// @Success 200 FuenteFinanciamiento models.FuenteFinanciamiento
+// @Failure 403 :vigencia is empty
+// @Failure 403 :unidadEjecutora is empty
+// @router /:vigencia/:unidadEjecutora [get]
 func (j *FuenteFinanciamientoController) GetAll() {
+	vigencia := j.GetString(":vigencia")
+	unidadEjecutora := j.GetString(":unidadEjecutora")
 	var query = make(map[string]interface{})
 
 	if v := j.GetString("query"); v != "" {
@@ -53,7 +56,7 @@ func (j *FuenteFinanciamientoController) GetAll() {
 		}
 	}
 
-	if obs, err := models.GetAllFuenteFinanciamiento(query); len(obs) == 0 {
+	if obs, err := models.GetAllFuenteFinanciamiento(query, unidadEjecutora, vigencia); len(obs) == 0 {
 		j.response = DefaultResponse(403, err, nil)
 	} else {
 		j.response = DefaultResponse(200, nil, &obs)
@@ -63,16 +66,18 @@ func (j *FuenteFinanciamientoController) GetAll() {
 	j.ServeJSON()
 }
 
-// Get obtiene un elemento por su _id
+// Get obtiene un elemento por su id
 // @Title Get
 // @Description get FuenteFinancimiento by nombre
 // @Param	nombre		path 	string	true		"El nombre de la FuenteFinancimiento a consultar"
 // @Success 200 {object} models.FuenteFinancimiento
-// @Failure 403 :uid is empty
-// @router /:objectId [get]
+// @Failure 403 :id is empty
+// @router /:id/:vigencia/:unidadEjecutora [get]
 func (j *FuenteFinanciamientoController) Get() {
-	objectID := j.GetString(":objectId")
-	if fuente, err := models.GetFuenteFinanciamientoByID(objectID); err == nil {
+	id := j.GetString(":id")
+	vigencia := j.GetString(":vigencia")
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	if fuente, err := models.GetFuenteFinanciamientoByID(id, unidadEjecutora, vigencia); err == nil {
 		j.response = DefaultResponse(200, nil, &fuente)
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -117,18 +122,20 @@ func (j *FuenteFinanciamientoController) VincularFuente() {
 // Put de HTTP
 // @Title Update
 // @Description update the FuenteFinanciamiento
-// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	id		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :objectId is empty
-// @router /:objectId [put]
+// @Failure 403 :id is empty
+// @router /:id/:vigencia/:unidadEjecutora [put]
 func (j *FuenteFinanciamientoController) Put() {
-	objectID := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":id")
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
 	var fuente models.FuenteFinanciamiento
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
 
-	if err := models.UpdateFuenteFinanciamiento(&fuente, objectID); err == nil {
+	if err := models.UpdateFuenteFinanciamiento(&fuente, objectID, unidadEjecutora, vigencia); err == nil {
 		j.response = DefaultResponse(200, nil, "update success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -141,14 +148,15 @@ func (j *FuenteFinanciamientoController) Put() {
 // Delete ...
 // @Title Borrar FuenteFinanciamiento
 // @Description Borrar FuenteFinanciamiento
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param	id		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
-// @router /:objectId [delete]
+// @router /:id/:vigencia/:unidadEjecutora [delete]
 func (j *FuenteFinanciamientoController) Delete() {
-	objectID := j.Ctx.Input.Param(":objectId")
-
-	if err := models.DeleteFuenteFinanciamiento(objectID); err == nil {
+	objectID := j.Ctx.Input.Param(":id")
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
+	if err := models.DeleteFuenteFinanciamiento(objectID, unidadEjecutora, vigencia); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -164,11 +172,13 @@ func (j *FuenteFinanciamientoController) Delete() {
 // @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
-// @router /fuente_financiamiento_apropiacion/:rubro_apropiacion_id [get]
+// @router /fuente_financiamiento_apropiacion/:rubro_apropiacion_id/:vigencia/:unidadEjecutora [get]
 func (j *FuenteFinanciamientoController) GetWithRubro() {
 	rubroApropiacionID := j.Ctx.Input.Param(":rubro_apropiacion_id")
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
 
-	if fuentes, err := models.GetFuentesByRubroApropiacion(rubroApropiacionID); err == nil {
+	if fuentes, err := models.GetFuentesByRubroApropiacion(rubroApropiacionID, unidadEjecutora, vigencia); err == nil {
 		j.response = DefaultResponse(200, nil, &fuentes)
 	} else {
 		j.response = DefaultResponse(403, err, nil)
