@@ -442,12 +442,13 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 		}
 	}
 	var indexValue int
+	logs.Info((values))
 	response := make(map[string]interface{})
 	for _, rootValue := range values {
 		if indexValue == 0 {
 			rootCompValue = rootValue.ValorActual
 		}
-		if rootCompValue != rootValue.ValorActual {
+		if rootCompValue != rootValue.ValorActual || rootValue.ValorActual == 0 {
 			balanceado = false
 		}
 		if rubroInfo, e := rubroManager.SearchRubro(rootValue.ID, ueStr); e {
@@ -462,6 +463,10 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	}
 
 	if rootCompValue == 0 {
+		balanceado = false
+	}
+
+	if response["totalGastos"] == nil || response["totalIngresos"] == nil {
 		balanceado = false
 	}
 
