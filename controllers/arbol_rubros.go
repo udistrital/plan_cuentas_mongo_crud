@@ -98,13 +98,13 @@ func (j *NodoRubroController) Get() {
 
 // @Title Borrar NodoRubro
 // @Description Borrar NodoRubro
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
 // @Success 200 {string} ok
-// @Failure 403 objectId is empty
-// @router /:objectId [delete]
+// @Failure 403 id is empty
+// @router /:id [delete]
 func (j *NodoRubroController) Delete() {
-	objectId := j.Ctx.Input.Param(":objectId")
-	if err := rubroManager.TrEliminarNodoHoja(objectId, models.NodoRubroCollection); err == nil {
+	objectID := j.Ctx.Input.Param(":id")
+	if err := rubroManager.TrEliminarNodoHoja(objectID, models.NodoRubroCollection); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
