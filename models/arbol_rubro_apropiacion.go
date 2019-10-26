@@ -16,7 +16,7 @@ const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 /* 	EstadoAprobada el estado aprobado de una apropiación, significa que la apropiación ya ha sido aprobada
 EstadoRegistrada el estado registrada de un apropiación, significa que sólo se ha registrado
 EstadoRechazada el estado rechazada de una apropiación, significa que se la apropiación ha sido rechazada */
-const EstadoAprobada, EstadoRegistrada, EstadoRechazada = "aprobada", "registrada", "rechazada"
+const EstadoAprobada, EstadoRegistrada, EstadoRechazada, EstadoSinRegistrar = "aprobada", "registrada", "rechazada", "no_registrada"
 
 // NodoRubroApropiacion es la estructura de un nodo rubro pero sumandole la apropiación
 type NodoRubroApropiacion struct {

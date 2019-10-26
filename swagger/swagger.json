@@ -135,6 +135,30 @@
                         "description": ":uid is empty"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "arbol_rubro"
+                ],
+                "description": "Borrar NodoRubro",
+                "operationId": "NodoRubroController.Borrar NodoRubro",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
             }
         },
         "/arbol_rubro/{objectId}": {
@@ -171,30 +195,6 @@
                     },
                     "403": {
                         "description": ":objectId is empty"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "Borrar NodoRubro",
-                "operationId": "NodoRubroController.Borrar NodoRubro",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} ok"
-                    },
-                    "403": {
-                        "description": "objectId is empty"
                     }
                 }
             }
@@ -426,7 +426,7 @@
             }
         },
         "/arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}": {
-            "get": {
+            "post": {
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
@@ -588,21 +588,6 @@
             }
         },
         "/fuente_financiamiento/": {
-            "get": {
-                "tags": [
-                    "fuente_financiamiento"
-                ],
-                "description": "get all objects",
-                "operationId": "FuenteFinanciamientoController.GetAll",
-                "responses": {
-                    "200": {
-                        "description": "FuenteFunanciamiento models.FuenteFinanciamiento"
-                    },
-                    "403": {
-                        "description": ":objectId is empty"
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "fuente_financiamiento"
@@ -664,7 +649,7 @@
                 }
             }
         },
-        "/fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}": {
+        "/fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
                     "fuente_financiamiento"
@@ -690,7 +675,7 @@
                 }
             }
         },
-        "/fuente_financiamiento/{objectId}": {
+        "/fuente_financiamiento/{id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
                     "fuente_financiamiento"
@@ -714,7 +699,7 @@
                         }
                     },
                     "403": {
-                        "description": ":uid is empty"
+                        "description": ":id is empty"
                     }
                 }
             },
@@ -727,7 +712,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
+                        "name": "id",
                         "description": "The objectid you want to update",
                         "required": true,
                         "type": "string"
@@ -750,7 +735,7 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
                     }
                 }
             },
@@ -763,7 +748,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
+                        "name": "id",
                         "description": "El ObjectId del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
@@ -775,6 +760,23 @@
                     },
                     "403": {
                         "description": "objectId is empty"
+                    }
+                }
+            }
+        },
+        "/fuente_financiamiento/{vigencia}/{unidadEjecutora}": {
+            "get": {
+                "tags": [
+                    "fuente_financiamiento"
+                ],
+                "description": "get all objects",
+                "operationId": "FuenteFinanciamientoController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "FuenteFinanciamiento models.FuenteFinanciamiento"
+                    },
+                    "403": {
+                        "description": ":unidadEjecutora is empty"
                     }
                 }
             }
@@ -1376,11 +1378,11 @@
         }
     },
     "definitions": {
-        "21432.0xc0003b4a20.false": {
+        "16243.0xc000402e70.false": {
             "title": "false",
             "type": "object"
         },
-        "21712.rubroFuente": {
+        "16594.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1409,23 +1411,29 @@
                 "Codigo": {
                     "type": "string"
                 },
+                "Estado": {
+                    "type": "string"
+                },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/21712.rubroFuente"
+                    "$ref": "#/definitions/16594.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/21432.0xc0003b4a20.false"
+                    "$ref": "#/definitions/16243.0xc000402e70.false"
                 },
-                "ValorAcumulado": {
+                "UnidadEjecutora": {
+                    "type": "string"
+                },
+                "ValorActual": {
                     "type": "number",
                     "format": "double"
                 },
-                "ValorOriginal": {
+                "ValorInicial": {
                     "type": "number",
                     "format": "double"
                 }
@@ -1532,6 +1540,10 @@
             "title": "Producto",
             "type": "object",
             "properties": {
+                "Codigo": {
+                    "type": "number",
+                    "format": "double"
+                },
                 "_id": {
                     "$ref": "#/definitions/bson.ObjectId"
                 }
