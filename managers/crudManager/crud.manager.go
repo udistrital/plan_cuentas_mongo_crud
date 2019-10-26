@@ -41,7 +41,7 @@ func GetDocumentByID(uuid, collectionName string) (interface{}, error) {
 }
 
 // RunPipe runs pipe of mongo's aggregation func.
-func RunPipe(collectionName string, queries ...bson.M) (interface{}, error) {
+func RunPipe(collectionName string, queries ...bson.M) ([]interface{}, error) {
 	session, c, err := GetDBCursorByCollection(collectionName)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func RunPipe(collectionName string, queries ...bson.M) (interface{}, error) {
 	}
 
 	defer session.Close()
-	var result interface{}
+	var result []interface{}
 	pipeline := c.Pipe(queries)
 	pipeline.All(&result)
 

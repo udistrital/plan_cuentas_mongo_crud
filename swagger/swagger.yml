@@ -906,8 +906,50 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /vigencia/{namespace}/{centrogestor}:
+    get:
+      tags:
+      - vigencia
+      description: Retorna las vigencias a las cuales se ha registrado un name_space
+        en el sistema.
+      operationId: VigenciaController.GetVigenciasByNameSpace
+      parameters:
+      - in: path
+        name: naemespace
+        description: name space al que pertenece el grupo de vigencias consultado
+        required: true
+        type: string
+      - in: path
+        name: centrogestor
+        description: centro gestor al que pertenece el grupo de vigencias consultado
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /vigencia/vigencia_actual:
+    get:
+      tags:
+      - vigencia
+      description: Retorna la vigencia actual según la hora del servidor y añade o
+        quita segùn el offset lo indica , por defecto 0.
+      operationId: VigenciaController.GetVigenciasCurrentVigenciaWithOffset
+      parameters:
+      - in: query
+        name: offset
+        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
+          offset=-1; vigencia -1'
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
 definitions:
-  16243.0xc000402e70.false:
+  16243.0xc000473aa0.false:
     title: "false"
     type: object
   16594.rubroFuente:
@@ -941,7 +983,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/16243.0xc000402e70.false'
+        $ref: '#/definitions/16243.0xc000473aa0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1216,3 +1258,6 @@ tags:
 - name: solicitudesCRP
   description: |
     SolicitudesCRPController estructura para un controlador de beego
+- name: vigencia
+  description: |
+    VigenciaController estructura para un controlador de beego

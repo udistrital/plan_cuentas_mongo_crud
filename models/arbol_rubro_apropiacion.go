@@ -13,6 +13,9 @@ import (
 // NodoRubroApropiacionCollection constante para la colección
 const NodoRubroApropiacionCollection = "arbol_rubro_apropiacion"
 
+// ApropiacionVigenciaNameSpace namespace para identificar los grupos de vigencia
+const ApropiacionVigenciaNameSpace = "apropiacion"
+
 /* 	EstadoAprobada el estado aprobado de una apropiación, significa que la apropiación ya ha sido aprobada
 EstadoRegistrada el estado registrada de un apropiación, significa que sólo se ha registrado
 EstadoRechazada el estado rechazada de una apropiación, significa que se la apropiación ha sido rechazada */
