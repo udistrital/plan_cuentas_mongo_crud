@@ -18,22 +18,34 @@ func AddNew(value int, namespace string, cg string) (err error) {
 		Valor:        value,
 		ID:           namespace + "_" + strconv.Itoa(value),
 		CentroGestor: cg,
+		Estado:       models.EstadoRegistrada,
 	}
 	return crudmanager.AddNew(models.VigenciaCollectionName, vigenciaStruct)
 }
 
 // GetVigenciasByNameSpaceAndCg return an array with numeric values of collection "vigencia" by namespace and cg.
-func GetVigenciasByNameSpaceAndCg(namespace, cg string) (vigenciasArr []int, err error) {
-	pipeline := []bson.M{bson.M{"$match": bson.M{"name_space": namespace, "centro_gestor": cg}}, bson.M{"$group": bson.M{"_id": "$valor"}}}
+func GetVigenciasByNameSpaceAndCg(namespace, cg string) (vigenciasArr []map[string]int, err error) {
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{
+				"name_space": namespace, "centro_gestor": cg},
+		}, bson.M{
+			"$group": bson.M{
+				"_id": "$valor",
+			},
+		},
+		bson.M{
+			"$sort": bson.M{
+				"_id": -1,
+			},
+		},
+	}
 	var unformatedVigenciaArr []interface{}
 	if unformatedVigenciaArr, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...); err == nil {
 		for _, unformatedVigencia := range unformatedVigenciaArr {
 			var unformatedVigenciaMap map[string]interface{}
-			err = formatdata.FillStruct(unformatedVigencia, &unformatedVigenciaMap)
-			if err != nil {
-				return nil, err
-			}
-			vigenciasArr = append(vigenciasArr, int(unformatedVigenciaMap["_id"].(float64)))
+			formatdata.FillStructP(unformatedVigencia, &unformatedVigenciaMap)
+			vigenciasArr = append(vigenciasArr, map[string]int{"vigencia": int(unformatedVigenciaMap["_id"].(float64))})
 		}
 	}
 

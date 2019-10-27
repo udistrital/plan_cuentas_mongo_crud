@@ -9,4 +9,5 @@ type Vigencia struct {
 	NameSapce    string `json:"NameSpace" bson:"name_space"`
 	CentroGestor string `json:"CentroGestor" bson:"centro_gestor"`
 	Valor        int    `json:"Valor" bson:"valor"`
+	Estado       string `json:"Estado" bson:"estado"`
 }
