@@ -58,6 +58,22 @@ paths:
             $ref: '#/definitions/models.NodoRubro'
         "403":
           description: :uid is empty
+    delete:
+      tags:
+      - arbol_rubro
+      description: Borrar NodoRubro
+      operationId: NodoRubroController.Borrar NodoRubro
+      parameters:
+      - in: path
+        name: id
+        description: El id del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: id is empty
   /arbol_rubro/{objectId}:
     put:
       tags:
@@ -83,22 +99,6 @@ paths:
             $ref: '#/definitions/models.Object'
         "403":
           description: :objectId is empty
-    delete:
-      tags:
-      - arbol_rubro
-      description: Borrar NodoRubro
-      operationId: NodoRubroController.Borrar NodoRubro
-      parameters:
-      - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
-        required: true
-        type: string
-      responses:
-        "200":
-          description: '{string} ok'
-        "403":
-          description: objectId is empty
   /arbol_rubro/arbol/{raiz}:
     get:
       tags:
@@ -352,7 +352,7 @@ paths:
         "404":
           description: body is empty
   /arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}:
-    get:
+    post:
       tags:
       - arbol_rubro_apropiacion
       description: ComprobarBalanceArbolApropiaciones
@@ -387,16 +387,6 @@ paths:
         "404":
           description: body is empty
   /fuente_financiamiento/:
-    get:
-      tags:
-      - fuente_financiamiento
-      description: get all objects
-      operationId: FuenteFinanciamientoController.GetAll
-      responses:
-        "200":
-          description: FuenteFunanciamiento models.FuenteFinanciamiento
-        "403":
-          description: :objectId is empty
     post:
       tags:
       - fuente_financiamiento
@@ -416,7 +406,7 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/{objectId}:
+  /fuente_financiamiento/{id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
       - fuente_financiamiento
@@ -434,7 +424,7 @@ paths:
           schema:
             $ref: '#/definitions/models.FuenteFinancimiento'
         "403":
-          description: :uid is empty
+          description: :id is empty
     put:
       tags:
       - fuente_financiamiento
@@ -442,7 +432,7 @@ paths:
       operationId: FuenteFinanciamientoController.Update
       parameters:
       - in: path
-        name: objectId
+        name: id
         description: The objectid you want to update
         required: true
         type: string
@@ -458,7 +448,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
     delete:
       tags:
       - fuente_financiamiento
@@ -466,7 +456,7 @@ paths:
       operationId: FuenteFinanciamientoController.Borrar FuenteFinanciamiento
       parameters:
       - in: path
-        name: objectId
+        name: id
         description: El ObjectId del objeto que se quiere borrar
         required: true
         type: string
@@ -475,6 +465,17 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /fuente_financiamiento/{vigencia}/{unidadEjecutora}:
+    get:
+      tags:
+      - fuente_financiamiento
+      description: get all objects
+      operationId: FuenteFinanciamientoController.GetAll
+      responses:
+        "200":
+          description: FuenteFinanciamiento models.FuenteFinanciamiento
+        "403":
+          description: :unidadEjecutora is empty
   /fuente_financiamiento/VincularFuente:
     post:
       tags:
@@ -495,7 +496,7 @@ paths:
             $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: body is empty
-  /fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}:
+  /fuente_financiamiento/fuente_financiamiento_apropiacion/{rubro_apropiacion_id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
       - fuente_financiamiento
@@ -905,11 +906,53 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /vigencia/{namespace}/{centrogestor}:
+    get:
+      tags:
+      - vigencia
+      description: Retorna las vigencias a las cuales se ha registrado un name_space
+        en el sistema.
+      operationId: VigenciaController.GetVigenciasByNameSpace
+      parameters:
+      - in: path
+        name: naemespace
+        description: name space al que pertenece el grupo de vigencias consultado
+        required: true
+        type: string
+      - in: path
+        name: centrogestor
+        description: centro gestor al que pertenece el grupo de vigencias consultado
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /vigencia/vigencia_actual:
+    get:
+      tags:
+      - vigencia
+      description: Retorna la vigencia actual según la hora del servidor y añade o
+        quita segùn el offset lo indica , por defecto 0.
+      operationId: VigenciaController.GetVigenciasCurrentVigenciaWithOffset
+      parameters:
+      - in: query
+        name: offset
+        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
+          offset=-1; vigencia -1'
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
 definitions:
-  21432.0xc0003b4a20.false:
+  16294.0xc0004e0060.false:
     title: "false"
     type: object
-  21712.rubroFuente:
+  16645.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -931,18 +974,22 @@ definitions:
     properties:
       Codigo:
         type: string
+      Estado:
+        type: string
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/21712.rubroFuente'
+        $ref: '#/definitions/16645.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/21432.0xc0003b4a20.false'
-      ValorAcumulado:
+        $ref: '#/definitions/16294.0xc0004e0060.false'
+      UnidadEjecutora:
+        type: string
+      ValorActual:
         type: number
         format: double
-      ValorOriginal:
+      ValorInicial:
         type: number
         format: double
   models.FuenteFinancimiento:
@@ -1019,6 +1066,9 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+      Codigo:
+        type: number
+        format: double
   models.SolicitudCDP:
     title: SolicitudCDP
     type: object
@@ -1208,3 +1258,6 @@ tags:
 - name: solicitudesCRP
   description: |
     SolicitudesCRPController estructura para un controlador de beego
+- name: vigencia
+  description: |
+    VigenciaController estructura para un controlador de beego
