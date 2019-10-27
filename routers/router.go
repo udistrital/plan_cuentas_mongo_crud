@@ -54,6 +54,11 @@ func init() {
 				&controllers.SolicitudesCRPController{},
 			),
 		),
+		beego.NSNamespace("/vigencia",
+			beego.NSInclude(
+				&controllers.VigenciaController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

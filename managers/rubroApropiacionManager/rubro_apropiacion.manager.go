@@ -53,7 +53,6 @@ func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigen
 
 // TrActualizarValorApropiacion ... Actualiza el valor de una apropiacion y propaga el cambio en el arbol.
 func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID string, ue string, vigencia int) error {
-	formatdata.JsonPrint(nodo)
 	if nodo.ValorInicial <= 0 {
 		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
 		return err
@@ -84,15 +83,13 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 		}
 
 		return runner.Run(ops, id, nil)
-	} else {
-		return err
 	}
+	return err
 
 }
 
 func searchRubro(nodo string, ue string, vigencia int) models.NodoRubro {
 	rubroPadre, err := models.GetNodoRubroByIdAndUE(nodo, ue)
-	formatdata.JsonPrint(err)
 	if err != nil {
 		message := err.Error()
 		if message == "not found" {

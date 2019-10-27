@@ -56,16 +56,18 @@ func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[strin
 		forkData := make(map[string]interface{})
 
 		raiz, err := models.GetNodoRubroById(raices[i]["Codigo"].(string))
-
 		if err != nil {
 			return nil
 		}
-
+		raices[i]["Nombre"] = raiz.Nombre
 		if apropiacion, err = models.GetNodoRubroApropiacionById(raices[i]["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
 			raices[i]["ValorInicial"] = 0
+			raices[i]["Estado"] = models.EstadoSinRegistrar
 		} else {
 			raices[i]["ValorInicial"] = apropiacion.ValorInicial
+			raices[i]["Estado"] = apropiacion.Estado
 			if apropiacion.Estado == estado {
+				apropiacion.General.Nombre = raiz.Nombre
 				forkData := make(map[string]interface{})
 				forkData["Codigo"] = apropiacion.ID
 				forkData["data"] = apropiacion
@@ -105,8 +107,10 @@ func getValueChildren(children []string, unidadEjecutora string, vigencia int) (
 
 		if apropiacion, err := models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia); err != nil {
 			forkData["data"].(map[string]interface{})["ValorInicial"] = 0
+			forkData["data"].(map[string]interface{})["Estado"] = models.EstadoSinRegistrar
 		} else {
 			forkData["data"].(map[string]interface{})["ValorInicial"] = apropiacion.ValorInicial
+			forkData["data"].(map[string]interface{})["Estado"] = apropiacion.Estado
 		}
 
 		if len(nodo.Hijos) > 0 {

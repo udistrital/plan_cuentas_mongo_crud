@@ -9,6 +9,7 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
+	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
 
 	"github.com/astaxie/beego/logs"
 
@@ -205,6 +206,7 @@ func (j *NodoRubroApropiacionController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
+		go vigenciahelper.AddNew(nodoRubroApropiacion.Vigencia, models.ApropiacionVigenciaNameSpace, nodoRubroApropiacion.UnidadEjecutora)
 		j.response = DefaultResponse(200, nil, "insert success")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -418,7 +420,10 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	vigencia, _ := strconv.Atoi(vigenciaStr)
 	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
 
-	var movimientos []models.Movimiento
+	var (
+		movimientos        []models.Movimiento
+		rootsAprpovedTotal int
+	)
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
 	balance := make(map[string]map[string]interface{})
@@ -429,12 +434,17 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	var rootCompValue float64
 	values := make(map[string]models.NodoRubroApropiacion)
 	balanceado := true
+	approved := false
 	rootsParamsIndexed := rubroHelper.GetRubroParamsIndexedByKey(ueStr, "Valor")
 
 	for _, raiz := range raices {
 		if rootsParamsIndexed[raiz.ID] != nil {
 			values[raiz.ID] = raiz
+			if raiz.Estado == models.EstadoAprobada {
+				rootsAprpovedTotal++
+			}
 		}
+		// perform this operation only if there are some simulation to perform ...
 		if rootsParamsIndexed[raiz.ID] != nil && balance[raiz.ID] != nil {
 			actualRaiz := raiz
 			actualRaiz.ValorActual = balance[raiz.ID]["valor_actual"].(float64)
@@ -442,7 +452,6 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 		}
 	}
 	var indexValue int
-	logs.Info((values))
 	response := make(map[string]interface{})
 	for _, rootValue := range values {
 		if indexValue == 0 {
@@ -470,7 +479,13 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 		balanceado = false
 	}
 
+	// if the tree's roots are all approved then the whole tree is approved..
+	if rootsAprpovedTotal == len(rootsParamsIndexed) {
+		approved = true
+	}
+
 	response["balanceado"] = balanceado
+	response["approved"] = approved
 
 	if err == nil {
 		j.response = DefaultResponse(200, nil, &response)
