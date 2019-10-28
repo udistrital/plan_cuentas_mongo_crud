@@ -949,10 +949,10 @@ paths:
         "403":
           description: error
 definitions:
-  16294.0xc0004e0060.false:
+  16364.0xc0004fa330.false:
     title: "false"
     type: object
-  16645.rubroFuente:
+  16715.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -979,11 +979,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/16645.rubroFuente'
+        $ref: '#/definitions/16715.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/16294.0xc0004e0060.false'
+        $ref: '#/definitions/16364.0xc0004fa330.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1042,6 +1042,8 @@ definitions:
     title: NodoRubro
     type: object
     properties:
+      Apropiaciones:
+        type: boolean
       Bloqueado:
         type: boolean
       Codigo:

@@ -170,10 +170,9 @@ func TrEliminarNodoHoja(idNodoHoja, collection string) error {
 	nodoPadre, err := models.GetNodoRubroById(nodoHoja.Padre)
 
 	if err == nil {
-		// nodoPadre.Hijos = append(nodoPadre.Hijos, nodoHoja.ID)
 		nodoPadre.Hijos = remove(nodoPadre.Hijos, idNodoHoja)
 		updateFields := bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}}}}
-		if len(nodoPadre.Hijos) == 0 {
+		if len(nodoPadre.Hijos) == 0 && !nodoPadre.Apropiaciones {
 			updateFields = bson.D{{"$set", bson.D{{"hijos", nodoPadre.Hijos}, {"bloqueado", false}}}}
 		}
 		ops = append(ops, txn.Op{
@@ -211,7 +210,7 @@ func SearchRubro(nodo string, ue string) (models.NodoRubro, bool) {
 func GetRootParams(cg string) (roots []models.ArbolRubroParameter) {
 	crudmanager.GetAllFromDB(map[string]interface{}{
 		"tipo":             "raiz",
-		"activo": true,
+		"activo":           true,
 		"unidad_ejecutora": bson.M{"$in": []string{"0", cg}},
 	}, models.ArbolRubroParameterCollection, &roots)
 	return
