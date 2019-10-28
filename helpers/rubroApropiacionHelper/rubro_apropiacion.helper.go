@@ -2,6 +2,7 @@ package rubroApropiacionHelper
 
 import (
 	"encoding/json"
+	"errors"
 	"strconv"
 
 	"github.com/globalsign/mgo/txn"
@@ -66,6 +67,7 @@ func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[strin
 		} else {
 			raices[i]["ValorInicial"] = apropiacion.ValorInicial
 			raices[i]["Estado"] = apropiacion.Estado
+			raices[i]["Productos"] = apropiacion.Productos
 			if apropiacion.Estado == estado {
 				apropiacion.General.Nombre = raiz.Nombre
 				forkData := make(map[string]interface{})
@@ -111,6 +113,7 @@ func getValueChildren(children []string, unidadEjecutora string, vigencia int) (
 		} else {
 			forkData["data"].(map[string]interface{})["ValorInicial"] = apropiacion.ValorInicial
 			forkData["data"].(map[string]interface{})["Estado"] = apropiacion.Estado
+			forkData["data"].(map[string]interface{})["Productos"] = apropiacion.Productos
 		}
 
 		if len(nodo.Hijos) > 0 {
@@ -157,4 +160,15 @@ func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centro
 		movimientoData = append(movimientoData, propagacionData...)
 	}
 	return balance
+}
+
+func IsMaxPercentProduct(productos map[string]map[string]interface{}) error {
+	var sum float64
+	for k := range productos {
+		sum += productos[k]["porcentaje"].(float64)
+	}
+	if sum > 100 {
+		return errors.New("Supera el máximo permitido de distribución (100%)")
+	}
+	return nil
 }
