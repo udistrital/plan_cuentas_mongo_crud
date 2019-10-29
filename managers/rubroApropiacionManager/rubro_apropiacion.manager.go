@@ -11,6 +11,7 @@ import (
 	"github.com/globalsign/mgo/bson"
 	"github.com/globalsign/mgo/txn"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroApropiacionHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -80,6 +81,23 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 			if propOps, err := PropagarValorApropiacion(nodo, nodo.ValorInicial-nodoOldInfo.ValorInicial, ue, vigencia); err == nil {
 				ops = append(ops, propOps...)
 			}
+		}
+		if nodo.Productos != nil {
+			err := rubroApropiacionHelper.IsAprApproved(nodo)
+			if err != nil {
+				return err
+			}
+			err = rubroApropiacionHelper.IsMaxPercentProduct(nodo.Productos)
+			if err != nil {
+				return err
+			}
+			producOps := []txn.Op{{
+				C:      collName,
+				Id:     nodo.ID,
+				Assert: bson.M{"_id": nodo.ID},
+				Update: bson.D{{"$set", bson.D{{"productos", nodo.Productos}}}},
+			}}
+			ops = append(ops, producOps...)
 		}
 
 		return runner.Run(ops, id, nil)

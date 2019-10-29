@@ -117,12 +117,12 @@ func (j *ProductoController) Post() {
 // Delete ...
 // @Title Eliminar Producto
 // @Description Eliminar Producto
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param	id		path 	string	true		"El ObjectId del objeto que se quiere borrar"
 // @Success 200 {string} ok
 // @Failure 403 objectId is empty
-// @router /:objectId [delete]
+// @router /:id [delete]
 func (j *ProductoController) Delete() {
-	objectId := j.Ctx.Input.Param(":objectId")
+	objectId := j.Ctx.Input.Param(":id")
 	err := models.DeleteProductoById(objectId)
 	if err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")
@@ -136,13 +136,13 @@ func (j *ProductoController) Delete() {
 // Put ...
 // @Title Update
 // @Description update the Producto
-// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	id		path 	string	true		"The objectid you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
-// @router /:objectId [put]
+// @router /:id [put]
 func (j *ProductoController) Put() {
-	objectId := j.Ctx.Input.Param(":objectId")
+	objectId := j.Ctx.Input.Param(":id")
 
 	var producto models.Producto
 	json.Unmarshal(j.Ctx.Input.RequestBody, &producto)

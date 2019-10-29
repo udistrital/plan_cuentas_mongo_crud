@@ -1048,9 +1048,7 @@
                         "description": ":uid is empty"
                     }
                 }
-            }
-        },
-        "/producto/{objectId}": {
+            },
             "put": {
                 "tags": [
                     "producto"
@@ -1060,7 +1058,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
+                        "name": "id",
                         "description": "The objectid you want to update",
                         "required": true,
                         "type": "string"
@@ -1096,7 +1094,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
+                        "name": "id",
                         "description": "El ObjectId del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
@@ -1437,11 +1435,11 @@
         }
     },
     "definitions": {
-        "16364.0xc0004fa330.false": {
+        "21051.0xc000755e60.false": {
             "title": "false",
             "type": "object"
         },
-        "16715.rubroFuente": {
+        "21402.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1477,13 +1475,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/16715.rubroFuente"
+                    "$ref": "#/definitions/21402.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/16364.0xc0004fa330.false"
+                    "$ref": "#/definitions/21051.0xc000755e60.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"

@@ -352,7 +352,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ProductoController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ProductoController"],
         beego.ControllerComments{
             Method: "Delete",
-            Router: `/:objectId`,
+            Router: `/:id`,
             AllowHTTPMethods: []string{"delete"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -361,7 +361,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ProductoController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:ProductoController"],
         beego.ControllerComments{
             Method: "Put",
-            Router: `/:objectId`,
+            Router: `/:id`,
             AllowHTTPMethods: []string{"put"},
             MethodParams: param.Make(),
             Filters: nil,
