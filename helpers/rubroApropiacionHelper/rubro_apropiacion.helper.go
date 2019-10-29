@@ -172,3 +172,12 @@ func IsMaxPercentProduct(productos map[string]map[string]interface{}) error {
 	}
 	return nil
 }
+
+func IsAprApproved(nodo *models.NodoRubroApropiacion) error {
+
+	if nodo.Estado == "aprobada" {
+		return errors.New("No se puede modificar productos a apropiaciones aprobadas")
+	}
+	return nil
+
+}

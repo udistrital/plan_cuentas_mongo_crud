@@ -83,8 +83,11 @@ func TrActualizarValorApropiacion(nodo *models.NodoRubroApropiacion, objectID st
 			}
 		}
 		if nodo.Productos != nil {
-			//formatdata.JsonPrint(nodo.Productos)
-			err := rubroApropiacionHelper.IsMaxPercentProduct(nodo.Productos)
+			err := rubroApropiacionHelper.IsAprApproved(nodo)
+			if err != nil {
+				return err
+			}
+			err = rubroApropiacionHelper.IsMaxPercentProduct(nodo.Productos)
 			if err != nil {
 				return err
 			}
