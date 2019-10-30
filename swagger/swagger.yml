@@ -948,10 +948,10 @@ paths:
         "403":
           description: error
 definitions:
-  21051.0xc000755e60.false:
+  22596.0xc00075edb0.false:
     title: "false"
     type: object
-  21402.rubroFuente:
+  22947.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -978,11 +978,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/21402.rubroFuente'
+        $ref: '#/definitions/22947.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/21051.0xc000755e60.false'
+        $ref: '#/definitions/22596.0xc00075edb0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1068,8 +1068,8 @@ definitions:
       _id:
         $ref: '#/definitions/bson.ObjectId'
       Codigo:
-        type: number
-        format: double
+        type: integer
+        format: int64
   models.SolicitudCDP:
     title: SolicitudCDP
     type: object
