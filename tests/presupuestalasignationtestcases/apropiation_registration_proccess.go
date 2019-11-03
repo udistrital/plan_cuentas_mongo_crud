@@ -41,7 +41,7 @@ func TestApropiationRegistrationSuccess(t *testing.T) {
 		ValorActual:  0,
 		Productos:    map[string]map[string]interface{}{},
 		Estado:       models.EstadoRegistrada,
-		Padre: '3'
+		Padre:        "3",
 	}
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(&raiz, "1", 2019); err != nil {
@@ -55,7 +55,7 @@ func TestApropiationRegistrationSuccess(t *testing.T) {
 		ValorActual:  0,
 		Productos:    map[string]map[string]interface{}{},
 		Estado:       models.EstadoRegistrada,
-		Padre: '2',
+		Padre:        "2",
 	}
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(&raiz2, "1", 2019); err != nil {
