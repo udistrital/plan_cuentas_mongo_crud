@@ -72,6 +72,17 @@ func TestRubroRegistrationSuccess(t *testing.T) {
 		panic(err.Error())
 	}
 
+	nodoRubro2_2 := models.NodoRubro{
+		General:         &general,
+		UnidadEjecutora: "1",
+		Padre:           "2",
+		ID:              "2-02",
+	}
+
+	if err := rubroManager.TrRegistrarNodoHoja(&nodoRubro2_2, models.NodoRubroCollection); err != nil {
+		panic(err.Error())
+	}
+
 }
 
 func TestRubroRegistrationNodeCodeFail(t *testing.T) {
