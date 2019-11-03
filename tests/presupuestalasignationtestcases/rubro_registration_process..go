@@ -1,4 +1,4 @@
-package tests
+package presupuestalasignationtestcases
 
 import (
 	"testing"
@@ -54,7 +54,7 @@ func TestRubroRegistrationSuccess(t *testing.T) {
 		General:         &general,
 		UnidadEjecutora: "1",
 		Padre:           "3",
-		ID:              "3-1",
+		ID:              "3-01",
 	}
 
 	if err := rubroManager.TrRegistrarNodoHoja(&nodoRubro3_1, models.NodoRubroCollection); err != nil {
@@ -65,7 +65,7 @@ func TestRubroRegistrationSuccess(t *testing.T) {
 		General:         &general,
 		UnidadEjecutora: "1",
 		Padre:           "2",
-		ID:              "2-1",
+		ID:              "2-01",
 	}
 
 	if err := rubroManager.TrRegistrarNodoHoja(&nodoRubro2_1, models.NodoRubroCollection); err != nil {
@@ -74,7 +74,7 @@ func TestRubroRegistrationSuccess(t *testing.T) {
 
 }
 
-func TestRubroRegistrationFail(t *testing.T) {
+func TestRubroRegistrationNodeCodeFail(t *testing.T) {
 
 	defer func() {
 		if r := recover(); r != nil {
