@@ -1431,7 +1431,7 @@
         }
     },
     "definitions": {
-        "21653.0xc0003fffb0.false": {
+        "21653.0xc0004427e0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1477,7 +1477,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/21653.0xc0003fffb0.false"
+                    "$ref": "#/definitions/21653.0xc0004427e0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1597,8 +1597,8 @@
             "type": "object",
             "properties": {
                 "Codigo": {
-                    "type": "number",
-                    "format": "double"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "_id": {
                     "$ref": "#/definitions/bson.ObjectId"
