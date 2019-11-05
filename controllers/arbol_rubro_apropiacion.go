@@ -169,13 +169,13 @@ func (j *NodoRubroApropiacionController) Get() {
 // Delete elimina
 // @Title Delete NodoRubroApropiacion2018
 // @Description Borrar NodoRubroApropiacion2018
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
 // @Success 200 {string} ok
-// @Failure 403 objectId is empty
-// @router /:objectId [delete]
+// @Failure 403 id is empty
+// @router /:id [delete]
 func (j *NodoRubroApropiacionController) Delete() {
 	session, _ := db.GetSession()
-	objectID := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":id")
 	if result, err := models.DeleteNodoRubroApropiacionById(session, objectID); err == nil {
 		j.response = DefaultResponse(200, nil, result)
 	} else {
@@ -218,13 +218,13 @@ func (j *NodoRubroApropiacionController) Post() {
 // Put de HTTP
 // @Title Update
 // @Description update the NodoRubroApropiacion2018
-// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :objectId is empty
-// @router /:objectId/:vigencia/:unidadEjecutora [put]
+// @Failure 403 :id is empty
+// @router /:id/:vigencia/:unidadEjecutora [put]
 func (j *NodoRubroApropiacionController) Put() {
-	objectID := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":id")
 	vigencia := j.Ctx.Input.Param(":vigencia")
 	unidadEjecutora := j.Ctx.Input.Param(":unidadEjecutora")
 	defer func() {
