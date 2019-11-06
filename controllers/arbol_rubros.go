@@ -139,13 +139,13 @@ func (j *NodoRubroController) Post() {
 
 // @Title Update
 // @Description update the NodoRubro
-// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :objectId is empty
-// @router /:objectId [put]
+// @Failure 403 :id is empty
+// @router /:id [put]
 func (j *NodoRubroController) Put() {
-	objectId := j.Ctx.Input.Param(":objectId")
+	objectId := j.Ctx.Input.Param(":id")
 	var arbolrubros models.NodoRubro
 	json.Unmarshal(j.Ctx.Input.RequestBody, &arbolrubros)
 
