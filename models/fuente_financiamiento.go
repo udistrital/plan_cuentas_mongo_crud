@@ -50,11 +50,13 @@ const FuenteFinanciamientoCollection = "fuente_financiamiento"
 // InsertFuenteFinanciamiento función para registrar un documento de tipo fuente_financiamiento
 func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 	session, err := db.GetSession()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
+	if strconv.Itoa(j.Vigencia) != "0" {
+		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+strconv.Itoa(j.Vigencia)+"_"+j.UnidadEjecutora)
+	}
 	if err != nil {
 		return err
 	}
-	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+strconv.Itoa(j.Vigencia)+"_"+j.UnidadEjecutora)
-
 	defer session.Close()
 	return c.Insert(&j)
 }
@@ -62,13 +64,15 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 // GetFuenteFinanciamientoByID Obtener un documento por el id
 func GetFuenteFinanciamientoByID(id string, ue string, vigencia string) (*FuenteFinanciamiento, error) {
 	var fuenteFinanciamiento FuenteFinanciamiento
-
 	session, err := db.GetSession()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
 	if err != nil {
 		return nil, err
 	}
+	if vigencia != "0" {
+		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+	}
 	defer session.Close()
-	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 
 	err = c.FindId(id).One(&fuenteFinanciamiento)
 
@@ -78,11 +82,13 @@ func GetFuenteFinanciamientoByID(id string, ue string, vigencia string) (*Fuente
 // UpdateFuenteFinanciamiento actualiza una fuente de financiamiento
 func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string, ue string, vigencia string) error {
 	session, err := db.GetSession()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
 	if err != nil {
 		return err
 	}
-	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
-
+	if vigencia != "0" {
+		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+	}
 	defer session.Close()
 
 	return c.Update(bson.M{"_id": id}, &j)
@@ -91,11 +97,14 @@ func UpdateFuenteFinanciamiento(j *FuenteFinanciamiento, id string, ue string, v
 // DeleteFuenteFinanciamiento elimina una fuente de financiamiento con su ID
 func DeleteFuenteFinanciamiento(id string, ue string, vigencia string) error {
 	session, err := db.GetSession()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
 	if err != nil {
 		return err
 	}
+	if vigencia != "0" {
+		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+	}
 
-	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
 	defer session.Close()
 
 	return c.RemoveId(id)
@@ -104,11 +113,14 @@ func DeleteFuenteFinanciamiento(id string, ue string, vigencia string) error {
 // GetAllFuenteFinanciamiento obtiene todos los registros de fuente de financiamiento
 func GetAllFuenteFinanciamiento(query map[string]interface{}, ue, vigencia string) ([]FuenteFinanciamiento, error) {
 	session, err := db.GetSession()
+	c := db.Cursor(session, FuenteFinanciamientoCollection)
 	if err != nil {
 		return nil, err
 	}
 
-	c := db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+	if vigencia != "0" {
+		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+	}
 	defer session.Close()
 
 	var fuentesFinanciamiento []FuenteFinanciamiento
