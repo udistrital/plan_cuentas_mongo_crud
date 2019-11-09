@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
+	"github.com/udistrital/utils_oas/responseformat"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
@@ -414,16 +415,31 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 // @Failure 404 body is empty
 // @router /comprobar_balance/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
-	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
-	vigenciaStr := j.GetString(":vigencia")
 
-	vigencia, _ := strconv.Atoi(vigenciaStr)
-	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
+	response := make(map[string]interface{})
 
 	var (
 		movimientos        []models.Movimiento
 		rootsAprpovedTotal int
 	)
+
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, response, "", 200)
+
+	}()
+
+	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
+	vigenciaStr := j.GetString(":vigencia")
+
+	vigencia, _ := strconv.Atoi(vigenciaStr)
+	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
 	balance := make(map[string]map[string]interface{})
@@ -452,7 +468,6 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 		}
 	}
 	var indexValue int
-	response := make(map[string]interface{})
 	for _, rootValue := range values {
 		if indexValue == 0 {
 			rootCompValue = rootValue.ValorActual
@@ -487,13 +502,6 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	response["balanceado"] = balanceado
 	response["approved"] = approved
 
-	if err == nil {
-		j.response = DefaultResponse(200, nil, &response)
-	} else {
-		j.response = DefaultResponse(404, err, nil)
-	}
-	j.Data["json"] = j.response
-	j.ServeJSON()
 }
 
 // AprobacionMasiva ...

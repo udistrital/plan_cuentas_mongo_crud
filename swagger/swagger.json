@@ -1431,11 +1431,11 @@
         }
     },
     "definitions": {
-        "27927.0xc000753710.false": {
+        "12085.0xc00051d320.false": {
             "title": "false",
             "type": "object"
         },
-        "28278.rubroFuente": {
+        "12436.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1471,13 +1471,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/28278.rubroFuente"
+                    "$ref": "#/definitions/12436.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/27927.0xc000753710.false"
+                    "$ref": "#/definitions/12085.0xc00051d320.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"

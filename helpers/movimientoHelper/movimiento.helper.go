@@ -83,9 +83,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 		} else {
 			errorMessage := ""
 			if documentoPadre["documento_presupuestal_uuid"] == nil {
-				errorMessage = "Cannot Perform operation, bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
+				errorMessage = "Saldo Insuficiente en " + documentoPadre[fatherUUIKey].(string)
 			} else {
-				errorMessage = "Cannot Perform operation, presupuestal document " + documentoPadre["documento_presupuestal_uuid"].(string) + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
+				errorMessage = "Saldo Insuficiente en" + documentoPadre[fatherUUIKey].(string) // "presupuestal document " + documentoPadre["documento_presupuestal_uuid"].(string) + " for bag " + documentoPadre[fatherUUIKey].(string) + " has no balance left!"
 			}
 			logs.Error(errorMessage)
 			panic(errorMessage)
