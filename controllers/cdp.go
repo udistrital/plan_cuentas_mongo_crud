@@ -71,12 +71,12 @@ func (j *SolicitudesCDPController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get SolicitudCDP by nombre
-// @Param	nombre		path 	string	true		"El nombre de la SolicitudCDP a consultar"
+// @Param	id		path 	string	true		"El id de la SolicitudCDP a consultar"
 // @Success 200 {object} models.SolicitudCDP
 // @Failure 403 :uid is empty
-// @router /:objectId [get]
+// @router /:id [get]
 func (j *SolicitudesCDPController) Get() {
-	objectId := j.GetString(":objectId")
+	objectId := j.GetString(":id")
 
 	if objectId != "" {
 		SolicitudCDP, err := models.GetSolicitudCDPByID(objectId)
@@ -113,13 +113,13 @@ func (j *SolicitudesCDPController) Post() {
 // Put de HTTP
 // @Title Update
 // @Description update the SolicitudCDP
-// @Param	objectId		path 	string	true		"The objectid you want to update"
+// @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Object	true		"The body"
 // @Success 200 {object} models.Object
-// @Failure 403 :objectId is empty
-// @router /:objectId [put]
+// @Failure 403 :id is empty
+// @router /:id [put]
 func (j *SolicitudesCDPController) Put() {
-	objectID := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":id")
 	var SolicitudCDP models.SolicitudCDP
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &SolicitudCDP)
@@ -137,12 +137,12 @@ func (j *SolicitudesCDPController) Put() {
 // Delete ...
 // @Title Borrar SolicitudCDP
 // @Description Borrar SolicitudCDP
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
 // @Success 200 {string} ok
-// @Failure 403 objectId is empty
-// @router /:objectId [delete]
+// @Failure 403 id is empty
+// @router /:id [delete]
 func (j *SolicitudesCDPController) Delete() {
-	objectID := j.Ctx.Input.Param(":objectId")
+	objectID := j.Ctx.Input.Param(":id")
 
 	if err := models.DeleteSolicitudCDP(objectID); err == nil {
 		j.response = DefaultResponse(200, nil, "delete success!")

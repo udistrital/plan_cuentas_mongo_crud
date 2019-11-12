@@ -136,32 +136,6 @@
                     }
                 }
             },
-            "delete": {
-                "tags": [
-                    "arbol_rubro"
-                ],
-                "description": "Borrar NodoRubro",
-                "operationId": "NodoRubroController.Borrar NodoRubro",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "description": "El id del objeto que se quiere borrar",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} ok"
-                    },
-                    "403": {
-                        "description": "id is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro/{objectId}": {
             "put": {
                 "tags": [
                     "arbol_rubro"
@@ -171,8 +145,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "The objectid you want to update",
+                        "name": "id",
+                        "description": "The id you want to update",
                         "required": true,
                         "type": "string"
                     },
@@ -194,7 +168,31 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "arbol_rubro"
+                ],
+                "description": "Borrar NodoRubro",
+                "operationId": "NodoRubroController.Borrar NodoRubro",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "id is empty"
                     }
                 }
             }
@@ -477,6 +475,32 @@
                 }
             }
         },
+        "/arbol_rubro_apropiacion/{id}": {
+            "delete": {
+                "tags": [
+                    "arbol_rubro_apropiacion"
+                ],
+                "description": "Borrar NodoRubroApropiacion2018",
+                "operationId": "NodoRubroApropiacionController.Delete NodoRubroApropiacion2018",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} ok"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        },
         "/arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}": {
             "get": {
                 "tags": [
@@ -504,35 +528,7 @@
                         "description": ":uid is empty"
                     }
                 }
-            }
-        },
-        "/arbol_rubro_apropiacion/{objectId}": {
-            "delete": {
-                "tags": [
-                    "arbol_rubro_apropiacion"
-                ],
-                "description": "Borrar NodoRubroApropiacion2018",
-                "operationId": "NodoRubroApropiacionController.Delete NodoRubroApropiacion2018",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{string} ok"
-                    },
-                    "403": {
-                        "description": "objectId is empty"
-                    }
-                }
-            }
-        },
-        "/arbol_rubro_apropiacion/{objectId}/{vigencia}/{unidadEjecutora}": {
+            },
             "put": {
                 "tags": [
                     "arbol_rubro_apropiacion"
@@ -542,8 +538,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "The objectid you want to update",
+                        "name": "id",
+                        "description": "The id you want to update",
                         "required": true,
                         "type": "string"
                     },
@@ -565,7 +561,7 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
                     }
                 }
             }
@@ -886,7 +882,7 @@
                 }
             }
         },
-        "/necesidades/{objectId}": {
+        "/necesidades/{id}": {
             "get": {
                 "tags": [
                     "necesidades"
@@ -896,8 +892,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la Necesidad a consultar",
+                        "name": "id",
+                        "description": "El id de la Necesidad a consultar",
                         "required": true,
                         "type": "string"
                     }
@@ -923,8 +919,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "The objectid you want to update",
+                        "name": "id",
+                        "description": "The id you want to update",
                         "required": true,
                         "type": "string"
                     },
@@ -946,7 +942,7 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
                     }
                 }
             },
@@ -959,8 +955,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
                     }
@@ -970,7 +966,7 @@
                         "description": "{string} ok"
                     },
                     "403": {
-                        "description": "objectId is empty"
+                        "description": "id is empty"
                     }
                 }
             }
@@ -1153,7 +1149,7 @@
                 }
             }
         },
-        "/solicitudesCDP/{objectId}": {
+        "/solicitudesCDP/{id}": {
             "get": {
                 "tags": [
                     "solicitudesCDP"
@@ -1163,8 +1159,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la SolicitudCDP a consultar",
+                        "name": "id",
+                        "description": "El id de la SolicitudCDP a consultar",
                         "required": true,
                         "type": "string"
                     }
@@ -1190,8 +1186,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "The objectid you want to update",
+                        "name": "id",
+                        "description": "The id you want to update",
                         "required": true,
                         "type": "string"
                     },
@@ -1213,7 +1209,7 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
                     }
                 }
             },
@@ -1226,8 +1222,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
                     }
@@ -1237,7 +1233,7 @@
                         "description": "{string} ok"
                     },
                     "403": {
-                        "description": "objectId is empty"
+                        "description": "id is empty"
                     }
                 }
             }
@@ -1285,7 +1281,7 @@
                 }
             }
         },
-        "/solicitudesCRP/{objectId}": {
+        "/solicitudesCRP/{id}": {
             "get": {
                 "tags": [
                     "solicitudesCRP"
@@ -1322,8 +1318,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "The objectid you want to update",
+                        "name": "id",
+                        "description": "The id you want to update",
                         "required": true,
                         "type": "string"
                     },
@@ -1345,7 +1341,7 @@
                         }
                     },
                     "403": {
-                        "description": ":objectId is empty"
+                        "description": ":id is empty"
                     }
                 }
             },
@@ -1358,8 +1354,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
-                        "description": "El ObjectId del objeto que se quiere borrar",
+                        "name": "id",
+                        "description": "El id del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
                     }
@@ -1369,7 +1365,7 @@
                         "description": "{string} ok"
                     },
                     "403": {
-                        "description": "objectId is empty"
+                        "description": "id is empty"
                     }
                 }
             }
@@ -1475,6 +1471,7 @@
                     "type": "string"
                 },
                 "Rubros": {
+
                     "$ref": "#/definitions/12436.rubroFuente"
                 },
                 "TipoDocumento": {
