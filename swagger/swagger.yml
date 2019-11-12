@@ -58,6 +58,30 @@ paths:
             $ref: '#/definitions/models.NodoRubro'
         "403":
           description: :uid is empty
+    put:
+      tags:
+      - arbol_rubro
+      description: update the NodoRubro
+      operationId: NodoRubroController.Update
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: The body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Object'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "403":
+          description: :id is empty
     delete:
       tags:
       - arbol_rubro
@@ -74,31 +98,6 @@ paths:
           description: '{string} ok'
         "403":
           description: id is empty
-  /arbol_rubro/{objectId}:
-    put:
-      tags:
-      - arbol_rubro
-      description: update the NodoRubro
-      operationId: NodoRubroController.Update
-      parameters:
-      - in: path
-        name: objectId
-        description: The objectid you want to update
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Object'
-      responses:
-        "200":
-          description: ""
-          schema:
-            $ref: '#/definitions/models.Object'
-        "403":
-          description: :objectId is empty
   /arbol_rubro/arbol/{raiz}:
     get:
       tags:
@@ -159,6 +158,23 @@ paths:
           description: '{int} NodoRubroApropiacion2018.Id'
         "403":
           description: body is empty
+  /arbol_rubro_apropiacion/{id}:
+    delete:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Borrar NodoRubroApropiacion2018
+      operationId: NodoRubroApropiacionController.Delete NodoRubroApropiacion2018
+      parameters:
+      - in: path
+        name: id
+        description: El id del objeto que se quiere borrar
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} ok'
+        "403":
+          description: id is empty
   /arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}:
     get:
       tags:
@@ -178,24 +194,6 @@ paths:
             $ref: '#/definitions/models.NodoRubroApropiacion2018'
         "403":
           description: :uid is empty
-  /arbol_rubro_apropiacion/{objectId}:
-    delete:
-      tags:
-      - arbol_rubro_apropiacion
-      description: Borrar NodoRubroApropiacion2018
-      operationId: NodoRubroApropiacionController.Delete NodoRubroApropiacion2018
-      parameters:
-      - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
-        required: true
-        type: string
-      responses:
-        "200":
-          description: '{string} ok'
-        "403":
-          description: objectId is empty
-  /arbol_rubro_apropiacion/{objectId}/{vigencia}/{unidadEjecutora}:
     put:
       tags:
       - arbol_rubro_apropiacion
@@ -203,8 +201,8 @@ paths:
       operationId: NodoRubroApropiacionController.Update
       parameters:
       - in: path
-        name: objectId
-        description: The objectid you want to update
+        name: id
+        description: The id you want to update
         required: true
         type: string
       - in: body
@@ -219,7 +217,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
   /arbol_rubro_apropiacion/{vigencia}/{unidadEjecutora}:
     get:
       tags:
@@ -583,7 +581,7 @@ paths:
           description: '{int} Necesidades.Id'
         "403":
           description: body is empty
-  /necesidades/{objectId}:
+  /necesidades/{id}:
     get:
       tags:
       - necesidades
@@ -591,8 +589,8 @@ paths:
       operationId: NecesidadesController.Get
       parameters:
       - in: path
-        name: nombre
-        description: El nombre de la Necesidad a consultar
+        name: id
+        description: El id de la Necesidad a consultar
         required: true
         type: string
       responses:
@@ -609,8 +607,8 @@ paths:
       operationId: NecesidadesController.Update
       parameters:
       - in: path
-        name: objectId
-        description: The objectid you want to update
+        name: id
+        description: The id you want to update
         required: true
         type: string
       - in: body
@@ -625,7 +623,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
     delete:
       tags:
       - necesidades
@@ -633,15 +631,15 @@ paths:
       operationId: NecesidadesController.Borrar Necesidad
       parameters:
       - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
+        name: id
+        description: El id del objeto que se quiere borrar
         required: true
         type: string
       responses:
         "200":
           description: '{string} ok'
         "403":
-          description: objectId is empty
+          description: id is empty
   /producto/:
     get:
       tags:
@@ -759,7 +757,7 @@ paths:
           description: '{int} SolicitudCDP.Id'
         "403":
           description: body is empty
-  /solicitudesCDP/{objectId}:
+  /solicitudesCDP/{id}:
     get:
       tags:
       - solicitudesCDP
@@ -767,8 +765,8 @@ paths:
       operationId: SolicitudesCDPController.Get
       parameters:
       - in: path
-        name: nombre
-        description: El nombre de la SolicitudCDP a consultar
+        name: id
+        description: El id de la SolicitudCDP a consultar
         required: true
         type: string
       responses:
@@ -785,8 +783,8 @@ paths:
       operationId: SolicitudesCDPController.Update
       parameters:
       - in: path
-        name: objectId
-        description: The objectid you want to update
+        name: id
+        description: The id you want to update
         required: true
         type: string
       - in: body
@@ -801,7 +799,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
     delete:
       tags:
       - solicitudesCDP
@@ -809,15 +807,15 @@ paths:
       operationId: SolicitudesCDPController.Borrar SolicitudCDP
       parameters:
       - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
+        name: id
+        description: El id del objeto que se quiere borrar
         required: true
         type: string
       responses:
         "200":
           description: '{string} ok'
         "403":
-          description: objectId is empty
+          description: id is empty
   /solicitudesCRP/:
     get:
       tags:
@@ -846,7 +844,7 @@ paths:
           description: '{int} SolicitudCRP.Id'
         "403":
           description: body is empty
-  /solicitudesCRP/{objectId}:
+  /solicitudesCRP/{id}:
     get:
       tags:
       - solicitudesCRP
@@ -872,8 +870,8 @@ paths:
       operationId: SolicitudesCRPController.Update
       parameters:
       - in: path
-        name: objectId
-        description: The objectid you want to update
+        name: id
+        description: The id you want to update
         required: true
         type: string
       - in: body
@@ -888,7 +886,7 @@ paths:
           schema:
             $ref: '#/definitions/models.Object'
         "403":
-          description: :objectId is empty
+          description: :id is empty
     delete:
       tags:
       - solicitudesCRP
@@ -896,15 +894,15 @@ paths:
       operationId: SolicitudesCRPController.Borrar SolicitudCRP
       parameters:
       - in: path
-        name: objectId
-        description: El ObjectId del objeto que se quiere borrar
+        name: id
+        description: El id del objeto que se quiere borrar
         required: true
         type: string
       responses:
         "200":
           description: '{string} ok'
         "403":
-          description: objectId is empty
+          description: id is empty
   /vigencia/{namespace}/{centrogestor}:
     get:
       tags:
@@ -948,10 +946,10 @@ paths:
         "403":
           description: error
 definitions:
-  22596.0xc00075edb0.false:
+  12085.0xc00048b770.false:
     title: "false"
     type: object
-  22947.rubroFuente:
+  12436.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -978,11 +976,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/22947.rubroFuente'
+        $ref: '#/definitions/12436.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/22596.0xc00075edb0.false'
+        $ref: '#/definitions/12085.0xc00048b770.false'
       UnidadEjecutora:
         type: string
       ValorActual:
