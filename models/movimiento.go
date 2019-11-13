@@ -31,3 +31,11 @@ type MovimientoParameter struct {
 	Initial              bool   `json:"Initial" bson:"initial"`
 	WithOutChangeState   bool   `json:"WithOutChangeState" bson:"without_change_state"`
 }
+
+// AfectacionMovimiento this struct will save modification's movs for test their behaivor before save on db
+type AfectacionMovimiento struct {
+	CuentaCredito       *NodoRubroApropiacion `json:"cuenta_credito"`
+	CuentaContraCredito *NodoRubroApropiacion `json:"cuenta_contra_credito"`
+	Tipo                string                `json:"tipo"`
+	Valor               float64               `json:"valor"`
+}
