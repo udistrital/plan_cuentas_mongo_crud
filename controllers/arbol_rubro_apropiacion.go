@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
 	"github.com/udistrital/utils_oas/responseformat"
 
@@ -419,8 +420,7 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	response := make(map[string]interface{})
 
 	var (
-		movimientos        []models.Movimiento
-		rootsAprpovedTotal int
+		movimientos []models.Movimiento
 	)
 
 	defer func() {
@@ -442,6 +442,7 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 	}
 
 	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
+
 	balance := make(map[string]map[string]interface{})
 	if len(movimientos) > 0 {
 		balance = rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
@@ -501,6 +502,7 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 
 	response["balanceado"] = balanceado
 	response["approved"] = approved
+
 
 }
 
