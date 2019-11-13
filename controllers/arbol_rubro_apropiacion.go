@@ -6,7 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	arbolrubroapropiacioncompositor "github.com/udistrital/plan_cuentas_mongo_crud/compositors/arbolRubroApropiacionCompositor"
+
+	"github.com/udistrital/plan_cuentas_mongo_crud/managers/rubroManager"
+	"github.com/udistrital/utils_oas/responseformat"
+
+	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
 	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
 
 	"github.com/astaxie/beego/logs"
@@ -412,23 +416,94 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 // @Failure 404 body is empty
 // @router /comprobar_balance/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
-	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
-	vigenciaStr := j.GetString(":vigencia")
+
+	response := make(map[string]interface{})
 
 	var (
 		movimientos []models.Movimiento
 	)
 
-	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
-	_, _, response, err := arbolrubroapropiacioncompositor.CheckForAprTreeBalanceWithSimulation(movimientos, vigenciaStr, ueStr)
+	defer func() {
+		if r := recover(); r != nil {
+			logs.Error(r)
+			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
+		}
+		responseformat.SetResponseFormat(&j.Controller, response, "", 200)
 
-	if err == nil {
-		j.response = DefaultResponse(200, nil, &response)
-	} else {
-		j.response = DefaultResponse(404, err, nil)
+	}()
+
+	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
+	vigenciaStr := j.GetString(":vigencia")
+
+	vigencia, _ := strconv.Atoi(vigenciaStr)
+	raices, err := models.GetRaicesApropiacion(ueStr, vigencia)
+	if err != nil {
+		panic(err.Error())
 	}
-	j.Data["json"] = j.response
-	j.ServeJSON()
+
+	json.Unmarshal(j.Ctx.Input.RequestBody, &movimientos)
+
+	balance := make(map[string]map[string]interface{})
+	if len(movimientos) > 0 {
+		balance = rubroApropiacionHelper.SimulatePropagationValues(movimientos, vigenciaStr, ueStr)
+	}
+
+	var rootCompValue float64
+	values := make(map[string]models.NodoRubroApropiacion)
+	balanceado := true
+	approved := false
+	rootsParamsIndexed := rubroHelper.GetRubroParamsIndexedByKey(ueStr, "Valor")
+
+	for _, raiz := range raices {
+		if rootsParamsIndexed[raiz.ID] != nil {
+			values[raiz.ID] = raiz
+			if raiz.Estado == models.EstadoAprobada {
+				rootsAprpovedTotal++
+			}
+		}
+		// perform this operation only if there are some simulation to perform ...
+		if rootsParamsIndexed[raiz.ID] != nil && balance[raiz.ID] != nil {
+			actualRaiz := raiz
+			actualRaiz.ValorActual = balance[raiz.ID]["valor_actual"].(float64)
+			values[raiz.ID] = actualRaiz
+		}
+	}
+	var indexValue int
+	for _, rootValue := range values {
+		if indexValue == 0 {
+			rootCompValue = rootValue.ValorActual
+		}
+		if rootCompValue != rootValue.ValorActual || rootValue.ValorActual == 0 {
+			balanceado = false
+		}
+		if rubroInfo, e := rubroManager.SearchRubro(rootValue.ID, ueStr); e {
+			if rubroInfo.ID == "2" {
+				response["totalIngresos"] = rootValue.ValorActual
+			} else if rubroInfo.ID == "3" {
+				response["totalGastos"] = rootValue.ValorActual
+			}
+
+		}
+		indexValue++
+	}
+
+	if rootCompValue == 0 {
+		balanceado = false
+	}
+
+	if response["totalGastos"] == nil || response["totalIngresos"] == nil {
+		balanceado = false
+	}
+
+	// if the tree's roots are all approved then the whole tree is approved..
+	if rootsAprpovedTotal == len(rootsParamsIndexed) {
+		approved = true
+	}
+
+	response["balanceado"] = balanceado
+	response["approved"] = approved
+
+
 }
 
 // AprobacionMasiva ...
