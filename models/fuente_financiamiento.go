@@ -1,6 +1,7 @@
 package models
 
 import (
+	"regexp"
 	"strconv"
 
 	"github.com/globalsign/mgo"
@@ -113,20 +114,33 @@ func DeleteFuenteFinanciamiento(id string, ue string, vigencia string) error {
 // GetAllFuenteFinanciamiento obtiene todos los registros de fuente de financiamiento
 func GetAllFuenteFinanciamiento(query map[string]interface{}, ue, vigencia string) ([]FuenteFinanciamiento, error) {
 	session, err := db.GetSession()
-	c := db.Cursor(session, FuenteFinanciamientoCollection)
-	if err != nil {
-		return nil, err
-	}
+	var fuentesFinanciamiento []FuenteFinanciamiento
+	var fuentesFinanciamientoAux []FuenteFinanciamiento
+	if vigencia == "all" {
+		collections, _ := session.DB("").CollectionNames()
+		collections = GetCollectionsByName(collections, "fuente_financiamiento")
+		for _, itemColl := range collections {
+			err = session.DB("").C(itemColl).Find(nil).All(&fuentesFinanciamientoAux)
+			fuentesFinanciamiento = append(fuentesFinanciamiento, fuentesFinanciamientoAux...)
+		}
+		if err != nil {
+			return nil, err
+		}
+	} else {
 
-	if vigencia != "0" {
-		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+		c := db.Cursor(session, FuenteFinanciamientoCollection)
+		if err != nil {
+			return nil, err
+		}
+
+		if vigencia != "0" {
+			c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+		}
+
+		err = c.Find(query).All(&fuentesFinanciamiento)
+
 	}
 	defer session.Close()
-
-	var fuentesFinanciamiento []FuenteFinanciamiento
-
-	err = c.Find(query).All(&fuentesFinanciamiento)
-
 	return fuentesFinanciamiento, err
 }
 
@@ -154,4 +168,16 @@ func GetFuentesByRubroApropiacion(idRubroApropiacion string, ue string, vigencia
 
 	c.Find(bson.M{"rubros." + idRubroApropiacion: bson.M{"$exists": "true"}}).All(&fuentes)
 	return
+}
+
+// GetCollectionsByName devuelve todas las colecciones encontradas por palabra clave
+func GetCollectionsByName(collections []string, word string) []string {
+	subMatches := []string{}
+	for _, i := range collections {
+		status, _ := regexp.MatchString("\\b"+word, i)
+		if status {
+			subMatches = append(subMatches, i)
+		}
+	}
+	return subMatches
 }
