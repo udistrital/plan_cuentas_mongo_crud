@@ -1,5 +1,6 @@
 # plan_cuentas_mongo_crud
-Api con MongoDB para negocio de plan de cuentas (rubros, apropiaciones, fuentes de financiamiento)
+
+Api integrada con MongoDB para el negocio de plan de cuentas (rubros, apropiaciones, fuentes de financiamiento, productos, CDP, CRP, modificaciones presupuestales)
 
 * Integration with CI
 
