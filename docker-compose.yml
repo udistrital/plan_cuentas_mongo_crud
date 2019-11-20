@@ -14,7 +14,7 @@ services:
       - .env
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost   
-    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -u ./...; bee run -downdoc=true -gendoc=true'
+    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -d -u ./...; bee run -downdoc=true -gendoc=true'
     depends_on: 
       - db
     networks: 
