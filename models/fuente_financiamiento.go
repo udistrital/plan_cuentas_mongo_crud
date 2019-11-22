@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 
@@ -104,8 +105,11 @@ func DeleteFuenteFinanciamiento(id string, ue string, vigencia string) error {
 	}
 	if vigencia != "0" {
 		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+vigencia+"_"+ue)
+		fuenteObj, _ := GetFuenteFinanciamientoByID(id, ue, vigencia)
+		if fuenteObj.Estado == "distribuida" {
+			return errors.New("No se puede eliminar esta fuente de financiamiento, debido a que esta distribuida")
+		}
 	}
-
 	defer session.Close()
 
 	return c.RemoveId(id)
