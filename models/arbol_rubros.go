@@ -244,6 +244,10 @@ func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
 			newrubro = rubro
 		}
 		break
+	// Linea temporal solicitada por @SoulFilip indice 7-> nivel 8
+	case 7:
+		return "", errors.New("Temporalmente no esta permitido registrar más niveles")
+	//
 	default:
 		if digits > 2 {
 			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
