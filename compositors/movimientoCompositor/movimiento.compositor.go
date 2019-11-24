@@ -39,7 +39,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection+collectionPostFixName, "", "", movimientoElmnt)
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
-		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt,balance, afectationIndex, collectionPostFixName)
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
 
 		if len(propagacionData) > 0 {
 			movimientoData = append(movimientoData, propagacionData...)

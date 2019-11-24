@@ -3,6 +3,7 @@ package movimientoManager
 import (
 	"github.com/globalsign/mgo/bson"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
@@ -64,6 +65,16 @@ func GetAllMovimiento(vigencia, cg string) (res []models.Movimiento, err error) 
 	c := db.Cursor(session, collectionPostFixName)
 	defer session.Close()
 	err = c.Find(nil).All(&res)
+	return
+
+}
+
+// GetMovimientoByDocumentoPresupuestalUUID ... Get Mpvimiento information by  documento presupuestal parent.
+func GetMovimientoByDocumentoPresupuestalUUID(vigencia, cg, parentUUID string) (res []models.Movimiento, err error) {
+	collectionFixedName := models.MovimientosCollection + "_" + vigencia + "_" + cg
+	query := make(map[string]interface{})
+	query["documento_presupuestal_uuid"] = parentUUID
+	crudmanager.GetAllFromDB(query, collectionFixedName, &res)
 	return
 
 }

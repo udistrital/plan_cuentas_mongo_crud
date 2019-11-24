@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/logs"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors/movimientoCompositor"
+	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -109,4 +110,22 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 		body = err
 	}
 
+}
+
+// GetMovimientosByDocumentoPresupuestalUUID función para obtener todos los objetos por parentUUID
+// @Title GetMovimientosByDocumentoPresupuestalUUID
+// @Description get all objects
+// @Success 200 Movimiento models.Movimiento
+// @Failure 403 :objectId is empty
+// @router /:vigencia/:CG/:parentUUID [get]
+func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
+	vigencia := j.GetString(":vigencia")
+	centroGestor := j.GetString(":CG")
+	parentUUID := j.GetString(":parentUUID")
+
+	rows, err := movimientoManager.GetMovimientoByDocumentoPresupuestalUUID(vigencia, centroGestor, parentUUID)
+	response := commonhelper.DefaultResponse(200, err, &rows)
+
+	j.Data["json"] = response
+	j.ServeJSON()
 }

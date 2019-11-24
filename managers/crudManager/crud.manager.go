@@ -9,14 +9,19 @@ import (
 )
 
 // GetAllFromDB ... get an array data from db by a collection and query.
-func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}) {
+func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}) error {
 	var collectionData []interface{}
 	var resulData []interface{}
 	session, c, err := GetDBCursorByCollection(collectionName)
+	if err != nil {
+		logs.Error(err.Error())
+		return err
+	}
 	defer session.Close()
 	err = c.Find(query).All(&collectionData)
 	if err != nil {
 		logs.Error(err.Error())
+		return err
 	}
 	for _, partialData := range collectionData {
 		var data interface{}
@@ -24,6 +29,7 @@ func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct
 		resulData = append(resulData, data)
 	}
 	commonhelper.FillArrBson(resulData, outStruct)
+	return nil
 }
 
 // GetDocumentByID ... get a document values by it's id. Returns a map with bson tags basis struct.

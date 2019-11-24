@@ -97,6 +97,7 @@ func DefaultResponse(code int, err error, info interface{}) map[string]interface
 	if err != nil {
 		response["Message"] = err.Error()
 		response["Type"] = "error"
+		response["Code"] = 500
 	}
 
 	return response

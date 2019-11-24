@@ -522,6 +522,17 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /movimiento/{vigencia}/{CG}/{parentUUID}:
+    get:
+      tags:
+      - movimiento
+      description: get all objects
+      operationId: MovimientosController.GetMovimientosByDocumentoPresupuestalUUID
+      responses:
+        "200":
+          description: Movimiento models.Movimiento
+        "403":
+          description: :objectId is empty
   /movimiento/RegistrarMovimientoParameter:
     post:
       tags:
@@ -957,7 +968,7 @@ paths:
         "403":
           description: error
 definitions:
-  907.0xc0004a2a20.false:
+  907.0xc0004df0e0.false:
     title: "false"
     type: object
   1258.rubroFuente:
@@ -991,7 +1002,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc0004a2a20.false'
+        $ref: '#/definitions/907.0xc0004df0e0.false'
       UnidadEjecutora:
         type: string
       ValorActual:

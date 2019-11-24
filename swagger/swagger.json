@@ -856,6 +856,23 @@
                 }
             }
         },
+        "/movimiento/{vigencia}/{CG}/{parentUUID}": {
+            "get": {
+                "tags": [
+                    "movimiento"
+                ],
+                "description": "get all objects",
+                "operationId": "MovimientosController.GetMovimientosByDocumentoPresupuestalUUID",
+                "responses": {
+                    "200": {
+                        "description": "Movimiento models.Movimiento"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
         "/necesidades/": {
             "get": {
                 "tags": [
@@ -1452,7 +1469,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "907.0xc0004a2a20.false": {
+        "907.0xc0004df0e0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1494,7 +1511,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc0004a2a20.false"
+                    "$ref": "#/definitions/907.0xc0004df0e0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
