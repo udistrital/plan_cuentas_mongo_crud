@@ -7,6 +7,15 @@ import (
 
 func init() {
 
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
+        beego.ControllerComments{
+            Method: "GetAll",
+            Router: `/:vigencia/:CG/:tipo`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:FuenteFinanciamientoController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:FuenteFinanciamientoController"],
         beego.ControllerComments{
             Method: "Post",

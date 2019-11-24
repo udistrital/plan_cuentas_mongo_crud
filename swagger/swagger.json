@@ -583,6 +583,23 @@
                 }
             }
         },
+        "/documento_presupuestal/{vigencia}/{CG}/{tipo}": {
+            "get": {
+                "tags": [
+                    "documento_presupuestal"
+                ],
+                "description": "get all objects",
+                "operationId": "DocumentoPresupuestalController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "DocumentoPresupuestal models.DocumentoPresupuestal"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
         "/fuente_financiamiento/": {
             "post": {
                 "tags": [
@@ -1435,7 +1452,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "907.0xc000449c80.false": {
+        "907.0xc0004a2a20.false": {
             "title": "false",
             "type": "object"
         },
@@ -1477,7 +1494,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc000449c80.false"
+                    "$ref": "#/definitions/907.0xc0004a2a20.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"

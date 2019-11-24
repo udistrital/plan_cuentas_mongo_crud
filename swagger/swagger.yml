@@ -384,6 +384,17 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /documento_presupuestal/{vigencia}/{CG}/{tipo}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: get all objects
+      operationId: DocumentoPresupuestalController.GetAll
+      responses:
+        "200":
+          description: DocumentoPresupuestal models.DocumentoPresupuestal
+        "403":
+          description: :objectId is empty
   /fuente_financiamiento/:
     post:
       tags:
@@ -946,7 +957,7 @@ paths:
         "403":
           description: error
 definitions:
-  907.0xc000449c80.false:
+  907.0xc0004a2a20.false:
     title: "false"
     type: object
   1258.rubroFuente:
@@ -980,7 +991,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc000449c80.false'
+        $ref: '#/definitions/907.0xc0004a2a20.false'
       UnidadEjecutora:
         type: string
       ValorActual:

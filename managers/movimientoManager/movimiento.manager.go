@@ -56,3 +56,14 @@ func SaveMovimientoParameter(data *models.MovimientoParameter) error {
 	defer session.Close()
 	return c.Insert(&data)
 }
+
+// GetAllMovimiento ... Get Mpvimiento information.
+func GetAllMovimiento(vigencia, cg string) (res []models.Movimiento, err error) {
+	collectionPostFixName := models.MovimientosCollection + "_" + vigencia + "_" + cg
+	session, err := db.GetSession()
+	c := db.Cursor(session, collectionPostFixName)
+	defer session.Close()
+	err = c.Find(nil).All(&res)
+	return
+
+}

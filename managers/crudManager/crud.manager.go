@@ -1,8 +1,7 @@
 package crudmanager
 
 import (
-	"log"
-
+	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
@@ -17,7 +16,7 @@ func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct
 	defer session.Close()
 	err = c.Find(query).All(&collectionData)
 	if err != nil {
-		log.Println(err.Error())
+		logs.Error(err.Error())
 	}
 	for _, partialData := range collectionData {
 		var data interface{}
