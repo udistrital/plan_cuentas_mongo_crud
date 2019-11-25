@@ -384,6 +384,17 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /documento_presupuestal/{vigencia}/{CG}/{tipo}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: get all objects
+      operationId: DocumentoPresupuestalController.GetAll
+      responses:
+        "200":
+          description: DocumentoPresupuestal models.DocumentoPresupuestal
+        "403":
+          description: :objectId is empty
   /fuente_financiamiento/:
     post:
       tags:
@@ -511,6 +522,17 @@ paths:
           description: '{string} ok'
         "403":
           description: objectId is empty
+  /movimiento/{vigencia}/{CG}/{parentUUID}:
+    get:
+      tags:
+      - movimiento
+      description: get all objects
+      operationId: MovimientosController.GetMovimientosByDocumentoPresupuestalUUID
+      responses:
+        "200":
+          description: Movimiento models.Movimiento
+        "403":
+          description: :objectId is empty
   /movimiento/RegistrarMovimientoParameter:
     post:
       tags:
@@ -946,10 +968,10 @@ paths:
         "403":
           description: error
 definitions:
-  12085.0xc0005495c0.false:
+  907.0xc0004c8510.false:
     title: "false"
     type: object
-  12436.rubroFuente:
+  1258.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -976,11 +998,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/12436.rubroFuente'
+        $ref: '#/definitions/1258.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/12085.0xc0005495c0.false'
+        $ref: '#/definitions/907.0xc0004c8510.false'
       UnidadEjecutora:
         type: string
       ValorActual:

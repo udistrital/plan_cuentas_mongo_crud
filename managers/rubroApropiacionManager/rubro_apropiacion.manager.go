@@ -17,9 +17,13 @@ import (
 
 // TrRegistrarNodoHoja transacción que registra una nueva hoja y modifica los hijos del padre
 func TrRegistrarNodoHoja(nodoHoja *models.NodoRubroApropiacion, ue string, vigencia int) error {
-	if nodoHoja.ValorInicial <= 0 {
-		err := fmt.Errorf("Valor de la apropiación debe ser mayor a 0")
+	if nodoHoja.ValorInicial < 0 {
+		err := fmt.Errorf("Valor de la apropiación debe ser positivo")
 		return err
+	}
+
+	if nodoHoja.ValorInicial == 0 {
+		nodoHoja.Estado = models.EstadoAprobada
 	}
 
 	session, err := db.GetSession()

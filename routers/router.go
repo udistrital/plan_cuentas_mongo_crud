@@ -59,6 +59,11 @@ func init() {
 				&controllers.VigenciaController{},
 			),
 		),
+		beego.NSNamespace("/documento_presupuestal",
+			beego.NSInclude(
+				&controllers.DocumentoPresupuestalController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
