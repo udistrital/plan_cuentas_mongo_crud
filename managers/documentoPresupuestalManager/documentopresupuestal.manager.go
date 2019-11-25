@@ -12,6 +12,7 @@ func GetByType(vigencia, centroGestor, tipo string) []models.DocumentoPresupuest
 	query["tipo"] = map[string]interface{}{
 		"$regex": ".*" + tipo + ".*",
 	}
-	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows)
+
+	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows, "-fecha_registro")
 	return documentoPresupuestalRows
 }

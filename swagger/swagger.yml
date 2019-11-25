@@ -968,7 +968,7 @@ paths:
         "403":
           description: error
 definitions:
-  907.0xc0004df0e0.false:
+  907.0xc0004c8510.false:
     title: "false"
     type: object
   1258.rubroFuente:
@@ -1002,7 +1002,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc0004df0e0.false'
+        $ref: '#/definitions/907.0xc0004c8510.false'
       UnidadEjecutora:
         type: string
       ValorActual:

@@ -9,7 +9,7 @@ import (
 )
 
 // GetAllFromDB ... get an array data from db by a collection and query.
-func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}) error {
+func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}, sort ...string) error {
 	var collectionData []interface{}
 	var resulData []interface{}
 	session, c, err := GetDBCursorByCollection(collectionName)
@@ -18,7 +18,9 @@ func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct
 		return err
 	}
 	defer session.Close()
-	err = c.Find(query).All(&collectionData)
+	builder := c.Find(query)
+	builder.Sort(sort...)
+	err = builder.All(&collectionData)
 	if err != nil {
 		logs.Error(err.Error())
 		return err
