@@ -1,8 +1,7 @@
 package crudmanager
 
 import (
-	"log"
-
+	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
@@ -10,14 +9,21 @@ import (
 )
 
 // GetAllFromDB ... get an array data from db by a collection and query.
-func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}) {
+func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct interface{}, sort ...string) error {
 	var collectionData []interface{}
 	var resulData []interface{}
 	session, c, err := GetDBCursorByCollection(collectionName)
-	defer session.Close()
-	err = c.Find(query).All(&collectionData)
 	if err != nil {
-		log.Println(err.Error())
+		logs.Error(err.Error())
+		return err
+	}
+	defer session.Close()
+	builder := c.Find(query)
+	builder.Sort(sort...)
+	err = builder.All(&collectionData)
+	if err != nil {
+		logs.Error(err.Error())
+		return err
 	}
 	for _, partialData := range collectionData {
 		var data interface{}
@@ -25,6 +31,7 @@ func GetAllFromDB(query map[string]interface{}, collectionName string, outStruct
 		resulData = append(resulData, data)
 	}
 	commonhelper.FillArrBson(resulData, outStruct)
+	return nil
 }
 
 // GetDocumentByID ... get a document values by it's id. Returns a map with bson tags basis struct.
