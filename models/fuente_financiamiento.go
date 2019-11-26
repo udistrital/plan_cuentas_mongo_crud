@@ -54,7 +54,16 @@ func InsertFuenteFinanciamiento(j *FuenteFinanciamiento) error {
 	session, err := db.GetSession()
 	c := db.Cursor(session, FuenteFinanciamientoCollection)
 	if strconv.Itoa(j.Vigencia) != "0" {
+		fuente, _ := GetFuenteFinanciamientoByID(j.ID, j.UnidadEjecutora, strconv.Itoa(j.Vigencia))
+		if fuente.ID != "" {
+			return errors.New("La Fuente de Financiamiento " + j.ID + " ya existe para la vigencia " + strconv.Itoa(j.Vigencia))
+		}
 		c = db.Cursor(session, FuenteFinanciamientoCollection+"_"+strconv.Itoa(j.Vigencia)+"_"+j.UnidadEjecutora)
+	} else {
+		fuente, _ := GetFuenteFinanciamientoByID(j.ID, "", "")
+		if fuente.ID != "" {
+			return errors.New("La Fuente de Financiamiento " + j.ID + " ya existe")
+		}
 	}
 	if err != nil {
 		return err
