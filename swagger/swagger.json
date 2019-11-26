@@ -1465,12 +1465,12 @@
         }
     },
     "definitions": {
-        "1258.rubroFuente": {
-            "title": "rubroFuente",
+        "21902.0xc0005b8ed0.false": {
+            "title": "false",
             "type": "object"
         },
-        "907.0xc0004c8510.false": {
-            "title": "false",
+        "22253.rubroFuente": {
+            "title": "rubroFuente",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1505,13 +1505,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/1258.rubroFuente"
+                    "$ref": "#/definitions/22253.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc0004c8510.false"
+                    "$ref": "#/definitions/21902.0xc0005b8ed0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1677,9 +1677,6 @@
                     "type": "string",
                     "format": "datetime"
                 },
-                "infoCdp": {
-                    "$ref": "#/definitions/models.infoCdp"
-                },
                 "justificacionRechazo": {
                     "type": "string"
                 },
@@ -1802,24 +1799,6 @@
                 "valor": {
                     "type": "number",
                     "format": "double"
-                }
-            }
-        },
-        "models.infoCdp": {
-            "title": "infoCdp",
-            "type": "object",
-            "properties": {
-                "consecutivo": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "estado": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "fechaExpedicion": {
-                    "type": "string",
-                    "format": "datetime"
                 }
             }
         },
