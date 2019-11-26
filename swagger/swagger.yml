@@ -968,10 +968,10 @@ paths:
         "403":
           description: error
 definitions:
-  907.0xc0004c8510.false:
+  21902.0xc0005b8ed0.false:
     title: "false"
     type: object
-  1258.rubroFuente:
+  22253.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -998,11 +998,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/1258.rubroFuente'
+        $ref: '#/definitions/22253.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc0004c8510.false'
+        $ref: '#/definitions/21902.0xc0005b8ed0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1119,8 +1119,6 @@ definitions:
       fechaRegistro:
         type: string
         format: datetime
-      infoCdp:
-        $ref: '#/definitions/models.infoCdp'
       justificacionRechazo:
         type: string
       necesidad:
@@ -1206,19 +1204,6 @@ definitions:
       valor:
         type: number
         format: double
-  models.infoCdp:
-    title: infoCdp
-    type: object
-    properties:
-      consecutivo:
-        type: integer
-        format: int64
-      estado:
-        type: integer
-        format: int64
-      fechaExpedicion:
-        type: string
-        format: datetime
   models.infoCrp:
     title: infoCrp
     type: object

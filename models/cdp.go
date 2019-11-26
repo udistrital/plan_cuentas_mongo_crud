@@ -29,7 +29,8 @@ type SolicitudCDP struct {
 	FechaRegistro        time.Time     `json:"fechaRegistro" bson:"fechaRegistro"`
 	Estado               int           `json:"estado" bson:"estado"`
 	JustificacionRechazo string        `json:"justificacionRechazo" bson:"justificacionRechazo"`
-	InfoCDP              *infoCdp      `json:"infoCdp" bson:"infoCdp"`
+	// InfoCDP              *infoCdp      `json:"infoCdp" bson:"infoCdp"`
+	// InfoCDP              ""      		`json:"infoCdp" bson:"infoCdp"`
 	Activo               bool          `json:"activo" bson:"activo"`
 	FechaCreacion        time.Time     `json:"fechaCreacion" bson:"fechaCreacion"`
 	FechaModificacion    time.Time     `json:"fechaModificacion" bson:"fechaModificacion"`
