@@ -1,5 +1,10 @@
 package models
 
+import (
+	"github.com/globalsign/mgo/bson"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+)
+
 // DocumentoPresupuestalCollection ... Nombre de la collección
 const DocumentoPresupuestalCollection = "documento_presupuestal"
 
@@ -16,4 +21,19 @@ type DocumentoPresupuestal struct {
 	ValorInicial  float64      `json:"ValorInicial" bson:"valor_inicial"`
 	Vigencia      int          `json:"Vigencia" bson:"-" validate:"required"`
 	CentroGestor  string       `json:"CentroGestor" bson:"centro_gestor" validate:"required"`
+}
+
+// GetDocumentoPresupuestalByDataID Obtiene la información de un documento presupuestal a través del atributo _id dentro de data
+func GetDocumentoPresupuestalByDataID(id, vigencia, centroGestor string) (documentoPresupuestal DocumentoPresupuestal, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+	defer session.Close()
+
+	collectionFixed := DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor
+
+	c := db.Cursor(session, collectionFixed)
+	err = c.Find(bson.M{"data._id": id}).One(&documentoPresupuestal)
+	return
 }
