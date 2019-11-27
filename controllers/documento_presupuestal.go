@@ -48,9 +48,9 @@ func (j *DocumentoPresupuestalController) GetAllCdp() {
 	j.ServeJSON()
 }
 
-// GetInfoCdp Obtiene un documento presupuestal de tipo cdp con su id
+// GetInfoCdp Obtiene un documento presupuestal de tipo cdp con su id de solicitud
 // @Title GetInfoCdp
-// @Description Obtiene un documento presupuestal de tipo cdp con su id
+// @Description Obtiene un documento presupuestal de tipo cdp con su id de solicitud
 // @Success 200 documentoPresupuestal models.DocumentoPresupuestal
 // @Failure 403 :id is empty
 // @router /get_info_cdp/:id [get]
