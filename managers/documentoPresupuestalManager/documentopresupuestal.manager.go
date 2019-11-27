@@ -1,6 +1,10 @@
 package documentopresupuestalmanager
 
 import (
+	"log"
+
+	"strconv"
+
 	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -15,4 +19,22 @@ func GetByType(vigencia, centroGestor, tipo string) []models.DocumentoPresupuest
 
 	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows, "-fecha_registro")
 	return documentoPresupuestalRows
+}
+
+// GetCDPByID obtiene una un CDP expedido con su _id de solicitud
+func GetCDPByID(id string) (documentoPresupuestal models.DocumentoPresupuestal) {
+	solicitudCdp, err := models.GetSolicitudCDPByID(id)
+
+	if err != nil {
+		log.Panicln(err.Error())
+		return
+	}
+
+	documentoPresupuestal, err = models.GetDocumentoPresupuestalByDataID(id, solicitudCdp.Vigencia, strconv.Itoa(solicitudCdp.CentroGestor))
+	if err != nil {
+		log.Panicln(err.Error())
+		return
+	}
+
+	return
 }

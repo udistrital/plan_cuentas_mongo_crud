@@ -395,6 +395,28 @@ paths:
           description: DocumentoPresupuestal models.DocumentoPresupuestal
         "403":
           description: :objectId is empty
+  /documento_presupuestal/get_info_cdp/{id}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene un documento presupuestal de tipo cdp con su id
+      operationId: DocumentoPresupuestalController.GetInfoCdp
+      responses:
+        "200":
+          description: documentoPresupuestal models.DocumentoPresupuestal
+        "403":
+          description: :id is empty
+  /documento_presupuestalget_all_cdp/{vigencia}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: get all cdp objects
+      operationId: DocumentoPresupuestalController.GetAllCdp
+      responses:
+        "200":
+          description: rows []models.DocumentoPresupuestal
+        "403":
+          description: :vigencia is empty
   /fuente_financiamiento/:
     post:
       tags:
@@ -968,10 +990,10 @@ paths:
         "403":
           description: error
 definitions:
-  21902.0xc0005b8ed0.false:
+  22559.0xc0005b87b0.false:
     title: "false"
     type: object
-  22253.rubroFuente:
+  22910.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -998,11 +1020,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/22253.rubroFuente'
+        $ref: '#/definitions/22910.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/21902.0xc0005b8ed0.false'
+        $ref: '#/definitions/22559.0xc0005b87b0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
