@@ -21,6 +21,7 @@ type DocumentoPresupuestal struct {
 	ValorInicial  float64      `json:"ValorInicial" bson:"valor_inicial"`
 	Vigencia      int          `json:"Vigencia" bson:"-" validate:"required"`
 	CentroGestor  string       `json:"CentroGestor" bson:"centro_gestor" validate:"required"`
+	Consecutivo   int          `json:"-" bson:"consecutivo"`
 }
 
 // GetDocumentoPresupuestalByDataID Obtiene la información de un documento presupuestal a través del atributo _id dentro de data
