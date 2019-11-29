@@ -37,3 +37,17 @@ func GetDocumentoPresupuestalByDataID(id, vigencia, centroGestor string) (docume
 	err = c.Find(bson.M{"data._id": id}).One(&documentoPresupuestal)
 	return
 }
+
+// GetAllDocumentoPresupuestal ...
+func GetAllDocumentoPresupuestal(vigencia, centroGestor string, query map[string]interface{}) (docPresupuestales []DocumentoPresupuestal, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+	defer session.Close()
+
+	collectionFixed := DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor
+	c := db.Cursor(session, collectionFixed)
+	err = c.Find(query).All(&docPresupuestales)
+	return
+}
