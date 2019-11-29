@@ -5,6 +5,7 @@ import (
 
 	"github.com/globalsign/mgo/txn"
 	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
+	docMananger "github.com/udistrital/plan_cuentas_mongo_crud/managers/documentoPresupuestalManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -19,7 +20,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	initialState := "expedido"
 	balance := make(map[string]map[string]interface{})
 	afectationIndex := make(map[string]map[string]interface{})
-	collectionPostFixName := "_" + strconv.Itoa(documentoPresupuestalRequestData.Vigencia) + "_" + documentoPresupuestalRequestData.CentroGestor
+	vigencia := strconv.Itoa(documentoPresupuestalRequestData.Vigencia)
+	centroGestor := documentoPresupuestalRequestData.CentroGestor
+	collectionPostFixName := "_" + vigencia + "_" + centroGestor
+	consecutivoDocumento := len(docMananger.GetByType(vigencia, centroGestor, documentoPresupuestalRequestData.Tipo)) + 1
 
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
 
@@ -29,8 +33,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	documentoPresupuestalRequestData.ValorInicial = valorActualDocumentoPres
 	documentoPresupuestalRequestData.ValorActual = valorActualDocumentoPres
 	documentoPresupuestalRequestData.Estado = initialState
+	documentoPresupuestalRequestData.Consecutivo = consecutivoDocumento
 	documentoPresupuestalOpStruct := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "Afectacion", documentoPresupuestalRequestData)
 	documentoPresupuestalRequestData.ID = documentoPresupuestalOpStruct[0].Id.(string)
+
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
 
 		movimientoElmnt.DocumentoPresupuestalUUID = documentoPresupuestalOpStruct[0].Id.(string)
@@ -46,7 +52,6 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		}
 
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
-
 	}
 
 	documentoPresupuestalRequestData.AfectacionIds = transactionManager.GetTrStructIds(movimientoDataInserted)
