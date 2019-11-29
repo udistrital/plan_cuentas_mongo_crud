@@ -600,6 +600,23 @@
                 }
             }
         },
+        "/documento_presupuestal/{vigencia}/{CG}/": {
+            "get": {
+                "tags": [
+                    "documento_presupuestal"
+                ],
+                "description": "get all objects with data bases query",
+                "operationId": "DocumentoPresupuestalController.GetAllQuery",
+                "responses": {
+                    "200": {
+                        "description": "DocumentoPresupuestal models.DocumentoPresupuestal"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
         "/documento_presupuestal/{vigencia}/{CG}/{tipo}": {
             "get": {
                 "tags": [
@@ -1499,11 +1516,11 @@
         }
     },
     "definitions": {
-        "22559.0xc0005b87b0.false": {
+        "23019.0xc0005bd1a0.false": {
             "title": "false",
             "type": "object"
         },
-        "22910.rubroFuente": {
+        "23370.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
@@ -1539,13 +1556,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/22910.rubroFuente"
+                    "$ref": "#/definitions/23370.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/22559.0xc0005b87b0.false"
+                    "$ref": "#/definitions/23019.0xc0005bd1a0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
