@@ -1,8 +1,6 @@
 package movimientoCompositor
 
 import (
-	// "fmt"
-
 	"strconv"
 
 	"github.com/globalsign/mgo/txn"
