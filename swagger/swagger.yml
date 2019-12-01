@@ -410,7 +410,7 @@ paths:
     get:
       tags:
       - documento_presupuestal
-      description: Obtiene un documento presupuestal de tipo cdp con su id
+      description: Obtiene un documento presupuestal de tipo cdp con su id de solicitud
       operationId: DocumentoPresupuestalController.GetInfoCdp
       responses:
         "200":
@@ -1001,10 +1001,10 @@ paths:
         "403":
           description: error
 definitions:
-  23019.0xc0005bd1a0.false:
+  6682.0xc00046a450.false:
     title: "false"
     type: object
-  23370.rubroFuente:
+  7033.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -1031,11 +1031,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/23370.rubroFuente'
+        $ref: '#/definitions/7033.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/23019.0xc0005bd1a0.false'
+        $ref: '#/definitions/6682.0xc00046a450.false'
       UnidadEjecutora:
         type: string
       ValorActual:

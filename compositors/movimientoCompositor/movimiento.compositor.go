@@ -6,6 +6,7 @@ import (
 	"github.com/globalsign/mgo/txn"
 	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	docMananger "github.com/udistrital/plan_cuentas_mongo_crud/managers/documentoPresupuestalManager"
+	movimientoManager "github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
@@ -20,6 +21,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	initialState := "expedido"
 	balance := make(map[string]map[string]interface{})
 	afectationIndex := make(map[string]map[string]interface{})
+	consecutivoIndex := make(map[string]int)
 	vigencia := strconv.Itoa(documentoPresupuestalRequestData.Vigencia)
 	centroGestor := documentoPresupuestalRequestData.CentroGestor
 	collectionPostFixName := "_" + vigencia + "_" + centroGestor
@@ -42,6 +44,37 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		movimientoElmnt.DocumentoPresupuestalUUID = documentoPresupuestalOpStruct[0].Id.(string)
 		movimientoElmnt.ValorActual = movimientoElmnt.ValorInicial
 		movimientoElmnt.Estado = initialState
+		movimientoParameter, err := movimientoManager.GetInitialMovimientoParameterByHijo(movimientoElmnt.Tipo)
+
+		if err == nil && movimientoParameter.TipoDocumentoGenerado != nil && *movimientoParameter.TipoDocumentoGenerado != documentoPresupuestalRequestData.Tipo {
+			// TODO: put this code on separate helper or manager.
+			if consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] == 0 {
+				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] = len(docMananger.GetByType(strconv.Itoa(documentoPresupuestalRequestData.Vigencia), documentoPresupuestalRequestData.CentroGestor, *movimientoParameter.TipoDocumentoGenerado)) + 1
+			} else {
+				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado]++
+			}
+			generatedDocument := models.DocumentoPresupuestal{
+				Tipo:          *movimientoParameter.TipoDocumentoGenerado,
+				Data:          documentoPresupuestalRequestData.Data,
+				FechaRegistro: documentoPresupuestalRequestData.FechaRegistro,
+				ValorActual:   movimientoElmnt.ValorActual,
+				ValorInicial:  movimientoElmnt.ValorInicial,
+				Vigencia:      documentoPresupuestalRequestData.Vigencia,
+				CentroGestor:  documentoPresupuestalRequestData.CentroGestor,
+				Estado:        models.EstadoRegistrada,
+				Consecutivo:   consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado],
+			}
+			documentoPresupuestalTr := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "", generatedDocument)
+			afectationGenerated := movimientoElmnt
+			afectationGenerated.Tipo = *movimientoParameter.TipoDocumentoGenerado
+			afectationGenerated.DocumentoPresupuestalUUID = documentoPresupuestalTr[0].Id.(string)
+			afectationGeneratedTr := transactionManager.ConvertToTransactionItem(models.MovimientosCollection+collectionPostFixName, "", "", afectationGenerated)
+			movimientoData = append(movimientoData, documentoPresupuestalTr...)
+			movimientoData = append(movimientoData, afectationGeneratedTr...)
+		} else if err == nil && movimientoParameter.TipoDocumentoGenerado != nil && *movimientoParameter.TipoDocumentoGenerado == documentoPresupuestalRequestData.Tipo {
+			panic("Document Generation of same type not allowed")
+		}
+
 		insertMovimientoData := transactionManager.ConvertToTransactionItem(models.MovimientosCollection+collectionPostFixName, "", "", movimientoElmnt)
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
