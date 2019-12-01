@@ -46,6 +46,7 @@ func init() {
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
+			TipoDocumentoGenerado: &externalDocType,
 		}
 
 		TrasladoDestinoApropiacion := models.MovimientoParameter{
@@ -55,7 +56,6 @@ func init() {
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
-			TipoDocumentoGenerado: &externalDocType,
 		}
 
 		parameters := []interface{}{
