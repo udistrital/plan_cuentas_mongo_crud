@@ -67,8 +67,8 @@ func (j *MovimientosController) RegistrarMovimiento() {
 		}
 	}
 
-	movimientoCompositor.DocumentoPresupuestalRegister(&documentoPresupuestalRequestData)
-	body = documentoPresupuestalRequestData
+	resulData := movimientoCompositor.DocumentoPresupuestalRegister(&documentoPresupuestalRequestData)
+	body = resulData
 }
 
 // RegistrarMovimientoParameter ...

@@ -1001,7 +1001,7 @@ paths:
         "403":
           description: error
 definitions:
-  6682.0xc00046a450.false:
+  6682.0xc0004ae270.false:
     title: "false"
     type: object
   7033.rubroFuente:
@@ -1035,7 +1035,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/6682.0xc00046a450.false'
+        $ref: '#/definitions/6682.0xc0004ae270.false'
       UnidadEjecutora:
         type: string
       ValorActual:
