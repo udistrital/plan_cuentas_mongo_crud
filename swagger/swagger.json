@@ -1516,11 +1516,11 @@
         }
     },
     "definitions": {
-        "14234.0xc0005ee9f0.false": {
+        "14234.0xc0005fe4b0.false": {
             "title": "false",
             "type": "object"
         },
-        "22748.0xc000608d80.false": {
+        "22748.0xc000620840.false": {
             "title": "false",
             "type": "object"
         },
@@ -1566,7 +1566,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/22748.0xc000608d80.false"
+                    "$ref": "#/definitions/22748.0xc000620840.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1717,7 +1717,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/14234.0xc0005ee9f0.false"
+                    "$ref": "#/definitions/14234.0xc0005fe4b0.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

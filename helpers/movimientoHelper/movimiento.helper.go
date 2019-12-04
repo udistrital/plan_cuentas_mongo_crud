@@ -1,9 +1,13 @@
 package movimientohelper
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/astaxie/beego/logs"
 	"github.com/globalsign/mgo/txn"
 	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
+	documentopresupuestalmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/documentoPresupuestalManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -186,4 +190,31 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 
 	}
 	return
+}
+
+func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg string) (result interface{}, err error) {
+	var movimientosJoined []map[string]interface{}
+
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.New(fmt.Sprintf("%s", r))
+			return
+		}
+	}()
+	for _, mov := range movimientos {
+		movMap := make(map[string]interface{})
+		if err := formatdata.FillStruct(mov, &movMap); err != nil {
+			return nil, errors.New("Cannont get generated document info")
+		}
+		if mov.DocumentosPresGenerados != nil {
+			var documentsGenerated []models.DocumentoPresupuestal
+			for _, doc := range *mov.DocumentosPresGenerados {
+				docGenerated := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
+				documentsGenerated = append(documentsGenerated, docGenerated)
+			}
+			movMap["DocumentsGenerated"] = documentsGenerated
+		}
+		movimientosJoined = append(movimientosJoined, movMap)
+	}
+	return movimientosJoined, nil
 }

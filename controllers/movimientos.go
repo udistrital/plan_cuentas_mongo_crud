@@ -7,6 +7,7 @@ import (
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors/movimientoCompositor"
 	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
+	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -67,8 +68,8 @@ func (j *MovimientosController) RegistrarMovimiento() {
 		}
 	}
 
-	movimientoCompositor.DocumentoPresupuestalRegister(&documentoPresupuestalRequestData)
-	body = documentoPresupuestalRequestData
+	resulData := movimientoCompositor.DocumentoPresupuestalRegister(&documentoPresupuestalRequestData)
+	body = resulData
 }
 
 // RegistrarMovimientoParameter ...
@@ -124,7 +125,8 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 	parentUUID := j.GetString(":parentUUID")
 
 	rows, err := movimientoManager.GetMovimientoByDocumentoPresupuestalUUID(vigencia, centroGestor, parentUUID)
-	response := commonhelper.DefaultResponse(200, err, &rows)
+	rowsJoined, err := movimientohelper.JoinGeneratedDocPresWithMov(rows, vigencia, centroGestor)
+	response := commonhelper.DefaultResponse(200, err, &rowsJoined)
 
 	j.Data["json"] = response
 	j.ServeJSON()
