@@ -75,7 +75,7 @@ func (j *DocumentoPresupuestalController) GetAll() {
 // @Description get all cdp objects
 // @Success 200 rows []models.DocumentoPresupuestal
 // @Failure 403 :vigencia is empty
-// @router get_all_cdp/:vigencia [get]
+// @router /get_all_cdp/:vigencia [get]
 func (j *DocumentoPresupuestalController) GetAllCdp() {
 	var rows []models.DocumentoPresupuestal
 	vigencia := j.GetString(":vigencia")

@@ -406,6 +406,17 @@ paths:
           description: DocumentoPresupuestal models.DocumentoPresupuestal
         "403":
           description: :objectId is empty
+  /documento_presupuestal/get_all_cdp/{vigencia}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: get all cdp objects
+      operationId: DocumentoPresupuestalController.GetAllCdp
+      responses:
+        "200":
+          description: rows []models.DocumentoPresupuestal
+        "403":
+          description: :vigencia is empty
   /documento_presupuestal/get_info_cdp/{id}:
     get:
       tags:
@@ -417,17 +428,6 @@ paths:
           description: documentoPresupuestal models.DocumentoPresupuestal
         "403":
           description: :id is empty
-  /documento_presupuestalget_all_cdp/{vigencia}:
-    get:
-      tags:
-      - documento_presupuestal
-      description: get all cdp objects
-      operationId: DocumentoPresupuestalController.GetAllCdp
-      responses:
-        "200":
-          description: rows []models.DocumentoPresupuestal
-        "403":
-          description: :vigencia is empty
   /fuente_financiamiento/:
     post:
       tags:
@@ -1001,10 +1001,13 @@ paths:
         "403":
           description: error
 definitions:
-  6682.0xc000495530.false:
+  14234.0xc0005fe4b0.false:
     title: "false"
     type: object
-  7033.rubroFuente:
+  22748.0xc000620840.false:
+    title: "false"
+    type: object
+  23099.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -1031,11 +1034,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/7033.rubroFuente'
+        $ref: '#/definitions/23099.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/6682.0xc000495530.false'
+        $ref: '#/definitions/22748.0xc000620840.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1141,8 +1144,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        type: integer
-        format: int64
+        $ref: '#/definitions/14234.0xc0005fe4b0.false'
       fechaCreacion:
         type: string
         format: datetime

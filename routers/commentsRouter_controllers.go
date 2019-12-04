@@ -27,8 +27,8 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
         beego.ControllerComments{
-            Method: "GetInfoCdp",
-            Router: `/get_info_cdp/:id`,
+            Method: "GetAllCdp",
+            Router: `/get_all_cdp/:vigencia`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -36,8 +36,8 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
         beego.ControllerComments{
-            Method: "GetAllCdp",
-            Router: `get_all_cdp/:vigencia`,
+            Method: "GetInfoCdp",
+            Router: `/get_info_cdp/:id`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
