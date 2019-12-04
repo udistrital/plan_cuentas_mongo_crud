@@ -406,18 +406,7 @@ paths:
           description: DocumentoPresupuestal models.DocumentoPresupuestal
         "403":
           description: :objectId is empty
-  /documento_presupuestal/get_info_cdp/{id}:
-    get:
-      tags:
-      - documento_presupuestal
-      description: Obtiene un documento presupuestal de tipo cdp con su id
-      operationId: DocumentoPresupuestalController.GetInfoCdp
-      responses:
-        "200":
-          description: documentoPresupuestal models.DocumentoPresupuestal
-        "403":
-          description: :id is empty
-  /documento_presupuestalget_all_cdp/{vigencia}:
+  /documento_presupuestal/get_all_cdp/{vigencia}:
     get:
       tags:
       - documento_presupuestal
@@ -428,6 +417,17 @@ paths:
           description: rows []models.DocumentoPresupuestal
         "403":
           description: :vigencia is empty
+  /documento_presupuestal/get_info_cdp/{id}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene un documento presupuestal de tipo cdp con su id de solicitud
+      operationId: DocumentoPresupuestalController.GetInfoCdp
+      responses:
+        "200":
+          description: documentoPresupuestal models.DocumentoPresupuestal
+        "403":
+          description: :id is empty
   /fuente_financiamiento/:
     post:
       tags:
@@ -1001,10 +1001,13 @@ paths:
         "403":
           description: error
 definitions:
-  23019.0xc0005bd1a0.false:
+  14234.0xc0005ee9f0.false:
     title: "false"
     type: object
-  23370.rubroFuente:
+  22748.0xc000608d80.false:
+    title: "false"
+    type: object
+  23099.rubroFuente:
     title: rubroFuente
     type: object
   bson.ObjectId:
@@ -1031,11 +1034,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/23370.rubroFuente'
+        $ref: '#/definitions/23099.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/23019.0xc0005bd1a0.false'
+        $ref: '#/definitions/22748.0xc000608d80.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1141,8 +1144,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        type: integer
-        format: int64
+        $ref: '#/definitions/14234.0xc0005ee9f0.false'
       fechaCreacion:
         type: string
         format: datetime
