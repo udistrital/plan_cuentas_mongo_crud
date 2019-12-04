@@ -60,7 +60,7 @@ func InsertNodoRubro(session *mgo.Session, j NodoRubro) error {
 func GetAllNodoRubro(session *mgo.Session, query map[string]interface{}) []NodoRubro {
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	// fmt.Println("Getting all NodoRubros")
+	
 	var NodoRubros []NodoRubro
 	err := c.Find(query).All(&NodoRubros)
 	if err != nil {
@@ -169,15 +169,12 @@ func GetRaices(session *mgo.Session, ue string) ([]NodoRubro, error) {
 	)
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	// bson.M{ "$or": []bson.M{ bson.M{"padre": nil}, bson.M{"padre": } }, "idpsql": bson.M{"$ne": nil} }
-	// err := c.Find(bson.M{"padre": nil, "idpsql": bson.M{"$ne": nil}}).All(&roots)
 	err := c.Find(bson.M{
 		"$or": []bson.M{bson.M{"padre": nil},
 			bson.M{"padre": ""}},
 		"idpsql":           bson.M{"$ne": nil},
 		"unidad_ejecutora": bson.M{"$in": []string{"0", ue}},
 	}).All(&roots)
-	fmt.Println("roots: ", roots)
 	return roots, err
 }
 
@@ -220,7 +217,7 @@ func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
 	i := strings.LastIndex(rubro, "-")
 	digits := len(strings.Replace(rubro[i:], "-", "", 1))
 	switch numcaracters {
-	case 2:
+	case 2: // Nivel 3
 		if digits > 3 {
 			return "", errors.New("No se Puede Ingresar el Rubro, supera el máximo permitido")
 		} else if digits < 2 {
@@ -231,7 +228,7 @@ func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
 			newrubro = rubro
 		}
 		break
-	case 6:
+	case 6: // Nivel 7
 		if digits > 4 {
 			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
 		} else if digits < 2 {
@@ -244,9 +241,19 @@ func concatRubro(numcaracters int, rubro string) (newrubro string, err error) {
 			newrubro = rubro
 		}
 		break
-	// Linea temporal solicitada por @SoulFilip indice 7-> nivel 8
-	case 7:
-		return "", errors.New("Temporalmente no esta permitido registrar más niveles")
+	case 7: // Nivel 8
+		if digits > 4 {
+			return "", errors.New("No se Puede Ingresar Rubro, supera el máximo permitido")
+		} else if digits < 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-000", 1)
+		} else if digits == 2 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-00", 1)
+		} else if digits == 3 {
+			newrubro = rubro[:i] + strings.Replace(rubro[i:], "-", "-0", 1)
+		} else {
+			newrubro = rubro
+		}
+		break
 	//
 	default:
 		if digits > 2 {
