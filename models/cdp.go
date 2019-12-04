@@ -8,15 +8,8 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/db"
 )
 
-// CDPCollection es el nombre de la colección en mongo.
+// SolicitudCDPCollection es el nombre de la colección en mongo.
 const SolicitudCDPCollection = "cdp"
-
-// infoCdp asociado a una solicitud de CDP
-type infoCdp struct {
-	Consecutivo     int       `json:"consecutivo" bson:"consecutivo"`
-	FechaExpedicion time.Time `json:"fechaExpedicion" bson:"fechaExpedicion"`
-	Estado          int       `json:"estado" bson:"estado"`
-}
 
 // SolicitudCDP información de la solicitud de un CDP
 type SolicitudCDP struct {
@@ -27,10 +20,8 @@ type SolicitudCDP struct {
 	Necesidad            int           `json:"necesidad" bson:"necesidad"`
 	Vigencia             string        `json:"vigencia" bson:"vigencia"`
 	FechaRegistro        time.Time     `json:"fechaRegistro" bson:"fechaRegistro"`
-	Estado               int           `json:"estado" bson:"estado"`
+	Estado               interface{}   `json:"estado" bson:"estado"`
 	JustificacionRechazo string        `json:"justificacionRechazo" bson:"justificacionRechazo"`
-	// InfoCDP              *infoCdp      `json:"infoCdp" bson:"infoCdp"`
-	// InfoCDP              ""      		`json:"infoCdp" bson:"infoCdp"`
 	Activo               bool          `json:"activo" bson:"activo"`
 	FechaCreacion        time.Time     `json:"fechaCreacion" bson:"fechaCreacion"`
 	FechaModificacion    time.Time     `json:"fechaModificacion" bson:"fechaModificacion"`
