@@ -11,6 +11,7 @@ import (
 
 func init() {
 	migrate.Register(func(db *mongo.Database) error {
+		externalDocType := "cdp_modificacion"
 		AdicionApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
 			TipoMovimientoHijo:   "adicion",
@@ -26,6 +27,7 @@ func init() {
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
+			TipoDocumentoGenerado: &externalDocType,
 		}
 		SuspencionApropiacion := models.MovimientoParameter{
 			Multiplicador:        -1,
@@ -34,6 +36,7 @@ func init() {
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
+			TipoDocumentoGenerado: &externalDocType,
 		}
 
 		TrasladoOrigenApropiacion := models.MovimientoParameter{
@@ -43,6 +46,7 @@ func init() {
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
+			TipoDocumentoGenerado: &externalDocType,
 		}
 
 		TrasladoDestinoApropiacion := models.MovimientoParameter{
