@@ -1516,16 +1516,16 @@
         }
     },
     "definitions": {
-        "14234.0xc0005fe4b0.false": {
+        "23691.0xc00079d7d0.false": {
             "title": "false",
             "type": "object"
         },
-        "22748.0xc000620840.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "23099.rubroFuente": {
+        "24042.rubroFuente": {
             "title": "rubroFuente",
+            "type": "object"
+        },
+        "853.0xc000754060.false": {
+            "title": "false",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1560,13 +1560,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/23099.rubroFuente"
+                    "$ref": "#/definitions/24042.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/22748.0xc000620840.false"
+                    "$ref": "#/definitions/23691.0xc00079d7d0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1717,7 +1717,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/14234.0xc0005fe4b0.false"
+                    "$ref": "#/definitions/853.0xc000754060.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
