@@ -26,17 +26,18 @@ type Compromiso struct {
 
 // SolicitudCRP información de la solicitud de un CRP
 type SolicitudCRP struct {
-	ID                bson.ObjectId `json:"_id" bson:"_id,omitempty"`
-	Consecutivo       int           `json:"consecutivo" bson:"consecutivo"`
-	ConsecutivoCDP    int           `json:"consecutivoCdp" bson:"consecutivoCdp"`
-	Vigencia          string        `json:"vigencia" bson:"vigencia"`
-	Beneficiario      string        `json:"beneficiario" bson:"beneficiario"`
-	Valor             float64       `json:"valor" bson:"valor"`
-	Compromiso        *Compromiso   `json:"compromiso" bson:"compromiso"`
-	InfoCRP           *infoCrp      `json:"infoCrp" bson:"infoCrp"`
-	Activo            bool          `json:"activo" bson:"activo"`
-	FechaCreacion     time.Time     `json:"fechaCreacion" bson:"fechaCreacion"`
-	FechaModificacion time.Time     `json:"fechaModificacion" bson:"fechaModificacion"`
+	ID                 bson.ObjectId `json:"_id" bson:"_id,omitempty"`
+	Consecutivo        int           `json:"consecutivo" bson:"consecutivo"`
+	ConsecutivoCDP     int           `json:"consecutivoCdp" bson:"consecutivoCdp"`
+	Vigencia           string        `json:"vigencia" bson:"vigencia"`
+	Beneficiario       string        `json:"beneficiario" bson:"beneficiario"`
+	Valor              float64       `json:"valor" bson:"valor"`
+	Compromiso         *Compromiso   `json:"compromiso" bson:"compromiso"`
+	InfoCRP            *infoCrp      `json:"infoCrp" bson:"infoCrp"`
+	FechaFinalVigencia time.Time     `json:"fechaFinalVigencia" bson:"fechaFinalVigencia"`
+	Activo             bool          `json:"activo" bson:"activo"`
+	FechaCreacion      time.Time     `json:"fechaCreacion" bson:"fechaCreacion"`
+	FechaModificacion  time.Time     `json:"fechaModificacion" bson:"fechaModificacion"`
 }
 
 // InsertSolicitudCRP registra una SolicitudCRP en la bd
