@@ -192,7 +192,7 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 	return
 }
 
-func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg string) (result interface{}, err error) {
+func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg string) (result []map[string]interface{}, err error) {
 	var movimientosJoined []map[string]interface{}
 
 	defer func() {

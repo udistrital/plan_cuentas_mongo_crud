@@ -126,7 +126,21 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 
 	rows, err := movimientoManager.GetMovimientoByDocumentoPresupuestalUUID(vigencia, centroGestor, parentUUID)
 	rowsJoined, err := movimientohelper.JoinGeneratedDocPresWithMov(rows, vigencia, centroGestor)
-	response := commonhelper.DefaultResponse(200, err, &rowsJoined)
+	var finalRowsFormated []map[string]interface{}
+	if v := j.GetString("fatherInfoLevel"); v != "" {
+		for _, row := range rowsJoined {
+			fatherByHiherachy, err := movimientoCompositor.GetMovimientoFatherInfoByHiherachylevel(row["_id"].(string), v, vigencia, centroGestor)
+			if err == nil {
+				row["FatherInfo"] = fatherByHiherachy
+			}
+
+			finalRowsFormated = append(finalRowsFormated, row)
+		}
+	} else {
+		finalRowsFormated = rowsJoined
+	}
+
+	response := commonhelper.DefaultResponse(200, err, &finalRowsFormated)
 
 	j.Data["json"] = response
 	j.ServeJSON()

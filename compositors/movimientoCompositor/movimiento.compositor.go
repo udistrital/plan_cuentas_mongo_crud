@@ -5,6 +5,7 @@ import (
 
 	"github.com/globalsign/mgo/txn"
 	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
+	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
 	docMananger "github.com/udistrital/plan_cuentas_mongo_crud/managers/documentoPresupuestalManager"
 	movimientoManager "github.com/udistrital/plan_cuentas_mongo_crud/managers/movimientoManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/managers/transactionManager"
@@ -105,7 +106,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	transactionManager.RunTransaction(movimientoData)
 	updateAfectationData := transactionManager.ConvertToUpdateTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "afectacion_ids", *documentoPresupuestalRequestData)
 	transactionManager.RunTransaction(updateAfectationData)
-	resultData["DocID"] = documentoPresupuestalRequestData.ID
+	resultData["DocInfo"] = documentoPresupuestalRequestData
 	resultData["Sequences"] = generatedDocumentIDS
 	return resultData
 }
@@ -123,4 +124,48 @@ func AddMovimientoTransaction(movimientoData ...models.Movimiento) []interface{}
 	}
 
 	return ops
+}
+
+func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg string) (resul interface{}, err error) {
+
+	runFlag := true
+	currMov := models.Movimiento{}
+	currMov.ID = ID
+	parameterForThisLevel := models.MovimientoParameter{}
+	fixedName := "_" + vigencia + "_" + cg
+	currMov, err = movimientoManager.GetOneMovimientoByID(currMov.ID, fixedName)
+	if err != nil {
+		return
+	}
+
+	parameterForThisLevel, err = movimientoManager.GetInitialMovimientoParameterByHijo(currMov.Tipo)
+	if err != nil {
+		return
+	}
+
+	for runFlag {
+
+		if currMov.Tipo == hiherachyLevel {
+			resul = currMov
+			return
+		}
+
+		if parameterForThisLevel.FatherCollectionName != "" && parameterForThisLevel.TipoMovimientoPadre == hiherachyLevel {
+			resul, err = crudmanager.GetDocumentByID(currMov.Padre, parameterForThisLevel.FatherCollectionName+fixedName)
+			return
+		}
+		sonType := currMov.Tipo
+		currMov, err = movimientoManager.GetOneMovimientoByID(currMov.Padre, fixedName)
+		if err != nil {
+			return
+		}
+
+		parameterForThisLevel, err = movimientoManager.GetOneMovimientoParameterByHijoAndPadre(sonType, currMov.Tipo)
+		if err != nil {
+			return
+		}
+
+	}
+
+	return
 }
