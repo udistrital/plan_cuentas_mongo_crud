@@ -78,3 +78,13 @@ func GetMovimientoByDocumentoPresupuestalUUID(vigencia, cg, parentUUID string) (
 	return
 
 }
+
+// GetOneMovimientoByID ... Get Mpvimiento information by id.
+func GetOneMovimientoByID(id, collectionPostFixName string) (res models.Movimiento, err error) {
+	session, err := db.GetSession()
+	c := db.Cursor(session, models.MovimientosCollection+collectionPostFixName)
+	defer session.Close()
+	err = c.Find(bson.M{"_id": id}).One(&res)
+	return
+
+}
