@@ -87,13 +87,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
 
-		if documentoPresupuestalRequestData.Tipo != "modificacion_fuente" {
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
 
-			propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
-
-			if len(propagacionData) > 0 {
-				movimientoData = append(movimientoData, propagacionData...)
-			}
+		if len(propagacionData) > 0 {
+			movimientoData = append(movimientoData, propagacionData...)
 		}
 
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
