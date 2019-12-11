@@ -1516,15 +1516,15 @@
         }
     },
     "definitions": {
-        "10894.0xc00054d9e0.false": {
+        "23698.0xc0007eeae0.false": {
             "title": "false",
             "type": "object"
         },
-        "11245.rubroFuente": {
+        "24049.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "853.0xc0005314d0.false": {
+        "853.0xc000785350.false": {
             "title": "false",
             "type": "object"
         },
@@ -1560,13 +1560,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/11245.rubroFuente"
+                    "$ref": "#/definitions/24049.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10894.0xc00054d9e0.false"
+                    "$ref": "#/definitions/23698.0xc0007eeae0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1717,7 +1717,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/853.0xc0005314d0.false"
+                    "$ref": "#/definitions/853.0xc000785350.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

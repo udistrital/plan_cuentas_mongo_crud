@@ -41,10 +41,10 @@ func (j *MovimientosController) RegistrarMovimiento() {
 	)
 
 	defer func() {
-		if r := recover(); r != nil {
+		/* 		if r := recover(); r != nil {
 			logs.Error(r)
 			responseformat.SetResponseFormat(&j.Controller, r, "", 500)
-		}
+		} */
 		responseformat.SetResponseFormat(&j.Controller, body, "", 200)
 
 	}()
