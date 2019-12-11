@@ -209,8 +209,10 @@ func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg s
 		if mov.DocumentosPresGenerados != nil {
 			var documentsGenerated []models.DocumentoPresupuestal
 			for _, doc := range *mov.DocumentosPresGenerados {
-				docGenerated := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
-				documentsGenerated = append(documentsGenerated, docGenerated)
+				docGenerated, err := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
+				if err == nil {
+					documentsGenerated = append(documentsGenerated, docGenerated)
+				}
 			}
 			movMap["DocumentsGenerated"] = documentsGenerated
 		}

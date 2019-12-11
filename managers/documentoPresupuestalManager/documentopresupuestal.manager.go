@@ -21,14 +21,17 @@ func GetByType(vigencia, centroGestor, tipo string) []models.DocumentoPresupuest
 	return documentoPresupuestalRows
 }
 
-func GetOneByType(UUID, vigencia, centroGestor, tipo string) models.DocumentoPresupuestal {
+func GetOneByType(UUID, vigencia, centroGestor, tipo string) (models.DocumentoPresupuestal, error) {
 	query := make(map[string]interface{})
 	collectionFixedName := models.DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor
 	var documentoPresupuestalRows []models.DocumentoPresupuestal
 	query["_id"] = UUID
 
-	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows)
-	return documentoPresupuestalRows[0]
+	err := crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows)
+	if err != nil {
+		return models.DocumentoPresupuestal{}, err
+	}
+	return documentoPresupuestalRows[0], nil
 }
 
 // GetCDPByID obtiene una un CDP expedido con su _id de solicitud

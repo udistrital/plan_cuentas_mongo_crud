@@ -417,6 +417,17 @@ paths:
           description: rows []models.DocumentoPresupuestal
         "403":
           description: :vigencia is empty
+  /documento_presupuestal/get_doc_mov_by_parent/{vigencia}/{CG}/{id}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene un documento presupuestal de tipo cdp con su id de solicitud
+      operationId: DocumentoPresupuestalController.GetDocMovByParent
+      responses:
+        "200":
+          description: documentoPresupuestal models.DocumentoPresupuestal
+        "403":
+          description: :id is empty
   /documento_presupuestal/get_info_cdp/{id}:
     get:
       tags:
@@ -1001,10 +1012,10 @@ paths:
         "403":
           description: error
 definitions:
-  853.0xc0005314d0.false:
+  853.0xc000573920.false:
     title: "false"
     type: object
-  10894.0xc00054d9e0.false:
+  10894.0xc000591e30.false:
     title: "false"
     type: object
   11245.rubroFuente:
@@ -1038,7 +1049,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/10894.0xc00054d9e0.false'
+        $ref: '#/definitions/10894.0xc000591e30.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1144,7 +1155,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/853.0xc0005314d0.false'
+        $ref: '#/definitions/853.0xc000573920.false'
       fechaCreacion:
         type: string
         format: datetime
