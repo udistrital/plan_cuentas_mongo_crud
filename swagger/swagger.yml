@@ -1001,14 +1001,17 @@ paths:
         "403":
           description: error
 definitions:
-  853.0xc000785350.false:
+  1413.0xc0007cbfb0.false:
     title: "false"
     type: object
-  23698.0xc0007eeae0.false:
+  29771.0xc000842570.false:
     title: "false"
     type: object
-  24049.rubroFuente:
+  30122.rubroFuente:
     title: rubroFuente
+    type: object
+  30472.0xc0008425d0.false:
+    title: "false"
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -1031,14 +1034,16 @@ definitions:
         type: string
       Estado:
         type: string
+      Movimientos:
+        $ref: '#/definitions/30472.0xc0008425d0.false'
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/24049.rubroFuente'
+        $ref: '#/definitions/30122.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/23698.0xc0007eeae0.false'
+        $ref: '#/definitions/29771.0xc000842570.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1144,7 +1149,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/853.0xc000785350.false'
+        $ref: '#/definitions/1413.0xc0007cbfb0.false'
       fechaCreacion:
         type: string
         format: datetime
