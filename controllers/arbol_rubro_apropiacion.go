@@ -10,7 +10,6 @@ import (
 	"github.com/udistrital/utils_oas/responseformat"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
-	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
 
 	"github.com/astaxie/beego/logs"
 
@@ -207,7 +206,7 @@ func (j *NodoRubroApropiacionController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
-		go vigenciahelper.AddNew(nodoRubroApropiacion.Vigencia, models.ApropiacionVigenciaNameSpace, nodoRubroApropiacion.UnidadEjecutora)
+		//go vigenciahelper.AddNew(nodoRubroApropiacion.Vigencia, models.ApropiacionVigenciaNameSpace, nodoRubroApropiacion.UnidadEjecutora)
 		j.response = DefaultResponse(200, nil, "insert success")
 	} else {
 		j.response = DefaultResponse(403, err, nil)

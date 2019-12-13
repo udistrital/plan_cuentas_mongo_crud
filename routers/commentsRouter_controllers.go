@@ -513,6 +513,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
         beego.ControllerComments{
+            Method: "AgregarVigencia",
+            Router: `/agregar_vigencia`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
+        beego.ControllerComments{
             Method: "GetVigenciasCurrentVigenciaWithOffset",
             Router: `/vigencia_actual`,
             AllowHTTPMethods: []string{"get"},

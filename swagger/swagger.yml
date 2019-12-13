@@ -981,6 +981,26 @@ paths:
           description: '{string} success'
         "403":
           description: error
+  /vigencia/agregar_vigencia:
+    post:
+      tags:
+      - vigencia
+      description: create vigencia
+      operationId: VigenciaController.AgregarVigencia
+      parameters:
+      - in: body
+        name: body
+        description: body for Producto content
+        required: true
+        schema:
+          $ref: '#/definitions/models.Vigencia'
+      responses:
+        "201":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Vigencia'
+        "403":
+          description: body is empty
   /vigencia/vigencia_actual:
     get:
       tags:
@@ -1001,14 +1021,14 @@ paths:
         "403":
           description: error
 definitions:
-  853.0xc0005314d0.false:
+  907.0xc000516900.false:
     title: "false"
     type: object
-  10894.0xc00054d9e0.false:
-    title: "false"
-    type: object
-  11245.rubroFuente:
+  1258.rubroFuente:
     title: rubroFuente
+    type: object
+  34458.0xc00058ad50.false:
+    title: "false"
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -1034,11 +1054,11 @@ definitions:
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/11245.rubroFuente'
+        $ref: '#/definitions/1258.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/10894.0xc00054d9e0.false'
+        $ref: '#/definitions/907.0xc000516900.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1144,7 +1164,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/853.0xc0005314d0.false'
+        $ref: '#/definitions/34458.0xc00058ad50.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -1195,6 +1215,23 @@ definitions:
         format: double
       vigencia:
         type: string
+  models.Vigencia:
+    title: Vigencia
+    type: object
+    properties:
+      AreaFuncional:
+        type: string
+      CentroGestor:
+        type: string
+      Estado:
+        type: string
+      Id:
+        type: string
+      NameSpace:
+        type: string
+      Valor:
+        type: integer
+        format: int64
   models.actividad:
     title: actividad
     type: object

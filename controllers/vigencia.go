@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"strconv"
 	"time"
 
@@ -12,6 +13,7 @@ import (
 // VigenciaController estructura para un controlador de beego
 type VigenciaController struct {
 	beego.Controller
+	response map[string]interface{}
 }
 
 // GetVigenciasByNameSpace ...
@@ -51,4 +53,35 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 	currentTime := time.Now()
 	year := currentTime.Year() + offset
 	responseformat.SetResponseFormat(&j.Controller, year, "", 200)
+}
+
+// GetVigenciaActual ...
+// @Title GetVigenciaActual
+// @Description Retorna la vigencia actual a partir del estado en el que esta se encuentre. Posibles estados: actual, cerrada, creada
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /vigencia_actual_prueba
+/*func (j *VigenciaController) GetVigenciaActual() {
+	var err error
+
+}
+*/
+
+// AgregarVigencia ...
+// @Title AgregarVigencia
+// @Description create vigencia
+// @Param	body		body 	models.Vigencia	true		"body for Producto content"
+// @Success 201 {object} models.Vigencia
+// @Failure 403 body is empty
+// @router /agregar_vigencia [post]
+func (j *VigenciaController) AgregarVigencia() {
+	var vigencia map[string]interface{}
+	json.Unmarshal(j.Ctx.Input.RequestBody, &vigencia)
+	if err := vigenciahelper.AddNew(int((vigencia["Valor"]).(float64)), (vigencia["NameSpace"]).(string), (vigencia["AreaFuncional"]).(string), (vigencia["CentroGestor"]).(string), vigenciahelper.VigenciaActual); err == nil {
+		j.response = DefaultResponse(201, nil, &vigencia)
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }
