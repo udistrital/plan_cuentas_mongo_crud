@@ -594,7 +594,7 @@
                     {
                         "in": "path",
                         "name": "id",
-                        "description": "El id de la SolicitudCDP a consultar",
+                        "description": "El id de la DocumentoPresupuestal a consultar",
                         "required": true,
                         "type": "string"
                     }
@@ -603,7 +603,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.SolicitudCDP"
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
                         }
                     },
                     "403": {
@@ -1599,11 +1599,11 @@
             "title": "false",
             "type": "object"
         },
-        "24081.rubroFuente": {
+        "24184.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "31719.\u003cnil\u003e.string": {
+        "31822.\u003cnil\u003e.string": {
             "title": "string",
             "type": "object"
         },
@@ -1649,7 +1649,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/20129.0xc00042a300.false"
+                    "$ref": "#/definitions/20232.0xc00043dd40.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1754,7 +1754,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/31719.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/31822.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -1951,6 +1951,10 @@
                     "format": "datetime"
                 },
                 "fechaFinalVigencia": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaInicioVigencia": {
                     "type": "string",
                     "format": "datetime"
                 },

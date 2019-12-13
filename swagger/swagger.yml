@@ -440,14 +440,14 @@ paths:
       parameters:
       - in: path
         name: id
-        description: El id de la SolicitudCDP a consultar
+        description: El id de la DocumentoPresupuestal a consultar
         required: true
         type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.SolicitudCDP'
+            $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :objectId is empty
   /documento_presupuestal/get_all_cdp/{vigencia}:
@@ -1090,7 +1090,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/20129.0xc00042a300.false'
+        $ref: '#/definitions/20232.0xc00043dd40.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1163,7 +1163,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/31719.<nil>.string'
+        $ref: '#/definitions/31822.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1299,6 +1299,9 @@ definitions:
         type: string
         format: datetime
       fechaFinalVigencia:
+        type: string
+        format: datetime
+      fechaInicioVigencia:
         type: string
         format: datetime
       fechaModificacion:
