@@ -583,6 +583,35 @@
                 }
             }
         },
+        "/documento_presupuestal/documento/{vigencia}/{areaFuncional}/{id}": {
+            "get": {
+                "tags": [
+                    "documento_presupuestal"
+                ],
+                "description": "get documento presupuestal by id",
+                "operationId": "DocumentoPresupuestalController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "El id de la SolicitudCDP a consultar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.SolicitudCDP"
+                        }
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
         "/documento_presupuestal/get_all_cdp/{vigencia}": {
             "get": {
                 "tags": [
@@ -647,6 +676,44 @@
                     },
                     "403": {
                         "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
+        "/documento_presupuestal/{vigencia}/{areaFuncional}/{id}": {
+            "put": {
+                "tags": [
+                    "documento_presupuestal"
+                ],
+                "description": "update a documento presupuestal document",
+                "operationId": "DocumentoPresupuestalController.Update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
+                        }
+                    },
+                    "403": {
+                        "description": ":areaFuncional is empty"
                     }
                 }
             }
@@ -1532,6 +1599,14 @@
             "title": "false",
             "type": "object"
         },
+        "24081.rubroFuente": {
+            "title": "rubroFuente",
+            "type": "object"
+        },
+        "31719.\u003cnil\u003e.string": {
+            "title": "string",
+            "type": "object"
+        },
         "bson.ObjectId": {
             "title": "ObjectId",
             "type": "object"
@@ -1547,6 +1622,58 @@
                 "tipoCompromiso": {
                     "type": "integer",
                     "format": "int64"
+                }
+            }
+        },
+        "models.DocumentoPresupuestal": {
+            "title": "DocumentoPresupuestal",
+            "type": "object",
+            "properties": {
+                "Afectacion": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Movimiento"
+                    }
+                },
+                "AfectacionIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "CentroGestor": {
+                    "type": "string"
+                },
+                "Consecutivo": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Data": {
+                    "$ref": "#/definitions/20129.0xc00042a300.false"
+                },
+                "Estado": {
+                    "type": "string"
+                },
+                "FechaRegistro": {
+                    "type": "string"
+                },
+                "Tipo": {
+                    "type": "string"
+                },
+                "ValorActual": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "ValorInicial": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "_id": {
+                    "type": "string"
                 }
             }
         },
@@ -1616,6 +1743,51 @@
                 "Vigencia": {
                     "type": "integer",
                     "format": "int64"
+                }
+            }
+        },
+        "models.Movimiento": {
+            "title": "Movimiento",
+            "type": "object",
+            "properties": {
+                "DocumentoPresupuestalUUID": {
+                    "type": "string"
+                },
+                "DocumentosPresGenerados": {
+                    "$ref": "#/definitions/31719.\u003cnil\u003e.string"
+                },
+                "Estado": {
+                    "type": "string"
+                },
+                "FechaRegistro": {
+                    "type": "string"
+                },
+                "IDPsql": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Movimientos": {
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "Padre": {
+                    "type": "string"
+                },
+                "Tipo": {
+                    "type": "string"
+                },
+                "ValorActual": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "ValorInicial": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "_id": {
+                    "type": "string"
                 }
             }
         },
