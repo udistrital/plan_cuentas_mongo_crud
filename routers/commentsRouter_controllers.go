@@ -27,6 +27,24 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
         beego.ControllerComments{
+            Method: "Put",
+            Router: `/:vigencia/:areaFuncional/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
+        beego.ControllerComments{
+            Method: "Get",
+            Router: `/documento/:vigencia/:areaFuncional/:id`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
+        beego.ControllerComments{
             Method: "GetAllCdp",
             Router: `/get_all_cdp/:vigencia`,
             AllowHTTPMethods: []string{"get"},

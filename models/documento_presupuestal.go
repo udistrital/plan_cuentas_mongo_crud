@@ -52,3 +52,32 @@ func GetAllDocumentoPresupuestal(vigencia, centroGestor string, query map[string
 	err = c.Find(query).All(&docPresupuestales)
 	return
 }
+
+// GetDocumentoPresupuestalById obtiene un documento presupuestal por su id por su _id
+func GetDocumentoPresupuestalById(id, vigencia, areaFuncional string) (docPresupuestal DocumentoPresupuestal, err error) {
+	session, err := db.GetSession()
+	if err != nil {
+		return
+	}
+	defer session.Close()
+
+	collectionFixed := DocumentoPresupuestalCollection + "_" + vigencia + "_" + areaFuncional
+	
+	c := db.Cursor(session, collectionFixed)
+	err = c.FindId(id).One(&docPresupuestal)
+	return
+}
+
+// UpdateDocumentoPresupuestal ...
+func UpdateDocumentoPresupuestal(j *DocumentoPresupuestal, id, vigencia, areaFuncional string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+
+	collectionFixed := DocumentoPresupuestalCollection + "_" + vigencia + "_" + areaFuncional
+
+	c := db.Cursor(session, collectionFixed)
+	return c.UpdateId(id, &j)
+}
