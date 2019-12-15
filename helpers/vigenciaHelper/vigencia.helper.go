@@ -1,7 +1,6 @@
 package vigenciahelper
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -60,11 +59,10 @@ func consultarVigencia(vig models.Vigencia) (existe bool) {
 			existe = true
 		}
 	}
-	fmt.Println(existe)
 	return
 }
 
-// GetVigenciaByID obtiene y devuelve la vigenci con el id que se pasó por parametros.
+// GetVigenciaByID obtiene y devuelve la vigencia con el id que se pasó por parametros.
 func GetVigenciaById(id string) (vigencia []interface{}, err error) {
 	pipeline := []bson.M{
 		bson.M{
@@ -82,7 +80,18 @@ func GetVigenciaById(id string) (vigencia []interface{}, err error) {
 		},
 	}
 	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...)
-	fmt.Println("Vigencia: ", vigencia, err)
+	return
+}
+
+// Retorna la vigencia con estado = actual.
+func GetVigenciaActual() (vigencia []interface{}, err error) {
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{
+				"estado": VigenciaActual},
+		},
+	}
+	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...)
 	return
 }
 

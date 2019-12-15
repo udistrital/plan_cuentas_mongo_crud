@@ -1512,6 +1512,23 @@
                 }
             }
         },
+        "/vigencia/vigencia_actual_prueba": {
+            "get": {
+                "tags": [
+                    "vigencia"
+                ],
+                "description": "Retorna la vigencia actual a partir del estado en el que esta se encuentre. Posibles estados: actual, cerrada, creada",
+                "operationId": "VigenciaController.GetVigenciaActual",
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
         "/vigencia/{namespace}/{centrogestor}": {
             "get": {
                 "tags": [
@@ -1551,11 +1568,11 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "34458.0xc00058ad50.false": {
+        "34458.0xc0005b7140.false": {
             "title": "false",
             "type": "object"
         },
-        "907.0xc000516900.false": {
+        "907.0xc000542cf0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1597,7 +1614,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc000516900.false"
+                    "$ref": "#/definitions/907.0xc000542cf0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1748,7 +1765,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/34458.0xc00058ad50.false"
+                    "$ref": "#/definitions/34458.0xc0005b7140.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

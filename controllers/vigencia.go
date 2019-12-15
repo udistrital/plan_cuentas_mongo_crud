@@ -60,12 +60,16 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 // @Description Retorna la vigencia actual a partir del estado en el que esta se encuentre. Posibles estados: actual, cerrada, creada
 // @Success 200 {string} success
 // @Failure 403 error
-// @router /vigencia_actual_prueba
-/*func (j *VigenciaController) GetVigenciaActual() {
+// @router /vigencia_actual_prueba [get]
+func (j *VigenciaController) GetVigenciaActual() {
 	var err error
-
+	var objVigenciaActual []interface{}
+	objVigenciaActual, err = vigenciahelper.GetVigenciaActual()
+	if err != nil {
+		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
+	}
+	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual[0], "", 200)
 }
-*/
 
 // AgregarVigencia ...
 // @Title AgregarVigencia

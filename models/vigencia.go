@@ -13,7 +13,7 @@ type Vigencia struct {
 	ID            string `json:"Id" bson:"_id,omitempty"`
 	NameSpace     string `json:"NameSpace" bson:"name_space"`
 	CentroGestor  string `json:"CentroGestor" bson:"centro_gestor"`
-	AreaFuncional string `json:"AreaFuncional" bson:"AreaFuncional"`
+	AreaFuncional string `json:"AreaFuncional" bson:"area_funcional"`
 	Valor         int    `json:"Valor" bson:"valor"`
 	Estado        string `json:"Estado" bson:"estado"`
 }
