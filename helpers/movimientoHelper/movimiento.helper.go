@@ -86,7 +86,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 		if documentoPadre["estado"] != nil {
 			documentoPadreNewState = documentoPadre["estado"].(string)
 		}
-
 		if documentoPadreValorActual == 0 {
 			documentoPadreNewState = "total_comprometido"
 		} else if documentoPadreValorActual > 0 {

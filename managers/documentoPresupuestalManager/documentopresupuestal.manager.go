@@ -1,6 +1,7 @@
 package documentopresupuestalmanager
 
 import (
+	"fmt"
 	"log"
 
 	"strconv"
@@ -14,8 +15,10 @@ func GetByType(vigencia, centroGestor, tipo string) []models.DocumentoPresupuest
 	collectionFixedName := models.DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor
 	var documentoPresupuestalRows []models.DocumentoPresupuestal
 	query["tipo"] = map[string]interface{}{
-		"$regex": tipo + ".*",
+		"$regex": "^" + tipo + ".*?$",
 	}
+
+	fmt.Println(query)
 
 	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows, "-fecha_registro")
 	return documentoPresupuestalRows
