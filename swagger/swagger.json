@@ -594,7 +594,7 @@
                     {
                         "in": "path",
                         "name": "id",
-                        "description": "El id de la SolicitudCDP a consultar",
+                        "description": "El id de la DocumentoPresupuestal a consultar",
                         "required": true,
                         "type": "string"
                     }
@@ -603,7 +603,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.SolicitudCDP"
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
                         }
                     },
                     "403": {
@@ -625,6 +625,23 @@
                     },
                     "403": {
                         "description": ":vigencia is empty"
+                    }
+                }
+            }
+        },
+        "/documento_presupuestal/get_doc_mov_by_parent/{vigencia}/{CG}/{id}": {
+            "get": {
+                "tags": [
+                    "documento_presupuestal"
+                ],
+                "description": "Obtiene un documento presupuestal de tipo cdp con su id de solicitud",
+                "operationId": "DocumentoPresupuestalController.GetDocMovByParent",
+                "responses": {
+                    "200": {
+                        "description": "documentoPresupuestal models.DocumentoPresupuestal"
+                    },
+                    "403": {
+                        "description": ":id is empty"
                     }
                 }
             }
@@ -1583,28 +1600,28 @@
         }
     },
     "definitions": {
-        "1413.0xc0007cbfb0.false": {
+        "10894.0xc000662840.false": {
             "title": "false",
             "type": "object"
         },
-        "29771.0xc000842570.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "30122.rubroFuente": {
+        "11245.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "30472.0xc0008425d0.false": {
+        "11595.0xc0006628a0.false": {
             "title": "false",
             "type": "object"
         },
-        "24081.rubroFuente": {
-            "title": "rubroFuente",
+        "30802.0xc00069d1a0.false": {
+            "title": "false",
             "type": "object"
         },
-        "31719.\u003cnil\u003e.string": {
+        "4261.\u003cnil\u003e.string": {
             "title": "string",
+            "type": "object"
+        },
+        "853.0xc00063e330.false": {
+            "title": "false",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1649,7 +1666,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/20129.0xc00042a300.false"
+                    "$ref": "#/definitions/30802.0xc00069d1a0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1688,19 +1705,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/30472.0xc0008425d0.false"
+                    "$ref": "#/definitions/11595.0xc0006628a0.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/30122.rubroFuente"
+                    "$ref": "#/definitions/11245.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/29771.0xc000842570.false"
+                    "$ref": "#/definitions/10894.0xc000662840.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1754,7 +1771,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/31719.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -1896,7 +1913,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/1413.0xc0007cbfb0.false"
+                    "$ref": "#/definitions/853.0xc00063e330.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

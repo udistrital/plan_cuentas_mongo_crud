@@ -6,6 +6,7 @@ import (
 	"strings"
 	"encoding/json"
 	"github.com/astaxie/beego"
+	"github.com/udistrital/plan_cuentas_mongo_crud/compositors"
 	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	documentopresupuestalmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/documentoPresupuestalManager"
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
@@ -152,6 +153,24 @@ func (j *DocumentoPresupuestalController) GetAllCdp() {
 func (j *DocumentoPresupuestalController) GetInfoCdp() {
 	id := j.GetString(":id")
 	data := documentopresupuestalmanager.GetCDPByID(id)
+
+	response := commonhelper.DefaultResponse(200, nil, &data)
+	j.Data["json"] = response
+	j.ServeJSON()
+}
+
+// GetDocMovByParent Obtiene un documento presupuestal de tipo cdp con su id de solicitud
+// @Title GetDocMovByParent
+// @Description Obtiene un documento presupuestal de tipo cdp con su id de solicitud
+// @Success 200 documentoPresupuestal models.DocumentoPresupuestal
+// @Failure 403 :id is empty
+// @router /get_doc_mov_by_parent/:vigencia/:CG/:id [get]
+func (j *DocumentoPresupuestalController) GetDocMovByParent() {
+	id := j.GetString(":id")
+	vigencia := j.GetString(":vigencia")
+	centroGestor := j.GetString(":CG")
+	docPresComp := compositors.DocumentoPresupuestalCompositor{}
+	data := docPresComp.GetMovDocumentPresByParent(vigencia, centroGestor, id)
 
 	response := commonhelper.DefaultResponse(200, nil, &data)
 	j.Data["json"] = response
