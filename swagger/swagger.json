@@ -1568,11 +1568,11 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "34458.0xc0005b7140.false": {
+        "34458.0xc0005e5260.false": {
             "title": "false",
             "type": "object"
         },
-        "907.0xc000542cf0.false": {
+        "907.0xc000572e10.false": {
             "title": "false",
             "type": "object"
         },
@@ -1614,7 +1614,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc000542cf0.false"
+                    "$ref": "#/definitions/907.0xc000572e10.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1765,7 +1765,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/34458.0xc0005b7140.false"
+                    "$ref": "#/definitions/34458.0xc0005e5260.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

@@ -1,6 +1,7 @@
 package vigenciahelper
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 
@@ -24,6 +25,9 @@ func AddNew(value int, namespace string, areafuncional string, cg string, estado
 		CentroGestor:  cg,
 		Valor:         value,
 		Estado:        estado,
+	}
+	if vig, _ := GetVigenciaActual(); len(vig) != 0 {
+		return errors.New("Ya existe una vigencia actual")
 	}
 	if strings.ToLower(estado) == VigenciaActual {
 		if consultarVigencia(vigenciaStruct) {
