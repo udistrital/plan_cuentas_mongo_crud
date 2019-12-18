@@ -1539,6 +1539,64 @@
                 }
             }
         },
+        "/vigencia/agregar_vigencia": {
+            "post": {
+                "tags": [
+                    "vigencia"
+                ],
+                "description": "create vigencia",
+                "operationId": "VigenciaController.AgregarVigencia",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Producto content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Vigencia"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Vigencia"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/vigencia/cerrar_vigencia_actual": {
+            "put": {
+                "tags": [
+                    "vigencia"
+                ],
+                "description": "Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.",
+                "operationId": "VigenciaController.CerrarVigencia",
+                "parameters": [
+                    {
+                        "in": "Área",
+                        "name": "area_funcional",
+                        "description": "a",
+                        "schema": {
+                            "$ref": "#/definitions/funcional"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
         "/vigencia/vigencia_actual": {
             "get": {
                 "tags": [
@@ -1553,6 +1611,33 @@
                         "description": "offset para determinar vigencia ej: offset= 1; vigencia+1 , offset=-1; vigencia -1",
                         "required": true,
                         "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} success"
+                    },
+                    "403": {
+                        "description": "error"
+                    }
+                }
+            }
+        },
+        "/vigencia/vigencia_actual_area": {
+            "get": {
+                "tags": [
+                    "vigencia"
+                ],
+                "description": "Retorna la vigencia del área funcional cuyo estado sea actual.",
+                "operationId": "VigenciaController.GetVigenciaActual",
+                "parameters": [
+                    {
+                        "in": "Área",
+                        "name": "area_funcional",
+                        "description": "a",
+                        "schema": {
+                            "$ref": "#/definitions/funcional"
+                        }
                     }
                 ],
                 "responses": {
@@ -1600,32 +1685,24 @@
         }
     },
     "definitions": {
-        "10894.0xc000662840.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "11245.rubroFuente": {
+        "1258.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "11595.0xc0006628a0.false": {
+        "34458.0xc000666510.false": {
             "title": "false",
             "type": "object"
         },
-        "30802.0xc00069d1a0.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "4261.\u003cnil\u003e.string": {
-            "title": "string",
-            "type": "object"
-        },
-        "853.0xc00063e330.false": {
+        "907.0xc0006040c0.false": {
             "title": "false",
             "type": "object"
         },
         "bson.ObjectId": {
             "title": "ObjectId",
+            "type": "object"
+        },
+        "funcional": {
+            "title": "funcional",
             "type": "object"
         },
         "models.Compromiso": {
@@ -1711,13 +1788,13 @@
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/11245.rubroFuente"
+                    "$ref": "#/definitions/1258.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10894.0xc000662840.false"
+                    "$ref": "#/definitions/907.0xc0006040c0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1913,7 +1990,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/853.0xc00063e330.false"
+                    "$ref": "#/definitions/34458.0xc000666510.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -1984,6 +2061,37 @@
                 },
                 "vigencia": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Vigencia": {
+            "title": "Vigencia",
+            "type": "object",
+            "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
+                "Estado": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "string"
+                },
+                "Valor": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "fechaCierre": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
                 }
             }
         },
