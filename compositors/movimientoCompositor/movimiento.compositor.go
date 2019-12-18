@@ -130,6 +130,7 @@ func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg st
 	currMov.ID = ID
 	parameterForThisLevel := models.MovimientoParameter{}
 	fixedName := "_" + vigencia + "_" + cg
+
 	currMov, err = movimientoManager.GetOneMovimientoByID(currMov.ID, fixedName)
 	if err != nil {
 		return

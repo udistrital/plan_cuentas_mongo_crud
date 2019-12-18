@@ -1,13 +1,35 @@
 package models
 
+import (
+	"time"
+
+	"github.com/globalsign/mgo/bson"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+)
+
 // VigenciaCollectionName nombre de la colleccion para guardar las agrupaciones de vigencias.
-const VigenciaCollectionName = "vigencia"
+const VigenciaCollectionName = "vigencia_233_"
 
 // Vigencia estructura para acceder de forma mas rápida a la información de las vigencias registradas.
 type Vigencia struct {
-	ID           string `json:"Id" bson:"_id,omitempty"`
-	NameSapce    string `json:"NameSpace" bson:"name_space"`
-	CentroGestor string `json:"CentroGestor" bson:"centro_gestor"`
-	Valor        int    `json:"Valor" bson:"valor"`
-	Estado       string `json:"Estado" bson:"estado"`
+	ID                string    `json:"Id" bson:"_id,omitempty"`
+	Valor             int       `json:"Valor" bson:"valor"`
+	Activo            bool      `json:"Activo" bson:"activo"`
+	Estado            string    `json:"Estado" bson:"estado"`
+	FechaCreacion     time.Time `json:"fechaCreacion" bson:"fechaCreacion"`
+	FechaModificacion time.Time `json:"fechaModificacion" bson:"fechaModificacion"`
+	FechaCierre       time.Time `json:"fechaCierre" bson:"fechaCierre"`
+}
+
+//UpdateVigencia ... actializa una vigencia
+func UpdateVigencia(j *Vigencia, id string, areaFuncional string) error {
+	session, err := db.GetSession()
+	if err != nil {
+		return err
+	}
+	c := db.Cursor(session, VigenciaCollectionName+areaFuncional)
+
+	defer session.Close()
+
+	return c.Update(bson.M{"_id": id}, &j)
 }

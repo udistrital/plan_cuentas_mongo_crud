@@ -86,7 +86,6 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 		if documentoPadre["estado"] != nil {
 			documentoPadreNewState = documentoPadre["estado"].(string)
 		}
-
 		if documentoPadreValorActual == 0 {
 			documentoPadreNewState = "total_comprometido"
 		} else if documentoPadreValorActual > 0 {
@@ -223,8 +222,10 @@ func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg s
 		if mov.DocumentosPresGenerados != nil {
 			var documentsGenerated []models.DocumentoPresupuestal
 			for _, doc := range *mov.DocumentosPresGenerados {
-				docGenerated := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
-				documentsGenerated = append(documentsGenerated, docGenerated)
+				docGenerated, err := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
+				if err == nil {
+					documentsGenerated = append(documentsGenerated, docGenerated)
+				}
 			}
 			movMap["DocumentsGenerated"] = documentsGenerated
 		}
