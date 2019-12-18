@@ -57,18 +57,37 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 
 // GetVigenciaActual ...
 // @Title GetVigenciaActual
-// @Description Retorna la vigencia actual a partir del estado en el que esta se encuentre. Posibles estados: actual, cerrada, creada
+// @Description Retorna la vigencia del área funcional cuyo estado sea actual.
+// @Param area_funcional Área funcional a la que pertenece la vigencia que se quiere consultar
 // @Success 200 {string} success
 // @Failure 403 error
-// @router /vigencia_actual_prueba [get]
+// @router /vigencia_actual_area [get]
 func (j *VigenciaController) GetVigenciaActual() {
 	var err error
 	var objVigenciaActual []interface{}
-	objVigenciaActual, err = vigenciahelper.GetVigenciaActual()
-	if err != nil {
+	objVigenciaActual, err = vigenciahelper.GetVigenciaActual(j.GetString("area_funcional"))
+	if err != nil || len(objVigenciaActual) == 0 {
 		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
 	}
-	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual[0], "", 200)
+
+	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual, "", 200)
+}
+
+// CerrarVigencia ...
+// @Title CerrarVigencia
+// @Description Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
+// @Param area_funcional Área funcional a la que pertenece la vigencia que se quiere cerrar.
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /cerrar_vigencia_actual [put]
+func (j *VigenciaController) CerrarVigencia() {
+	if err := vigenciahelper.CerrarVigencia(j.GetString("area_funcional")); err == nil {
+		j.response = DefaultResponse(201, nil, "")
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }
 
 // AgregarVigencia ...
@@ -81,7 +100,7 @@ func (j *VigenciaController) GetVigenciaActual() {
 func (j *VigenciaController) AgregarVigencia() {
 	var vigencia map[string]interface{}
 	json.Unmarshal(j.Ctx.Input.RequestBody, &vigencia)
-	if err := vigenciahelper.AddNew(int((vigencia["Valor"]).(float64)), (vigencia["NameSpace"]).(string), (vigencia["AreaFuncional"]).(string), (vigencia["CentroGestor"]).(string), vigenciahelper.VigenciaActual); err == nil {
+	if err := vigenciahelper.AddNew(int((vigencia["Valor"]).(float64)), vigenciahelper.VigenciaActual, (vigencia["AreaFuncional"]).(string)); err == nil {
 		j.response = DefaultResponse(201, nil, &vigencia)
 	} else {
 		j.response = DefaultResponse(403, err, nil)

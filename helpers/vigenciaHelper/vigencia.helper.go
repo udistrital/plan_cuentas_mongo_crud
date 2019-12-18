@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/udistrital/utils_oas/formatdata"
 
@@ -16,49 +17,76 @@ import (
 const VigenciaActual, VigenciaSiguiente, VigenciaCerrada = "actual", "siguiente", "cerrada"
 
 // AddNew adds a new record to vigencia collection. Cada que se agregue una nueva vigencia
-func AddNew(value int, namespace string, areafuncional string, cg string, estado string) error {
+func AddNew(value int, estado string, areaFuncional string) error {
 
 	vigenciaStruct := models.Vigencia{
-		ID:            strconv.Itoa(value) + "_" + cg,
-		NameSpace:     namespace,
-		AreaFuncional: areafuncional,
-		CentroGestor:  cg,
-		Valor:         value,
-		Estado:        estado,
+		ID:                strconv.Itoa(value),
+		Activo:            true,
+		Valor:             value,
+		Estado:            estado,
+		FechaCreacion:     time.Now(),
+		FechaModificacion: time.Now(),
 	}
-	if vig, _ := GetVigenciaActual(); len(vig) != 0 {
+	if vig, _ := GetVigenciaActual(areaFuncional); len(vig) != 0 {
 		return errors.New("Ya existe una vigencia actual")
 	}
 	if strings.ToLower(estado) == VigenciaActual {
-		if consultarVigencia(vigenciaStruct) {
-			if err := models.UpdateVigencia(&vigenciaStruct, vigenciaStruct.ID); err == nil {
+		if consultarVigencia(vigenciaStruct, areaFuncional) {
+			if err := models.UpdateVigencia(&vigenciaStruct, vigenciaStruct.ID, areaFuncional); err == nil {
+				AgregarVigenciaSiguiente(value+1, VigenciaSiguiente, areaFuncional)
 				return err
 			}
 		}
 	}
-	if err := AgregarVigenciaSiguiente(value+1, namespace, areafuncional, cg); err != nil {
+	if err := AgregarVigenciaSiguiente(value+1, VigenciaSiguiente, areaFuncional); err != nil {
 		return err
 	}
-	return crudmanager.AddNew(models.VigenciaCollectionName, vigenciaStruct)
+	return crudmanager.AddNew(models.VigenciaCollectionName+areaFuncional, vigenciaStruct)
 }
 
 //Agrega una nueva vigencia con el estado de siguiente, cuando se registra una viencia nueva
-func AgregarVigenciaSiguiente(value int, namespace string, areafuncional, cg string) error {
+func AgregarVigenciaSiguiente(value int, estado string, areaFuncional string) error {
 	nuevaVigencia := models.Vigencia{
-		ID:            strconv.Itoa(value) + "_" + cg,
-		NameSpace:     namespace,
-		AreaFuncional: areafuncional,
-		CentroGestor:  cg,
-		Valor:         value,
-		Estado:        VigenciaSiguiente,
+		ID:                strconv.Itoa(value),
+		Activo:            true,
+		Valor:             value,
+		Estado:            estado,
+		FechaCreacion:     time.Now(),
+		FechaModificacion: time.Now(),
 	}
-	return crudmanager.AddNew(models.VigenciaCollectionName, nuevaVigencia)
+	return crudmanager.AddNew(models.VigenciaCollectionName+areaFuncional, nuevaVigencia)
+}
+
+//Cierra la vigencia que se encuentre con el estado actual en la colección
+func CerrarVigencia(area string) (err error) {
+
+	if vigActual, _ := GetVigenciaActual(area); len(vigActual) != 0 {
+		var objVigencia map[string]interface{}
+		formatdata.FillStructP(vigActual[0], &objVigencia)
+
+		layout := "2006-01-02T15:04:05.000Z"
+		finicio, _ := time.Parse(layout, objVigencia["fechaCreacion"].(string))
+
+		vigenciaCerrada := models.Vigencia{
+			ID:                objVigencia["_id"].(string),
+			Activo:            objVigencia["activo"].(bool),
+			Valor:             int(objVigencia["valor"].(float64)),
+			Estado:            VigenciaCerrada,
+			FechaCreacion:     finicio,
+			FechaModificacion: time.Now(),
+			FechaCierre:       time.Now(),
+		}
+		err = models.UpdateVigencia(&vigenciaCerrada, vigenciaCerrada.ID, area)
+	} else {
+		return errors.New("No hay vigencia para cerrar")
+	}
+	return
 }
 
 // Consulta si ya existe una vigencia en la base de datos, devuelve true si existe, false en caso contrario
-func consultarVigencia(vig models.Vigencia) (existe bool) {
+func consultarVigencia(vig models.Vigencia, areaFuncional string) (existe bool) {
 	existe = false
-	if vigencia, err := GetVigenciaById(vig.ID); err == nil {
+	if vigencia, err := GetVigenciaById(vig.ID, areaFuncional); err == nil {
 		if len(vigencia) != 0 {
 			existe = true
 		}
@@ -67,7 +95,7 @@ func consultarVigencia(vig models.Vigencia) (existe bool) {
 }
 
 // GetVigenciaByID obtiene y devuelve la vigencia con el id que se pasó por parametros.
-func GetVigenciaById(id string) (vigencia []interface{}, err error) {
+func GetVigenciaById(id string, area string) (vigencia []interface{}, err error) {
 	pipeline := []bson.M{
 		bson.M{
 			"$match": bson.M{
@@ -83,19 +111,19 @@ func GetVigenciaById(id string) (vigencia []interface{}, err error) {
 			},
 		},
 	}
-	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...)
+	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName+area, pipeline...)
 	return
 }
 
 // Retorna la vigencia con estado = actual.
-func GetVigenciaActual() (vigencia []interface{}, err error) {
+func GetVigenciaActual(area string) (vigencia []interface{}, err error) {
 	pipeline := []bson.M{
 		bson.M{
 			"$match": bson.M{
 				"estado": VigenciaActual},
 		},
 	}
-	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...)
+	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName+area, pipeline...)
 	return
 }
 

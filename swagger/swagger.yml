@@ -1001,6 +1001,24 @@ paths:
             $ref: '#/definitions/models.Vigencia'
         "403":
           description: body is empty
+  /vigencia/cerrar_vigencia_actual:
+    put:
+      tags:
+      - vigencia
+      description: Se cierra la vigencia que se encuentre con estado actual en la
+        colección, dependiendo del área funcional que le llegue.
+      operationId: VigenciaController.CerrarVigencia
+      parameters:
+      - in: Área
+        name: area_funcional
+        description: a
+        schema:
+          $ref: '#/definitions/funcional'
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
   /vigencia/vigencia_actual:
     get:
       tags:
@@ -1020,30 +1038,38 @@ paths:
           description: '{string} success'
         "403":
           description: error
-  /vigencia/vigencia_actual_prueba:
+  /vigencia/vigencia_actual_area:
     get:
       tags:
       - vigencia
-      description: 'Retorna la vigencia actual a partir del estado en el que esta
-        se encuentre. Posibles estados: actual, cerrada, creada'
+      description: Retorna la vigencia del área funcional cuyo estado sea actual.
       operationId: VigenciaController.GetVigenciaActual
+      parameters:
+      - in: Área
+        name: area_funcional
+        description: a
+        schema:
+          $ref: '#/definitions/funcional'
       responses:
         "200":
           description: '{string} success'
         "403":
           description: error
 definitions:
-  907.0xc000572e10.false:
+  907.0xc0006040c0.false:
     title: "false"
     type: object
   1258.rubroFuente:
     title: rubroFuente
     type: object
-  34458.0xc0005e5260.false:
+  34458.0xc000666510.false:
     title: "false"
     type: object
   bson.ObjectId:
     title: ObjectId
+    type: object
+  funcional:
+    title: funcional
     type: object
   models.Compromiso:
     title: Compromiso
@@ -1070,7 +1096,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc000572e10.false'
+        $ref: '#/definitions/907.0xc0006040c0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1176,7 +1202,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/34458.0xc0005e5260.false'
+        $ref: '#/definitions/34458.0xc000666510.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -1231,19 +1257,24 @@ definitions:
     title: Vigencia
     type: object
     properties:
-      AreaFuncional:
-        type: string
-      CentroGestor:
-        type: string
+      Activo:
+        type: boolean
       Estado:
         type: string
       Id:
         type: string
-      NameSpace:
-        type: string
       Valor:
         type: integer
         format: int64
+      fechaCierre:
+        type: string
+        format: datetime
+      fechaCreacion:
+        type: string
+        format: datetime
+      fechaModificacion:
+        type: string
+        format: datetime
   models.actividad:
     title: actividad
     type: object
