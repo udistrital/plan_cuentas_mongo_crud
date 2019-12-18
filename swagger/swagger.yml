@@ -1156,7 +1156,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/30802.0xc00069d1a0.false'
+        $ref: '#/definitions/20232.0xc00043dd40.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1229,7 +1229,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/4261.<nil>.string'
+        $ref: '#/definitions/31822.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1365,6 +1365,9 @@ definitions:
         type: string
         format: datetime
       fechaFinalVigencia:
+        type: string
+        format: datetime
+      fechaInicioVigencia:
         type: string
         format: datetime
       fechaModificacion:

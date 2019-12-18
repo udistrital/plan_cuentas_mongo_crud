@@ -1693,8 +1693,12 @@
             "title": "false",
             "type": "object"
         },
-        "907.0xc0006040c0.false": {
-            "title": "false",
+        "24184.rubroFuente": {
+            "title": "rubroFuente",
+            "type": "object"
+        },
+        "31822.\u003cnil\u003e.string": {
+            "title": "string",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1743,7 +1747,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/30802.0xc00069d1a0.false"
+                    "$ref": "#/definitions/20232.0xc00043dd40.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1848,7 +1852,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/31822.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -2045,6 +2049,10 @@
                     "format": "datetime"
                 },
                 "fechaFinalVigencia": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "fechaInicioVigencia": {
                     "type": "string",
                     "format": "datetime"
                 },
