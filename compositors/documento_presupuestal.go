@@ -30,3 +30,21 @@ func (c *DocumentoPresupuestalCompositor) GetAllByType(vigencia, centroGestor, t
 
 	return documentoPresupuestalData
 }
+
+func (c *DocumentoPresupuestalCompositor) GetMovDocumentPresByParent(vigencia, centroGestor, parentUUID string) []models.DocumentoPresupuestal {
+	collectionFixedName := "_" + vigencia + "_" + centroGestor
+	var docPresArr []models.DocumentoPresupuestal
+	movs, err := movimientoManager.GetAllMovimientoByParentUUID(parentUUID, collectionFixedName)
+	if err != nil {
+		logs.Error("error at GetMovDocumentPresByParent ", err.Error())
+	}
+
+	for _, mov := range movs {
+		doc, err := documentopresupuestalmanager.GetOneByType(mov.DocumentoPresupuestalUUID, vigencia, centroGestor, "")
+		if err == nil {
+			docPresArr = append(docPresArr, doc)
+		}
+	}
+
+	return docPresArr
+}

@@ -38,6 +38,7 @@ type FuenteFinanciamiento struct {
 	NumeroDocumento string                       `json:"NumeroDocumento" bson:"numeroDocumento"`
 	TipoDocumento   string                       `json:"TipoDocumento" bson:"tipoDocumento"`
 	UnidadEjecutora string                       `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
+	Movimientos     map[string]interface{}       `json:"Movimientos" bson:"movimientos"`
 }
 
 // FuenteFinanciamientoCollection constante para la colección
