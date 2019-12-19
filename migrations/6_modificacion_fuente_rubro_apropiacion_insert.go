@@ -11,27 +11,25 @@ import (
 
 func init() {
 	migrate.Register(func(db *mongo.Database) error {
-		AdicionFuente := models.MovimientoParameter{
+		AdicionFuenteToApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
-			TipoMovimientoHijo:   "ad_fuente",
-			TipoMovimientoPadre:  "fuente",
-			FatherCollectionName: "fuente_financiamiento",
+			TipoMovimientoHijo:   "ad_fuente_apropiacion",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
 		}
-
-		ReduccionFuente := models.MovimientoParameter{
+		ReduccionFuenteToApropiacion := models.MovimientoParameter{
 			Multiplicador:        -1,
-			TipoMovimientoHijo:   "rd_fuente",
-			TipoMovimientoPadre:  "fuente",
-			FatherCollectionName: "fuente_financiamiento",
+			TipoMovimientoHijo:   "rd_fuente_apropiacion",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
 		}
-
 		parameters := []interface{}{
-			AdicionFuente,
-			ReduccionFuente,
+			AdicionFuenteToApropiacion,
+			ReduccionFuenteToApropiacion,
 		}
 		_, err := db.Collection(models.MovimientoParameterCollection).InsertMany(context.TODO(), parameters)
 		if err != nil {
@@ -39,27 +37,25 @@ func init() {
 		}
 		return nil
 	}, func(db *mongo.Database) error {
-		AdicionFuente := models.MovimientoParameter{
+		AdicionFuenteToApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
 			TipoMovimientoHijo:   "ad_fuente",
-			TipoMovimientoPadre:  "fuente",
-			FatherCollectionName: "fuente_financiamiento",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
 		}
-
-		ReduccionFuente := models.MovimientoParameter{
+		ReduccionFuenteToApropiacion := models.MovimientoParameter{
 			Multiplicador:        -1,
 			TipoMovimientoHijo:   "rd_fuente",
-			TipoMovimientoPadre:  "fuente",
-			FatherCollectionName: "fuente_financiamiento",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
 			Initial:              true,
 			WithOutChangeState:   true,
 		}
-
 		parameters := []interface{}{
-			AdicionFuente,
-			ReduccionFuente,
+			AdicionFuenteToApropiacion,
+			ReduccionFuenteToApropiacion,
 		}
 		_, err := db.Collection(models.MovimientoParameterCollection).DeleteMany(context.TODO(), parameters)
 		if err != nil {
