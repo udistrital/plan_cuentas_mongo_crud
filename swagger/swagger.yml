@@ -325,7 +325,7 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
-  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}:
+  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}/:
     get:
       tags:
       - arbol_rubro_apropiacion
@@ -1056,19 +1056,19 @@ paths:
         "403":
           description: error
 definitions:
-  853.0xc0007bb890.false:
+  853.0xc0007d6480.false:
     title: "false"
     type: object
-  12635.0xc0007eb170.false:
+  12635.0xc0007f7d40.false:
     title: "false"
     type: object
-  24673.0xc000815560.false:
+  24673.0xc000830150.false:
     title: "false"
     type: object
   25024.rubroFuente:
     title: rubroFuente
     type: object
-  25374.0xc0008155c0.false:
+  25374.0xc0008301b0.false:
     title: "false"
     type: object
   41144.<nil>.string:
@@ -1107,7 +1107,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/12635.0xc0007eb170.false'
+        $ref: '#/definitions/12635.0xc0007f7d40.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1132,7 +1132,7 @@ definitions:
       Estado:
         type: string
       Movimientos:
-        $ref: '#/definitions/25374.0xc0008155c0.false'
+        $ref: '#/definitions/25374.0xc0008301b0.false'
       NumeroDocumento:
         type: string
       Rubros:
@@ -1140,7 +1140,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/24673.0xc000815560.false'
+        $ref: '#/definitions/24673.0xc000830150.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1277,7 +1277,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/853.0xc0007bb890.false'
+        $ref: '#/definitions/853.0xc0007d6480.false'
       fechaCreacion:
         type: string
         format: datetime
