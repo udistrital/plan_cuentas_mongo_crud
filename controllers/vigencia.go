@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -12,6 +14,7 @@ import (
 // VigenciaController estructura para un controlador de beego
 type VigenciaController struct {
 	beego.Controller
+	response map[string]interface{}
 }
 
 // GetVigenciasByNameSpace ...
@@ -51,4 +54,59 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 	currentTime := time.Now()
 	year := currentTime.Year() + offset
 	responseformat.SetResponseFormat(&j.Controller, year, "", 200)
+}
+
+// GetVigenciaActual ...
+// @Title GetVigenciaActual
+// @Description Retorna la vigencia del área funcional cuyo estado sea actual.
+// @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere consultar"
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /vigencia_actual_area/:area_funcional [get]
+func (j *VigenciaController) GetVigenciaActual() {
+	var err error
+	var objVigenciaActual []interface{}
+	objVigenciaActual, err = vigenciahelper.GetVigenciaActual(j.GetString(":area_funcional"))
+	if err != nil || len(objVigenciaActual) == 0 {
+		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
+	}
+
+	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual, "", 200)
+}
+
+// CerrarVigencia ...
+// @Title CerrarVigencia
+// @Description Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
+// @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere cerrar."
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /cerrar_vigencia_actual/:area_funcional [put]
+func (j *VigenciaController) CerrarVigencia() {
+	fmt.Println("hola")
+	if err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional")); err == nil {
+		j.response = DefaultResponse(201, nil, "")
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
+// AgregarVigencia ...
+// @Title AgregarVigencia
+// @Description create vigencia
+// @Param	body		body 	models.VigenciaNueva	true		"body for Producto content"
+// @Success 201 {object} models.Vigencia
+// @Failure 403 body is empty
+// @router /agregar_vigencia [post]
+func (j *VigenciaController) AgregarVigencia() {
+	var vigencia map[string]interface{}
+	json.Unmarshal(j.Ctx.Input.RequestBody, &vigencia)
+	if err := vigenciahelper.AddNew(int((vigencia["Valor"]).(float64)), vigenciahelper.VigenciaActual, (vigencia["AreaFuncional"]).(string)); err == nil {
+		j.response = DefaultResponse(201, nil, &vigencia)
+	} else {
+		j.response = DefaultResponse(403, err, nil)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
 }

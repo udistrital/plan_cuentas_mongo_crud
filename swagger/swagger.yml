@@ -1036,6 +1036,44 @@ paths:
           description: '{string} success'
         "403":
           description: error
+  /vigencia/agregar_vigencia:
+    post:
+      tags:
+      - vigencia
+      description: create vigencia
+      operationId: VigenciaController.AgregarVigencia
+      parameters:
+      - in: body
+        name: body
+        description: body for Producto content
+        required: true
+        schema:
+          $ref: '#/definitions/models.VigenciaNueva'
+      responses:
+        "201":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Vigencia'
+        "403":
+          description: body is empty
+  /vigencia/cerrar_vigencia_actual/{area_funcional}:
+    put:
+      tags:
+      - vigencia
+      description: Se cierra la vigencia que se encuentre con estado actual en la
+        colección, dependiendo del área funcional que le llegue.
+      operationId: VigenciaController.CerrarVigencia
+      parameters:
+      - in: path
+        name: area_funcional
+        description: Área funcional a la que pertenece la vigencia que se quiere cerrar.
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
   /vigencia/vigencia_actual:
     get:
       tags:
@@ -1048,6 +1086,23 @@ paths:
         name: offset
         description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
           offset=-1; vigencia -1'
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
+  /vigencia/vigencia_actual_area/{area_funcional}:
+    get:
+      tags:
+      - vigencia
+      description: Retorna la vigencia del área funcional cuyo estado sea actual.
+      operationId: VigenciaController.GetVigenciaActual
+      parameters:
+      - in: path
+        name: area_funcional
+        description: Área funcional a la que pertenece la vigencia que se quiere consultar
         required: true
         type: string
       responses:
@@ -1318,6 +1373,9 @@ definitions:
       fechaFinalVigencia:
         type: string
         format: datetime
+      fechaInicioVigencia:
+        type: string
+        format: datetime
       fechaModificacion:
         type: string
         format: datetime
@@ -1328,6 +1386,37 @@ definitions:
         format: double
       vigencia:
         type: string
+  models.Vigencia:
+    title: Vigencia
+    type: object
+    properties:
+      Activo:
+        type: boolean
+      Estado:
+        type: string
+      Id:
+        type: string
+      Valor:
+        type: integer
+        format: int64
+      fechaCierre:
+        type: string
+        format: datetime
+      fechaCreacion:
+        type: string
+        format: datetime
+      fechaModificacion:
+        type: string
+        format: datetime
+  models.VigenciaNueva:
+    title: VigenciaNueva
+    type: object
+    properties:
+      AreaFuncional:
+        type: string
+      Valor:
+        type: integer
+        format: int64
   models.actividad:
     title: actividad
     type: object
