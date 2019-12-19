@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -58,14 +59,14 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 // GetVigenciaActual ...
 // @Title GetVigenciaActual
 // @Description Retorna la vigencia del área funcional cuyo estado sea actual.
-// @Param area_funcional Área funcional a la que pertenece la vigencia que se quiere consultar
+// @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere consultar"
 // @Success 200 {string} success
 // @Failure 403 error
-// @router /vigencia_actual_area [get]
+// @router /vigencia_actual_area/:area_funcional [get]
 func (j *VigenciaController) GetVigenciaActual() {
 	var err error
 	var objVigenciaActual []interface{}
-	objVigenciaActual, err = vigenciahelper.GetVigenciaActual(j.GetString("area_funcional"))
+	objVigenciaActual, err = vigenciahelper.GetVigenciaActual(j.GetString(":area_funcional"))
 	if err != nil || len(objVigenciaActual) == 0 {
 		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
 	}
@@ -76,12 +77,13 @@ func (j *VigenciaController) GetVigenciaActual() {
 // CerrarVigencia ...
 // @Title CerrarVigencia
 // @Description Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
-// @Param area_funcional Área funcional a la que pertenece la vigencia que se quiere cerrar.
+// @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere cerrar."
 // @Success 200 {string} success
 // @Failure 403 error
-// @router /cerrar_vigencia_actual [put]
+// @router /cerrar_vigencia_actual/:area_funcional [put]
 func (j *VigenciaController) CerrarVigencia() {
-	if err := vigenciahelper.CerrarVigencia(j.GetString("area_funcional")); err == nil {
+	fmt.Println("hola")
+	if err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional")); err == nil {
 		j.response = DefaultResponse(201, nil, "")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -93,7 +95,7 @@ func (j *VigenciaController) CerrarVigencia() {
 // AgregarVigencia ...
 // @Title AgregarVigencia
 // @Description create vigencia
-// @Param	body		body 	models.Vigencia	true		"body for Producto content"
+// @Param	body		body 	models.VigenciaNueva	true		"body for Producto content"
 // @Success 201 {object} models.Vigencia
 // @Failure 403 body is empty
 // @router /agregar_vigencia [post]

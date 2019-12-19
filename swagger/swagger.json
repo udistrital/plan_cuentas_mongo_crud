@@ -1553,7 +1553,7 @@
                         "description": "body for Producto content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Vigencia"
+                            "$ref": "#/definitions/models.VigenciaNueva"
                         }
                     }
                 ],
@@ -1570,7 +1570,7 @@
                 }
             }
         },
-        "/vigencia/cerrar_vigencia_actual": {
+        "/vigencia/cerrar_vigencia_actual/{area_funcional}": {
             "put": {
                 "tags": [
                     "vigencia"
@@ -1579,12 +1579,11 @@
                 "operationId": "VigenciaController.CerrarVigencia",
                 "parameters": [
                     {
-                        "in": "Área",
+                        "in": "path",
                         "name": "area_funcional",
-                        "description": "a",
-                        "schema": {
-                            "$ref": "#/definitions/funcional"
-                        }
+                        "description": "Área funcional a la que pertenece la vigencia que se quiere cerrar.",
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1623,7 +1622,7 @@
                 }
             }
         },
-        "/vigencia/vigencia_actual_area": {
+        "/vigencia/vigencia_actual_area/{area_funcional}": {
             "get": {
                 "tags": [
                     "vigencia"
@@ -1632,12 +1631,11 @@
                 "operationId": "VigenciaController.GetVigenciaActual",
                 "parameters": [
                     {
-                        "in": "Área",
+                        "in": "path",
                         "name": "area_funcional",
-                        "description": "a",
-                        "schema": {
-                            "$ref": "#/definitions/funcional"
-                        }
+                        "description": "Área funcional a la que pertenece la vigencia que se quiere consultar",
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1685,24 +1683,32 @@
         }
     },
     "definitions": {
-        "1258.rubroFuente": {
-            "title": "rubroFuente",
+        "20958.\u003cnil\u003e.string": {
+            "title": "string",
             "type": "object"
         },
-        "34458.0xc000666510.false": {
+        "22778.0xc0004bff80.false": {
             "title": "false",
             "type": "object"
         },
-        "907.0xc0006040c0.false": {
+        "33492.0xc0004ed0e0.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "6376.0xc0004956b0.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "6727.rubroFuente": {
+            "title": "rubroFuente",
+            "type": "object"
+        },
+        "7077.0xc000495710.false": {
             "title": "false",
             "type": "object"
         },
         "bson.ObjectId": {
             "title": "ObjectId",
-            "type": "object"
-        },
-        "funcional": {
-            "title": "funcional",
             "type": "object"
         },
         "models.Compromiso": {
@@ -1743,7 +1749,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/30802.0xc00069d1a0.false"
+                    "$ref": "#/definitions/22778.0xc0004bff80.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1782,19 +1788,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/11595.0xc0006628a0.false"
+                    "$ref": "#/definitions/7077.0xc000495710.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/1258.rubroFuente"
+                    "$ref": "#/definitions/6727.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/907.0xc0006040c0.false"
+                    "$ref": "#/definitions/6376.0xc0004956b0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1848,7 +1854,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/20958.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -1990,7 +1996,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/34458.0xc000666510.false"
+                    "$ref": "#/definitions/33492.0xc0004ed0e0.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -2092,6 +2098,19 @@
                 "fechaModificacion": {
                     "type": "string",
                     "format": "datetime"
+                }
+            }
+        },
+        "models.VigenciaNueva": {
+            "title": "VigenciaNueva",
+            "type": "object",
+            "properties": {
+                "AreaFuncional": {
+                    "type": "string"
+                },
+                "Valor": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },
