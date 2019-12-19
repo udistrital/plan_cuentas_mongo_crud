@@ -2054,6 +2054,10 @@
                     "type": "string",
                     "format": "datetime"
                 },
+                "fechaInicioVigencia": {
+                    "type": "string",
+                    "format": "datetime"
+                },
                 "fechaModificacion": {
                     "type": "string",
                     "format": "datetime"
