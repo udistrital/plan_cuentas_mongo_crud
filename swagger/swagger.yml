@@ -325,7 +325,7 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
-  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}:
+  /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}/:
     get:
       tags:
       - arbol_rubro_apropiacion
