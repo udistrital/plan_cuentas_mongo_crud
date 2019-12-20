@@ -74,6 +74,23 @@ func (j *VigenciaController) GetVigenciaActual() {
 	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual, "", 200)
 }
 
+// GetTodasVigencias ...
+// @Title GetTodasVigencias
+// @Description Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /vigencias_total [get]
+func (j *VigenciaController) GetTodasVigencias() {
+	var err error
+	fmt.Println("Hola")
+	var vigenciasArr []interface{}
+	vigenciasArr, err = vigenciahelper.GetTodasVigencias()
+	if err != nil || len(vigenciasArr) == 0 {
+		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
+	}
+	responseformat.SetResponseFormat(&j.Controller, vigenciasArr, "", 200)
+}
+
 // CerrarVigencia ...
 // @Title CerrarVigencia
 // @Description Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.

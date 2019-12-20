@@ -127,6 +127,33 @@ func GetVigenciaActual(area string) (vigencia []interface{}, err error) {
 	return
 }
 
+//Retorna las todas las vigencias de todas las colecciones de la base de datos.
+func GetTodasVigencias() (arregloVigencias []interface{}, err error) {
+	//Machetazo momentanio, debo pensar en alguna forma de encontrar todos los códigos de los centros gestores para poder buscar en todas las colecciones.
+	var area = []string{"1", "2"}
+	pipeline := []bson.M{
+		bson.M{
+			"$sort": bson.M{
+				"_id": -1,
+			},
+		},
+	}
+	for a := range area {
+
+		if auxVig, err := crudmanager.RunPipe(models.VigenciaCollectionName+area[a], pipeline...); err == nil {
+			for x := range auxVig {
+				var objVigencia map[string]interface{}
+				formatdata.FillStructP(auxVig[x], &objVigencia)
+				objVigencia["areaFuncional"] = area[a]
+				arregloVigencias = append(arregloVigencias, objVigencia)
+			}
+
+		}
+
+	}
+	return
+}
+
 // GetVigenciasByNameSpaceAndCg return an array with numeric values of collection "vigencia" by namespace and cg.
 func GetVigenciasByNameSpaceAndCg(namespace, cg string) (vigenciasArr []map[string]int, err error) {
 	pipeline := []bson.M{
