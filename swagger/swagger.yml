@@ -1110,23 +1110,35 @@ paths:
           description: '{string} success'
         "403":
           description: error
+  /vigencia/vigencias_total:
+    get:
+      tags:
+      - vigencia
+      description: Retorna las vigencias guardadas en las diferentes colecciones de
+        la base de datos.
+      operationId: VigenciaController.GetTodasVigencias
+      responses:
+        "200":
+          description: '{string} success'
+        "403":
+          description: error
 definitions:
-  6376.0xc0004956b0.false:
+  6479.0xc00053a960.false:
     title: "false"
     type: object
-  6727.rubroFuente:
+  6830.rubroFuente:
     title: rubroFuente
     type: object
-  7077.0xc000495710.false:
+  7180.0xc00053a9c0.false:
     title: "false"
     type: object
-  20958.<nil>.string:
+  21061.<nil>.string:
     title: string
     type: object
-  22778.0xc0004bff80.false:
+  22881.0xc000561230.false:
     title: "false"
     type: object
-  33492.0xc0004ed0e0.false:
+  33595.0xc00058a390.false:
     title: "false"
     type: object
   bson.ObjectId:
@@ -1162,7 +1174,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/22778.0xc0004bff80.false'
+        $ref: '#/definitions/22881.0xc000561230.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1187,15 +1199,15 @@ definitions:
       Estado:
         type: string
       Movimientos:
-        $ref: '#/definitions/7077.0xc000495710.false'
+        $ref: '#/definitions/7180.0xc00053a9c0.false'
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/6727.rubroFuente'
+        $ref: '#/definitions/6830.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/6376.0xc0004956b0.false'
+        $ref: '#/definitions/6479.0xc00053a960.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1235,7 +1247,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/20958.<nil>.string'
+        $ref: '#/definitions/21061.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1332,7 +1344,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/33492.0xc0004ed0e0.false'
+        $ref: '#/definitions/33595.0xc00058a390.false'
       fechaCreacion:
         type: string
         format: datetime
