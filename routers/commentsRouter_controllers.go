@@ -307,7 +307,7 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:NodoRubroApropiacionController"],
         beego.ControllerComments{
             Method: "TreeByState",
-            Router: `/arbol_por_estado/:unidadEjecutora/:vigencia/:estado`,
+            Router: `/arbol_por_estado/:unidadEjecutora/:vigencia/:estado/`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -540,8 +540,44 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
         beego.ControllerComments{
+            Method: "AgregarVigencia",
+            Router: `/agregar_vigencia`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
+        beego.ControllerComments{
+            Method: "CerrarVigencia",
+            Router: `/cerrar_vigencia_actual/:area_funcional`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
+        beego.ControllerComments{
             Method: "GetVigenciasCurrentVigenciaWithOffset",
             Router: `/vigencia_actual`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
+        beego.ControllerComments{
+            Method: "GetVigenciaActual",
+            Router: `/vigencia_actual_area/:area_funcional`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:VigenciaController"],
+        beego.ControllerComments{
+            Method: "GetTodasVigencias",
+            Router: `/vigencias_total`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,

@@ -10,7 +10,6 @@ import (
 	"github.com/udistrital/utils_oas/responseformat"
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/helpers/rubroHelper"
-	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
 
 	"github.com/astaxie/beego/logs"
 
@@ -207,7 +206,7 @@ func (j *NodoRubroApropiacionController) Post() {
 	json.Unmarshal(j.Ctx.Input.RequestBody, &nodoRubroApropiacion)
 
 	if err := rubroApropiacionManager.TrRegistrarNodoHoja(nodoRubroApropiacion, nodoRubroApropiacion.UnidadEjecutora, nodoRubroApropiacion.Vigencia); err == nil {
-		go vigenciahelper.AddNew(nodoRubroApropiacion.Vigencia, models.ApropiacionVigenciaNameSpace, nodoRubroApropiacion.UnidadEjecutora)
+		//go vigenciahelper.AddNew(nodoRubroApropiacion.Vigencia, models.ApropiacionVigenciaNameSpace, nodoRubroApropiacion.UnidadEjecutora)
 		j.response = DefaultResponse(200, nil, "insert success")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
@@ -379,7 +378,7 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	if err != nil {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
-		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, "")
+		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, "", nil)
 		j.response = DefaultResponse(200, nil, &tree)
 	}
 	j.Data["json"] = j.response
@@ -534,16 +533,37 @@ func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 // @Param vigencia vigencia string	true "Vigencia de la apropiación"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado [get]
+// @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado/ [get]
 func (j *NodoRubroApropiacionController) TreeByState() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
 	estado := j.GetString(":estado")
+	var query = make(map[string]interface{})
+	if v := j.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				j.Data["json"] = errors.New("Consulta invalida")
+				j.ServeJSON()
+				return
+			}
+
+			if i, err := strconv.Atoi(kv[1]); err == nil {
+				k, v := kv[0], i
+				query[k] = v
+			} else {
+				k, v := kv[0], kv[1]
+				query[k] = v
+			}
+		}
+	} else {
+		query = nil
+	}
 	vigencia, err := strconv.Atoi(vigenciaStr)
 	if err != nil {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
-		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, estado)
+		tree := rubroApropiacionHelper.ValuesTree(unidadEjecutora, vigencia, estado, query)
 		j.response = DefaultResponse(200, nil, &tree)
 	}
 	j.Data["json"] = j.response
