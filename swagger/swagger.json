@@ -1700,19 +1700,19 @@
         }
     },
     "definitions": {
-        "10993.0xc0006c3ce0.false": {
+        "11110.0xc00067cf90.false": {
             "title": "false",
             "type": "object"
         },
-        "11344.rubroFuente": {
+        "11461.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "11694.0xc0006c3d40.false": {
+        "11811.0xc00067cff0.false": {
             "title": "false",
             "type": "object"
         },
-        "31004.0xc00071e660.false": {
+        "31121.0xc0006bd8f0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1720,7 +1720,7 @@
             "title": "string",
             "type": "object"
         },
-        "853.0xc0006ad7d0.false": {
+        "853.0xc000658a80.false": {
             "title": "false",
             "type": "object"
         },
@@ -1766,7 +1766,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/31004.0xc00071e660.false"
+                    "$ref": "#/definitions/31121.0xc0006bd8f0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1805,19 +1805,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/11694.0xc0006c3d40.false"
+                    "$ref": "#/definitions/11811.0xc00067cff0.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/11344.rubroFuente"
+                    "$ref": "#/definitions/11461.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/10993.0xc0006c3ce0.false"
+                    "$ref": "#/definitions/11110.0xc00067cf90.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2013,7 +2013,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/853.0xc0006ad7d0.false"
+                    "$ref": "#/definitions/853.0xc000658a80.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

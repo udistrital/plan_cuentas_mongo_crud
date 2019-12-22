@@ -54,10 +54,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 
 		if err == nil && movimientoParameter.TipoDocumentoGenerado != nil && *movimientoParameter.TipoDocumentoGenerado != documentoPresupuestalRequestData.Tipo {
 			// TODO: put this code on separate helper or manager.
-			if consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] == 0 {
-				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] = len(docMananger.GetByType(strconv.Itoa(documentoPresupuestalRequestData.Vigencia), documentoPresupuestalRequestData.CentroGestor, strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0])) + 1
+			if consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]] == 0 {
+				consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]] = len(docMananger.GetByType(strconv.Itoa(documentoPresupuestalRequestData.Vigencia), documentoPresupuestalRequestData.CentroGestor, strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0])) + 1
 			} else {
-				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado]++
+				consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]]++
 			}
 			generatedDocument := models.DocumentoPresupuestal{
 				Tipo:          *movimientoParameter.TipoDocumentoGenerado,
@@ -68,7 +68,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 				Vigencia:      documentoPresupuestalRequestData.Vigencia,
 				CentroGestor:  documentoPresupuestalRequestData.CentroGestor,
 				Estado:        models.EstadoRegistrada,
-				Consecutivo:   consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado],
+				Consecutivo:   consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]],
 			}
 			generatedDocumentIDS = append(generatedDocumentIDS, generatedDocument.Consecutivo)
 			documentoPresupuestalTr := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "", generatedDocument)
