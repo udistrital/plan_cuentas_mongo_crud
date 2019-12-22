@@ -67,12 +67,27 @@ func (j *VigenciaController) GetVigenciaActual() {
 	var err error
 	var objVigenciaActual []interface{}
 	objVigenciaActual, err = vigenciahelper.GetVigenciaActual(j.GetString(":area_funcional"))
-	fmt.Println("/***********entra")
 	if err != nil || len(objVigenciaActual) == 0 {
 		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
 	}
 
 	responseformat.SetResponseFormat(&j.Controller, objVigenciaActual, "", 200)
+}
+
+// GetTodasVigencias ...
+// @Title GetTodasVigencias
+// @Description Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
+// @Success 200 {string} success
+// @Failure 403 error
+// @router /vigencias_total [get]
+func (j *VigenciaController) GetTodasVigencias() {
+	var err error
+	var vigenciasArr []interface{}
+	vigenciasArr, err = vigenciahelper.GetTodasVigencias()
+	if err != nil || len(vigenciasArr) == 0 {
+		responseformat.SetResponseFormat(&j.Controller, err, "", 403)
+	}
+	responseformat.SetResponseFormat(&j.Controller, vigenciasArr, "", 200)
 }
 
 // CerrarVigencia ...
