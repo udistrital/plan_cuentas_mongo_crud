@@ -1700,27 +1700,27 @@
         }
     },
     "definitions": {
-        "21061.\u003cnil\u003e.string": {
-            "title": "string",
-            "type": "object"
-        },
-        "22881.0xc000561230.false": {
+        "10993.0xc0006c3ce0.false": {
             "title": "false",
             "type": "object"
         },
-        "33595.0xc00058a390.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "6479.0xc00053a960.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "6830.rubroFuente": {
+        "11344.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "7180.0xc00053a9c0.false": {
+        "11694.0xc0006c3d40.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "31004.0xc00071e660.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "4261.\u003cnil\u003e.string": {
+            "title": "string",
+            "type": "object"
+        },
+        "853.0xc0006ad7d0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1766,7 +1766,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/22881.0xc000561230.false"
+                    "$ref": "#/definitions/31004.0xc00071e660.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1805,19 +1805,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/7180.0xc00053a9c0.false"
+                    "$ref": "#/definitions/11694.0xc0006c3d40.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/6830.rubroFuente"
+                    "$ref": "#/definitions/11344.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6479.0xc00053a960.false"
+                    "$ref": "#/definitions/10993.0xc0006c3ce0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1871,7 +1871,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/21061.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -2013,7 +2013,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/33595.0xc00058a390.false"
+                    "$ref": "#/definitions/853.0xc0006ad7d0.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

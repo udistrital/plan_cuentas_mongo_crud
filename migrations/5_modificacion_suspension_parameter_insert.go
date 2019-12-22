@@ -33,6 +33,7 @@ func init() {
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			WithOutChangeState:   true,
+			Initial:              true,
 		}
 
 		parameters := []interface{}{
