@@ -2,6 +2,7 @@ package rubroManager
 
 import (
 	"errors"
+	"strconv"
 
 	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	crudmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/crudManager"
@@ -35,6 +36,32 @@ func GetRaices(ue string) []map[string]interface{} {
 	}()
 
 	err := c.Find(bson.M{"padre": "", "unidad_ejecutora": "1"}).All(&roots)
+	if err != nil {
+		panic(err.Error())
+	}
+	var resul []map[string]interface{}
+	formatdata.FillStructP(roots, &resul)
+	return resul
+}
+
+// GetRaiz muestra arbol de apropiación por raiz
+func GetRaiz(ue string, vigencia int, query map[string]interface{}) []map[string]interface{} {
+	var (
+		roots []models.NodoRubroApropiacion
+	)
+	session, _ := db.GetSession()
+	//collectionFixed := models.NodoRubroApropiacionCollection + "_" + strconv.Itoa(vigencia) + "_" + ue
+	c := db.Cursor(session, models.NodoRubroApropiacionCollection+"_"+strconv.Itoa(vigencia)+"_"+ue)
+	defer func() {
+		session.Close()
+		if r := recover(); r != nil {
+			logs.Error(r)
+			logManager.LogError(r)
+			panic(r)
+		}
+	}()
+	code := strconv.Itoa(query["Codigo"].(int))
+	err := c.Find(bson.M{"_id": code}).All(&roots)
 	if err != nil {
 		panic(err.Error())
 	}

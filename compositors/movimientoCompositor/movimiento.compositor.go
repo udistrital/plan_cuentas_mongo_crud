@@ -87,13 +87,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
 
-		if documentoPresupuestalRequestData.Tipo != "modificacion_fuente" {
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
 
-			propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
-
-			if len(propagacionData) > 0 {
-				movimientoData = append(movimientoData, propagacionData...)
-			}
+		if len(propagacionData) > 0 {
+			movimientoData = append(movimientoData, propagacionData...)
 		}
 
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
@@ -133,6 +130,7 @@ func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg st
 	currMov.ID = ID
 	parameterForThisLevel := models.MovimientoParameter{}
 	fixedName := "_" + vigencia + "_" + cg
+
 	currMov, err = movimientoManager.GetOneMovimientoByID(currMov.ID, fixedName)
 	if err != nil {
 		return

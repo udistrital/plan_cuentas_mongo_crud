@@ -46,10 +46,15 @@ func getChildren(children []string, unidadEjecutora, estado string, vigencia int
 }
 
 // ValuesTree árbol que contiene todos los rubros y le asgina un valor 0 cuando no tienen una apropiación
-func ValuesTree(unidadEjecutora string, vigencia int, estado string) []map[string]interface{} {
+func ValuesTree(unidadEjecutora string, vigencia int, estado string, query map[string]interface{}) []map[string]interface{} {
 	var tree []map[string]interface{}
+	var raices []map[string]interface{}
 	var apropiacion *models.NodoRubroApropiacion
-	raices := rubroManager.GetRaices(unidadEjecutora)
+	if query != nil {
+		raices = rubroManager.GetRaiz(unidadEjecutora, vigencia, query)
+	} else {
+		raices = rubroManager.GetRaices(unidadEjecutora)
+	}
 
 	for i := 0; i < len(raices); i++ {
 		forkData := make(map[string]interface{})
