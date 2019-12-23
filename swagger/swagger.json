@@ -1709,8 +1709,8 @@
         }
     },
     "definitions": {
-        "21061.\u003cnil\u003e.string": {
-            "title": "string",
+        "11110.0xc00067cf90.false": {
+            "title": "false",
             "type": "object"
         },
         "34458.0xc000729a70.false": {
@@ -1721,8 +1721,20 @@
             "title": "false",
             "type": "object"
         },
-        "6479.0xc00053a960.false": {
+        "31121.0xc0006bd8f0.false": {
             "title": "false",
+            "type": "object"
+        },
+        "4261.\u003cnil\u003e.string": {
+            "title": "string",
+            "type": "object"
+        },
+        "853.0xc000658a80.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "bson.ObjectId": {
+            "title": "ObjectId",
             "type": "object"
         },
         "models.Compromiso": {
@@ -1763,7 +1775,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/22881.0xc000561230.false"
+                    "$ref": "#/definitions/31121.0xc0006bd8f0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1802,13 +1814,13 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/7180.0xc00053a9c0.false"
+                    "$ref": "#/definitions/11811.0xc00067cff0.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/6830.rubroFuente"
+                    "$ref": "#/definitions/11461.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
@@ -1868,7 +1880,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/21061.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
