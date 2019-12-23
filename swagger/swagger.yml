@@ -1068,13 +1068,13 @@ paths:
         "403":
           description: error
 definitions:
-  907.0xc00065a6c0.false:
+  907.0xc0006b9620.false:
     title: "false"
     type: object
   1258.rubroFuente:
     title: rubroFuente
     type: object
-  34458.0xc0006ccb10.false:
+  34458.0xc000729a70.false:
     title: "false"
     type: object
   bson.ObjectId:
@@ -1105,7 +1105,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/907.0xc00065a6c0.false'
+        $ref: '#/definitions/907.0xc0006b9620.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1211,7 +1211,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/34458.0xc0006ccb10.false'
+        $ref: '#/definitions/34458.0xc000729a70.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -1275,6 +1275,8 @@ definitions:
       Valor:
         type: integer
         format: int64
+      Vigencia_ejecucion_programacion:
+        type: string
       fechaCierre:
         type: string
         format: datetime
