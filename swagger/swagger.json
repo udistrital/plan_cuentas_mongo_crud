@@ -1637,7 +1637,16 @@
                         "required": true,
                         "type": "string"
                     }
+                }
+            }
+        },
+        "/vigencia/vigencias_total": {
+            "get": {
+                "tags": [
+                    "vigencia"
                 ],
+                "description": "Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.",
+                "operationId": "VigenciaController.GetTodasVigencias",
                 "responses": {
                     "200": {
                         "description": "{string} success"
@@ -1704,11 +1713,11 @@
             "title": "false",
             "type": "object"
         },
-        "11461.rubroFuente": {
-            "title": "rubroFuente",
+        "34458.0xc000729a70.false": {
+            "title": "false",
             "type": "object"
         },
-        "11811.0xc00067cff0.false": {
+        "907.0xc0006b9620.false": {
             "title": "false",
             "type": "object"
         },
@@ -1817,7 +1826,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/11110.0xc00067cf90.false"
+                    "$ref": "#/definitions/907.0xc0006b9620.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2013,7 +2022,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/853.0xc000658a80.false"
+                    "$ref": "#/definitions/34458.0xc000729a70.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -2107,6 +2116,9 @@
                 "Valor": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "Vigencia_ejecucion_programacion": {
+                    "type": "string"
                 },
                 "fechaCierre": {
                     "type": "string",

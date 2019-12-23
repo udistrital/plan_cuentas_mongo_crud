@@ -12,13 +12,19 @@ const VigenciaCollectionName = "vigencia_233_"
 
 // Vigencia estructura para acceder de forma mas rápida a la información de las vigencias registradas.
 type Vigencia struct {
-	ID                string    `json:"Id" bson:"_id,omitempty"`
-	Valor             int       `json:"Valor" bson:"valor"`
-	Activo            bool      `json:"Activo" bson:"activo"`
-	Estado            string    `json:"Estado" bson:"estado"`
-	FechaCreacion     time.Time `json:"fechaCreacion" bson:"fechaCreacion"`
-	FechaModificacion time.Time `json:"fechaModificacion" bson:"fechaModificacion"`
-	FechaCierre       time.Time `json:"fechaCierre" bson:"fechaCierre"`
+	ID                            string    `json:"Id" bson:"_id,omitempty"`
+	Valor                         int       `json:"Valor" bson:"valor"`
+	VigenciaEjecucionProgramacion string    `json:"Vigencia_ejecucion_programacion" bson:"vigenciaEjecucionProgramacion"`
+	Activo                        bool      `json:"Activo" bson:"activo"`
+	Estado                        string    `json:"Estado" bson:"estado"`
+	FechaCreacion                 time.Time `json:"fechaCreacion" bson:"fechaCreacion"`
+	FechaModificacion             time.Time `json:"fechaModificacion" bson:"fechaModificacion"`
+	FechaCierre                   time.Time `json:"fechaCierre" bson:"fechaCierre"`
+}
+
+type VigenciaNueva struct {
+	Valor         int    `json:"Valor" bson:"valor"`
+	AreaFuncional string `json:"AreaFuncional" bson:"areaFuncional"`
 }
 
 type VigenciaNueva struct {

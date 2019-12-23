@@ -82,7 +82,6 @@ func (j *VigenciaController) GetVigenciaActual() {
 // @router /vigencias_total [get]
 func (j *VigenciaController) GetTodasVigencias() {
 	var err error
-	fmt.Println("Hola")
 	var vigenciasArr []interface{}
 	vigenciasArr, err = vigenciahelper.GetTodasVigencias()
 	if err != nil || len(vigenciasArr) == 0 {
