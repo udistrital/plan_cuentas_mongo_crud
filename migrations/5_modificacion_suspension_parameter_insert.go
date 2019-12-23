@@ -14,14 +14,14 @@ func init() {
 
 		AnulacionCdpToRp := models.MovimientoParameter{
 			Multiplicador:       -1,
-			TipoMovimientoHijo:  "anul_cdp_modificacion",
-			TipoMovimientoPadre: "cdp_modificacion",
+			TipoMovimientoHijo:  "anul_cdp_suspension",
+			TipoMovimientoPadre: "cdp_suspension",
 			Initial:             true,
 		}
 
 		AnulacionCdpToApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
-			TipoMovimientoHijo:   "anul_cdp_modificacion",
+			TipoMovimientoHijo:   "anul_cdp_suspension",
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			WithOutChangeState:   true,
@@ -29,10 +29,11 @@ func init() {
 
 		CdpModificacionApropiacion := models.MovimientoParameter{
 			Multiplicador:        -1,
-			TipoMovimientoHijo:   "cdp_modificacion",
+			TipoMovimientoHijo:   "cdp_suspension",
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			WithOutChangeState:   true,
+			Initial:              true,
 		}
 
 		parameters := []interface{}{
@@ -49,14 +50,22 @@ func init() {
 
 		AnulacionCdpToRp := models.MovimientoParameter{
 			Multiplicador:       -1,
-			TipoMovimientoHijo:  "anul_cdp_modificacion",
-			TipoMovimientoPadre: "cdp_modificacion",
+			TipoMovimientoHijo:  "anul_cdp_suspension",
+			TipoMovimientoPadre: "cdp_suspension",
 			Initial:             true,
 		}
 
 		AnulacionCdpToApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
-			TipoMovimientoHijo:   "anul_cdp_modificacion",
+			TipoMovimientoHijo:   "anul_cdp_suspension",
+			TipoMovimientoPadre:  "apropiacion",
+			FatherCollectionName: "arbol_rubro_apropiacion",
+			WithOutChangeState:   true,
+		}
+
+		CdpModificacionApropiacion := models.MovimientoParameter{
+			Multiplicador:        -1,
+			TipoMovimientoHijo:   "cdp_suspension",
 			TipoMovimientoPadre:  "apropiacion",
 			FatherCollectionName: "arbol_rubro_apropiacion",
 			WithOutChangeState:   true,
@@ -65,6 +74,7 @@ func init() {
 		parameters := []interface{}{
 			AnulacionCdpToRp,
 			AnulacionCdpToApropiacion,
+			CdpModificacionApropiacion,
 		}
 		_, err := db.Collection(models.MovimientoParameterCollection).DeleteMany(context.TODO(), parameters)
 		if err != nil {
