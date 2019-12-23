@@ -27,11 +27,6 @@ type VigenciaNueva struct {
 	AreaFuncional string `json:"AreaFuncional" bson:"areaFuncional"`
 }
 
-type VigenciaNueva struct {
-	Valor         int    `json:"Valor" bson:"valor"`
-	AreaFuncional string `json:"AreaFuncional" bson:"areaFuncional"`
-}
-
 //UpdateVigencia ... actializa una vigencia
 func UpdateVigencia(j *Vigencia, id string, areaFuncional string) error {
 	session, err := db.GetSession()
