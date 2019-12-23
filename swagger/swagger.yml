@@ -1123,22 +1123,13 @@ paths:
         "403":
           description: error
 definitions:
-  6479.0xc00053a960.false:
+  907.0xc0006b9620.false:
     title: "false"
     type: object
-  6830.rubroFuente:
-    title: rubroFuente
-    type: object
-  7180.0xc00053a9c0.false:
-    title: "false"
-    type: object
-  21061.<nil>.string:
+  4261.<nil>.string:
     title: string
     type: object
-  22881.0xc000561230.false:
-    title: "false"
-    type: object
-  33595.0xc00058a390.false:
+  34458.0xc000729a70.false:
     title: "false"
     type: object
   bson.ObjectId:
@@ -1174,7 +1165,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/22881.0xc000561230.false'
+        $ref: '#/definitions/31121.0xc0006bd8f0.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1199,15 +1190,15 @@ definitions:
       Estado:
         type: string
       Movimientos:
-        $ref: '#/definitions/7180.0xc00053a9c0.false'
+        $ref: '#/definitions/11811.0xc00067cff0.false'
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/6830.rubroFuente'
+        $ref: '#/definitions/11461.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/6479.0xc00053a960.false'
+        $ref: '#/definitions/907.0xc0006b9620.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1247,7 +1238,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/21061.<nil>.string'
+        $ref: '#/definitions/4261.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1344,7 +1335,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/33595.0xc00058a390.false'
+        $ref: '#/definitions/34458.0xc000729a70.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -1411,6 +1402,8 @@ definitions:
       Valor:
         type: integer
         format: int64
+      Vigencia_ejecucion_programacion:
+        type: string
       fechaCierre:
         type: string
         format: datetime

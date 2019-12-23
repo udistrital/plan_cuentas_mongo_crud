@@ -88,6 +88,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 		}
 		if documentoPadreValorActual == 0 {
 			documentoPadreNewState = "total_comprometido"
+			if movimientoParameter.NoBalanceLeftStateName != nil {
+				documentoPadreNewState = *movimientoParameter.NoBalanceLeftStateName
+			}
 		} else if documentoPadreValorActual > 0 {
 			documentoPadreNewState = "parcial_comprometido"
 		} else {
@@ -144,6 +147,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 				if !movimientoParameter.WithOutChangeState {
 					if documentoPresupuestal["valor_actual"].(float64) == 0 {
 						documentoPresupuestal["estado"] = "total_comprometido"
+						if movimientoParameter.NoBalanceLeftStateName != nil {
+							documentoPresupuestal["estado"] = *movimientoParameter.NoBalanceLeftStateName
+						}
 					} else {
 						documentoPresupuestal["estado"] = "parcial_comprometido"
 					}

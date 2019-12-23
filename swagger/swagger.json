@@ -1637,7 +1637,16 @@
                         "required": true,
                         "type": "string"
                     }
+                }
+            }
+        },
+        "/vigencia/vigencias_total": {
+            "get": {
+                "tags": [
+                    "vigencia"
                 ],
+                "description": "Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.",
+                "operationId": "VigenciaController.GetTodasVigencias",
                 "responses": {
                     "200": {
                         "description": "{string} success"
@@ -1700,27 +1709,27 @@
         }
     },
     "definitions": {
-        "21061.\u003cnil\u003e.string": {
+        "11110.0xc00067cf90.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "34458.0xc000729a70.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "907.0xc0006b9620.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "31121.0xc0006bd8f0.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "4261.\u003cnil\u003e.string": {
             "title": "string",
             "type": "object"
         },
-        "22881.0xc000561230.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "33595.0xc00058a390.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "6479.0xc00053a960.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "6830.rubroFuente": {
-            "title": "rubroFuente",
-            "type": "object"
-        },
-        "7180.0xc00053a9c0.false": {
+        "853.0xc000658a80.false": {
             "title": "false",
             "type": "object"
         },
@@ -1766,7 +1775,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/22881.0xc000561230.false"
+                    "$ref": "#/definitions/31121.0xc0006bd8f0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1805,19 +1814,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/7180.0xc00053a9c0.false"
+                    "$ref": "#/definitions/11811.0xc00067cff0.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/6830.rubroFuente"
+                    "$ref": "#/definitions/11461.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6479.0xc00053a960.false"
+                    "$ref": "#/definitions/907.0xc0006b9620.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1871,7 +1880,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/21061.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/4261.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -2013,7 +2022,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/33595.0xc00058a390.false"
+                    "$ref": "#/definitions/34458.0xc000729a70.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -2107,6 +2116,9 @@
                 "Valor": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "Vigencia_ejecucion_programacion": {
+                    "type": "string"
                 },
                 "fechaCierre": {
                     "type": "string",

@@ -11,11 +11,13 @@ import (
 
 func init() {
 	migrate.Register(func(db *mongo.Database) error {
+		anulateSTatus := "anulado"
 		AnulacionCdpToRp := models.MovimientoParameter{
-			Multiplicador:       -1,
-			TipoMovimientoHijo:  "anul_cdp",
-			TipoMovimientoPadre: "cdp",
-			Initial:             true,
+			Multiplicador:          -1,
+			TipoMovimientoHijo:     "anul_cdp",
+			TipoMovimientoPadre:    "cdp",
+			Initial:                true,
+			NoBalanceLeftStateName: &anulateSTatus,
 		}
 		AnulacionRpToRp := models.MovimientoParameter{
 			Multiplicador:       -1,
