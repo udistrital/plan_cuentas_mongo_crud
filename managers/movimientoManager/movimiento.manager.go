@@ -88,3 +88,13 @@ func GetOneMovimientoByID(id, collectionPostFixName string) (res models.Movimien
 	return
 
 }
+
+// GetOneMovimientoByParentUUID ... Get Mpvimiento information by id.
+func GetAllMovimientoByParentUUID(id, collectionPostFixName string) (res []models.Movimiento, err error) {
+	session, err := db.GetSession()
+	c := db.Cursor(session, models.MovimientosCollection+collectionPostFixName)
+	defer session.Close()
+	err = c.Find(bson.M{"padre": id}).All(&res)
+	return
+
+}

@@ -11,7 +11,9 @@ import (
 
 func init() {
 	migrate.Register(func(db *mongo.Database) error {
-		externalDocType := "cdp_modificacion"
+		externalDocTypeSusp := "cdp_suspension"
+		externalDocTypeRed := "cdp_reduccion"
+		externalDocTypeTraslado := "cdp_traslado"
 		AdicionApropiacion := models.MovimientoParameter{
 			Multiplicador:        1,
 			TipoMovimientoHijo:   "adicion",
@@ -21,32 +23,32 @@ func init() {
 			WithOutChangeState:   true,
 		}
 		ReduccionApropiacion := models.MovimientoParameter{
-			Multiplicador:        -1,
-			TipoMovimientoHijo:   "reduccion",
-			TipoMovimientoPadre:  "apropiacion",
-			FatherCollectionName: "arbol_rubro_apropiacion",
-			Initial:              true,
-			WithOutChangeState:   true,
-			TipoDocumentoGenerado: &externalDocType,
+			Multiplicador:         -1,
+			TipoMovimientoHijo:    "reduccion",
+			TipoMovimientoPadre:   "apropiacion",
+			FatherCollectionName:  "arbol_rubro_apropiacion",
+			Initial:               true,
+			WithOutChangeState:    true,
+			TipoDocumentoGenerado: &externalDocTypeRed,
 		}
 		SuspencionApropiacion := models.MovimientoParameter{
-			Multiplicador:        -1,
-			TipoMovimientoHijo:   "suspencion",
-			TipoMovimientoPadre:  "apropiacion",
-			FatherCollectionName: "arbol_rubro_apropiacion",
-			Initial:              true,
-			WithOutChangeState:   true,
-			TipoDocumentoGenerado: &externalDocType,
+			Multiplicador:         -1,
+			TipoMovimientoHijo:    "suspension",
+			TipoMovimientoPadre:   "apropiacion",
+			FatherCollectionName:  "arbol_rubro_apropiacion",
+			Initial:               true,
+			WithOutChangeState:    true,
+			TipoDocumentoGenerado: &externalDocTypeSusp,
 		}
 
 		TrasladoOrigenApropiacion := models.MovimientoParameter{
-			Multiplicador:        -1,
-			TipoMovimientoHijo:   "traslado",
-			TipoMovimientoPadre:  "apropiacion",
-			FatherCollectionName: "arbol_rubro_apropiacion",
-			Initial:              true,
-			WithOutChangeState:   true,
-			TipoDocumentoGenerado: &externalDocType,
+			Multiplicador:         -1,
+			TipoMovimientoHijo:    "traslado",
+			TipoMovimientoPadre:   "apropiacion",
+			FatherCollectionName:  "arbol_rubro_apropiacion",
+			Initial:               true,
+			WithOutChangeState:    true,
+			TipoDocumentoGenerado: &externalDocTypeTraslado,
 		}
 
 		TrasladoDestinoApropiacion := models.MovimientoParameter{

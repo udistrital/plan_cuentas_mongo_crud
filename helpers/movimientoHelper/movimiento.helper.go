@@ -63,6 +63,8 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 
 	var propagationName = movimientoHijo["tipo"].(string)
 	var propagationValue = movimientoHijo["valor_inicial"].(float64)
+	var documentoPadreValorActual float64
+	var documentoPadreNewState string
 	for runFlag {
 		if documentoPadre["movimientos"] == nil {
 			documentoPadre["movimientos"] = make(map[string]interface{})
@@ -77,11 +79,18 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 			movimientosPadreData[propagationName] = newMovimeintoPadreValorActual
 		}
 
-		documentoPadreValorActual := documentoPadre["valor_actual"].(float64)
+		if documentoPadre["valor_actual"] != nil {
+			documentoPadreValorActual = documentoPadre["valor_actual"].(float64)
+		}
 		documentoPadreValorActual += propagationValue * float64(movimientoParameter.Multiplicador)
-		documentoPadreNewState := documentoPadre["estado"].(string)
+		if documentoPadre["estado"] != nil {
+			documentoPadreNewState = documentoPadre["estado"].(string)
+		}
 		if documentoPadreValorActual == 0 {
 			documentoPadreNewState = "total_comprometido"
+			if movimientoParameter.NoBalanceLeftStateName != nil {
+				documentoPadreNewState = *movimientoParameter.NoBalanceLeftStateName
+			}
 		} else if documentoPadreValorActual > 0 {
 			documentoPadreNewState = "parcial_comprometido"
 		} else {
@@ -116,6 +125,8 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 			if balance[documentoPadre[balanceKey].(string)] == nil {
 				balance[documentoPadre[balanceKey].(string)] = make(map[string]interface{})
 
+				formatdata.JsonPrint(movimientoParameter.Multiplicador)
+				formatdata.JsonPrint(documentoPadre)
 				documentoPresupuestalIntfc, err := crudmanager.GetDocumentByID(documentoPadre[balanceKey].(string), balanceCollectionName)
 				if err == nil {
 					formatdata.FillStructP(documentoPresupuestalIntfc, &documentoPresupuestal)
@@ -136,6 +147,9 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 				if !movimientoParameter.WithOutChangeState {
 					if documentoPresupuestal["valor_actual"].(float64) == 0 {
 						documentoPresupuestal["estado"] = "total_comprometido"
+						if movimientoParameter.NoBalanceLeftStateName != nil {
+							documentoPresupuestal["estado"] = *movimientoParameter.NoBalanceLeftStateName
+						}
 					} else {
 						documentoPresupuestal["estado"] = "parcial_comprometido"
 					}
@@ -145,46 +159,51 @@ func BuildPropagacionValoresTr(movimiento models.Movimiento, balance, afectation
 
 			}
 		}
-
-		documentoPadre["movimientos"] = movimientosPadreData
-		afectationIndex[documentoPadre["_id"].(string)] = documentoPadre
-		trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(propagationCollectionName, fatherUUIKey, "estado,movimientos,valor_actual", documentoPadre)...)
-		movimientoHijo = documentoPadre
-		nextMovimientoParameter, _ := movimientoManager.GetInitialMovimientoParameterByHijo(movimientoParameter.TipoMovimientoPadre)
-		if nextMovimientoParameter.TipoMovimientoPadre != "" {
-			movimientoParameter = nextMovimientoParameter
-		}
-		movimientoParameter, err = movimientoManager.GetOneMovimientoParameterByHijoAndPadre(propagationName, movimientoParameter.TipoMovimientoPadre)
-
-		if err != nil {
-			runFlag = false
-		} else {
-			if movimientoParameter.FatherCollectionName != "" {
-				propagationCollectionName = movimientoParameter.FatherCollectionName
-				if movimientoParameter.FatherUUIKeyName != "" {
-					fatherUUIKey = movimientoParameter.FatherUUIKeyName
-				}
+		if documentoPadre["_id"] != nil {
+			documentoPadre["movimientos"] = movimientosPadreData
+			afectationIndex[documentoPadre["_id"].(string)] = documentoPadre
+			trData = append(trData, transactionManager.ConvertToUpdateTransactionItem(propagationCollectionName, fatherUUIKey, "estado,movimientos,valor_actual", documentoPadre)...)
+			movimientoHijo = documentoPadre
+			nextMovimientoParameter, _ := movimientoManager.GetInitialMovimientoParameterByHijo(movimientoParameter.TipoMovimientoPadre)
+			if nextMovimientoParameter.TipoMovimientoPadre != "" {
+				movimientoParameter = nextMovimientoParameter
 			}
-
-			propagationCollectionName += collectionPostFixName
-			documentoPadre = make(map[string]interface{})
-			if afectationIndex[movimientoHijo["padre"].(string)] != nil {
-				documentoPadre = afectationIndex[movimientoHijo["padre"].(string)]
+			movimientoParameter, err = movimientoManager.GetOneMovimientoParameterByHijoAndPadre(propagationName, movimientoParameter.TipoMovimientoPadre)
+			if err != nil {
+				runFlag = false
 			} else {
-				movimientoPadre, err = crudmanager.GetDocumentByID(movimientoHijo["padre"].(string), propagationCollectionName)
-				if err != nil {
-					logs.Error(err.Error(), movimientoHijo["padre"].(string), propagationCollectionName)
-					runFlag = false
+				if movimientoParameter.FatherCollectionName != "" {
+					propagationCollectionName = movimientoParameter.FatherCollectionName
+					if movimientoParameter.FatherUUIKeyName != "" {
+						fatherUUIKey = movimientoParameter.FatherUUIKeyName
+					}
 				}
-				documentoPadre, errMap = formatdata.ToMap(movimientoPadre, "bson")
-				if errMap != nil {
-					panic(errMap.Error())
+
+				propagationCollectionName += collectionPostFixName
+				documentoPadre = make(map[string]interface{})
+				if movimientoHijo["padre"] != nil {
+
+					if afectationIndex[movimientoHijo["padre"].(string)] != nil {
+						documentoPadre = afectationIndex[movimientoHijo["padre"].(string)]
+					} else {
+						movimientoPadre, err = crudmanager.GetDocumentByID(movimientoHijo["padre"].(string), propagationCollectionName)
+						if err != nil {
+							logs.Error(err.Error(), movimientoHijo["padre"].(string), propagationCollectionName)
+							runFlag = false
+						}
+						documentoPadre, errMap = formatdata.ToMap(movimientoPadre, "bson")
+						if errMap != nil {
+							panic(errMap.Error())
+						}
+						if err != nil {
+							runFlag = false
+						}
+
+					}
 				}
 
 			}
-
-		}
-		if err != nil {
+		} else {
 			runFlag = false
 		}
 
@@ -209,8 +228,10 @@ func JoinGeneratedDocPresWithMov(movimientos []models.Movimiento, vigencia, cg s
 		if mov.DocumentosPresGenerados != nil {
 			var documentsGenerated []models.DocumentoPresupuestal
 			for _, doc := range *mov.DocumentosPresGenerados {
-				docGenerated := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
-				documentsGenerated = append(documentsGenerated, docGenerated)
+				docGenerated, err := documentopresupuestalmanager.GetOneByType(doc, vigencia, cg, mov.Tipo)
+				if err == nil {
+					documentsGenerated = append(documentsGenerated, docGenerated)
+				}
 			}
 			movMap["DocumentsGenerated"] = documentsGenerated
 		}

@@ -2,6 +2,7 @@ package movimientoCompositor
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/globalsign/mgo/txn"
 	movimientohelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/movimientoHelper"
@@ -30,7 +31,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 	vigencia := strconv.Itoa(documentoPresupuestalRequestData.Vigencia)
 	centroGestor := documentoPresupuestalRequestData.CentroGestor
 	collectionPostFixName := "_" + vigencia + "_" + centroGestor
-	consecutivoDocumento := len(docMananger.GetByType(vigencia, centroGestor, documentoPresupuestalRequestData.Tipo)) + 1
+	consecutivoDocumento := len(docMananger.GetByType(vigencia, centroGestor, strings.Split(documentoPresupuestalRequestData.Tipo, "_")[0])) + 1
 
 	for _, movimientoElmnt := range documentoPresupuestalRequestData.Afectacion {
 
@@ -53,10 +54,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 
 		if err == nil && movimientoParameter.TipoDocumentoGenerado != nil && *movimientoParameter.TipoDocumentoGenerado != documentoPresupuestalRequestData.Tipo {
 			// TODO: put this code on separate helper or manager.
-			if consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] == 0 {
-				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado] = len(docMananger.GetByType(strconv.Itoa(documentoPresupuestalRequestData.Vigencia), documentoPresupuestalRequestData.CentroGestor, *movimientoParameter.TipoDocumentoGenerado)) + 1
+			if consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]] == 0 {
+				consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]] = len(docMananger.GetByType(strconv.Itoa(documentoPresupuestalRequestData.Vigencia), documentoPresupuestalRequestData.CentroGestor, strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0])) + 1
 			} else {
-				consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado]++
+				consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]]++
 			}
 			generatedDocument := models.DocumentoPresupuestal{
 				Tipo:          *movimientoParameter.TipoDocumentoGenerado,
@@ -67,7 +68,7 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 				Vigencia:      documentoPresupuestalRequestData.Vigencia,
 				CentroGestor:  documentoPresupuestalRequestData.CentroGestor,
 				Estado:        models.EstadoRegistrada,
-				Consecutivo:   consecutivoIndex[*movimientoParameter.TipoDocumentoGenerado],
+				Consecutivo:   consecutivoIndex[strings.Split(*movimientoParameter.TipoDocumentoGenerado, "_")[0]],
 			}
 			generatedDocumentIDS = append(generatedDocumentIDS, generatedDocument.Consecutivo)
 			documentoPresupuestalTr := transactionManager.ConvertToTransactionItem(models.DocumentoPresupuestalCollection+collectionPostFixName, "", "", generatedDocument)
@@ -87,13 +88,10 @@ func DocumentoPresupuestalRegister(documentoPresupuestalRequestData *models.Docu
 		movimientoDataInserted = append(movimientoDataInserted, insertMovimientoData...)
 		movimientoData = append(movimientoData, insertMovimientoData...)
 
-		if documentoPresupuestalRequestData.Tipo != "modificacion_fuente" {
+		propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
 
-			propagacionData := movimientohelper.BuildPropagacionValoresTr(movimientoElmnt, balance, afectationIndex, collectionPostFixName)
-
-			if len(propagacionData) > 0 {
-				movimientoData = append(movimientoData, propagacionData...)
-			}
+		if len(propagacionData) > 0 {
+			movimientoData = append(movimientoData, propagacionData...)
 		}
 
 		valorActualDocumentoPres += movimientoElmnt.ValorInicial
@@ -133,6 +131,7 @@ func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg st
 	currMov.ID = ID
 	parameterForThisLevel := models.MovimientoParameter{}
 	fixedName := "_" + vigencia + "_" + cg
+
 	currMov, err = movimientoManager.GetOneMovimientoByID(currMov.ID, fixedName)
 	if err != nil {
 		return
