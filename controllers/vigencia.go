@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -96,9 +95,8 @@ func (j *VigenciaController) GetTodasVigencias() {
 // @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere cerrar."
 // @Success 200 {string} success
 // @Failure 403 error
-// @router /cerrar_vigencia_actual/:area_funcional [put]
+// @router /cerrar_vigencia_actual/:area_funcional [get]
 func (j *VigenciaController) CerrarVigencia() {
-	fmt.Println("hola")
 	if err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional")); err == nil {
 		j.response = DefaultResponse(201, nil, "")
 	} else {
