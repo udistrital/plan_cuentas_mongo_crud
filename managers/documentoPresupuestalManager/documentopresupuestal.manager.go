@@ -24,6 +24,20 @@ func GetByType(vigencia, centroGestor, tipo string) []models.DocumentoPresupuest
 	return documentoPresupuestalRows
 }
 
+func GetByTypeLike(vigencia, centroGestor, tipo string) []models.DocumentoPresupuestal {
+	query := make(map[string]interface{})
+	collectionFixedName := models.DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor
+	var documentoPresupuestalRows []models.DocumentoPresupuestal
+	query["tipo"] = map[string]interface{}{
+		"$regex": ".*" + tipo + ".*",
+	}
+
+	fmt.Println(query)
+
+	crudmanager.GetAllFromDB(query, collectionFixedName, &documentoPresupuestalRows, "-fecha_registro")
+	return documentoPresupuestalRows
+}
+
 func GetOneByType(UUID, vigencia, centroGestor, tipo string) (models.DocumentoPresupuestal, error) {
 	query := make(map[string]interface{})
 	collectionFixedName := models.DocumentoPresupuestalCollection + "_" + vigencia + "_" + centroGestor

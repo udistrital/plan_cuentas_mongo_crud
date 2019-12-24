@@ -1588,7 +1588,7 @@
             }
         },
         "/vigencia/cerrar_vigencia_actual/{area_funcional}": {
-            "put": {
+            "get": {
                 "tags": [
                     "vigencia"
                 ],
@@ -2124,6 +2124,9 @@
                 "Valor": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "Vigencia_ejecucion_programacion": {
+                    "type": "string"
                 },
                 "fechaCierre": {
                     "type": "string",

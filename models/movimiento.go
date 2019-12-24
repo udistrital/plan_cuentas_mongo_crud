@@ -28,15 +28,16 @@ type Movimiento struct {
 
 // MovimientoParameter this struct represent a "movmientos_parametros" collection item.
 type MovimientoParameter struct {
-	ID                    string  `json:"_id" bson:"_id,omitempty"`
-	TipoMovimientoHijo    string  `json:"TipoMovimientoHijo" bson:"tipo_movimiento_hijo"`
-	TipoMovimientoPadre   string  `json:"TipoMovimientoPadre" bson:"tipo_movimiento_padre"`
-	Multiplicador         int     `json:"Multiplicador" bson:"miltiplicador"`
-	FatherCollectionName  string  `json:"FatherCollectionName" bson:"father_collection_name"`
-	FatherUUIKeyName      string  `json:"FatherUUIKeyName" bson:"father_uuikey_name"`
-	Initial               bool    `json:"Initial" bson:"initial"`
-	WithOutChangeState    bool    `json:"WithOutChangeState" bson:"without_change_state"`
-	TipoDocumentoGenerado *string `json:"TipoDocumentoGenerado" bson:"tipo_documento_generado,omitempty"`
+	ID                     string  `json:"_id" bson:"_id,omitempty"`
+	TipoMovimientoHijo     string  `json:"TipoMovimientoHijo" bson:"tipo_movimiento_hijo"`
+	TipoMovimientoPadre    string  `json:"TipoMovimientoPadre" bson:"tipo_movimiento_padre"`
+	Multiplicador          int     `json:"Multiplicador" bson:"miltiplicador"`
+	FatherCollectionName   string  `json:"FatherCollectionName" bson:"father_collection_name"`
+	FatherUUIKeyName       string  `json:"FatherUUIKeyName" bson:"father_uuikey_name"`
+	Initial                bool    `json:"Initial" bson:"initial"`
+	WithOutChangeState     bool    `json:"WithOutChangeState" bson:"without_change_state"`
+	TipoDocumentoGenerado  *string `json:"TipoDocumentoGenerado" bson:"tipo_documento_generado,omitempty"`
+	NoBalanceLeftStateName *string `json:"NoBalanceLeftStateName" bson:"no_balance_left_state_name,omitempty"`
 }
 
 // AfectacionMovimiento this struct will save modification's movs for test their behaivor before save on db

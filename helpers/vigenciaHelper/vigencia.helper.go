@@ -3,7 +3,6 @@ package vigenciahelper
 import (
 	"errors"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/udistrital/utils_oas/formatdata"
@@ -14,23 +13,25 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-const VigenciaActual, VigenciaSiguiente, VigenciaCerrada = "actual", "siguiente", "cerrada"
+const VigenciaActual, VigenciaSiguiente, VigenciaCerrada = "Actual", "Futura", "Cerrada"
 
 // AddNew adds a new record to vigencia collection. Cada que se agregue una nueva vigencia
 func AddNew(value int, estado string, areaFuncional string) error {
 
 	vigenciaStruct := models.Vigencia{
-		ID:                strconv.Itoa(value),
-		Activo:            true,
-		Valor:             value,
-		Estado:            estado,
-		FechaCreacion:     time.Now(),
-		FechaModificacion: time.Now(),
+		ID:                            strconv.Itoa(value),
+		Activo:                        true,
+		Valor:                         value,
+		VigenciaEjecucionProgramacion: strconv.Itoa(value),
+		Estado:                        estado,
+		FechaCreacion:                 time.Now(),
+		FechaModificacion:             time.Now(),
 	}
+
 	if vig, _ := GetVigenciaActual(areaFuncional); len(vig) != 0 {
 		return errors.New("Ya existe una vigencia actual")
 	}
-	if strings.ToLower(estado) == VigenciaActual {
+	if estado == VigenciaActual {
 		if consultarVigencia(vigenciaStruct, areaFuncional) {
 			if err := models.UpdateVigencia(&vigenciaStruct, vigenciaStruct.ID, areaFuncional); err == nil {
 				AgregarVigenciaSiguiente(value+1, VigenciaSiguiente, areaFuncional)
@@ -47,12 +48,13 @@ func AddNew(value int, estado string, areaFuncional string) error {
 //Agrega una nueva vigencia con el estado de siguiente, cuando se registra una viencia nueva
 func AgregarVigenciaSiguiente(value int, estado string, areaFuncional string) error {
 	nuevaVigencia := models.Vigencia{
-		ID:                strconv.Itoa(value),
-		Activo:            true,
-		Valor:             value,
-		Estado:            estado,
-		FechaCreacion:     time.Now(),
-		FechaModificacion: time.Now(),
+		ID:                            strconv.Itoa(value),
+		Activo:                        true,
+		Valor:                         value,
+		VigenciaEjecucionProgramacion: strconv.Itoa(value),
+		Estado:                        estado,
+		FechaCreacion:                 time.Now(),
+		FechaModificacion:             time.Now(),
 	}
 	return crudmanager.AddNew(models.VigenciaCollectionName+areaFuncional, nuevaVigencia)
 }
@@ -68,13 +70,14 @@ func CerrarVigencia(area string) (err error) {
 		finicio, _ := time.Parse(layout, objVigencia["fechaCreacion"].(string))
 
 		vigenciaCerrada := models.Vigencia{
-			ID:                objVigencia["_id"].(string),
-			Activo:            objVigencia["activo"].(bool),
-			Valor:             int(objVigencia["valor"].(float64)),
-			Estado:            VigenciaCerrada,
-			FechaCreacion:     finicio,
-			FechaModificacion: time.Now(),
-			FechaCierre:       time.Now(),
+			ID:                            objVigencia["_id"].(string),
+			Activo:                        objVigencia["activo"].(bool),
+			Valor:                         int(objVigencia["valor"].(float64)),
+			VigenciaEjecucionProgramacion: strconv.Itoa(int(objVigencia["valor"].(float64))),
+			Estado:                        VigenciaCerrada,
+			FechaCreacion:                 finicio,
+			FechaModificacion:             time.Now(),
+			FechaCierre:                   time.Now(),
 		}
 		err = models.UpdateVigencia(&vigenciaCerrada, vigenciaCerrada.ID, area)
 	} else {
@@ -91,6 +94,7 @@ func consultarVigencia(vig models.Vigencia, areaFuncional string) (existe bool) 
 			existe = true
 		}
 	}
+
 	return
 }
 
