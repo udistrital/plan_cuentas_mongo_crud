@@ -98,7 +98,7 @@ func (j *VigenciaController) GetTodasVigencias() {
 // @router /cerrar_vigencia_actual/:area_funcional [get]
 func (j *VigenciaController) CerrarVigencia() {
 	if err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional")); err == nil {
-		j.response = DefaultResponse(201, nil, "")
+		j.response = DefaultResponse(201, "", "")
 	} else {
 		j.response = DefaultResponse(403, err, nil)
 	}
