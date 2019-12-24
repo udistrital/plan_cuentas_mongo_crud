@@ -1571,7 +1571,7 @@
             }
         },
         "/vigencia/cerrar_vigencia_actual/{area_funcional}": {
-            "put": {
+            "get": {
                 "tags": [
                     "vigencia"
                 ],
@@ -1708,19 +1708,11 @@
             "title": "false",
             "type": "object"
         },
-        "3274.0xc000716390.false": {
+        "34458.0xc000723d10.false": {
             "title": "false",
             "type": "object"
         },
-        "6974.0xc000717290.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "7325.rubroFuente": {
-            "title": "rubroFuente",
-            "type": "object"
-        },
-        "7675.0xc0007172f0.false": {
+        "907.0xc0006b58c0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1817,7 +1809,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6974.0xc000717290.false"
+                    "$ref": "#/definitions/907.0xc0006b58c0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2013,7 +2005,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/18136.0xc00074efc0.false"
+                    "$ref": "#/definitions/34458.0xc000723d10.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
