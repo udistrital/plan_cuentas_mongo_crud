@@ -991,6 +991,23 @@
                 }
             }
         },
+        "/movimiento/get_movimentos_by_parent_id/{vigencia}/{areaFuncional}/{id}": {
+            "get": {
+                "tags": [
+                    "movimiento"
+                ],
+                "description": "get one object",
+                "operationId": "MovimientosController.GetOne",
+                "responses": {
+                    "200": {
+                        "description": "Movimiento models.Movimiento"
+                    },
+                    "403": {
+                        "description": ":objectId is empty"
+                    }
+                }
+            }
+        },
         "/movimiento/{vigencia}/{CG}/{parentUUID}": {
             "get": {
                 "tags": [
@@ -1700,28 +1717,28 @@
         }
     },
     "definitions": {
-        "21061.\u003cnil\u003e.string": {
-            "title": "string",
-            "type": "object"
-        },
-        "22881.0xc000561230.false": {
+        "14234.0xc00067b320.false": {
             "title": "false",
             "type": "object"
         },
-        "33595.0xc00058a390.false": {
+        "20232.0xc00068ecf0.false": {
             "title": "false",
             "type": "object"
         },
-        "6479.0xc00053a960.false": {
+        "23932.0xc00068fbf0.false": {
             "title": "false",
             "type": "object"
         },
-        "6830.rubroFuente": {
+        "24283.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "7180.0xc00053a9c0.false": {
+        "24633.0xc00068fc50.false": {
             "title": "false",
+            "type": "object"
+        },
+        "32105.\u003cnil\u003e.string": {
+            "title": "string",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1766,7 +1783,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/22881.0xc000561230.false"
+                    "$ref": "#/definitions/20232.0xc00068ecf0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1805,19 +1822,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/7180.0xc00053a9c0.false"
+                    "$ref": "#/definitions/24633.0xc00068fc50.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/6830.rubroFuente"
+                    "$ref": "#/definitions/24283.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/6479.0xc00053a960.false"
+                    "$ref": "#/definitions/23932.0xc00068fbf0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1871,7 +1888,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/21061.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/32105.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -2013,7 +2030,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/33595.0xc00058a390.false"
+                    "$ref": "#/definitions/14234.0xc00067b320.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

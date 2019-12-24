@@ -663,6 +663,17 @@ paths:
           description: '{string} success'
         "403":
           description: error
+  /movimiento/get_movimentos_by_parent_id/{vigencia}/{areaFuncional}/{id}:
+    get:
+      tags:
+      - movimiento
+      description: get one object
+      operationId: MovimientosController.GetOne
+      responses:
+        "200":
+          description: Movimiento models.Movimiento
+        "403":
+          description: :objectId is empty
   /necesidades/:
     get:
       tags:
@@ -1123,23 +1134,23 @@ paths:
         "403":
           description: error
 definitions:
-  6479.0xc00053a960.false:
+  14234.0xc00067b320.false:
     title: "false"
     type: object
-  6830.rubroFuente:
+  20232.0xc00068ecf0.false:
+    title: "false"
+    type: object
+  23932.0xc00068fbf0.false:
+    title: "false"
+    type: object
+  24283.rubroFuente:
     title: rubroFuente
     type: object
-  7180.0xc00053a9c0.false:
+  24633.0xc00068fc50.false:
     title: "false"
     type: object
-  21061.<nil>.string:
+  32105.<nil>.string:
     title: string
-    type: object
-  22881.0xc000561230.false:
-    title: "false"
-    type: object
-  33595.0xc00058a390.false:
-    title: "false"
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -1174,7 +1185,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/22881.0xc000561230.false'
+        $ref: '#/definitions/20232.0xc00068ecf0.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1199,15 +1210,15 @@ definitions:
       Estado:
         type: string
       Movimientos:
-        $ref: '#/definitions/7180.0xc00053a9c0.false'
+        $ref: '#/definitions/24633.0xc00068fc50.false'
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/6830.rubroFuente'
+        $ref: '#/definitions/24283.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/6479.0xc00053a960.false'
+        $ref: '#/definitions/23932.0xc00068fbf0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1247,7 +1258,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/21061.<nil>.string'
+        $ref: '#/definitions/32105.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1344,7 +1355,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/33595.0xc00058a390.false'
+        $ref: '#/definitions/14234.0xc00067b320.false'
       fechaCreacion:
         type: string
         format: datetime

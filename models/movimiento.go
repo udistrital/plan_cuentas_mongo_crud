@@ -1,5 +1,10 @@
 package models
 
+import (
+	"github.com/globalsign/mgo/bson"
+	"github.com/udistrital/plan_cuentas_mongo_crud/db"
+)
+
 // MovimientosCollection es el nombre de la colección en mongo.
 const MovimientosCollection = "movimientos"
 
@@ -40,4 +45,22 @@ type AfectacionMovimiento struct {
 	CuentaContraCredito *NodoRubroApropiacion `json:"cuenta_contra_credito"`
 	Tipo                string                `json:"tipo"`
 	Valor               float64               `json:"valor"`
+}
+
+// GetMovmientoByParentId obtiene todos los movimientos relacionados
+func GetMovmientoByParentId(vigencia, areaFuncional, id string) (Movimiento, error) {
+	var movimiento Movimiento
+
+	session, err := db.GetSession()
+	if err != nil {
+		return movimiento, err
+	}
+
+	collectionFixedName := MovimientosCollection + "_" + vigencia + "_" + areaFuncional
+
+	c := db.Cursor(session, collectionFixedName)
+	err = c.Find(bson.M{"padre": id}).One(&movimiento)
+
+	defer session.Close()
+	return movimiento, err
 }
