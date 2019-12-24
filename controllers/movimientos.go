@@ -145,3 +145,21 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 	j.Data["json"] = response
 	j.ServeJSON()
 }
+
+// GetOne get one object
+// @Title GetOne
+// @Description get one object
+// @Success 200 Movimiento models.Movimiento
+// @Failure 403 :objectId is empty
+// @router /get_movimentos_by_parent_id/:vigencia/:areaFuncional/:id [get]
+func (j *MovimientosController) GetOne() {
+	vigencia := j.GetString(":vigencia")
+	areaFuncional := j.GetString(":areaFuncional")
+	ID := j.GetString(":id")
+
+	movimiento, err := models.GetMovmientoByParentId(vigencia, areaFuncional, ID)
+	response := commonhelper.DefaultResponse(200, err, &movimiento)
+
+	j.Data["json"] = response
+	j.ServeJSON()
+}
