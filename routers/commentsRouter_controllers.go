@@ -524,7 +524,7 @@ func init() {
         beego.ControllerComments{
             Method: "CerrarVigencia",
             Router: `/cerrar_vigencia_actual/:area_funcional`,
-            AllowHTTPMethods: []string{"put"},
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
