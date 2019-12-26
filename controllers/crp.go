@@ -31,6 +31,7 @@ func (j *SolicitudesCRPController) URLMapping() {
 // @Title GetAll
 // @Description get all objects
 // @Success 200 SolicitudCRP models.SolicitudCRP
+// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int"
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *SolicitudesCRPController) GetAll() {
@@ -45,10 +46,11 @@ func (j *SolicitudesCRPController) GetAll() {
 				return
 			}
 
-			if i, err := strconv.Atoi(kv[1]); err == nil {
+			if i, err := strconv.Atoi(kv[1]); (err == nil && !strings.Contains(kv[1], "!$")) {
 				k, v := kv[0], i
 				query[k] = v
 			} else {
+				kv[1] = strings.Split(kv[1], "!$")[1]
 				k, v := kv[0], kv[1]
 				query[k] = v
 			}
@@ -58,7 +60,6 @@ func (j *SolicitudesCRPController) GetAll() {
 	err := errors.New("No data")
 
 	response := DefaultResponse(204, err, nil)
-
 	if obs := models.GetAllSolicitudCRP(query); len(obs) > 0 {
 		response = DefaultResponse(200, nil, &obs)
 	}
