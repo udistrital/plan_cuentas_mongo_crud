@@ -97,11 +97,9 @@ func (j *VigenciaController) GetTodasVigencias() {
 // @Failure 403 error
 // @router /cerrar_vigencia_actual/:area_funcional [get]
 func (j *VigenciaController) CerrarVigencia() {
-	if err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional")); err == nil {
-		j.response = DefaultResponse(201, "", "")
-	} else {
-		j.response = DefaultResponse(403, err, nil)
-	}
+	err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional"))
+	j.response = DefaultResponse(200, err, "vigencia cerrada")
+	
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
