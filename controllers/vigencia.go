@@ -99,7 +99,7 @@ func (j *VigenciaController) GetTodasVigencias() {
 func (j *VigenciaController) CerrarVigencia() {
 	err := vigenciahelper.CerrarVigencia(j.GetString(":area_funcional"))
 	j.response = DefaultResponse(200, err, "vigencia cerrada")
-	
+
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }

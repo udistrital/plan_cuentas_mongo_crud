@@ -13,7 +13,9 @@ import (
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 )
 
-const VigenciaActual, VigenciaSiguiente, VigenciaCerrada = "Actual", "Futura", "Cerrada"
+const VigenciaActual = "Actual"
+const VigenciaSiguiente = "Futura"
+const VigenciaCerrada = "Cerrada"
 
 // AddNew adds a new record to vigencia collection. Cada que se agregue una nueva vigencia
 func AddNew(value int, estado string, areaFuncional string) error {
@@ -42,7 +44,7 @@ func AddNew(value int, estado string, areaFuncional string) error {
 	if err := AgregarVigenciaSiguiente(value+1, VigenciaSiguiente, areaFuncional); err != nil {
 		return err
 	}
-	return crudmanager.AddNew(models.VigenciaCollectionName+areaFuncional, vigenciaStruct)
+	return crudmanager.AddNew(models.VigenciaCollection+areaFuncional, vigenciaStruct)
 }
 
 //Agrega una nueva vigencia con el estado de siguiente, cuando se registra una viencia nueva
@@ -56,12 +58,11 @@ func AgregarVigenciaSiguiente(value int, estado string, areaFuncional string) er
 		FechaCreacion:                 time.Now(),
 		FechaModificacion:             time.Now(),
 	}
-	return crudmanager.AddNew(models.VigenciaCollectionName+areaFuncional, nuevaVigencia)
+	return crudmanager.AddNew(models.VigenciaCollection+areaFuncional, nuevaVigencia)
 }
 
-//Cierra la vigencia que se encuentre con el estado actual en la colección
+//CerrarVigencia Cierra la vigencia que se encuentre con el estado actual en la colección
 func CerrarVigencia(area string) (err error) {
-
 	if vigActual, _ := GetVigenciaActual(area); len(vigActual) != 0 {
 		var objVigencia map[string]interface{}
 		formatdata.FillStructP(vigActual[0], &objVigencia)
@@ -80,6 +81,15 @@ func CerrarVigencia(area string) (err error) {
 			FechaCierre:                   time.Now(),
 		}
 		err = models.UpdateVigencia(&vigenciaCerrada, vigenciaCerrada.ID, area)
+		if vigenciafutura, _ := models.GetVigenciaByID(strconv.Itoa(vigenciaCerrada.Valor+1), area); vigenciafutura == (models.Vigencia{}) {
+			AgregarVigenciaSiguiente(vigenciaCerrada.Valor+1, VigenciaSiguiente, area)
+		}
+		vigenciafutura, _ := models.GetVigenciaByID(strconv.Itoa(vigenciaCerrada.Valor+1), area)
+		formatdata.JsonPrint(vigenciafutura)
+		vigenciafutura.Estado = VigenciaActual
+		err = models.UpdateVigencia(&vigenciafutura, vigenciafutura.ID, area)
+		AgregarVigenciaSiguiente(vigenciafutura.Valor+1, VigenciaSiguiente, area)
+
 	} else {
 		return errors.New("No hay vigencia para cerrar")
 	}
@@ -98,7 +108,7 @@ func consultarVigencia(vig models.Vigencia, areaFuncional string) (existe bool) 
 	return
 }
 
-// GetVigenciaByID obtiene y devuelve la vigencia con el id que se pasó por parametros.
+//GetVigenciaByID obtiene y devuelve la vigencia con el id que se pasó por parametros.
 func GetVigenciaById(id string, area string) (vigencia []interface{}, err error) {
 	pipeline := []bson.M{
 		bson.M{
@@ -115,7 +125,7 @@ func GetVigenciaById(id string, area string) (vigencia []interface{}, err error)
 			},
 		},
 	}
-	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName+area, pipeline...)
+	vigencia, err = crudmanager.RunPipe(models.VigenciaCollection+area, pipeline...)
 	return
 }
 
@@ -127,7 +137,7 @@ func GetVigenciaActual(area string) (vigencia []interface{}, err error) {
 				"estado": VigenciaActual},
 		},
 	}
-	vigencia, err = crudmanager.RunPipe(models.VigenciaCollectionName+area, pipeline...)
+	vigencia, err = crudmanager.RunPipe(models.VigenciaCollection+area, pipeline...)
 	return
 }
 
@@ -144,7 +154,7 @@ func GetTodasVigencias() (arregloVigencias []interface{}, err error) {
 	}
 	for a := range area {
 
-		if auxVig, err := crudmanager.RunPipe(models.VigenciaCollectionName+area[a], pipeline...); err == nil {
+		if auxVig, err := crudmanager.RunPipe(models.VigenciaCollection+area[a], pipeline...); err == nil {
 			for x := range auxVig {
 				var objVigencia map[string]interface{}
 				formatdata.FillStructP(auxVig[x], &objVigencia)
@@ -176,7 +186,7 @@ func GetVigenciasByNameSpaceAndCg(namespace, cg string) (vigenciasArr []map[stri
 		},
 	}
 	var unformatedVigenciaArr []interface{}
-	if unformatedVigenciaArr, err = crudmanager.RunPipe(models.VigenciaCollectionName, pipeline...); err == nil {
+	if unformatedVigenciaArr, err = crudmanager.RunPipe(models.VigenciaCollection, pipeline...); err == nil {
 		for _, unformatedVigencia := range unformatedVigenciaArr {
 			var unformatedVigenciaMap map[string]interface{}
 			formatdata.FillStructP(unformatedVigencia, &unformatedVigenciaMap)
