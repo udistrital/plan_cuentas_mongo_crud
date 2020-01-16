@@ -1,5 +1,7 @@
 # plan_cuentas_mongo_crud
-Api con MongoDB para negocio de plan de cuentas (rubros, apropiaciones, fuentes de financiamiento)
+
+El API plan_cuentas_mongo_crud, generada con beego, proporciona interfaces para la manipulación(CRUD) de los datos almacenados en una base de datos no relacional MongoDB (rubros, apropiaciones, fuentes de financiamiento, cpd, crp, vigencias), esta API hace representa la capa de datos del sistema de gestión financiero KRONOS.
+
 
 * Integration with CI
 
