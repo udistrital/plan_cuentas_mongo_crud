@@ -8,6 +8,7 @@ import (
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
 	"github.com/udistrital/utils_oas/customerror"
+	"github.com/udistrital/auditoria"
 )
 
 func main() {
