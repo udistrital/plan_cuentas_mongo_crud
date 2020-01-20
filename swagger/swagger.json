@@ -1431,6 +1431,14 @@
                 ],
                 "description": "get all objects",
                 "operationId": "SolicitudesCRPController.GetAll",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int",
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "SolicitudCRP models.SolicitudCRP"
@@ -1717,28 +1725,28 @@
         }
     },
     "definitions": {
-        "16867.0xc0006d7b30.false": {
+        "1435.\u003cnil\u003e.string": {
+            "title": "string",
+            "type": "object"
+        },
+        "18095.0xc0004b1bc0.false": {
             "title": "false",
             "type": "object"
         },
-        "23953.0xc0006f1ce0.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "27779.0xc000708cc0.false": {
-            "title": "false",
-            "type": "object"
-        },
-        "28130.rubroFuente": {
+        "18446.rubroFuente": {
             "title": "rubroFuente",
             "type": "object"
         },
-        "28480.0xc000708d20.false": {
+        "18796.0xc0004b1c20.false": {
             "title": "false",
             "type": "object"
         },
-        "5844.\u003cnil\u003e.string": {
-            "title": "string",
+        "33292.0xc0004ecf90.false": {
+            "title": "false",
+            "type": "object"
+        },
+        "42885.0xc000501d70.false": {
+            "title": "false",
             "type": "object"
         },
         "bson.ObjectId": {
@@ -1783,7 +1791,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/16867.0xc0006d7b30.false"
+                    "$ref": "#/definitions/42885.0xc000501d70.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1822,19 +1830,19 @@
                     "type": "string"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/28480.0xc000708d20.false"
+                    "$ref": "#/definitions/18796.0xc0004b1c20.false"
                 },
                 "NumeroDocumento": {
                     "type": "string"
                 },
                 "Rubros": {
-                    "$ref": "#/definitions/28130.rubroFuente"
+                    "$ref": "#/definitions/18446.rubroFuente"
                 },
                 "TipoDocumento": {
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/27779.0xc000708cc0.false"
+                    "$ref": "#/definitions/18095.0xc0004b1bc0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1888,7 +1896,7 @@
                     "type": "string"
                 },
                 "DocumentosPresGenerados": {
-                    "$ref": "#/definitions/5844.\u003cnil\u003e.string"
+                    "$ref": "#/definitions/1435.\u003cnil\u003e.string"
                 },
                 "Estado": {
                     "type": "string"
@@ -2030,7 +2038,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/23953.0xc0006f1ce0.false"
+                    "$ref": "#/definitions/33292.0xc0004ecf90.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
