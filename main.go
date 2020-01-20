@@ -39,7 +39,7 @@ func main() {
 	}
 
 	//Prueba de auditoria
-	// auditoria.InitMiddleware()
+	auditoria.InitMiddleware()
 
 	beego.ErrorController(&customerror.CustomErrorController{})
 	apistatus.Init()
