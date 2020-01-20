@@ -1,6 +1,7 @@
 package movimientoCompositor
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -134,11 +135,14 @@ func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg st
 
 	currMov, err = movimientoManager.GetOneMovimientoByID(currMov.ID, fixedName)
 	if err != nil {
+		log.Println("err1", err.Error())
 		return
 	}
 
 	parameterForThisLevel, err = movimientoManager.GetInitialMovimientoParameterByHijo(currMov.Tipo)
 	if err != nil {
+		log.Println("err2", err.Error())
+
 		return
 	}
 
@@ -153,14 +157,19 @@ func GetMovimientoFatherInfoByHiherachylevel(ID, hiherachyLevel, vigencia, cg st
 			resul, err = crudmanager.GetDocumentByID(currMov.Padre, parameterForThisLevel.FatherCollectionName+fixedName)
 			return
 		}
-		sonType := currMov.Tipo
+
 		currMov, err = movimientoManager.GetOneMovimientoByID(currMov.Padre, fixedName)
 		if err != nil {
+			log.Println("err3", err.Error(), fixedName)
+
 			return
 		}
 
-		parameterForThisLevel, err = movimientoManager.GetOneMovimientoParameterByHijoAndPadre(sonType, currMov.Tipo)
+		parameterForThisLevel, err = movimientoManager.GetInitialMovimientoParameterByHijo(currMov.Tipo)
+
 		if err != nil {
+			log.Println("err4", err.Error())
+
 			return
 		}
 
