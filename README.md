@@ -46,12 +46,10 @@ docker ps
 ```
 
 ### Ejecución del proyecto directamente con Go
-Para ejecutar el proyecto con el lenguaje **Go** es necesario tener instalado en su equipo:
 
-Prerequisitos:
-
-* Go
-* beego
+***Prerequisitos:***
+* [Golang](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/golang.md)
+* [BeeGo](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/beego.md)
 * MongoDB
 
 ```sh
