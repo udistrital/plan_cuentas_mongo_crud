@@ -12,7 +12,7 @@ El API plan_cuentas_mongo_crud, generada con beego, proporciona interfaces para 
 *Si se utiliza Windows como sistema operativo, se recomienda utilizar **Git bash** para ejecutar todos los comandos posteriores*
 
 ### Variables de Entorno
-
+ Las variables se pueden ver en el fichero **conf/app.conf** y están identificadas con **${FINANCIERA_MONGO_CRUD_...}**
 ```sh
 FINANCIERA_MONGO_CRUD_PORT = [descripción]
 FINANCIERA_MONGO_CRUD_DB_URL = [descripción]
@@ -64,8 +64,7 @@ cd $GOPATH/src/github.com/udistrital/plan_cuentas_mongo_crud
 # 3. Moverse a la rama **dev**
 git pull origin dev && git checkout dev
 
-# 4. listar todas las variables de entorno que utiliza el proyecto. Las variables se pueden ver en el fichero **conf/app.conf** y están identificadas con **${FINANCIERA_MONGO_CRUD_...}**
-
+# 4. alimentar todas las variables de entorno que utiliza el proyecto.
 FINANCIERA_MONGO_CRUD_PORT=8080 FINANCIERA_MONGO_CRUD_DB_URL=127.0.0.1:27017 FINANCIERA_MONGO_CRUD_SOME_VARIABLE=some_value bee run
 ```
 
