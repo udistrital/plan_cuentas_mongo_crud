@@ -47,18 +47,18 @@ steps:
     event:
     - push
 
-# - name: go_build
-#   image: golang:1.9
-#   commands:
-#   - go get -t
-#   - GOOS=linux GOARCH=amd64 go build -o main
-#   when:
-#     branch:
-#     - develop
-#     - release/*
-#     - master
-#     event:
-#     - push
+- name: go_build
+  image: golang:1.14
+  commands:
+  - go get -t
+  - GOOS=linux GOARCH=amd64 go build -o main
+  when:
+    branch:
+    - develop
+    - release/*
+    - master
+    event:
+    - push
 
 - name: go_run_test
   image: golang:1.9
