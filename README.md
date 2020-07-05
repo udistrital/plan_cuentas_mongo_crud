@@ -43,8 +43,8 @@ FINANCIERA_MONGO_CRUD_PORT=8080 FINANCIERA_MONGO_CRUD_DB_URL=127.0.0.1:27017 FIN
 
 ### Ejecución Dockerfile
 ```shell
-# docker build --tag=covid-api . --no-cache
-# docker run -p 80:80 covid-api
+# docker build --tag=plan_cuentas_mongo_crud . --no-cache
+# docker run -p 80:80 plan_cuentas_mongo_crud
 ```
 
 ### Ejecución docker-compose
