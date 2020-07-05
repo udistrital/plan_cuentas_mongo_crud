@@ -87,20 +87,12 @@ steps:
   - export RELEASE=4.2.0.1873
   - apk add --no-cache  curl grep sed unzip nodejs npm
   - curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$RELEASE-linux.zip
-  - unzip sonarscanner.zip
-  - rm sonarscanner.zip
+  - unzip sonarscanner.zip && rm sonarscanner.zip
   - rm -rf sonar-scanner-$RELEASE-linux/jre
   - sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' ./sonar-scanner-$RELEASE-linux/bin/sonar-scanner
   - export PATH=$PATH:/go/src/github.com/udistrital/${DRONE_REPO##udistrital/}/sonar-scanner-$RELEASE-linux/bin
-  - sonar-scanner -Dsonar.projectKey=${DRONE_REPO_NAME} -Dsonar.projectName=${DRONE_REPO_NAME} -Dsonar.projectVersion=1.0
-    \-Dsonar.sourceEncoding=UTF-8
-    \-Dsonar.golint.reportPath=report.xml
-    \-Dsonar.coverage.dtdVerification=false
-    \-Dsonar.language=go
-    \-Dsonar.exclusions=swagger/**,routers/**,database/**
-    \-Dsonar.sources=./
-    \-Dsonar.sources.inclusions=**/**.go
-    \-Dsonar.host.url=https://sonarqube.portaloas.udistrital.edu.co/
+  - cp sonar-project.properties ./sonar-scanner-$RELEASE-linux/conf/sonar-scanner.properties
+  - sonar-scanner
   when:
     branch:
     - develop
