@@ -94,21 +94,12 @@ steps:
   - export PATH=$PATH:/go/src/github.com/udistrital/${DRONE_REPO##udistrital/}/sonar-scanner-$RELEASE-linux/bin
   - sonar-scanner -Dsonar.projectKey=${DRONE_REPO_NAME} -Dsonar.projectName=${DRONE_REPO_NAME} -Dsonar.projectVersion=1.0
     \-Dsonar.sourceEncoding=UTF-8
-    # GoLint report path, default value is report.xml
     \-Dsonar.golint.reportPath=report.xml
-    # Cobertura like coverage report path, default value is coverage.xml
-    #\-Dsonar.coverage.reportPath=coverage.xml
-    # if you want disabled the DTD verification for a proxy problem for example, true by default
     \-Dsonar.coverage.dtdVerification=false
-    # JUnit like test report, default value is test.xml
-    #\-Dsonar.test.reportPath=test.xml
     \-Dsonar.language=go
     \-Dsonar.exclusions=swagger/**,routers/**,database/**
     \-Dsonar.sources=./
     \-Dsonar.sources.inclusions=**/**.go
-    #\-Dsonar.tests=./tests/
-    #\-Dsonar.test.inclusions=**/**_test.go
-    #\-Dsonar.test.exclusions=database/**
     \-Dsonar.host.url=https://sonarqube.portaloas.udistrital.edu.co/
   when:
     branch:
