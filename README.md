@@ -1,19 +1,21 @@
 # plan_cuentas_mongo_crud
 
+El API plan_cuentas_mongo_crud proporciona interfaces para la manipulación (CRUD) de los datos almacenados en una base de datos no relacional MongoDB (rubros, apropiaciones, fuentes de financiamiento, cpd, crp, vigencias)
 
-El API plan_cuentas_mongo_crud, generada con beego, proporciona interfaces para la manipulación(CRUD) de los datos almacenados en una base de datos no relacional MongoDB (rubros, apropiaciones, fuentes de financiamiento, cpd, crp, vigencias), esta API hace representa la capa de datos del sistema de gestión financiero KRONOS.
+Esta API representa la capa de datos del sistema de gestión financiero KRONOS.
 
 ## Especificaciones Técnicas
 
-### Requisitos previos
-* Docker
-* Docker Compose
+### Tecnologías Implementadas y Versiones
 
-*Si se utiliza Windows como sistema operativo, se recomienda utilizar **Git bash** para ejecutar todos los comandos posteriores*
+* [Golang](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/golang.md)
+* [BeeGo](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/beego.md)
+* [MongoDB]()
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)
+* [Docker Compose](https://docs.docker.com/compose/)
 
 ### Variables de Entorno
- Las variables se pueden ver en el fichero **conf/app.conf** y están identificadas con **${FINANCIERA_MONGO_CRUD_...}**
-```sh
+```shell
 FINANCIERA_MONGO_CRUD_PORT = [descripción]
 FINANCIERA_MONGO_CRUD_DB_URL = [descripción]
 FINANCIERA_MONGO_CRUD_DB_NAME = [descripción]
@@ -21,10 +23,32 @@ FINANCIERA_MONGO_CRUD_DB_USER = [descripción]
 FINANCIERA_MONGO_CRUD_DB_PASS = [descripción]
 FINANCIERA_MONGO_CRUD_DB_AUTH = [descripción]
 ```
+**NOTA:** Las variables se pueden ver en el fichero conf/app.conf y están identificadas con FINANCIERA_MONGO_CRUD_...
 
-### Ejecución del proyecto con Docker
+### Ejecución del Proyecto
+```shell
+#1. Obtener el repositorio con Go
+go get github.com/udistrital/plan_cuentas_mongo_crud
 
-```sh
+#2. Moverse a la carpeta del repositorio
+cd $GOPATH/src/github.com/udistrital/plan_cuentas_mongo_crud
+
+# 3. Moverse a la rama **dev**
+git pull origin dev && git checkout dev
+
+# 4. alimentar todas las variables de entorno que utiliza el proyecto.
+FINANCIERA_MONGO_CRUD_PORT=8080 FINANCIERA_MONGO_CRUD_DB_URL=127.0.0.1:27017 FINANCIERA_MONGO_CRUD_SOME_VARIABLE=some_value bee run
+```
+![Vista previa](images/terminal_api_view.png)
+
+### Ejecución Dockerfile
+```shell
+# docker build --tag=covid-api . --no-cache
+# docker run -p 80:80 covid-api
+```
+
+### Ejecución docker-compose
+```shell
 #1. Clonar el repositorio
 git clone -b dev https://github.com/udistrital/plan_cuentas_mongo_crud
 
@@ -44,33 +68,17 @@ docker-compose up --build
 #6. Comprobar que los contenedores estén en ejecución
 docker ps
 ```
+### Ejecución Pruebas
 
-### Ejecución del proyecto directamente con Go
-
-***Prerequisitos:***
-* [Golang](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/golang.md)
-* [BeeGo](https://github.com/udistrital/introduccion_oas/blob/master/instalacion_de_herramientas/beego.md)
-* MongoDB
-
-```sh
-#1. Obtener el repositorio con Go
-go get github.com/udistrital/plan_cuentas_mongo_crud
-
-#2. Moverse a la carpeta del repositorio
-cd $GOPATH/src/github.com/udistrital/plan_cuentas_mongo_crud
-
-# 3. Moverse a la rama **dev**
-git pull origin dev && git checkout dev
-
-# 4. alimentar todas las variables de entorno que utiliza el proyecto.
-FINANCIERA_MONGO_CRUD_PORT=8080 FINANCIERA_MONGO_CRUD_DB_URL=127.0.0.1:27017 FINANCIERA_MONGO_CRUD_SOME_VARIABLE=some_value bee run
+Pruebas unitarias
+```shell
+# Not Data
 ```
+## Estado CI
 
-![Vista previa](images/terminal_api_view.png)
-
-### Servicios
-
-Para la documentación de esta API, se utiliza swagger. Si quieres ver una documentación exaustiva de todos los servicios que provee esta API, una vez ejecutado el contenedor o el proyecto de beego, ve a la dirección http://127.0.0.1:8082/swagger/swagger-1/
+| Develop | Relese 0.0.1 | Master |
+| -- | -- | -- |
+| 1 | 2 | 3 |
 
 
 ## Licencia
@@ -79,6 +87,6 @@ This file is part of plan_cuentas_mongo_crud.
 
 plan_cuentas_mongo_crud is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+plan_cuentas_mongo_crud is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with Foobar. If not, see https://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with plan_cuentas_mongo_crud. If not, see https://www.gnu.org/licenses/.
