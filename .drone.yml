@@ -117,7 +117,7 @@ steps:
     - release/*
     - master
 
-- name: go-awsecs
+- name: update_aws_ecs
   image: golang:1.9
   environment:
     AWS_ACCESS_KEY_ID:
