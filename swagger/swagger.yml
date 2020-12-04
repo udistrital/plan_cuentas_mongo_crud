@@ -266,8 +266,7 @@ paths:
     post:
       tags:
       - arbol_rubro_apropiacion
-      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una
-        vigencia y unidad ejecutora
+      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
       operationId: NodoRubroApropiacionController.AprobacionMasiva
       parameters:
       - in: unidadEjecutora
@@ -366,8 +365,7 @@ paths:
     get:
       tags:
       - arbol_rubro_apropiacion
-      description: Devuelve un arreglo con todos los nodos hoja correspondientes a
-        la vigencia y ue
+      description: Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
       operationId: NodoRubroApropiacionController.GetHojas
       parameters:
       - in: body
@@ -625,8 +623,7 @@ paths:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
-        y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimientoParameter
       parameters:
       - in: body
@@ -646,8 +643,7 @@ paths:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
-        y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimiento
       parameters:
       - in: body
@@ -946,8 +942,7 @@ paths:
       parameters:
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
-          !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -1034,8 +1029,7 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias a las cuales se ha registrado un name_space
-        en el sistema.
+      description: Retorna las vigencias a las cuales se ha registrado un name_space en el sistema.
       operationId: VigenciaController.GetVigenciasByNameSpace
       parameters:
       - in: path
@@ -1077,8 +1071,7 @@ paths:
     get:
       tags:
       - vigencia
-      description: Se cierra la vigencia que se encuentre con estado actual en la
-        colección, dependiendo del área funcional que le llegue.
+      description: Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
       operationId: VigenciaController.CerrarVigencia
       parameters:
       - in: path
@@ -1095,14 +1088,12 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna la vigencia actual según la hora del servidor y añade o
-        quita segùn el offset lo indica , por defecto 0.
+      description: Retorna la vigencia actual según la hora del servidor y añade o quita segùn el offset lo indica , por defecto 0.
       operationId: VigenciaController.GetVigenciasCurrentVigenciaWithOffset
       parameters:
       - in: query
         name: offset
-        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
-          offset=-1; vigencia -1'
+        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 , offset=-1; vigencia -1'
         required: true
         type: string
       responses:
@@ -1131,8 +1122,7 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias guardadas en las diferentes colecciones de
-        la base de datos.
+      description: Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
       operationId: VigenciaController.GetTodasVigencias
       responses:
         "200":
@@ -1140,23 +1130,23 @@ paths:
         "403":
           description: error
 definitions:
-  1435.<nil>.string:
-    title: string
-    type: object
-  18095.0xc0004b1bc0.false:
+  14234.0xc0005f4750.false:
     title: "false"
     type: object
-  18446.rubroFuente:
+  20232.0xc000614120.false:
+    title: "false"
+    type: object
+  23932.0xc000615020.false:
+    title: "false"
+    type: object
+  24283.rubroFuente:
     title: rubroFuente
     type: object
-  18796.0xc0004b1c20.false:
+  24633.0xc000615080.false:
     title: "false"
     type: object
-  33292.0xc0004ecf90.false:
-    title: "false"
-    type: object
-  42885.0xc000501d70.false:
-    title: "false"
+  32105.<nil>.string:
+    title: string
     type: object
   bson.ObjectId:
     title: ObjectId
@@ -1191,7 +1181,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/42885.0xc000501d70.false'
+        $ref: '#/definitions/20232.0xc000614120.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1211,20 +1201,32 @@ definitions:
     title: FuenteFinanciamiento
     type: object
     properties:
+      Activo:
+        type: boolean
       Codigo:
+        type: string
+      Descripcion:
         type: string
       Estado:
         type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
       Movimientos:
-        $ref: '#/definitions/18796.0xc0004b1c20.false'
+        $ref: '#/definitions/24633.0xc000615080.false'
+      Nombre:
+        type: string
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/18446.rubroFuente'
+        $ref: '#/definitions/24283.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/18095.0xc0004b1bc0.false'
+        $ref: '#/definitions/23932.0xc000615020.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1233,6 +1235,9 @@ definitions:
       ValorInicial:
         type: number
         format: double
+      Vigencia:
+        type: integer
+        format: int64
   models.FuenteFinancimiento:
     title: FuenteFinancimiento
     type: object
@@ -1264,7 +1269,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/1435.<nil>.string'
+        $ref: '#/definitions/32105.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1314,20 +1319,35 @@ definitions:
     title: NodoRubro
     type: object
     properties:
+      Activo:
+        type: boolean
       Apropiaciones:
         type: boolean
       Bloqueado:
         type: boolean
       Codigo:
         type: string
+      Descripcion:
+        type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
       Hijos:
         type: array
         items:
           type: string
+      Nombre:
+        type: string
       Padre:
         type: string
       UnidadEjecutora:
         type: string
+      Vigencia:
+        type: integer
+        format: int64
   models.NodoRubroApropiacion2018:
     title: NodoRubroApropiacion2018
     type: object
@@ -1340,7 +1360,22 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+      Activo:
+        type: boolean
       Codigo:
+        type: integer
+        format: int64
+      Descripcion:
+        type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
+      Nombre:
+        type: string
+      Vigencia:
         type: integer
         format: int64
   models.SolicitudCDP:
@@ -1361,7 +1396,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/33292.0xc0004ecf90.false'
+        $ref: '#/definitions/14234.0xc0005f4750.false'
       fechaCreacion:
         type: string
         format: datetime
