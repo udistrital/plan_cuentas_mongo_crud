@@ -25,3 +25,5 @@ swagger/fonts/
 swagger/images/
 swagger/lang/
 swagger/lib/
+go.mod
+go.sum
