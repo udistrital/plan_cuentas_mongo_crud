@@ -1,12 +1,12 @@
 package migrationmanager
 
-import (
+import ( 
 	"context"
 	"fmt"
 	"time"
 
 	"github.com/astaxie/beego"
-	migrate "github.com/udistrital/mongo-migrate"
+	migrate "github.com/xakep666/mongo-migrate"
 
 	// migrtions ... import the migration file.
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/migrations"
