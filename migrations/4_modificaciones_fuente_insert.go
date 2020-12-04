@@ -5,7 +5,7 @@ import (
 
 	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 
-	migrate "github.com/udistrital/mongo-migrate"
+	migrate "github.com/xakep666/mongo-migrate"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

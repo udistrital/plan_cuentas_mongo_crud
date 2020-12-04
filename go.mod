@@ -10,7 +10,7 @@ require (
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/julianfrank/console v0.0.0-20200620072909-d7afeac7f121
 	github.com/leodido/go-urn v1.2.0 // indirect
-	github.com/manucorporat/try v0.0.0-20170609134256-2a0c6b941d52 // indirect
+	github.com/manucorporat/try v0.0.0-20170609134256-2a0c6b941d52
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/smartystreets/goconvey v1.6.4
