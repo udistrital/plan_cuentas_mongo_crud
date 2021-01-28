@@ -9,9 +9,12 @@ import (
 func BuildTree(raiz *models.NodoRubro) []map[string]interface{} {
 	var tree []map[string]interface{}
 	forkData := make(map[string]interface{})
+	AuxData := make(map[string]interface{})
 	forkData["Codigo"] = raiz.ID
-	forkData["data"] = raiz
-	delete(forkData["data"].(map[string]interface{}), "Hijos")
+	AuxData["data"] = raiz
+	AuxHijos := AuxData["data"].(map[string]interface{})
+	delete(AuxHijos, "Hijos")
+	forkData["data"] = AuxHijos
 	forkData["children"] = getChildren(raiz.Hijos)
 	tree = append(tree, forkData)
 	return tree
