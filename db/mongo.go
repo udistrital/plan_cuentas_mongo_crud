@@ -45,7 +45,7 @@ func GetSession() (*mgo.Session, error) {
 		Database: mongoDatabase,
 		Username: mongoUser,
 		Password: mongoPassword,
-		Source:   mongoDatabase,
+		Source:   mongoAuthDb,
 	}
 
 	session, err := mgo.DialWithInfo(info)
