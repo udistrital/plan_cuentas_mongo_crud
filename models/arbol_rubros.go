@@ -24,8 +24,8 @@ type NodoRubro struct {
 	*General
 	ID              string   `json:"Codigo" bson:"_id,omitempty"`
 	Hijos           []string `json:"-" bson:"hijos,omitempty"`
-	Padre           string   `json:"Padre" bson:"padre"`
-	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
+	Padre           string   `json:"-" bson:"padre"`
+	UnidadEjecutora string   `json:"-" bson:"unidad_ejecutora"`
 	Bloqueado       bool     `json:"Bloqueado" bson:"bloqueado"`
 	Apropiaciones   bool     `json:"Apropiaciones" bson:"apropiaciones"`
 }
