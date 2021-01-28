@@ -23,7 +23,7 @@ const ArbolRubroParameterCollection = "arbol_rubro_parametros"
 type NodoRubro struct {
 	*General
 	ID              string   `json:"Codigo" bson:"_id,omitempty"`
-	Hijos           []string `json:"Hijos" bson:"hijos"`
+	Hijos           []string `json:"Hijos,omitempty" bson:"hijos,omitempty"`
 	Padre           string   `json:"Padre" bson:"padre"`
 	UnidadEjecutora string   `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 	Bloqueado       bool     `json:"Bloqueado" bson:"bloqueado"`
@@ -60,7 +60,7 @@ func InsertNodoRubro(session *mgo.Session, j NodoRubro) error {
 func GetAllNodoRubro(session *mgo.Session, query map[string]interface{}) []NodoRubro {
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	
+
 	var NodoRubros []NodoRubro
 	err := c.Find(query).All(&NodoRubros)
 	if err != nil {
