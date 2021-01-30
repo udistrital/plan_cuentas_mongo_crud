@@ -11,7 +11,6 @@ func BuildTree(raiz *models.NodoRubro) []map[string]interface{} {
 	forkData := make(map[string]interface{})
 	forkData["Codigo"] = raiz.ID
 	forkData["data"] = raiz
-	delete(forkData["data"].(map[string]interface{}), "Hijos")
 	forkData["children"] = getChildren(raiz.Hijos)
 	tree = append(tree, forkData)
 	return tree
