@@ -6,10 +6,10 @@ import "time"
 type General struct {
 	Vigencia          int       `json:"Vigencia" bson:"vigencia"`
 	Nombre            string    `json:"Nombre" bson:"nombre"`
-	Descripcion       string    `json:"-" bson:"descripcion"`
-	FechaCreacion     time.Time `json:"-" bson:"fechaCreacion"`
-	FechaModificacion time.Time `json:"-" bson:"fechaModificacion"`
-	Activo            bool      `json:"-" bson:"activo"`
+	Descripcion       string    `json:"Descripcion" bson:"descripcion"`
+	FechaCreacion     time.Time `json:"FechaCreacion" bson:"fechaCreacion"`
+	FechaModificacion time.Time `json:"FechaModificacion" bson:"fechaModificacion"`
+	Activo            bool      `json:"Activo" bson:"activo"`
 }
 
 // GeneralAfectationFileds .. main structure for balance.
