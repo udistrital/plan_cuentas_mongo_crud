@@ -196,11 +196,10 @@ func (j *NodoRubroController) FullArbolRubro() {
 	} else {
 		tree := rubroHelper.BuildTree(&raizRubro)
 		j.response = DefaultResponse(200, nil, &tree)
+		j.Data["json"] = tree
+		j.ServeJSON()
 	}
 
-	tree := rubroHelper.BuildTree(&raizRubro)
-	j.Data["json"] = tree
-	j.ServeJSON()
 }
 
 func GetHijoRubro(id, ue string) map[string]interface{} {
@@ -239,3 +238,24 @@ func (j *NodoRubroController) GetHojas() {
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
+
+// @Title FullArbolRubroReducido
+// @Description Construye el árbol a un nivel dependiendo de la raíz
+// @Param body body stringtrue "Código de la raíz"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /arbolV2/:raiz [get]
+// func (j *NodoRubroController) FullArbolRubroReducido() {
+// 	raiz := j.GetString(":raiz")
+
+// 	raizRubro, err := models.GetNodoRubroReducidoById(raiz)
+// 	if err != nil {
+// 		j.response = DefaultResponse(403, err, nil)
+// 	} else {
+// 		tree := rubroHelper.BuildTreeReducido(&raizRubro)
+// 		j.response = DefaultResponse(200, nil, &tree)
+// 		j.Data["json"] = tree
+// 		j.ServeJSON()
+// 	}
+
+// }
