@@ -17,3 +17,8 @@ type GeneralAfectationFileds struct {
 	ValorActual  float64 `json:"ValorActual" bson:"ValorActual"`
 	ValorInicial float64 `json:"ValorInicial" bson:"ValorInicial"`
 }
+
+// GeneralReducida estructura general reducida de una entidad en plan de cuentas
+type GeneralReducida struct {
+	Nombre string `json:"Nombre" bson:"nombre"`
+}
