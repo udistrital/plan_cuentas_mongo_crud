@@ -385,6 +385,41 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	j.ServeJSON()
 }
 
+// FullArbolApropiacionesbyID ...
+// @Title FullArbolApropiacionesbyID
+// @Description Construye el árbol completo con valores
+// @Param body body stringtrue "Código de la raíz"
+// @Param nivel nivel string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Success 200 {object} models.Object
+// @Failure 404 body is empty
+// @router /arbol_apropiacion_valores/:unidadEjecutora/:vigencia/:id [get]
+func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
+	var intNivel int
+	unidadEjecutora := j.GetString(":unidadEjecutora")
+	vigenciaStr := j.GetString(":vigencia")
+	nivel := j.GetString("nivel")
+
+	if nivel == "" {
+		intNivel = -1
+	} else {
+		intNivel, _ = strconv.Atoi(nivel)
+	}
+
+	query := map[string]interface{}{
+		"Codigo": j.GetString(":id"),
+		"Nivel":  intNivel,
+	}
+	vigencia, err := strconv.Atoi(vigenciaStr)
+	if err != nil {
+		j.response = DefaultResponse(404, err, nil)
+	} else {
+		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, "", query)
+		j.response = DefaultResponse(200, nil, &tree)
+	}
+	j.Data["json"] = j.response
+	j.ServeJSON()
+}
+
 // GetHojas ...
 // @Title GetHojas
 // @Description Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
