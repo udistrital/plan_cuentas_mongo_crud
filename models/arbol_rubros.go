@@ -41,9 +41,10 @@ type ArbolRubroParameter struct {
 
 // NodoRubroReducido es la estructura de un Rubro con datos básicos, es un nodo puesto que forma parte del árbol
 type NodoRubroReducido struct {
-	General *GeneralReducida `json:"General" bson:"general"`
-	ID      string           `json:"Codigo" bson:"_id,omitempty"`
-	Hijos   []string         `json:"Hijos" bson:"hijos"`
+	General         *GeneralReducida `json:"General" bson:"general"`
+	ID              string           `json:"Codigo" bson:"_id,omitempty"`
+	Hijos           []string         `json:"Hijos" bson:"hijos"`
+	UnidadEjecutora string           `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 }
 
 func UpdateNodoRubro(j NodoRubro, id string) error {
@@ -101,7 +102,7 @@ func GetNodoRubroReducidoById(id string) (NodoRubroReducido, error) {
 	}
 
 	c := db.Cursor(session, NodoRubroCollection)
-	err = c.FindId(id).Select(bson.M{"_Id": 1, "hijos": 1, "general.nombre": 1}).One(&nodoRubro)
+	err = c.FindId(id).Select(bson.M{"_Id": 1, "hijos": 1, "unidad_ejecutora": 1, "general.nombre": 1}).One(&nodoRubro)
 
 	defer session.Close()
 	return nodoRubro, err

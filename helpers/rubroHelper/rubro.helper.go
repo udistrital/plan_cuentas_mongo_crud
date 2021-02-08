@@ -44,10 +44,16 @@ func GetRubroParamsIndexedByKey(cg, key string) map[string]interface{} {
 func BuildTreeReducido(raiz *models.NodoRubroReducido, nivel int) []map[string]interface{} {
 	var tree []map[string]interface{}
 	forkData := make(map[string]interface{})
-	forkData["Codigo"] = raiz.ID
-	forkData["data"] = raiz.General.Nombre
+	forkData = map[string]interface{}{
+		"Codigo": raiz.ID,
+		"data": map[string]interface{}{
+			"Nombre":          raiz.General.Nombre,
+			"Codigo":          raiz.ID,
+			"UnidadEjecutora": raiz.UnidadEjecutora,
+		},
+	}
 	if nivel == 0 {
-		forkData["children"] = raiz.Hijos
+		forkData["Hijos"] = raiz.Hijos
 	} else {
 		forkData["children"] = getChildrenReducido(raiz.Hijos, nivel-1)
 	}
@@ -63,8 +69,14 @@ func getChildrenReducido(children []string, nivel int) (childrenTree []map[strin
 		if err != nil {
 			return
 		}
-		forkData["data"] = nodo.General.Nombre
-		forkData["Codigo"] = nodo.ID
+		forkData = map[string]interface{}{
+			"Codigo": nodo.ID,
+			"data": map[string]interface{}{
+				"Nombre":          nodo.General.Nombre,
+				"Codigo":          nodo.ID,
+				"UnidadEjecutora": nodo.UnidadEjecutora,
+			},
+		}
 		if nivel < 0 {
 			if len(nodo.Hijos) > 0 {
 				forkData["children"] = getChildrenReducido(nodo.Hijos, -1)
@@ -74,7 +86,7 @@ func getChildrenReducido(children []string, nivel int) (childrenTree []map[strin
 				forkData["children"] = getChildrenReducido(nodo.Hijos, nivel-1)
 			}
 		} else {
-			forkData["children"] = nodo.Hijos
+			forkData["Hijos"] = nodo.Hijos
 		}
 		childrenTree = append(childrenTree, forkData)
 	}

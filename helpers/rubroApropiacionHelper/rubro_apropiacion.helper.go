@@ -232,7 +232,7 @@ func getValueChildrenbyID(children []string, unidadEjecutora string, vigencia in
 				forkData["children"] = getValueChildrenbyID(nodo.Hijos, unidadEjecutora, vigencia, nivel-1)
 			}
 		} else {
-			forkData["children"] = nodo.Hijos
+			forkData["Hijos"] = nodo.Hijos
 		}
 
 		childrenTree = append(childrenTree, forkData)
