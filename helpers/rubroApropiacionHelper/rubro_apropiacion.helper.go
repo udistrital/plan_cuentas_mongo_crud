@@ -153,6 +153,94 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 	return hijo
 }
 
+// ValuesTreebyID consulta un rubro por el ID y le asgina un valor 0 cuando no tienen una apropiación
+func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query map[string]interface{}) []map[string]interface{} {
+	var tree []map[string]interface{}
+	var apropiacion *models.NodoRubroApropiacion
+	raices := make(map[string]interface{})
+	forkData := make(map[string]interface{})
+
+	raices = rubroManager.GetNodo(query["Codigo"].(string), unidadEjecutora)
+
+	raiz, err := models.GetNodoRubroById(query["Codigo"].(string))
+	if err != nil {
+		return nil
+	}
+	raices["Nombre"] = raiz.Nombre
+	if apropiacion, err = models.GetNodoRubroApropiacionById(query["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
+		raices["ValorInicial"] = 0
+		raices["Estado"] = models.EstadoSinRegistrar
+	} else {
+		raices["ValorInicial"] = apropiacion.ValorInicial
+		raices["Estado"] = apropiacion.Estado
+		raices["Productos"] = apropiacion.Productos
+		if apropiacion.Estado == estado {
+			apropiacion.General.Nombre = raiz.Nombre
+			forkData := make(map[string]interface{})
+			forkData["Codigo"] = apropiacion.ID
+			forkData["data"] = apropiacion
+			forkData["children"] = getChildren(apropiacion.Hijos, unidadEjecutora, estado, vigencia)
+			tree = append(tree, forkData)
+		}
+	}
+	if estado == "" {
+		forkData["Codigo"] = query["Codigo"]
+		forkData["data"] = raices
+		if query["Nivel"].(int) != 0 {
+			if query["Nivel"].(int) < 0 {
+				forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
+			} else {
+				forkData["children"] = getValueChildrenbyID(raiz.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
+			}
+		}
+		tree = append(tree, forkData)
+	}
+
+	return tree
+}
+
+// getValueChildrenbyID crea la estructura de árbol con la función ValuesTree, encargándoe de asignar un valor de 0 cuando algún rubro
+// no tiene apropiación, además recibe como parametro el nivel de hijos que quiere retornar.
+func getValueChildrenbyID(children []string, unidadEjecutora string, vigencia int, nivel int) (childrenTree []map[string]interface{}) {
+	for i := 0; i < len(children); i++ {
+		child := children[i]
+
+		forkData := make(map[string]interface{})
+		nodo, err := models.GetNodoRubroById(child)
+
+		if err != nil {
+			return
+		}
+
+		inrec, _ := json.Marshal(nodo)
+		data := make(map[string]interface{})
+		json.Unmarshal(inrec, &data)
+
+		forkData["data"] = data
+		forkData["Codigo"] = nodo.ID
+
+		if apropiacion, err := models.GetNodoRubroApropiacionById(child, unidadEjecutora, vigencia); err != nil {
+			forkData["data"].(map[string]interface{})["ValorInicial"] = 0
+			forkData["data"].(map[string]interface{})["Estado"] = models.EstadoSinRegistrar
+		} else {
+			forkData["data"].(map[string]interface{})["ValorInicial"] = apropiacion.ValorInicial
+			forkData["data"].(map[string]interface{})["Estado"] = apropiacion.Estado
+			forkData["data"].(map[string]interface{})["Productos"] = apropiacion.Productos
+		}
+		if nivel > 0 {
+			if len(nodo.Hijos) > 0 {
+				forkData["children"] = getValueChildrenbyID(nodo.Hijos, unidadEjecutora, vigencia, nivel-1)
+			}
+		} else {
+			forkData["Hijos"] = nodo.Hijos
+		}
+
+		childrenTree = append(childrenTree, forkData)
+	}
+
+	return
+}
+
 func SimulatePropagationValues(movimientos []models.Movimiento, vigencia, centroGestor string) map[string]map[string]interface{} {
 	balance := make(map[string]map[string]interface{})
 	afectationIndex := make(map[string]map[string]interface{})
