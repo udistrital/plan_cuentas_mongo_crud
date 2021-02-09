@@ -239,23 +239,31 @@ func (j *NodoRubroController) GetHojas() {
 	j.ServeJSON()
 }
 
+// FullArbolRubroReducido ...
 // @Title FullArbolRubroReducido
-// @Description Construye el árbol a un nivel dependiendo de la raíz
-// @Param body body stringtrue "Código de la raíz"
+// @Description Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
+// @Param raiz raiz string "Código de la raíz"
+// @Param nivel nivel string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
-// @router /arbolV2/:raiz [get]
-// func (j *NodoRubroController) FullArbolRubroReducido() {
-// 	raiz := j.GetString(":raiz")
+// @router /arbol_reducido/:raiz [get]
+func (j *NodoRubroController) FullArbolRubroReducido() {
+	var nivel int
+	raiz := j.GetString(":raiz")
+	query := j.GetString("nivel")
+	if query == "" {
+		nivel = -1
+	} else {
+		nivel, _ = strconv.Atoi(query)
+	}
+	raizRubro, err := models.GetNodoRubroReducidoById(raiz)
+	if err != nil {
+		j.response = DefaultResponse(403, err, nil)
+	} else {
+		tree := rubroHelper.BuildTreeReducido(&raizRubro, nivel)
+		j.response = DefaultResponse(200, nil, &tree)
+		j.Data["json"] = tree
+		j.ServeJSON()
+	}
 
-// 	raizRubro, err := models.GetNodoRubroReducidoById(raiz)
-// 	if err != nil {
-// 		j.response = DefaultResponse(403, err, nil)
-// 	} else {
-// 		tree := rubroHelper.BuildTreeReducido(&raizRubro)
-// 		j.response = DefaultResponse(200, nil, &tree)
-// 		j.Data["json"] = tree
-// 		j.ServeJSON()
-// 	}
-
-// }
+}
