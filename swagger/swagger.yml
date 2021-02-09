@@ -117,6 +117,28 @@ paths:
             $ref: '#/definitions/models.Object'
         "404":
           description: body is empty
+  /arbol_rubro/arbol_reducido/{raiz}:
+    get:
+      tags:
+      - arbol_rubro
+      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
+      operationId: NodoRubroController.FullArbolRubroReducido
+      parameters:
+      - in: raiz
+        name: raiz
+        description: Código de la raíz
+        type: string
+      - in: nivel
+        name: nivel
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
   /arbol_rubro/get_hojas:
     get:
       tags:
@@ -317,6 +339,29 @@ paths:
         description: Código de la raíz
         schema:
           $ref: '#/definitions/stringtrue'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Object'
+        "404":
+          description: body is empty
+  /arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}/{id}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Construye el árbol completo con valores
+      operationId: NodoRubroApropiacionController.FullArbolApropiacionesbyID
+      parameters:
+      - in: body
+        name: body
+        description: Código de la raíz
+        schema:
+          $ref: '#/definitions/stringtrue'
+      - in: nivel
+        name: nivel
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
+        type: string
       responses:
         "200":
           description: ""
@@ -1130,22 +1175,22 @@ paths:
         "403":
           description: error
 definitions:
-  14234.0xc0005f4750.false:
+  15179.0xc00058ef90.false:
     title: "false"
     type: object
-  20232.0xc000614120.false:
+  21177.0xc0005a8960.false:
     title: "false"
     type: object
-  23932.0xc000615020.false:
+  24877.0xc0005a9860.false:
     title: "false"
     type: object
-  24283.rubroFuente:
+  25228.rubroFuente:
     title: rubroFuente
     type: object
-  24633.0xc000615080.false:
+  25578.0xc0005a98c0.false:
     title: "false"
     type: object
-  32105.<nil>.string:
+  33209.<nil>.string:
     title: string
     type: object
   bson.ObjectId:
@@ -1181,7 +1226,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/20232.0xc000614120.false'
+        $ref: '#/definitions/21177.0xc0005a8960.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1201,32 +1246,20 @@ definitions:
     title: FuenteFinanciamiento
     type: object
     properties:
-      Activo:
-        type: boolean
       Codigo:
-        type: string
-      Descripcion:
         type: string
       Estado:
         type: string
-      FechaCreacion:
-        type: string
-        format: datetime
-      FechaModificacion:
-        type: string
-        format: datetime
       Movimientos:
-        $ref: '#/definitions/24633.0xc000615080.false'
-      Nombre:
-        type: string
+        $ref: '#/definitions/25578.0xc0005a98c0.false'
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/24283.rubroFuente'
+        $ref: '#/definitions/25228.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/23932.0xc000615020.false'
+        $ref: '#/definitions/24877.0xc0005a9860.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1235,9 +1268,6 @@ definitions:
       ValorInicial:
         type: number
         format: double
-      Vigencia:
-        type: integer
-        format: int64
   models.FuenteFinancimiento:
     title: FuenteFinancimiento
     type: object
@@ -1269,7 +1299,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/32105.<nil>.string'
+        $ref: '#/definitions/33209.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1319,35 +1349,20 @@ definitions:
     title: NodoRubro
     type: object
     properties:
-      Activo:
-        type: boolean
       Apropiaciones:
         type: boolean
       Bloqueado:
         type: boolean
       Codigo:
         type: string
-      Descripcion:
-        type: string
-      FechaCreacion:
-        type: string
-        format: datetime
-      FechaModificacion:
-        type: string
-        format: datetime
       Hijos:
         type: array
         items:
           type: string
-      Nombre:
-        type: string
       Padre:
         type: string
       UnidadEjecutora:
         type: string
-      Vigencia:
-        type: integer
-        format: int64
   models.NodoRubroApropiacion2018:
     title: NodoRubroApropiacion2018
     type: object
@@ -1360,22 +1375,7 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
-      Activo:
-        type: boolean
       Codigo:
-        type: integer
-        format: int64
-      Descripcion:
-        type: string
-      FechaCreacion:
-        type: string
-        format: datetime
-      FechaModificacion:
-        type: string
-        format: datetime
-      Nombre:
-        type: string
-      Vigencia:
         type: integer
         format: int64
   models.SolicitudCDP:
@@ -1396,7 +1396,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/14234.0xc0005f4750.false'
+        $ref: '#/definitions/15179.0xc00058ef90.false'
       fechaCreacion:
         type: string
         format: datetime
