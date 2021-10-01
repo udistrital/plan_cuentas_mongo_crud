@@ -1795,15 +1795,15 @@
         }
     },
     "definitions": {
-        "15179.0xc00058ef90.false": {
+        "15179.0xc0004ee300.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc0005a8960.false": {
+        "21177.0xc0004efec0.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc0005a9860.false": {
+        "24877.0xc00050afc0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1811,7 +1811,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc0005a98c0.false": {
+        "25578.0xc00050b020.false": {
             "title": "false",
             "type": "object"
         },
@@ -1861,7 +1861,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc0005a8960.false"
+                    "$ref": "#/definitions/21177.0xc0004efec0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1893,14 +1893,31 @@
             "title": "FuenteFinanciamiento",
             "type": "object",
             "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
                 "Codigo": {
+                    "type": "string"
+                },
+                "Descripcion": {
                     "type": "string"
                 },
                 "Estado": {
                     "type": "string"
                 },
+                "FechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "FechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc0005a98c0.false"
+                    "$ref": "#/definitions/25578.0xc00050b020.false"
+                },
+                "Nombre": {
+                    "type": "string"
                 },
                 "NumeroDocumento": {
                     "type": "string"
@@ -1912,7 +1929,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc0005a9860.false"
+                    "$ref": "#/definitions/24877.0xc00050afc0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -1924,6 +1941,10 @@
                 "ValorInicial": {
                     "type": "number",
                     "format": "double"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },
@@ -2041,6 +2062,9 @@
             "title": "NodoRubro",
             "type": "object",
             "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
                 "Apropiaciones": {
                     "type": "boolean"
                 },
@@ -2050,17 +2074,35 @@
                 "Codigo": {
                     "type": "string"
                 },
+                "Descripcion": {
+                    "type": "string"
+                },
+                "FechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "FechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
                 "Hijos": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
+                "Nombre": {
+                    "type": "string"
+                },
                 "Padre": {
                     "type": "string"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },
@@ -2076,7 +2118,28 @@
             "title": "Producto",
             "type": "object",
             "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
                 "Codigo": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Descripcion": {
+                    "type": "string"
+                },
+                "FechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "FechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Nombre": {
+                    "type": "string"
+                },
+                "Vigencia": {
                     "type": "integer",
                     "format": "int64"
                 },
@@ -2108,7 +2171,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc00058ef90.false"
+                    "$ref": "#/definitions/15179.0xc0004ee300.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
