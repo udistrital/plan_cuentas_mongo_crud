@@ -207,10 +207,22 @@ paths:
       operationId: NodoRubroApropiacionController.Get
       parameters:
       - in: path
-        name: nombre
-        description: El nombre de la NodoRubroApropiacion2018 a consultar
+        name: id
+        description: id
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
@@ -356,15 +368,32 @@ paths:
       description: Construye el árbol completo con valores
       operationId: NodoRubroApropiacionController.FullArbolApropiacionesbyID
       parameters:
-      - in: body
-        name: body
-        description: Código de la raíz
-        schema:
-          $ref: '#/definitions/stringtrue'
-      - in: nivel
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: id
+        description: Rubro
+        required: true
+        type: string
+      - in: query
         name: nivel
         description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer
           Nivel ... )
+        type: integer
+        format: int64
+      - in: query
+        name: estado
+        description: 'Estado de la apropiacion (TODO: Confirmar)'
         type: string
       responses:
         "200":
@@ -1188,19 +1217,19 @@ paths:
         "403":
           description: error
 definitions:
-  15179.0xc0004ee300.false:
+  15179.0xc0005c0060.false:
     title: "false"
     type: object
-  21177.0xc0004efec0.false:
+  21177.0xc0005c1c20.false:
     title: "false"
     type: object
-  24877.0xc00050afc0.false:
+  24877.0xc0005d8d20.false:
     title: "false"
     type: object
   25228.rubroFuente:
     title: rubroFuente
     type: object
-  25578.0xc00050b020.false:
+  25578.0xc0005d8d80.false:
     title: "false"
     type: object
   33209.<nil>.string:
@@ -1239,7 +1268,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/21177.0xc0004efec0.false'
+        $ref: '#/definitions/21177.0xc0005c1c20.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1274,7 +1303,7 @@ definitions:
         type: string
         format: datetime
       Movimientos:
-        $ref: '#/definitions/25578.0xc00050b020.false'
+        $ref: '#/definitions/25578.0xc0005d8d80.false'
       Nombre:
         type: string
       NumeroDocumento:
@@ -1284,7 +1313,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/24877.0xc00050afc0.false'
+        $ref: '#/definitions/24877.0xc0005d8d20.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1454,7 +1483,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/15179.0xc0004ee300.false'
+        $ref: '#/definitions/15179.0xc0005c0060.false'
       fechaCreacion:
         type: string
         format: datetime

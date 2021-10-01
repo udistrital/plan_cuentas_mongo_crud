@@ -145,7 +145,9 @@ func (j *NodoRubroApropiacionController) GetAll() {
 // Get Método Get de HTTP
 // @Title Get
 // @Description get NodoRubroApropiacion2018 by nombre
-// @Param	nombre		path 	string	true		"El nombre de la NodoRubroApropiacion2018 a consultar"
+// @Param id              path  string true  "id"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
 // @Success 200 {object} models.NodoRubroApropiacion2018
 // @Failure 403 :uid is empty
 // @router /:id/:vigencia/:unidadEjecutora [get]
@@ -388,8 +390,11 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 // FullArbolApropiacionesbyID ...
 // @Title FullArbolApropiacionesbyID
 // @Description Construye el árbol completo con valores
-// @Param body body stringtrue "Código de la raíz"
-// @Param nivel nivel string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param id              path  string true  "Rubro"
+// @Param nivel           query int    false "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Param estado          query string false "Estado de la apropiacion (TODO: Confirmar)"
 // @Success 200 {object} models.Object
 // @Failure 404 body is empty
 // @router /arbol_apropiacion_valores/:unidadEjecutora/:vigencia/:id [get]
@@ -398,6 +403,7 @@ func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
 	nivel := j.GetString("nivel")
+	estado := j.GetString("estado", "")
 
 	if nivel == "" {
 		intNivel = -1
@@ -413,7 +419,7 @@ func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 	if err != nil {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
-		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, "", query)
+		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, estado, query)
 		j.response = DefaultResponse(200, nil, &tree)
 	}
 	j.Data["json"] = j.response

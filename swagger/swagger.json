@@ -430,17 +430,39 @@
                 "operationId": "NodoRubroApropiacionController.FullArbolApropiacionesbyID",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     },
                     {
-                        "in": "nivel",
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "Rubro",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
                         "name": "nivel",
                         "description": "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "estado",
+                        "description": "Estado de la apropiacion (TODO: Confirmar)",
                         "type": "string"
                     }
                 ],
@@ -581,10 +603,26 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la NodoRubroApropiacion2018 a consultar",
+                        "name": "id",
+                        "description": "id",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
@@ -1795,15 +1833,15 @@
         }
     },
     "definitions": {
-        "15179.0xc0004ee300.false": {
+        "15179.0xc0005c0060.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc0004efec0.false": {
+        "21177.0xc0005c1c20.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc00050afc0.false": {
+        "24877.0xc0005d8d20.false": {
             "title": "false",
             "type": "object"
         },
@@ -1811,7 +1849,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc00050b020.false": {
+        "25578.0xc0005d8d80.false": {
             "title": "false",
             "type": "object"
         },
@@ -1861,7 +1899,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc0004efec0.false"
+                    "$ref": "#/definitions/21177.0xc0005c1c20.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1914,7 +1952,7 @@
                     "format": "datetime"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc00050b020.false"
+                    "$ref": "#/definitions/25578.0xc0005d8d80.false"
                 },
                 "Nombre": {
                     "type": "string"
@@ -1929,7 +1967,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc00050afc0.false"
+                    "$ref": "#/definitions/24877.0xc0005d8d20.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2171,7 +2209,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc0004ee300.false"
+                    "$ref": "#/definitions/15179.0xc0005c0060.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
