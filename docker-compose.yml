@@ -11,7 +11,7 @@ services:
     ports: 
       - "${PORT}:${PORT}"
     env_file: 
-      - .env
+      - develop.env
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost   
     command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -d -u ./...; go mod init; bee run'

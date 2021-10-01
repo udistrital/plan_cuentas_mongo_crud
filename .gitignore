@@ -1,27 +1,24 @@
+# Binarios y Temporales
 .DS_Store
+*~
+*.exe
 api
-api~
-api.exe
-api.exe~
-plan_cuentas_mongo_crud
-plan_cuentas_mongo_crud~
-plan_cuentas_mongo_crud.exe
-plan_cuentas_mongo_crud.exe~
-lastupdate.tmp
-custom.env
-lastupdate.tmp
-.vscode/
-titan_api_crud
 main
-.scannerwork/
-swagger/*.png
-swagger/*.html
-swagger/*.js
-swagger/*.map
-swagger/*.css
-swagger/*.yml
-swagger/css/
-swagger/fonts/
-swagger/images/
-swagger/lang/
-swagger/lib/
+plan_cuentas_mongo_crud
+titan_api_crud
+*.tmp
+*.log
+
+# Variables de entorno
+*.env
+!template.env
+!develop.env
+
+# IDEs
+.vscode
+
+# Otros
+.scannerwork
+swagger/**
+!swagger/swagger.json
+!swagger/swagger.yml
