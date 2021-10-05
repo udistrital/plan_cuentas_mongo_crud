@@ -121,7 +121,8 @@ paths:
     get:
       tags:
       - arbol_rubro
-      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
+      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel
+        dependiendo de la raíz y nivel
       operationId: NodoRubroController.FullArbolRubroReducido
       parameters:
       - in: raiz
@@ -130,7 +131,8 @@ paths:
         type: string
       - in: nivel
         name: nivel
-        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer
+          Nivel ... )
         type: string
       responses:
         "200":
@@ -288,7 +290,8 @@ paths:
     post:
       tags:
       - arbol_rubro_apropiacion
-      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
+      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una
+        vigencia y unidad ejecutora
       operationId: NodoRubroApropiacionController.AprobacionMasiva
       parameters:
       - in: unidadEjecutora
@@ -360,7 +363,8 @@ paths:
           $ref: '#/definitions/stringtrue'
       - in: nivel
         name: nivel
-        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer
+          Nivel ... )
         type: string
       responses:
         "200":
@@ -410,7 +414,8 @@ paths:
     get:
       tags:
       - arbol_rubro_apropiacion
-      description: Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
+      description: Devuelve un arreglo con todos los nodos hoja correspondientes a
+        la vigencia y ue
       operationId: NodoRubroApropiacionController.GetHojas
       parameters:
       - in: body
@@ -668,7 +673,8 @@ paths:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
+        y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimientoParameter
       parameters:
       - in: body
@@ -688,7 +694,8 @@ paths:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
+        y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimiento
       parameters:
       - in: body
@@ -987,7 +994,8 @@ paths:
       parameters:
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
+          !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -1074,7 +1082,8 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias a las cuales se ha registrado un name_space en el sistema.
+      description: Retorna las vigencias a las cuales se ha registrado un name_space
+        en el sistema.
       operationId: VigenciaController.GetVigenciasByNameSpace
       parameters:
       - in: path
@@ -1116,7 +1125,8 @@ paths:
     get:
       tags:
       - vigencia
-      description: Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
+      description: Se cierra la vigencia que se encuentre con estado actual en la
+        colección, dependiendo del área funcional que le llegue.
       operationId: VigenciaController.CerrarVigencia
       parameters:
       - in: path
@@ -1133,12 +1143,14 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna la vigencia actual según la hora del servidor y añade o quita segùn el offset lo indica , por defecto 0.
+      description: Retorna la vigencia actual según la hora del servidor y añade o
+        quita segùn el offset lo indica , por defecto 0.
       operationId: VigenciaController.GetVigenciasCurrentVigenciaWithOffset
       parameters:
       - in: query
         name: offset
-        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 , offset=-1; vigencia -1'
+        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
+          offset=-1; vigencia -1'
         required: true
         type: string
       responses:
@@ -1167,7 +1179,8 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
+      description: Retorna las vigencias guardadas en las diferentes colecciones de
+        la base de datos.
       operationId: VigenciaController.GetTodasVigencias
       responses:
         "200":
@@ -1175,19 +1188,19 @@ paths:
         "403":
           description: error
 definitions:
-  15179.0xc00058ef90.false:
+  15179.0xc000463b90.false:
     title: "false"
     type: object
-  21177.0xc0005a8960.false:
+  21177.0xc000475770.false:
     title: "false"
     type: object
-  24877.0xc0005a9860.false:
+  24877.0xc00048c870.false:
     title: "false"
     type: object
   25228.rubroFuente:
     title: rubroFuente
     type: object
-  25578.0xc0005a98c0.false:
+  25578.0xc00048c8d0.false:
     title: "false"
     type: object
   33209.<nil>.string:
@@ -1226,7 +1239,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/21177.0xc0005a8960.false'
+        $ref: '#/definitions/21177.0xc000475770.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1246,12 +1259,24 @@ definitions:
     title: FuenteFinanciamiento
     type: object
     properties:
+      Activo:
+        type: boolean
       Codigo:
+        type: string
+      Descripcion:
         type: string
       Estado:
         type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
       Movimientos:
-        $ref: '#/definitions/25578.0xc0005a98c0.false'
+        $ref: '#/definitions/25578.0xc00048c8d0.false'
+      Nombre:
+        type: string
       NumeroDocumento:
         type: string
       Rubros:
@@ -1259,7 +1284,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/24877.0xc0005a9860.false'
+        $ref: '#/definitions/24877.0xc00048c870.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1268,6 +1293,9 @@ definitions:
       ValorInicial:
         type: number
         format: double
+      Vigencia:
+        type: integer
+        format: int64
   models.FuenteFinancimiento:
     title: FuenteFinancimiento
     type: object
@@ -1349,20 +1377,35 @@ definitions:
     title: NodoRubro
     type: object
     properties:
+      Activo:
+        type: boolean
       Apropiaciones:
         type: boolean
       Bloqueado:
         type: boolean
       Codigo:
         type: string
+      Descripcion:
+        type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
       Hijos:
         type: array
         items:
           type: string
+      Nombre:
+        type: string
       Padre:
         type: string
       UnidadEjecutora:
         type: string
+      Vigencia:
+        type: integer
+        format: int64
   models.NodoRubroApropiacion2018:
     title: NodoRubroApropiacion2018
     type: object
@@ -1375,7 +1418,22 @@ definitions:
     properties:
       _id:
         $ref: '#/definitions/bson.ObjectId'
+      Activo:
+        type: boolean
       Codigo:
+        type: integer
+        format: int64
+      Descripcion:
+        type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
+      Nombre:
+        type: string
+      Vigencia:
         type: integer
         format: int64
   models.SolicitudCDP:
@@ -1396,7 +1454,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/15179.0xc00058ef90.false'
+        $ref: '#/definitions/15179.0xc000463b90.false'
       fechaCreacion:
         type: string
         format: datetime
