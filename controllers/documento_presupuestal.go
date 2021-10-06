@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
 	"strconv"
 	"strings"
-	"encoding/json"
+
 	"github.com/astaxie/beego"
 	"github.com/udistrital/plan_cuentas_mongo_crud/compositors"
 	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
@@ -20,7 +21,9 @@ type DocumentoPresupuestalController struct {
 // GetAllQuery función para obtener todos los objetos con la opción de hacer queries en la BD
 // @Title GetAllQuery
 // @Description get all objects with data bases query
-// @Success 200 DocumentoPresupuestal models.DocumentoPresupuestal
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param CG              path  string true  "Centro Gestor (Unidad Ejecutora?)"
+// @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/ [get]
 func (j *DocumentoPresupuestalController) GetAllQuery() {
@@ -53,12 +56,13 @@ func (j *DocumentoPresupuestalController) GetAllQuery() {
 	j.ServeJSON()
 }
 
-
 // Get ...
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get documento presupuestal by id
 // @Param	id		path 	string	true		"El id de la DocumentoPresupuestal a consultar"
+// @Param vigencia      path  int    true  "Vigencia"
+// @Param areaFuncional path  int    true  "Area Funcional"
 // @Success 200 {object} models.DocumentoPresupuestal
 // @Failure 403 :objectId is empty
 // @router /documento/:vigencia/:areaFuncional/:id [get]
@@ -66,7 +70,7 @@ func (j *DocumentoPresupuestalController) Get() {
 	objectId := j.GetString(":id")
 	vigencia := j.GetString(":vigencia")
 	areaFuncional := j.GetString(":areaFuncional")
-	
+
 	docPresupuestal, err := models.GetDocumentoPresupuestalById(objectId, vigencia, areaFuncional)
 	if err == nil {
 		j.response = DefaultResponse(200, nil, &docPresupuestal)
@@ -78,13 +82,14 @@ func (j *DocumentoPresupuestalController) Get() {
 	j.ServeJSON()
 }
 
-
 // Put de HTTP
 // @Title Update
 // @Description update a documento presupuestal document
 // @Param	id			path 	string							true		"The id you want to update"
+// @Param vigencia      path  int    true  "Vigencia"
+// @Param areaFuncional path  int    true  "Area Funcional"
 // @Param	body		body 	models.DocumentoPresupuestal	true		"The body"
-// @Success 200 {object} models.DocumentoPresupuestal
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @Failure 403 :vigencia is empty
 // @Failure 403 :areaFuncional is empty
@@ -107,10 +112,11 @@ func (j *DocumentoPresupuestalController) Put() {
 	j.Data["json"] = j.response
 	j.ServeJSON()
 }
+
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 DocumentoPresupuestal models.DocumentoPresupuestal
+// @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/:tipo [get]
 func (j *DocumentoPresupuestalController) GetAll() {
@@ -129,7 +135,8 @@ func (j *DocumentoPresupuestalController) GetAll() {
 // GetAllCdp función para obtener todos los movimientos de CDP, de una vigencia, sin importar el centro gestor
 // @Title GetAllCdp
 // @Description get all cdp objects
-// @Success 200 rows []models.DocumentoPresupuestal
+// @Param vigencia        path  int    true  "Vigencia"
+// @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :vigencia is empty
 // @router /get_all_cdp/:vigencia [get]
 func (j *DocumentoPresupuestalController) GetAllCdp() {
@@ -147,7 +154,7 @@ func (j *DocumentoPresupuestalController) GetAllCdp() {
 // GetInfoCdp Obtiene un documento presupuestal de tipo cdp con su id de solicitud
 // @Title GetInfoCdp
 // @Description Obtiene un documento presupuestal de tipo cdp con su id de solicitud
-// @Success 200 documentoPresupuestal models.DocumentoPresupuestal
+// @Success 200 {object} models.DocumentoPresupuestal
 // @Failure 403 :id is empty
 // @router /get_info_cdp/:id [get]
 func (j *DocumentoPresupuestalController) GetInfoCdp() {
@@ -162,7 +169,10 @@ func (j *DocumentoPresupuestalController) GetInfoCdp() {
 // GetDocMovByParent Obtiene un documento presupuestal de tipo cdp con su id de solicitud
 // @Title GetDocMovByParent
 // @Description Obtiene un documento presupuestal de tipo cdp con su id de solicitud
-// @Success 200 documentoPresupuestal models.DocumentoPresupuestal
+// @Param id       path  string true  "The parentUUID you want to get"
+// @Param vigencia path  int    true  "Vigencia"
+// @Param CG       path  string true  "Centro Gestor (Unidad Ejecutora?)"
+// @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :id is empty
 // @router /get_doc_mov_by_parent/:vigencia/:CG/:id [get]
 func (j *DocumentoPresupuestalController) GetDocMovByParent() {

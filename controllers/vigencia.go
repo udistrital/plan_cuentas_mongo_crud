@@ -19,9 +19,9 @@ type VigenciaController struct {
 // GetVigenciasByNameSpace ...
 // @Title GetVigenciasByNameSpace
 // @Description Retorna las vigencias a las cuales se ha registrado un name_space en el sistema.
-// @Param	naemespace		path 	string	true		"name space al que pertenece el grupo de vigencias consultado"
+// @Param	namespace		path 	string	true		"name space al que pertenece el grupo de vigencias consultado"
 // @Param	centrogestor		path 	string	true		"centro gestor al que pertenece el grupo de vigencias consultado"
-// @Success 200 {string} success
+// @Success 200 {object} []map[string]int
 // @Failure 403 error
 // @router /:namespace/:centrogestor [get]
 func (j *VigenciaController) GetVigenciasByNameSpace() {
@@ -38,7 +38,7 @@ func (j *VigenciaController) GetVigenciasByNameSpace() {
 // @Title GetVigenciasCurrentVigenciaWithOffset
 // @Description Retorna la vigencia actual según la hora del servidor y añade o quita segùn el offset lo indica , por defecto 0.
 // @Param	offset		query 	string	true		"offset para determinar vigencia ej: offset= 1; vigencia+1 , offset=-1; vigencia -1"
-// @Success 200 {string} success
+// @Success 200 {object} uint
 // @Failure 403 error
 // @router /vigencia_actual [get]
 func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
@@ -59,7 +59,7 @@ func (j *VigenciaController) GetVigenciasCurrentVigenciaWithOffset() {
 // @Title GetVigenciaActual
 // @Description Retorna la vigencia del área funcional cuyo estado sea actual.
 // @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere consultar"
-// @Success 200 {string} success
+// @Success 200 {object} []interface{}
 // @Failure 403 error
 // @router /vigencia_actual_area/:area_funcional [get]
 func (j *VigenciaController) GetVigenciaActual() {
@@ -76,7 +76,7 @@ func (j *VigenciaController) GetVigenciaActual() {
 // GetTodasVigencias ...
 // @Title GetTodasVigencias
 // @Description Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
-// @Success 200 {string} success
+// @Success 200 {object} []interface{}
 // @Failure 403 error
 // @router /vigencias_total [get]
 func (j *VigenciaController) GetTodasVigencias() {
@@ -93,7 +93,7 @@ func (j *VigenciaController) GetTodasVigencias() {
 // @Title CerrarVigencia
 // @Description Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
 // @Param area_funcional 	path 	string	true	"Área funcional a la que pertenece la vigencia que se quiere cerrar."
-// @Success 200 {string} success
+// @Success 200 {object} map[string]interface{}
 // @Failure 403 error
 // @router /cerrar_vigencia_actual/:area_funcional [get]
 func (j *VigenciaController) CerrarVigencia() {
@@ -108,7 +108,7 @@ func (j *VigenciaController) CerrarVigencia() {
 // @Title AgregarVigencia
 // @Description create vigencia
 // @Param	body		body 	models.VigenciaNueva	true		"body for Producto content"
-// @Success 201 {object} models.Vigencia
+// @Success 201 {object} map[string]interface{}
 // @Failure 403 body is empty
 // @router /agregar_vigencia [post]
 func (j *VigenciaController) AgregarVigencia() {

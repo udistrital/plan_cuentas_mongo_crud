@@ -34,7 +34,7 @@ func (j *ProductoController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 Producto models.Producto
+// @Success 200 {object} []models.Producto
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *ProductoController) GetAll() {
@@ -75,7 +75,7 @@ func (j *ProductoController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get Producto by nombre
-// @Param	nombre		path 	string	true		"El nombre de la Producto a consultar"
+// @Param	id		path 	string	true		"El nombre del Producto a consultar"
 // @Success 200 {object} models.Producto
 // @Failure 403 :uid is empty
 // @router /:id [get]
@@ -98,7 +98,7 @@ func (j *ProductoController) Get() {
 // @Title Create
 // @Description create Producto
 // @Param	body		body 	models.Producto	true		"body for Producto content"
-// @Success 201 {object} models.Producto
+// @Success 201 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *ProductoController) Post() {
@@ -118,7 +118,7 @@ func (j *ProductoController) Post() {
 // @Title Eliminar Producto
 // @Description Eliminar Producto
 // @Param	id		path 	string	true		"El ObjectId del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 objectId is empty
 // @router /:id [delete]
 func (j *ProductoController) Delete() {
@@ -137,8 +137,8 @@ func (j *ProductoController) Delete() {
 // @Title Update
 // @Description update the Producto
 // @Param	id		path 	string	true		"The objectid you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param	body		body 	models.Producto	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :objectId is empty
 // @router /:id [put]
 func (j *ProductoController) Put() {

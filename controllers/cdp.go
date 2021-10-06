@@ -30,7 +30,8 @@ func (j *SolicitudesCDPController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 SolicitudCDP models.SolicitudCDP
+// @Param	query		query 	string	true		"The id you want to get"
+// @Success 200 {object} []models.SolicitudCDP
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *SolicitudesCDPController) GetAll() {
@@ -93,7 +94,7 @@ func (j *SolicitudesCDPController) Get() {
 // @Title Post
 // @Description Post
 // @Param	body		body 	models.SolicitudCDP	true		"Body para la creacion de SolicitudesCDP"
-// @Success 200 {int} SolicitudCDP.Id
+// @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *SolicitudesCDPController) Post() {
@@ -114,8 +115,8 @@ func (j *SolicitudesCDPController) Post() {
 // @Title Update
 // @Description update the SolicitudCDP
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param	body		body 	models.SolicitudCDP	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id [put]
 func (j *SolicitudesCDPController) Put() {
@@ -138,7 +139,7 @@ func (j *SolicitudesCDPController) Put() {
 // @Title Borrar SolicitudCDP
 // @Description Borrar SolicitudCDP
 // @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (j *SolicitudesCDPController) Delete() {

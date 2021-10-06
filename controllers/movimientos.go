@@ -29,8 +29,8 @@ type MovimientosController struct {
 // arbolrubrosapropiacion_[vigencia]_[unidad_ejecutura], como en la colección movimientos. Utiliza la función registrarValores para registrar los valores,
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
-// @Param	body		body 	[]models.Object true "json de movimientos enviado desde el api_mid_financiera"
-// @Success 200 {string} success
+// @Param	body		body 	[]models.DocumentoPresupuestal true "json de movimientos enviado desde el api_mid_financiera"
+// @Success 200 {object} map[string]interface{}
 // @Failure 403 error
 // @router /RegistrarMovimientos [post]
 func (j *MovimientosController) RegistrarMovimiento() {
@@ -78,8 +78,8 @@ func (j *MovimientosController) RegistrarMovimiento() {
 // arbolrubrosapropiacion_[vigencia]_[unidad_ejecutura], como en la colección movimientos. Utiliza la función registrarValores para registrar los valores,
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
-// @Param	body		body 	[]models.Object true "json de movimientos enviado desde el api_mid_financiera"
-// @Success 200 {string} success
+// @Param	body		body 	models.MovimientoParameter true "json de movimientos enviado desde el api_mid_financiera"
+// @Success 200 {object} models.MovimientoParameter
 // @Failure 403 error
 // @router /RegistrarMovimientoParameter [post]
 func (j *MovimientosController) RegistrarMovimientoParameter() {
@@ -116,7 +116,10 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 // GetMovimientosByDocumentoPresupuestalUUID función para obtener todos los objetos por parentUUID
 // @Title GetMovimientosByDocumentoPresupuestalUUID
 // @Description get all objects
-// @Success 200 Movimiento models.Movimiento
+// @Param parentUUID      path  string true "El parentUUID del objeto que se quiere traer"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param CG              path  int    true  "Centro Gestor (Unidad Ejecutora?)"
+// @Success 200 {object} []map[string]interface{}
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/:parentUUID [get]
 func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
@@ -125,6 +128,9 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 	parentUUID := j.GetString(":parentUUID")
 
 	rows, err := movimientoManager.GetMovimientoByDocumentoPresupuestalUUID(vigencia, centroGestor, parentUUID)
+	if err != nil {
+		logs.Warn(err)
+	}
 	rowsJoined, err := movimientohelper.JoinGeneratedDocPresWithMov(rows, vigencia, centroGestor)
 	var finalRowsFormated []map[string]interface{}
 	if v := j.GetString("fatherInfoLevel"); v != "" {
@@ -149,7 +155,7 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 // GetOne get one object
 // @Title GetOne
 // @Description get one object
-// @Success 200 Movimiento models.Movimiento
+// @Success 200 {object} models.Movimiento
 // @Failure 403 :objectId is empty
 // @router /get_movimentos_by_parent_id/:vigencia/:areaFuncional/:id [get]
 func (j *MovimientosController) GetOne() {
