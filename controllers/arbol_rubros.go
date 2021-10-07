@@ -33,7 +33,8 @@ func (j *NodoRubroController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 NodoRubro models.NodoRubro
+// @Param query        query  string    true  "Consulta"
+// @Success 200 {object} []models.NodoRubro
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *NodoRubroController) GetAll() {
@@ -76,7 +77,7 @@ func (j *NodoRubroController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get NodoRubro by nombre
-// @Param	nombre		path 	string	true		"El nombre de la NodoRubro a consultar"
+// @Param	id		path 	string	true		"El nombre de la NodoRubro a consultar"
 // @Success 200 {object} models.NodoRubro
 // @Failure 403 :uid is empty
 // @router /:id [get]
@@ -97,7 +98,7 @@ func (j *NodoRubroController) Get() {
 // @Title Borrar NodoRubro
 // @Description Borrar NodoRubro
 // @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (j *NodoRubroController) Delete() {
@@ -114,7 +115,7 @@ func (j *NodoRubroController) Delete() {
 // @Title Crear NodoRubro
 // @Description Crear NodoRubro
 // @Param	body		body 	models.NodoRubro	true		"Body para la creacion de NodoRubro"
-// @Success 200 {int} NodoRubro.Id
+// @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroController) Post() {
@@ -138,8 +139,8 @@ func (j *NodoRubroController) Post() {
 // @Title Update
 // @Description update the NodoRubro
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param	body		body 	models.NodoRubro	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id [put]
 func (j *NodoRubroController) Put() {
@@ -157,34 +158,10 @@ func (j *NodoRubroController) Put() {
 	j.ServeJSON()
 }
 
-// // @Title Preflight options
-// // @Description Crear NodoRubro
-// // @Param	body		body 	models.NodoRubro	true		"Body para la creacion de NodoRubro"
-// // @Success 200 {int} NodoRubro.Id
-// // @Failure 403 body is empty
-// // @router / [options]
-// func (j *NodoRubroController) Options() {
-// 	j.Data["json"] = "success!"
-// 	j.Data["json"] = j.response
-// 	j.ServeJSON()
-// }
-
-// // @Title Preflight options
-// // @Description Crear NodoRubro
-// // @Param	body		body 	models.NodoRubro true		"Body para la creacion de NodoRubro"
-// // @Success 200 {int} NodoRubro.Id
-// // @Failure 403 body is empty
-// // @router /:objectId [options]
-// func (j *NodoRubroController) NodoRubroDeleteOptions() {
-// 	j.Data["json"] = "success!"
-// 	j.Data["json"] = j.response
-// 	j.ServeJSON()
-// }
-
 // @Title FullArbolRubro
 // @Description Construye el árbol a un nivel dependiendo de la raíz
-// @Param body body stringtrue "Código de la raíz"
-// @Success 200 {object} models.Object
+// @Param raiz path string true "Código de la raíz"
+// @Success 200 {object} []map[string]interface{}
 // @Failure 404 body is empty
 // @router /arbol/:raiz [get]
 func (j *NodoRubroController) FullArbolRubro() {
@@ -224,8 +201,7 @@ func GetHijoRubro(id, ue string) map[string]interface{} {
 // GetHojas ...
 // @Title GetHojas
 // @Description Devuelve un arreglo con todos los nodos hoja
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Success 200 {object} []models.NodoRubroApropiacion
 // @router /get_hojas [get]
 func (j *NodoRubroController) GetHojas() {
 	leafs, err := models.GetHojasRubro()
@@ -242,9 +218,9 @@ func (j *NodoRubroController) GetHojas() {
 // FullArbolRubroReducido ...
 // @Title FullArbolRubroReducido
 // @Description Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
-// @Param raiz raiz string "Código de la raíz"
-// @Param nivel nivel string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
-// @Success 200 {object} models.Object
+// @Param raiz path string "Código de la raíz"
+// @Param nivel query string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Success 200 {object} []map[string]interface{}
 // @Failure 404 body is empty
 // @router /arbol_reducido/:raiz [get]
 func (j *NodoRubroController) FullArbolRubroReducido() {

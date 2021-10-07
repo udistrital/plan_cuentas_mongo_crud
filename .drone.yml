@@ -10,8 +10,14 @@ workspace:
 kind: pipeline
 name: oas_api_ci
 
+trigger:
+  event:
+    exclude:
+      - tag
+
 steps:
 - name: check_readme
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_readme.py
@@ -24,6 +30,7 @@ steps:
     - push
 
 - name: check_branch
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_branch.py -H ${DRONE_GIT_HTTP_URL}
@@ -36,6 +43,7 @@ steps:
     - push
 
 - name: check_commits
+  failure: ignore
   image: jjvargass/qa_develoment:latest
   commands:
   - python /app/check_commits.py
@@ -61,16 +69,16 @@ steps:
     - push
 
 - name: go_run_test
+  failure: ignore
   image: golang:1.14
   commands:
   - go get -t
   - go get github.com/smartystreets/goconvey/convey
-  - GO111MODULE=off go get -u gopkg.in/alecthomas/gometalinter.v1
-  - GO111MODULE=off gometalinter.v1 --install
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
   - go get github.com/axw/gocov/...
   - go get github.com/AlekSi/gocov-xml
   - go get -u github.com/jstemmer/go-junit-report
-  - GO111MODULE=off gometalinter.v1 ./... --checkstyle | tee report.xml
+  - golangci-lint run ./... | tee report.xml
   # - gocov test ./... | gocov-xml > coverage.xml
   # - go test -v ./... | go-junit-report > test.xml
   when:

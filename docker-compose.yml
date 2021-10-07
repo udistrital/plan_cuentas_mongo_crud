@@ -1,6 +1,6 @@
 version: '3.4'
 
-services: 
+services:
   api:
     build: ./bee_build
     image: ${SERVICE_NAME}
@@ -8,22 +8,22 @@ services:
     volumes:
       - gosrc:/go
       - .:/go/src/${API_BASE_DIR}/${API_NAME}
-    ports: 
+    ports:
       - "${PORT}:${PORT}"
-    env_file: 
-      - .env
+    env_file:
+      - develop.env
     environment:
-      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost   
-    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v -d -u ./...; go mod init; bee run'
-    depends_on: 
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost
+    command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v; bee run'
+    depends_on:
       - db
-    networks: 
+    networks:
       - back_end
-      
+
   db:
     image: mongo:latest
     container_name: ${FINANCIERA_MONGO_CRUD_DB_URL}
-    environment: 
+    environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
       - MONGO_INITDB_ROOT_USERNAME=${FINANCIERA_MONGO_CRUD_DB_USER}
@@ -31,10 +31,10 @@ services:
     volumes:
       - financiera_mongo_data:/data/db
     ports:
-      - ${DB_PORT}:27017 
-    networks: 
+      - ${DB_PORT}:27017
+    networks:
       - back_end
-      
+
   mongoexpress:
     image: mongo-express
     environment:
@@ -46,12 +46,12 @@ services:
       - 8090:8081
     depends_on:
       - db
-    networks: 
+    networks:
       - back_end
 
 volumes:
   gosrc:
   financiera_mongo_data:
-networks: 
+networks:
   back_end:
     external: true

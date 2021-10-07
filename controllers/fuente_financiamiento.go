@@ -3,6 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -28,7 +30,9 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 FuenteFinanciamiento models.FuenteFinanciamiento
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []models.FuenteFinanciamiento
 // @Failure 403 :vigencia is empty
 // @Failure 403 :unidadEjecutora is empty
 // @router /:vigencia/:unidadEjecutora [get]
@@ -69,7 +73,9 @@ func (j *FuenteFinanciamientoController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get FuenteFinancimiento by nombre
-// @Param	nombre		path 	string	true		"El nombre de la FuenteFinancimiento a consultar"
+// @Param id              path  string true  "El nombre de la FuenteFinancimiento a consultar"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
 // @Success 200 {object} models.FuenteFinancimiento
 // @Failure 403 :id is empty
 // @router /:id/:vigencia/:unidadEjecutora [get]
@@ -90,7 +96,7 @@ func (j *FuenteFinanciamientoController) Get() {
 // @Title Create
 // @Description create FuenteFinanciamiento
 // @Param	body		body 	models.FuenteFinanciamiento	true		"body for FuenteFinanciamiento content"
-// @Success 201 {object} models.FuenteFinanciamiento
+// @Success 201 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *FuenteFinanciamientoController) Post() {
@@ -117,14 +123,17 @@ func (j *FuenteFinanciamientoController) Post() {
 func (j *FuenteFinanciamientoController) VincularFuente() {
 	var fuente models.FuenteFinanciamiento
 	json.Unmarshal(j.Ctx.Input.RequestBody, &fuente)
+	j.Abort(fmt.Sprintf("%d", http.StatusNotImplemented))
 }
 
 // Put de HTTP
 // @Title Update
 // @Description update the FuenteFinanciamiento
 // @Param	id		path 	string	true		"The objectid you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param	body		body 	models.FuenteFinanciamiento	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id/:vigencia/:unidadEjecutora [put]
 func (j *FuenteFinanciamientoController) Put() {
@@ -149,7 +158,9 @@ func (j *FuenteFinanciamientoController) Put() {
 // @Title Borrar FuenteFinanciamiento
 // @Description Borrar FuenteFinanciamiento
 // @Param	id		path 	string	true		"El ObjectId del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} string
 // @Failure 403 objectId is empty
 // @router /:id/:vigencia/:unidadEjecutora [delete]
 func (j *FuenteFinanciamientoController) Delete() {
@@ -169,8 +180,10 @@ func (j *FuenteFinanciamientoController) Delete() {
 // GetWithRubro ...
 // @Title GetWithRubro
 // @Description Borrar FuenteFinanciamiento
-// @Param	objectId		path 	string	true		"El ObjectId del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Param	rubro_apropiacion_id		path 	string	true		"El ObjectId del objeto que se quiere borrar"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []models.FuenteFinanciamiento
 // @Failure 403 objectId is empty
 // @router /fuente_financiamiento_apropiacion/:rubro_apropiacion_id/:vigencia/:unidadEjecutora [get]
 func (j *FuenteFinanciamientoController) GetWithRubro() {

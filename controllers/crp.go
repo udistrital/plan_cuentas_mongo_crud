@@ -30,7 +30,7 @@ func (j *SolicitudesCRPController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 SolicitudCRP models.SolicitudCRP
+// @Success 200 {object} []models.SolicitudCRP
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int"
 // @Failure 403 :objectId is empty
 // @router / [get]
@@ -46,7 +46,7 @@ func (j *SolicitudesCRPController) GetAll() {
 				return
 			}
 
-			if i, err := strconv.Atoi(kv[1]); (err == nil && !strings.Contains(kv[1], "!$")) {
+			if i, err := strconv.Atoi(kv[1]); err == nil && !strings.Contains(kv[1], "!$") {
 				k, v := kv[0], i
 				query[k] = v
 			} else {
@@ -72,7 +72,7 @@ func (j *SolicitudesCRPController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get SolicitudCRP by nombre
-// @Param	nombre		path 	string	true		"El nombre de la SolicitudCRP a consultar"
+// @Param	id		path 	string	true		"El nombre de la SolicitudCRP a consultar"
 // @Success 200 {object} models.SolicitudCRP
 // @Failure 403 :uid is empty
 // @router /:id [get]
@@ -94,7 +94,7 @@ func (j *SolicitudesCRPController) Get() {
 // @Title Post
 // @Description Post
 // @Param	body		body 	models.SolicitudCRP	true		"Body para la creacion de SolicitudesCRP"
-// @Success 200 {int} SolicitudCRP.Id
+// @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *SolicitudesCRPController) Post() {
@@ -115,8 +115,8 @@ func (j *SolicitudesCRPController) Post() {
 // @Title Update
 // @Description update the SolicitudCRP
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param	body		body 	models.SolicitudCRP	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id [put]
 func (j *SolicitudesCRPController) Put() {
@@ -139,7 +139,7 @@ func (j *SolicitudesCRPController) Put() {
 // @Title Borrar SolicitudCRP
 // @Description Borrar SolicitudCRP
 // @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (j *SolicitudesCRPController) Delete() {

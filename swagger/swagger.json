@@ -22,9 +22,24 @@
                 ],
                 "description": "get all objects",
                 "operationId": "NodoRubroController.GetAll",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Consulta",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "NodoRubro models.NodoRubro"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NodoRubro"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -50,7 +65,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} NodoRubro.Id"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "body is empty"
@@ -67,19 +85,21 @@
                 "operationId": "NodoRubroController.FullArbolRubro",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
+                        "in": "path",
+                        "name": "raiz",
                         "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
                     },
                     "404": {
@@ -97,13 +117,13 @@
                 "operationId": "NodoRubroController.FullArbolRubroReducido",
                 "parameters": [
                     {
-                        "in": "raiz",
+                        "in": "path",
                         "name": "raiz",
                         "description": "Código de la raíz",
                         "type": "string"
                     },
                     {
-                        "in": "nivel",
+                        "in": "query",
                         "name": "nivel",
                         "description": "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )",
                         "type": "string"
@@ -113,7 +133,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
                     },
                     "404": {
@@ -133,11 +156,11 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NodoRubroApropiacion"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -152,7 +175,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
+                        "name": "id",
                         "description": "El nombre de la NodoRubro a consultar",
                         "required": true,
                         "type": "string"
@@ -190,7 +213,7 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.NodoRubro"
                         }
                     }
                 ],
@@ -198,7 +221,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -223,7 +246,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "id is empty"
@@ -238,9 +264,33 @@
                 ],
                 "description": "get all objects",
                 "operationId": "NodoRubroApropiacionController.GetAll",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "NodoRubroApropiacion models.NodoRubroApropiacion"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NodoRubroApropiacion"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -266,7 +316,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} NodoRubroApropiacion2018.Id"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "body is empty"
@@ -283,24 +336,38 @@
                 "operationId": "NodoRubroApropiacionController.Preflight ArbolApropiacionPadreHijo",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Body para la creacion de NodoRubroApropiacion2018",
+                        "in": "path",
+                        "name": "raiz",
+                        "description": "Raiz",
                         "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
-                        }
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "403": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -312,15 +379,33 @@
                 ],
                 "description": "RaicesArbolApropiacion",
                 "operationId": "NodoRubroApropiacionController.RaicesArbolApropiacion",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -334,14 +419,14 @@
                 "operationId": "NodoRubroApropiacionController.AprobacionMasiva",
                 "parameters": [
                     {
-                        "in": "unidadEjecutora",
+                        "in": "path",
                         "name": "unidadEjecutora",
                         "description": "Unidad Ejecutora de la apropiación",
                         "required": true,
                         "type": "string"
                     },
                     {
-                        "in": "vigencia",
+                        "in": "path",
                         "name": "vigencia",
                         "description": "Vigencia de la apropiación",
                         "required": true,
@@ -352,11 +437,8 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -370,23 +452,38 @@
                 "operationId": "NodoRubroApropiacionController.FullArbolRubroApropiaciones",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
+                        "in": "path",
+                        "name": "raiz",
                         "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -400,23 +497,31 @@
                 "operationId": "NodoRubroApropiacionController.FullArbolApropiaciones",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -430,17 +535,39 @@
                 "operationId": "NodoRubroApropiacionController.FullArbolApropiacionesbyID",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Código de la raíz",
-                        "schema": {
-                            "$ref": "#/definitions/stringtrue"
-                        }
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     },
                     {
-                        "in": "nivel",
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "Rubro",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
                         "name": "nivel",
                         "description": "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "estado",
+                        "description": "Estado de la apropiacion (TODO: Confirmar)",
                         "type": "string"
                     }
                 ],
@@ -448,11 +575,11 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -466,16 +593,25 @@
                 "operationId": "NodoRubroApropiacionController.TreeByState",
                 "parameters": [
                     {
-                        "in": "unidadEjecutora",
+                        "in": "path",
                         "name": "unidadEjecutora",
                         "description": "Unidad Ejecutora de la apropiación",
                         "required": true,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
-                        "in": "vigencia",
+                        "in": "path",
                         "name": "vigencia",
                         "description": "Vigencia de la apropiación",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "in": "path",
+                        "name": "estado",
+                        "description": "Estado",
                         "required": true,
                         "type": "string"
                     }
@@ -484,11 +620,11 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -500,11 +636,41 @@
                 ],
                 "description": "ComprobarBalanceArbolApropiaciones",
                 "operationId": "NodoRubroApropiacionController.ComprobarBalanceArbolApropiaciones",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "body",
+                        "name": "movimientos",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Movimiento"
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/map[string]interface{}"
                         }
                     },
                     "404": {
@@ -522,25 +688,31 @@
                 "operationId": "NodoRubroApropiacionController.GetHojas",
                 "parameters": [
                     {
-                        "in": "body",
-                        "name": "body",
-                        "description": "Código de la raíz",
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
                         "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NodoRubroApropiacion"
+                            }
                         }
-                    },
-                    "404": {
-                        "description": "body is empty"
                     }
                 }
             }
@@ -563,7 +735,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "id is empty"
@@ -581,17 +756,33 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la NodoRubroApropiacion2018 a consultar",
+                        "name": "id",
+                        "description": "id",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
+                            "$ref": "#/definitions/models.NodoRubroApropiacion"
                         }
                     },
                     "403": {
@@ -614,12 +805,28 @@
                         "type": "string"
                     },
                     {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
                         "in": "body",
                         "name": "body",
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.NodoRubroApropiacion"
                         }
                     }
                 ],
@@ -627,7 +834,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -643,9 +850,33 @@
                 ],
                 "description": "get all objects",
                 "operationId": "NodoRubroApropiacionController.GetAllVigencia",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "NodoRubroApropiacion models.NodoRubroApropiacion"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NodoRubroApropiacion"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":unidadEjecutora is empty"
@@ -667,6 +898,22 @@
                         "description": "El id de la DocumentoPresupuestal a consultar",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "areaFuncional",
+                        "description": "Area Funcional",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
@@ -689,9 +936,25 @@
                 ],
                 "description": "get all cdp objects",
                 "operationId": "DocumentoPresupuestalController.GetAllCdp",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "rows []models.DocumentoPresupuestal"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.DocumentoPresupuestal"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":vigencia is empty"
@@ -706,9 +969,39 @@
                 ],
                 "description": "Obtiene un documento presupuestal de tipo cdp con su id de solicitud",
                 "operationId": "DocumentoPresupuestalController.GetDocMovByParent",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The parentUUID you want to get",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "CG",
+                        "description": "Centro Gestor (Unidad Ejecutora?)",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "documentoPresupuestal models.DocumentoPresupuestal"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.DocumentoPresupuestal"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":id is empty"
@@ -725,7 +1018,10 @@
                 "operationId": "DocumentoPresupuestalController.GetInfoCdp",
                 "responses": {
                     "200": {
-                        "description": "documentoPresupuestal models.DocumentoPresupuestal"
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
+                        }
                     },
                     "403": {
                         "description": ":id is empty"
@@ -740,9 +1036,32 @@
                 ],
                 "description": "get all objects with data bases query",
                 "operationId": "DocumentoPresupuestalController.GetAllQuery",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "CG",
+                        "description": "Centro Gestor (Unidad Ejecutora?)",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "DocumentoPresupuestal models.DocumentoPresupuestal"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.DocumentoPresupuestal"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -759,7 +1078,13 @@
                 "operationId": "DocumentoPresupuestalController.GetAll",
                 "responses": {
                     "200": {
-                        "description": "DocumentoPresupuestal models.DocumentoPresupuestal"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.DocumentoPresupuestal"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -783,6 +1108,22 @@
                         "type": "string"
                     },
                     {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "areaFuncional",
+                        "description": "Area Funcional",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
                         "in": "body",
                         "name": "body",
                         "description": "The body",
@@ -796,7 +1137,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.DocumentoPresupuestal"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -827,7 +1168,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.FuenteFinanciamiento"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -877,15 +1218,37 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "objectId",
+                        "name": "rubro_apropiacion_id",
                         "description": "El ObjectId del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.FuenteFinanciamiento"
+                            }
+                        }
                     },
                     "403": {
                         "description": "objectId is empty"
@@ -903,10 +1266,26 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
+                        "name": "id",
                         "description": "El nombre de la FuenteFinancimiento a consultar",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
@@ -936,12 +1315,28 @@
                         "type": "string"
                     },
                     {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
                         "in": "body",
                         "name": "body",
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.FuenteFinanciamiento"
                         }
                     }
                 ],
@@ -949,7 +1344,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -970,11 +1365,30 @@
                         "description": "El ObjectId del objeto que se quiere borrar",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "objectId is empty"
@@ -989,9 +1403,33 @@
                 ],
                 "description": "get all objects",
                 "operationId": "FuenteFinanciamientoController.GetAll",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "unidadEjecutora",
+                        "description": "Unidad Ejecutora",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "FuenteFinanciamiento models.FuenteFinanciamiento"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.FuenteFinanciamiento"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":unidadEjecutora is empty"
@@ -1013,16 +1451,16 @@
                         "description": "json de movimientos enviado desde el api_mid_financiera",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Object"
-                            }
+                            "$ref": "#/definitions/models.MovimientoParameter"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.MovimientoParameter"
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1046,14 +1484,17 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Object"
+                                "$ref": "#/definitions/models.DocumentoPresupuestal"
                             }
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/map[string]interface{}"
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1070,7 +1511,10 @@
                 "operationId": "MovimientosController.GetOne",
                 "responses": {
                     "200": {
-                        "description": "Movimiento models.Movimiento"
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Movimiento"
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1085,9 +1529,40 @@
                 ],
                 "description": "get all objects",
                 "operationId": "MovimientosController.GetMovimientosByDocumentoPresupuestalUUID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "parentUUID",
+                        "description": "El parentUUID del objeto que se quiere traer",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "CG",
+                        "description": "Centro Gestor (Unidad Ejecutora?)",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Movimiento models.Movimiento"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]interface{}"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1102,9 +1577,24 @@
                 ],
                 "description": "get all objects",
                 "operationId": "NecesidadesController.GetAll",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Consulta",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Necesidades models.Necesidades"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Necesidad"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1124,13 +1614,16 @@
                         "description": "Body para la creacion de Necesidades",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Necesidades"
+                            "$ref": "#/definitions/models.Necesidad"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} Necesidades.Id"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "body is empty"
@@ -1186,7 +1679,7 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.Necesidad"
                         }
                     }
                 ],
@@ -1194,7 +1687,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -1219,7 +1712,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "id is empty"
@@ -1236,7 +1732,13 @@
                 "operationId": "ProductoController.GetAll",
                 "responses": {
                     "200": {
-                        "description": "Producto models.Producto"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Producto"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1264,7 +1766,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Producto"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -1283,8 +1785,8 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
-                        "description": "El nombre de la Producto a consultar",
+                        "name": "id",
+                        "description": "El nombre del Producto a consultar",
                         "required": true,
                         "type": "string"
                     }
@@ -1321,7 +1823,7 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.Producto"
                         }
                     }
                 ],
@@ -1329,7 +1831,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -1354,7 +1856,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "objectId is empty"
@@ -1369,9 +1874,24 @@
                 ],
                 "description": "get all objects",
                 "operationId": "SolicitudesCDPController.GetAll",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "The id you want to get",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "SolicitudCDP models.SolicitudCDP"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SolicitudCDP"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1397,7 +1917,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} SolicitudCDP.Id"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "body is empty"
@@ -1453,7 +1976,7 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.SolicitudCDP"
                         }
                     }
                 ],
@@ -1461,7 +1984,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -1486,7 +2009,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "id is empty"
@@ -1511,7 +2037,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "SolicitudCRP models.SolicitudCRP"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SolicitudCRP"
+                            }
+                        }
                     },
                     "403": {
                         "description": ":objectId is empty"
@@ -1537,7 +2069,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{int} SolicitudCRP.Id"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "body is empty"
@@ -1555,7 +2090,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "nombre",
+                        "name": "id",
                         "description": "El nombre de la SolicitudCRP a consultar",
                         "required": true,
                         "type": "string"
@@ -1593,7 +2128,7 @@
                         "description": "The body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "$ref": "#/definitions/models.SolicitudCRP"
                         }
                     }
                 ],
@@ -1601,7 +2136,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Object"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -1626,7 +2161,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} ok"
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     "403": {
                         "description": "id is empty"
@@ -1656,7 +2194,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Vigencia"
+                            "$ref": "#/definitions/map[string]interface{}"
                         }
                     },
                     "403": {
@@ -1683,7 +2221,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/map[string]interface{}"
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1709,7 +2250,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1735,7 +2280,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/interface{}"
+                            }
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1752,7 +2303,13 @@
                 "operationId": "VigenciaController.GetTodasVigencias",
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/interface{}"
+                            }
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1770,7 +2327,7 @@
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "naemespace",
+                        "name": "namespace",
                         "description": "name space al que pertenece el grupo de vigencias consultado",
                         "required": true,
                         "type": "string"
@@ -1785,7 +2342,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{string} success"
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/map[string]int"
+                            }
+                        }
                     },
                     "403": {
                         "description": "error"
@@ -1795,15 +2358,19 @@
         }
     },
     "definitions": {
-        "15179.0xc000463b90.false": {
+        "1422.string.0xc000548690": {
+            "title": "0xc000548690",
+            "type": "object"
+        },
+        "15179.0xc000499f50.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc000475770.false": {
+        "21177.0xc0004d0f60.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc00048c870.false": {
+        "24877.0xc0004f5ec0.false": {
             "title": "false",
             "type": "object"
         },
@@ -1811,7 +2378,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc00048c8d0.false": {
+        "25578.0xc0004f5f20.false": {
             "title": "false",
             "type": "object"
         },
@@ -1821,6 +2388,18 @@
         },
         "bson.ObjectId": {
             "title": "ObjectId",
+            "type": "object"
+        },
+        "interface{}": {
+            "title": "interface{}",
+            "type": "object"
+        },
+        "map[string]int": {
+            "title": "map[string]int",
+            "type": "object"
+        },
+        "map[string]interface{}": {
+            "title": "map[string]interface{}",
             "type": "object"
         },
         "models.Compromiso": {
@@ -1861,7 +2440,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc000475770.false"
+                    "$ref": "#/definitions/21177.0xc0004d0f60.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -1914,7 +2493,7 @@
                     "format": "datetime"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc00048c8d0.false"
+                    "$ref": "#/definitions/25578.0xc0004f5f20.false"
                 },
                 "Nombre": {
                     "type": "string"
@@ -1929,7 +2508,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc00048c870.false"
+                    "$ref": "#/definitions/24877.0xc0004f5ec0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2024,6 +2603,43 @@
                 }
             }
         },
+        "models.MovimientoParameter": {
+            "title": "MovimientoParameter",
+            "type": "object",
+            "properties": {
+                "FatherCollectionName": {
+                    "type": "string"
+                },
+                "FatherUUIKeyName": {
+                    "type": "string"
+                },
+                "Initial": {
+                    "type": "boolean"
+                },
+                "Multiplicador": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "NoBalanceLeftStateName": {
+                    "type": "string"
+                },
+                "TipoDocumentoGenerado": {
+                    "type": "string"
+                },
+                "TipoMovimientoHijo": {
+                    "type": "string"
+                },
+                "TipoMovimientoPadre": {
+                    "type": "string"
+                },
+                "WithOutChangeState": {
+                    "type": "boolean"
+                },
+                "_id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Necesidad": {
             "title": "Necesidad",
             "type": "object",
@@ -2053,10 +2669,6 @@
                     "format": "double"
                 }
             }
-        },
-        "models.Necesidades": {
-            "title": "Necesidades",
-            "type": "object"
         },
         "models.NodoRubro": {
             "title": "NodoRubro",
@@ -2106,12 +2718,76 @@
                 }
             }
         },
+        "models.NodoRubroApropiacion": {
+            "title": "NodoRubroApropiacion",
+            "type": "object",
+            "properties": {
+                "Activo": {
+                    "type": "boolean"
+                },
+                "Apropiaciones": {
+                    "type": "boolean"
+                },
+                "Bloqueado": {
+                    "type": "boolean"
+                },
+                "Codigo": {
+                    "type": "string"
+                },
+                "Descripcion": {
+                    "type": "string"
+                },
+                "Estado": {
+                    "type": "string"
+                },
+                "FechaCreacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "FechaModificacion": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Hijos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Movimientos": {
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "Nombre": {
+                    "type": "string"
+                },
+                "Padre": {
+                    "type": "string"
+                },
+                "Productos": {
+                    "$ref": "#/definitions/1422.string.0xc000548690"
+                },
+                "UnidadEjecutora": {
+                    "type": "string"
+                },
+                "ValorActual": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "ValorInicial": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "Vigencia": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
         "models.NodoRubroApropiacion2018": {
             "title": "NodoRubroApropiacion2018",
-            "type": "object"
-        },
-        "models.Object": {
-            "title": "Object",
             "type": "object"
         },
         "models.Producto": {
@@ -2171,7 +2847,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc000463b90.false"
+                    "$ref": "#/definitions/15179.0xc000499f50.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -2246,40 +2922,6 @@
                 },
                 "vigencia": {
                     "type": "string"
-                }
-            }
-        },
-        "models.Vigencia": {
-            "title": "Vigencia",
-            "type": "object",
-            "properties": {
-                "Activo": {
-                    "type": "boolean"
-                },
-                "Estado": {
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "string"
-                },
-                "Valor": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Vigencia_ejecucion_programacion": {
-                    "type": "string"
-                },
-                "fechaCierre": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "fechaCreacion": {
-                    "type": "string",
-                    "format": "datetime"
-                },
-                "fechaModificacion": {
-                    "type": "string",
-                    "format": "datetime"
                 }
             }
         },
@@ -2410,10 +3052,6 @@
                     "format": "double"
                 }
             }
-        },
-        "stringtrue": {
-            "title": "stringtrue",
-            "type": "object"
         }
     },
     "tags": [
