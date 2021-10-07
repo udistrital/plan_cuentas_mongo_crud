@@ -29,7 +29,8 @@ func (j *NecesidadesController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 Necesidades models.Necesidades
+// @Param query query string true "Consulta"
+// @Success 200 {object} []models.Necesidad
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *NecesidadesController) GetAll() {
@@ -66,7 +67,6 @@ func (j *NecesidadesController) GetAll() {
 	j.ServeJSON()
 }
 
-// Get ...
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get Necesidad by nombre
@@ -90,8 +90,8 @@ func (j *NecesidadesController) Get() {
 
 // @Title Post
 // @Description Post
-// @Param	body		body 	models.Necesidades	true		"Body para la creacion de Necesidades"
-// @Success 200 {int} Necesidades.Id
+// @Param	body		body 	models.Necesidad	true		"Body para la creacion de Necesidades"
+// @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NecesidadesController) Post() {
@@ -112,8 +112,8 @@ func (j *NecesidadesController) Post() {
 // @Title Update
 // @Description update the Necesidad
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param	body		body 	models.Necesidad	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id [put]
 func (j *NecesidadesController) Put() {
@@ -136,7 +136,7 @@ func (j *NecesidadesController) Put() {
 // @Title Borrar Necesidad
 // @Description Borrar Necesidad
 // @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (j *NecesidadesController) Delete() {

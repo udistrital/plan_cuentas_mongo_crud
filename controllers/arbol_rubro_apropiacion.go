@@ -46,7 +46,9 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 // GetAllVigencia función para obtener todos los objetos con una vigencia y una unidad ejecutora
 // @Title GetAllVigencia
 // @Description get all objects
-// @Success 200 NodoRubroApropiacion models.NodoRubroApropiacion
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []models.NodoRubroApropiacion
 // @Failure 403 :vigencia is empty
 // @Failure 403 :unidadEjecutora is empty
 // @router /:vigencia/:unidadEjecutora [get]
@@ -104,7 +106,9 @@ func DefaultResponse(code int, err error, info interface{}) map[string]interface
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Success 200 NodoRubroApropiacion models.NodoRubroApropiacion
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []models.NodoRubroApropiacion
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *NodoRubroApropiacionController) GetAll() {
@@ -145,8 +149,10 @@ func (j *NodoRubroApropiacionController) GetAll() {
 // Get Método Get de HTTP
 // @Title Get
 // @Description get NodoRubroApropiacion2018 by nombre
-// @Param	nombre		path 	string	true		"El nombre de la NodoRubroApropiacion2018 a consultar"
-// @Success 200 {object} models.NodoRubroApropiacion2018
+// @Param id              path  string true  "id"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} models.NodoRubroApropiacion
 // @Failure 403 :uid is empty
 // @router /:id/:vigencia/:unidadEjecutora [get]
 func (j *NodoRubroApropiacionController) Get() {
@@ -170,7 +176,7 @@ func (j *NodoRubroApropiacionController) Get() {
 // @Title Delete NodoRubroApropiacion2018
 // @Description Borrar NodoRubroApropiacion2018
 // @Param	id		path 	string	true		"El id del objeto que se quiere borrar"
-// @Success 200 {string} ok
+// @Success 200 {object} string
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (j *NodoRubroApropiacionController) Delete() {
@@ -189,7 +195,7 @@ func (j *NodoRubroApropiacionController) Delete() {
 // @Title Post NodoRubroApropiacion2018
 // @Description Post NodoRubroApropiacion2018
 // @Param	body		body 	models.NodoRubroApropiacion2018	true		"Body para la creacion de NodoRubroApropiacion2018"
-// @Success 200 {int} NodoRubroApropiacion2018.Id
+// @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
 func (j *NodoRubroApropiacionController) Post() {
@@ -219,8 +225,10 @@ func (j *NodoRubroApropiacionController) Post() {
 // @Title Update
 // @Description update the NodoRubroApropiacion2018
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Object	true		"The body"
-// @Success 200 {object} models.Object
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param	body		body 	models.NodoRubroApropiacion	true		"The body"
+// @Success 200 {object} string
 // @Failure 403 :id is empty
 // @router /:id/:vigencia/:unidadEjecutora [put]
 func (j *NodoRubroApropiacionController) Put() {
@@ -251,9 +259,10 @@ func (j *NodoRubroApropiacionController) Put() {
 // ArbolApropiacionPadreHijo devuelve un árbol desde la raiz indicada
 // @Title Preflight ArbolApropiacionPadreHijo
 // @Description Devuelve un nivel del árbol de apropiaciones
-// @Param	body		body 	models.NodoRubroApropiacion2018 true		"Body para la creacion de NodoRubroApropiacion2018"
-// @Success 200 {object} models.Object
-// @Failure 403 body is empty
+// @Param raiz            path  string true  "Raiz"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []map[string]interface{}
 // @router /ArbolApropiacionPadreHijo/:raiz/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 	nodoRaiz := j.GetString(":raiz")
@@ -294,8 +303,9 @@ func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 // RaicesArbolApropiacion ...
 // @Title RaicesArbolApropiacion
 // @Description RaicesArbolApropiacion
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []map[string]interface{}
 // @router /RaicesArbolApropiacion/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
@@ -339,9 +349,10 @@ func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 // FullArbolRubroApropiaciones ...
 // @Title FullArbolRubroApropiaciones
 // @Description Construye el árbol dependiendo de la raíz
-// @Param body body stringtrue "Código de la raíz"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param raiz            path  string true  "Código de la raíz"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []map[string]interface{}
 // @router /arbol_apropiacion/:raiz/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 	raiz := j.GetString(":raiz")
@@ -365,9 +376,9 @@ func (j *NodoRubroApropiacionController) FullArbolRubroApropiaciones() {
 // FullArbolApropiaciones ...
 // @Title FullArbolApropiaciones
 // @Description Construye el árbol completo con valores
-// @Param body body stringtrue "Código de la raíz"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []map[string]interface{}
 // @router /arbol_apropiacion_valores/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
@@ -388,16 +399,19 @@ func (j *NodoRubroApropiacionController) FullArbolApropiaciones() {
 // FullArbolApropiacionesbyID ...
 // @Title FullArbolApropiacionesbyID
 // @Description Construye el árbol completo con valores
-// @Param body body stringtrue "Código de la raíz"
-// @Param nivel nivel string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param id              path  string true  "Rubro"
+// @Param nivel           query int    false "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Param estado          query string false "Estado de la apropiacion (TODO: Confirmar)"
+// @Success 200 {object} []map[string]interface{}
 // @router /arbol_apropiacion_valores/:unidadEjecutora/:vigencia/:id [get]
 func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 	var intNivel int
 	unidadEjecutora := j.GetString(":unidadEjecutora")
 	vigenciaStr := j.GetString(":vigencia")
 	nivel := j.GetString("nivel")
+	estado := j.GetString("estado", "")
 
 	if nivel == "" {
 		intNivel = -1
@@ -413,7 +427,7 @@ func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 	if err != nil {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
-		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, "", query)
+		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, estado, query)
 		j.response = DefaultResponse(200, nil, &tree)
 	}
 	j.Data["json"] = j.response
@@ -423,9 +437,9 @@ func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 // GetHojas ...
 // @Title GetHojas
 // @Description Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
-// @Param body body string	true "Código de la raíz"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Success 200 {object} []models.NodoRubroApropiacion
 // @router /get_hojas/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) GetHojas() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
@@ -445,7 +459,10 @@ func (j *NodoRubroApropiacionController) GetHojas() {
 // ComprobarBalanceArbolApropiaciones ...
 // @Title ComprobarBalanceArbolApropiaciones
 // @Description ComprobarBalanceArbolApropiaciones
-// @Success 200 {object} models.Object
+// @Param vigencia        path  int    true  "Vigencia"
+// @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param movimientos body []models.Movimiento true "Unidad Ejecutora"
+// @Success 200 {object} map[string]interface{}
 // @Failure 404 body is empty
 // @router /comprobar_balance/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
@@ -542,10 +559,9 @@ func (j *NodoRubroApropiacionController) ComprobarBalanceArbolApropiaciones() {
 // AprobacionMasiva ...
 // @Title AprobacionMasiva
 // @Description Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
-// @Param unidadEjecutora unidadEjecutora string	true "Unidad Ejecutora de la apropiación"
-// @Param vigencia vigencia string	true "Vigencia de la apropiación"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param unidadEjecutora path string	true "Unidad Ejecutora de la apropiación"
+// @Param vigencia path string	true "Vigencia de la apropiación"
+// @Success 200 {object} string
 // @router /aprobacion_masiva/:unidadEjecutora/:vigencia [post]
 func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
@@ -564,10 +580,10 @@ func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 // TreeByState ...
 // @Title TreeByState
 // @Description Genera el árbol dependiendo del estado de las apropiaciones
-// @Param unidadEjecutora unidadEjecutora string	true "Unidad Ejecutora de la apropiación"
-// @Param vigencia vigencia string	true "Vigencia de la apropiación"
-// @Success 200 {object} models.Object
-// @Failure 404 body is empty
+// @Param unidadEjecutora path uint	true "Unidad Ejecutora de la apropiación"
+// @Param vigencia path uint	true "Vigencia de la apropiación"
+// @Param estado        path  string    true  "Estado"
+// @Success 200 {object} []map[string]interface{}
 // @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado/ [get]
 func (j *NodoRubroApropiacionController) TreeByState() {
 	unidadEjecutora := j.GetString(":unidadEjecutora")
