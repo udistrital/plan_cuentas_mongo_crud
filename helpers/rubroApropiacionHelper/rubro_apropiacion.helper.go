@@ -159,23 +159,28 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 	var apropiacion *models.NodoRubroApropiacion
 	raices := make(map[string]interface{})
 	forkData := make(map[string]interface{})
-
-	raices = rubroManager.GetNodo(query["Codigo"].(string), unidadEjecutora)
-
-	raiz, err := models.GetNodoRubroById(query["Codigo"].(string))
-	if err != nil {
-		return nil
-	}
-	raices["Nombre"] = raiz.Nombre
+	var err error
 	if apropiacion, err = models.GetNodoRubroApropiacionById(query["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
 		raices["ValorInicial"] = 0
 		raices["Estado"] = models.EstadoSinRegistrar
 	} else {
+		raices["Activo"] = apropiacion.Activo
+		raices["Apropiaciones"] = apropiacion.Apropiaciones
+		raices["Bloqueado"] = apropiacion.Bloqueado
+		raices["Codigo"] = apropiacion.ID
+		raices["Descripcion"] = apropiacion.Descripcion
+		raices["FechaCreacion"] = apropiacion.FechaCreacion
+		raices["FechaModificacion"] = apropiacion.FechaModificacion
+		raices["Hijos"] = apropiacion.Hijos
+		raices["Nombre"] = apropiacion.Nombre
+		raices["Padre"] = apropiacion.Padre
+		raices["UnidadEjecutora"] = apropiacion.UnidadEjecutora
+		raices["Vigencia"] = apropiacion.Vigencia
 		raices["ValorInicial"] = apropiacion.ValorInicial
 		raices["Estado"] = apropiacion.Estado
 		raices["Productos"] = apropiacion.Productos
 		if apropiacion.Estado == estado {
-			apropiacion.General.Nombre = raiz.Nombre
+			apropiacion.General.Nombre = apropiacion.Nombre
 			forkData := make(map[string]interface{})
 			forkData["Codigo"] = apropiacion.ID
 			forkData["data"] = apropiacion
@@ -188,9 +193,9 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		forkData["data"] = raices
 		if query["Nivel"].(int) != 0 {
 			if query["Nivel"].(int) < 0 {
-				forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
+				forkData["children"] = getValueChildren(apropiacion.Hijos, unidadEjecutora, vigencia)
 			} else {
-				forkData["children"] = getValueChildrenbyID(raiz.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
+				forkData["children"] = getValueChildrenbyID(apropiacion.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
 			}
 		}
 		tree = append(tree, forkData)
