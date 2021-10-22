@@ -155,15 +155,19 @@ func GetHijoApropiacion(id, ue string, vigencia int) map[string]interface{} {
 
 // ValuesTreebyID consulta un rubro por el ID y le asgina un valor 0 cuando no tienen una apropiación
 func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query map[string]interface{}) []map[string]interface{} {
+	// logs.Debug("ValuesTreebyID")
 	var tree []map[string]interface{}
 	var apropiacion *models.NodoRubroApropiacion
 	raices := make(map[string]interface{})
 	forkData := make(map[string]interface{})
 	var err error
 	if apropiacion, err = models.GetNodoRubroApropiacionById(query["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
+		// logs.Error("Err: ", err)
 		raices["ValorInicial"] = 0
 		raices["Estado"] = models.EstadoSinRegistrar
+		return nil
 	} else {
+		// logs.Debug("Else apropiacion")
 		raices["Activo"] = apropiacion.Activo
 		raices["Apropiaciones"] = apropiacion.Apropiaciones
 		raices["Bloqueado"] = apropiacion.Bloqueado
@@ -188,11 +192,15 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 			tree = append(tree, forkData)
 		}
 	}
+	// logs.Debug("Primer condicional")
 	if estado == "" {
+		// logs.Debug(fmt.Sprintf("Query:%+v - raices:%+v", query, raices))
 		forkData["Codigo"] = query["Codigo"]
 		forkData["data"] = raices
 		if query["Nivel"].(int) != 0 {
+			// logs.Debug("Tercer condicional")
 			if query["Nivel"].(int) < 0 {
+				// logs.Debug(fmt.Sprintf("apropiacion:%+v - unidadEjecutora:%+v - vigencia:%v", apropiacion, unidadEjecutora, vigencia))
 				forkData["children"] = getValueChildren(apropiacion.Hijos, unidadEjecutora, vigencia)
 			} else {
 				forkData["children"] = getValueChildrenbyID(apropiacion.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
