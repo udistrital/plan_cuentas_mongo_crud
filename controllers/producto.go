@@ -30,10 +30,10 @@ func (j *ProductoController) URLMapping() {
 	j.Mapping("Delete", j.Delete)
 }
 
-// GetAll
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
+// @Param query           query string false "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int"
 // @Success 200 {object} []models.Producto
 // @Failure 403 :objectId is empty
 // @router / [get]

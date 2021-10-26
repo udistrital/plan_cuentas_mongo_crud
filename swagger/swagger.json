@@ -27,7 +27,6 @@
                         "in": "query",
                         "name": "query",
                         "description": "Consulta",
-                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -120,12 +119,13 @@
                         "in": "path",
                         "name": "raiz",
                         "description": "Código de la raíz",
+                        "required": true,
                         "type": "string"
                     },
                     {
                         "in": "query",
                         "name": "nivel",
-                        "description": "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )",
+                        "description": "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... - Por Defecto: -1)",
                         "type": "string"
                     }
                 ],
@@ -280,6 +280,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Consulta",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -301,16 +307,16 @@
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
-                "description": "Post NodoRubroApropiacion2018",
-                "operationId": "NodoRubroApropiacionController.Post NodoRubroApropiacion2018",
+                "description": "Post NodoRubroApropiacion",
+                "operationId": "NodoRubroApropiacionController.Post NodoRubroApropiacion",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Body para la creacion de NodoRubroApropiacion2018",
+                        "description": "Body para la creacion de NodoRubroApropiacion",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.NodoRubroApropiacion2018"
+                            "$ref": "#/definitions/models.NodoRubroApropiacion"
                         }
                     }
                 ],
@@ -614,6 +620,12 @@
                         "description": "Estado",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Consulta",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -794,7 +806,7 @@
                 "tags": [
                     "arbol_rubro_apropiacion"
                 ],
-                "description": "update the NodoRubroApropiacion2018",
+                "description": "update the NodoRubroApropiacion",
                 "operationId": "NodoRubroApropiacionController.Update",
                 "parameters": [
                     {
@@ -866,6 +878,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Consulta",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1016,6 +1034,15 @@
                 ],
                 "description": "Obtiene un documento presupuestal de tipo cdp con su id de solicitud",
                 "operationId": "DocumentoPresupuestalController.GetInfoCdp",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "_id de Solicitud CDP",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
@@ -1051,6 +1078,12 @@
                         "description": "Centro Gestor (Unidad Ejecutora?)",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1076,6 +1109,30 @@
                 ],
                 "description": "get all objects",
                 "operationId": "DocumentoPresupuestalController.GetAll",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "CG",
+                        "description": "Centro Gestor (Unidad Ejecutora?)",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "tipo",
+                        "description": "Tipo",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
@@ -1419,6 +1476,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int",
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1482,10 +1545,7 @@
                         "description": "json de movimientos enviado desde el api_mid_financiera",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.DocumentoPresupuestal"
-                            }
+                            "$ref": "#/definitions/models.DocumentoPresupuestal"
                         }
                     }
                 ],
@@ -1509,6 +1569,31 @@
                 ],
                 "description": "get one object",
                 "operationId": "MovimientosController.GetOne",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "vigencia",
+                        "description": "Vigencia",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "areaFuncional",
+                        "description": "Area Funcional",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID padre",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
@@ -1730,6 +1815,14 @@
                 ],
                 "description": "get all objects",
                 "operationId": "ProductoController.GetAll",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int",
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
@@ -1878,8 +1971,7 @@
                     {
                         "in": "query",
                         "name": "query",
-                        "description": "The id you want to get",
-                        "required": true,
+                        "description": "Consulta",
                         "type": "string"
                     }
                 ],
@@ -1940,7 +2032,6 @@
                         "in": "path",
                         "name": "id",
                         "description": "El id de la SolicitudCDP a consultar",
-                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2092,7 +2183,6 @@
                         "in": "path",
                         "name": "id",
                         "description": "El nombre de la SolicitudCRP a consultar",
-                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2194,7 +2284,7 @@
                     "201": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/map[string]interface{}"
+                            "$ref": "#/definitions/models.VigenciaNueva"
                         }
                     },
                     "403": {
@@ -2358,19 +2448,19 @@
         }
     },
     "definitions": {
-        "1422.string.0xc00063ee70": {
-            "title": "0xc00063ee70",
+        "1422.string.0xc0005ab350": {
+            "title": "0xc0005ab350",
             "type": "object"
         },
-        "15179.0xc0006b0c90.false": {
+        "15179.0xc0006175c0.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc0006c8660.false": {
+        "21177.0xc0006271a0.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc0006c9560.false": {
+        "24877.0xc0006422a0.false": {
             "title": "false",
             "type": "object"
         },
@@ -2378,7 +2468,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc0006c95c0.false": {
+        "25578.0xc000642300.false": {
             "title": "false",
             "type": "object"
         },
@@ -2440,7 +2530,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc0006c8660.false"
+                    "$ref": "#/definitions/21177.0xc0006271a0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -2493,7 +2583,7 @@
                     "format": "datetime"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc0006c95c0.false"
+                    "$ref": "#/definitions/25578.0xc000642300.false"
                 },
                 "Nombre": {
                     "type": "string"
@@ -2508,7 +2598,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc0006c9560.false"
+                    "$ref": "#/definitions/24877.0xc0006422a0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2767,7 +2857,7 @@
                     "type": "string"
                 },
                 "Productos": {
-                    "$ref": "#/definitions/1422.string.0xc00063ee70"
+                    "$ref": "#/definitions/1422.string.0xc0005ab350"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2785,10 +2875,6 @@
                     "format": "int64"
                 }
             }
-        },
-        "models.NodoRubroApropiacion2018": {
-            "title": "NodoRubroApropiacion2018",
-            "type": "object"
         },
         "models.Producto": {
             "title": "Producto",
@@ -2847,7 +2933,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc0006b0c90.false"
+                    "$ref": "#/definitions/15179.0xc0006175c0.false"
                 },
                 "fechaCreacion": {
                     "type": "string",

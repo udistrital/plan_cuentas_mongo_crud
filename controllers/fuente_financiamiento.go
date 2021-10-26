@@ -32,6 +32,7 @@ func (j *FuenteFinanciamientoController) URLMapping() {
 // @Description get all objects
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param query           query string false "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int"
 // @Success 200 {object} []models.FuenteFinanciamiento
 // @Failure 403 :vigencia is empty
 // @Failure 403 :unidadEjecutora is empty

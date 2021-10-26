@@ -29,7 +29,7 @@ type MovimientosController struct {
 // arbolrubrosapropiacion_[vigencia]_[unidad_ejecutura], como en la colección movimientos. Utiliza la función registrarValores para registrar los valores,
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
-// @Param	body		body 	[]models.DocumentoPresupuestal true "json de movimientos enviado desde el api_mid_financiera"
+// @Param	body		body 	models.DocumentoPresupuestal true "json de movimientos enviado desde el api_mid_financiera"
 // @Success 200 {object} map[string]interface{}
 // @Failure 403 error
 // @router /RegistrarMovimientos [post]
@@ -116,7 +116,7 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 // GetMovimientosByDocumentoPresupuestalUUID función para obtener todos los objetos por parentUUID
 // @Title GetMovimientosByDocumentoPresupuestalUUID
 // @Description get all objects
-// @Param parentUUID      path  string true "El parentUUID del objeto que se quiere traer"
+// @Param parentUUID      path  string true  "El parentUUID del objeto que se quiere traer"
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param CG              path  int    true  "Centro Gestor (Unidad Ejecutora?)"
 // @Success 200 {object} []map[string]interface{}
@@ -155,6 +155,9 @@ func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {
 // GetOne get one object
 // @Title GetOne
 // @Description get one object
+// @Param vigencia      path  int    true  "Vigencia"
+// @Param areaFuncional path  int    true  "Area Funcional"
+// @Param id            path  string true  "ID padre"
 // @Success 200 {object} models.Movimiento
 // @Failure 403 :objectId is empty
 // @router /get_movimentos_by_parent_id/:vigencia/:areaFuncional/:id [get]

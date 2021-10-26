@@ -33,7 +33,7 @@ func (j *NodoRubroController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Param query        query  string    true  "Consulta"
+// @Param query        query  string    false  "Consulta"
 // @Success 200 {object} []models.NodoRubro
 // @Failure 403 :objectId is empty
 // @router / [get]
@@ -218,8 +218,8 @@ func (j *NodoRubroController) GetHojas() {
 // FullArbolRubroReducido ...
 // @Title FullArbolRubroReducido
 // @Description Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
-// @Param raiz path string "Código de la raíz"
-// @Param nivel query string "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )"
+// @Param raiz  path  string true  "Código de la raíz"
+// @Param nivel query string false "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... - Por Defecto: -1)"
 // @Success 200 {object} []map[string]interface{}
 // @Failure 404 body is empty
 // @router /arbol_reducido/:raiz [get]

@@ -23,6 +23,7 @@ type DocumentoPresupuestalController struct {
 // @Description get all objects with data bases query
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param CG              path  string true  "Centro Gestor (Unidad Ejecutora?)"
+// @Param query           query string false "Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int"
 // @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/ [get]
@@ -116,6 +117,9 @@ func (j *DocumentoPresupuestalController) Put() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
+// @Param vigencia path  int    true  "Vigencia"
+// @Param CG       path  string true  "Centro Gestor (Unidad Ejecutora?)"
+// @Param tipo     path  string true  "Tipo"
 // @Success 200 {object} []models.DocumentoPresupuestal
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/:tipo [get]
@@ -154,6 +158,7 @@ func (j *DocumentoPresupuestalController) GetAllCdp() {
 // GetInfoCdp Obtiene un documento presupuestal de tipo cdp con su id de solicitud
 // @Title GetInfoCdp
 // @Description Obtiene un documento presupuestal de tipo cdp con su id de solicitud
+// @Param id path string true "_id de Solicitud CDP"
 // @Success 200 {object} models.DocumentoPresupuestal
 // @Failure 403 :id is empty
 // @router /get_info_cdp/:id [get]

@@ -48,6 +48,7 @@ func (j *NodoRubroApropiacionController) URLMapping() {
 // @Description get all objects
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param query           query string false  "Consulta"
 // @Success 200 {object} []models.NodoRubroApropiacion
 // @Failure 403 :vigencia is empty
 // @Failure 403 :unidadEjecutora is empty
@@ -108,6 +109,7 @@ func DefaultResponse(code int, err error, info interface{}) map[string]interface
 // @Description get all objects
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
+// @Param query           query string false  "Consulta"
 // @Success 200 {object} []models.NodoRubroApropiacion
 // @Failure 403 :objectId is empty
 // @router / [get]
@@ -192,9 +194,9 @@ func (j *NodoRubroApropiacionController) Delete() {
 }
 
 // Post Método Post de HTTP
-// @Title Post NodoRubroApropiacion2018
-// @Description Post NodoRubroApropiacion2018
-// @Param	body		body 	models.NodoRubroApropiacion2018	true		"Body para la creacion de NodoRubroApropiacion2018"
+// @Title Post NodoRubroApropiacion
+// @Description Post NodoRubroApropiacion
+// @Param	body		body 	models.NodoRubroApropiacion	true		"Body para la creacion de NodoRubroApropiacion"
 // @Success 200 {object} string
 // @Failure 403 body is empty
 // @router / [post]
@@ -223,7 +225,7 @@ func (j *NodoRubroApropiacionController) Post() {
 
 // Put de HTTP
 // @Title Update
-// @Description update the NodoRubroApropiacion2018
+// @Description update the NodoRubroApropiacion
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
@@ -587,6 +589,7 @@ func (j *NodoRubroApropiacionController) AprobacionMasiva() {
 // @Param unidadEjecutora path uint	true "Unidad Ejecutora de la apropiación"
 // @Param vigencia path uint	true "Vigencia de la apropiación"
 // @Param estado        path  string    true  "Estado"
+// @Param query         query string    false "Consulta"
 // @Success 200 {object} []map[string]interface{}
 // @router /arbol_por_estado/:unidadEjecutora/:vigencia/:estado/ [get]
 func (j *NodoRubroApropiacionController) TreeByState() {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/astaxie/beego"
 	vigenciahelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/vigenciaHelper"
+	"github.com/udistrital/plan_cuentas_mongo_crud/models"
 	"github.com/udistrital/utils_oas/responseformat"
 )
 
@@ -108,13 +109,13 @@ func (j *VigenciaController) CerrarVigencia() {
 // @Title AgregarVigencia
 // @Description create vigencia
 // @Param	body		body 	models.VigenciaNueva	true		"body for Producto content"
-// @Success 201 {object} map[string]interface{}
+// @Success 201 {object} models.VigenciaNueva
 // @Failure 403 body is empty
 // @router /agregar_vigencia [post]
 func (j *VigenciaController) AgregarVigencia() {
-	var vigencia map[string]interface{}
+	var vigencia models.VigenciaNueva
 	json.Unmarshal(j.Ctx.Input.RequestBody, &vigencia)
-	if err := vigenciahelper.AddNew(int((vigencia["Valor"]).(float64)), vigenciahelper.VigenciaActual, (vigencia["AreaFuncional"]).(string)); err == nil {
+	if err := vigenciahelper.AddNew(vigencia.Valor, vigenciahelper.VigenciaActual, vigencia.AreaFuncional); err == nil {
 		j.response = DefaultResponse(201, nil, &vigencia)
 	} else {
 		j.response = DefaultResponse(403, err, nil)

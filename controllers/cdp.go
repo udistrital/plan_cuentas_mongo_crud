@@ -30,7 +30,7 @@ func (j *SolicitudesCDPController) URLMapping() {
 // GetAll función para obtener todos los objetos
 // @Title GetAll
 // @Description get all objects
-// @Param	query		query 	string	true		"The id you want to get"
+// @Param	query		query 	string	false		"Consulta"
 // @Success 200 {object} []models.SolicitudCDP
 // @Failure 403 :objectId is empty
 // @router / [get]
@@ -72,7 +72,7 @@ func (j *SolicitudesCDPController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get SolicitudCDP by nombre
-// @Param	id		path 	string	true		"El id de la SolicitudCDP a consultar"
+// @Param	id		path 	string	false		"El id de la SolicitudCDP a consultar"
 // @Success 200 {object} models.SolicitudCDP
 // @Failure 403 :uid is empty
 // @router /:id [get]
