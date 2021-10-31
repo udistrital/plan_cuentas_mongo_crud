@@ -160,12 +160,19 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 	var apropiacion *models.NodoRubroApropiacion
 	raices := make(map[string]interface{})
 	forkData := make(map[string]interface{})
-	var err error
+
+	raices = rubroManager.GetNodo(query["Codigo"].(string), unidadEjecutora)
+
+	raiz, err := models.GetNodoRubroById(query["Codigo"].(string))
+	if err != nil {
+		return nil
+	}
+	raices["Nombre"] = raiz.Nombre
+
 	if apropiacion, err = models.GetNodoRubroApropiacionById(query["Codigo"].(string), unidadEjecutora, vigencia); err != nil {
 		// logs.Error("Err: ", err)
 		raices["ValorInicial"] = 0
 		raices["Estado"] = models.EstadoSinRegistrar
-		return nil
 	} else {
 		// logs.Debug("Else apropiacion")
 		raices["Activo"] = apropiacion.Activo
@@ -176,7 +183,6 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		raices["FechaCreacion"] = apropiacion.FechaCreacion
 		raices["FechaModificacion"] = apropiacion.FechaModificacion
 		raices["Hijos"] = apropiacion.Hijos
-		raices["Nombre"] = apropiacion.Nombre
 		raices["Padre"] = apropiacion.Padre
 		raices["UnidadEjecutora"] = apropiacion.UnidadEjecutora
 		raices["Vigencia"] = apropiacion.Vigencia
@@ -184,7 +190,7 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		raices["Estado"] = apropiacion.Estado
 		raices["Productos"] = apropiacion.Productos
 		if apropiacion.Estado == estado {
-			apropiacion.General.Nombre = apropiacion.Nombre
+			apropiacion.General.Nombre = raiz.Nombre
 			forkData := make(map[string]interface{})
 			forkData["Codigo"] = apropiacion.ID
 			forkData["data"] = apropiacion
@@ -200,10 +206,11 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		if query["Nivel"].(int) != 0 {
 			// logs.Debug("Tercer condicional")
 			if query["Nivel"].(int) < 0 {
-				// logs.Debug(fmt.Sprintf("apropiacion:%+v - unidadEjecutora:%+v - vigencia:%v", apropiacion, unidadEjecutora, vigencia))
-				forkData["children"] = getValueChildren(apropiacion.Hijos, unidadEjecutora, vigencia)
+				// logs.Debug(fmt.Sprintf("Nivel<0 - apropiacion:%+v - unidadEjecutora:%+v - vigencia:%v", raiz, unidadEjecutora, vigencia))
+				forkData["children"] = getValueChildren(raiz.Hijos, unidadEjecutora, vigencia)
 			} else {
-				forkData["children"] = getValueChildrenbyID(apropiacion.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
+				// logs.Debug(fmt.Sprintf("apropiacion:%+v - unidadEjecutora:%+v - vigencia:%v", raiz, unidadEjecutora, vigencia))
+				forkData["children"] = getValueChildrenbyID(raiz.Hijos, unidadEjecutora, vigencia, query["Nivel"].(int)-1)
 			}
 		}
 		tree = append(tree, forkData)
