@@ -430,7 +430,11 @@ func (j *NodoRubroApropiacionController) FullArbolApropiacionesbyID() {
 		j.response = DefaultResponse(404, err, nil)
 	} else {
 		tree := rubroApropiacionHelper.ValuesTreebyID(unidadEjecutora, vigencia, estado, query)
-		j.response = DefaultResponse(200, nil, &tree)
+		if tree == nil {
+			j.response = DefaultResponse(200, nil, []interface{}{})
+		} else {
+			j.response = DefaultResponse(200, nil, &tree)
+		}
 	}
 	j.Data["json"] = j.response
 	j.ServeJSON()
