@@ -2448,19 +2448,19 @@
         }
     },
     "definitions": {
-        "1422.string.0xc0005ab350": {
-            "title": "0xc0005ab350",
+        "1422.string.0xc0006733b0": {
+            "title": "0xc0006733b0",
             "type": "object"
         },
-        "15179.0xc0006175c0.false": {
+        "15179.0xc0006f9410.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc0006271a0.false": {
+        "21177.0xc00070cde0.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc0006422a0.false": {
+        "24877.0xc00070dce0.false": {
             "title": "false",
             "type": "object"
         },
@@ -2468,7 +2468,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc000642300.false": {
+        "25578.0xc00070dd40.false": {
             "title": "false",
             "type": "object"
         },
@@ -2530,7 +2530,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc0006271a0.false"
+                    "$ref": "#/definitions/21177.0xc00070cde0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -2583,7 +2583,7 @@
                     "format": "datetime"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc000642300.false"
+                    "$ref": "#/definitions/25578.0xc00070dd40.false"
                 },
                 "Nombre": {
                     "type": "string"
@@ -2598,7 +2598,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc0006422a0.false"
+                    "$ref": "#/definitions/24877.0xc00070dce0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2857,7 +2857,7 @@
                     "type": "string"
                 },
                 "Productos": {
-                    "$ref": "#/definitions/1422.string.0xc0005ab350"
+                    "$ref": "#/definitions/1422.string.0xc0006733b0"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2933,7 +2933,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc0006175c0.false"
+                    "$ref": "#/definitions/15179.0xc0006f9410.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
