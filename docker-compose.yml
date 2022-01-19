@@ -11,7 +11,7 @@ services:
     ports:
       - "${PORT}:${PORT}"
     env_file:
-      - develop.env
+      - .env
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:${SERVICE_NAME}.localhost
     command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -v; bee run'
@@ -21,7 +21,7 @@ services:
       - back_end
 
   db:
-    image: mongo:latest
+    image: mongo:4
     container_name: ${FINANCIERA_MONGO_CRUD_DB_URL}
     environment:
       - MONGO_DATA_DIR=/data/db
