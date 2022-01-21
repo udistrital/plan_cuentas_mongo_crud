@@ -11,6 +11,7 @@ titan_api_crud
 
 # Variables de entorno
 *.env
+!.env
 !template.env
 !develop.env
 
