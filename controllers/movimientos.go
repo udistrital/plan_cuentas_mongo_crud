@@ -30,7 +30,7 @@ type MovimientosController struct {
 // y se le envian como párametro el nombre de los movimientos que se van a guardar en el atributo movimiento de la colección arbolrubrosapropiacion,
 // al igual que se envia la variable dataValor, que son los valores del movimiento enviados desde el api_mid_financiera
 // @Param	body		body 	models.DocumentoPresupuestal true "json de movimientos enviado desde el api_mid_financiera"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.PorDefinir
 // @Failure 403 error
 // @router /RegistrarMovimientos [post]
 func (j *MovimientosController) RegistrarMovimiento() {
@@ -119,7 +119,7 @@ func (j *MovimientosController) RegistrarMovimientoParameter() {
 // @Param parentUUID      path  string true  "El parentUUID del objeto que se quiere traer"
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param CG              path  int    true  "Centro Gestor (Unidad Ejecutora?)"
-// @Success 200 {object} []map[string]interface{}
+// @Success 200 {object} []models.PorDefinir
 // @Failure 403 :objectId is empty
 // @router /:vigencia/:CG/:parentUUID [get]
 func (j *MovimientosController) GetMovimientosByDocumentoPresupuestalUUID() {

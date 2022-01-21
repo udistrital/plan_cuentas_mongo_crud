@@ -97,7 +97,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/map[string]interface{}"
+                                "$ref": "#/definitions/models.PorDefinir"
                             }
                         }
                     },
@@ -135,7 +135,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/map[string]interface{}"
+                                "$ref": "#/definitions/models.PorDefinir"
                             }
                         }
                     },
@@ -409,7 +409,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/map[string]interface{}"
+                                "$ref": "#/definitions/models.Root1"
                             }
                         }
                     }
@@ -1553,7 +1553,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/map[string]interface{}"
+                            "$ref": "#/definitions/models.PorDefinir"
                         }
                     },
                     "403": {
@@ -1645,7 +1645,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/map[string]interface{}"
+                                "$ref": "#/definitions/models.PorDefinir"
                             }
                         }
                     },
@@ -2313,7 +2313,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/map[string]interface{}"
+                            "type": "string"
                         }
                     },
                     "403": {
@@ -2342,7 +2342,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "format": "int32",
+                            "format": "int64",
                             "type": "integer"
                         }
                     },
@@ -2374,7 +2374,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/interface{}"
+                                "$ref": "#/definitions/models.PorDefinir"
                             }
                         }
                     },
@@ -2397,7 +2397,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/interface{}"
+                                "$ref": "#/definitions/models.PorDefinir"
                             }
                         }
                     },
@@ -2436,7 +2436,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/map[string]int"
+                                "$ref": "#/definitions/models.VigenciaNamespace"
                             }
                         }
                     },
@@ -2448,19 +2448,19 @@
         }
     },
     "definitions": {
-        "1422.string.0xc00052e318": {
-            "title": "0xc00052e318",
+        "1422.string.0xc00047b6e0": {
+            "title": "0xc00047b6e0",
             "type": "object"
         },
-        "15179.0xc000574e70.false": {
+        "15179.0xc0003af740.false": {
             "title": "false",
             "type": "object"
         },
-        "21177.0xc00058aa50.false": {
+        "21177.0xc0003d3ad0.false": {
             "title": "false",
             "type": "object"
         },
-        "24877.0xc00058bb30.false": {
+        "24877.0xc0003f1bc0.false": {
             "title": "false",
             "type": "object"
         },
@@ -2468,7 +2468,7 @@
             "title": "rubroFuente",
             "type": "object"
         },
-        "25578.0xc00058bb90.false": {
+        "25578.0xc0003f1c20.false": {
             "title": "false",
             "type": "object"
         },
@@ -2478,14 +2478,6 @@
         },
         "bson.ObjectId": {
             "title": "ObjectId",
-            "type": "object"
-        },
-        "interface{}": {
-            "title": "interface{}",
-            "type": "object"
-        },
-        "map[string]int": {
-            "title": "map[string]int",
             "type": "object"
         },
         "map[string]interface{}": {
@@ -2530,7 +2522,7 @@
                     "format": "int64"
                 },
                 "Data": {
-                    "$ref": "#/definitions/21177.0xc00058aa50.false"
+                    "$ref": "#/definitions/21177.0xc0003d3ad0.false"
                 },
                 "Estado": {
                     "type": "string"
@@ -2583,7 +2575,7 @@
                     "format": "datetime"
                 },
                 "Movimientos": {
-                    "$ref": "#/definitions/25578.0xc00058bb90.false"
+                    "$ref": "#/definitions/25578.0xc0003f1c20.false"
                 },
                 "Nombre": {
                     "type": "string"
@@ -2598,7 +2590,7 @@
                     "type": "string"
                 },
                 "TipoFuente": {
-                    "$ref": "#/definitions/24877.0xc00058bb30.false"
+                    "$ref": "#/definitions/24877.0xc0003f1bc0.false"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2857,7 +2849,7 @@
                     "type": "string"
                 },
                 "Productos": {
-                    "$ref": "#/definitions/1422.string.0xc00052e318"
+                    "$ref": "#/definitions/1422.string.0xc00047b6e0"
                 },
                 "UnidadEjecutora": {
                     "type": "string"
@@ -2875,6 +2867,10 @@
                     "format": "int64"
                 }
             }
+        },
+        "models.PorDefinir": {
+            "title": "PorDefinir",
+            "type": "object"
         },
         "models.Producto": {
             "title": "Producto",
@@ -2910,6 +2906,34 @@
                 }
             }
         },
+        "models.Root1": {
+            "title": "Root1",
+            "type": "object",
+            "properties": {
+                "Codigo": {
+                    "type": "string"
+                },
+                "Hijos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "IsLeaf": {
+                    "type": "boolean"
+                },
+                "Nombre": {
+                    "type": "string"
+                },
+                "UnidadEjecutora": {
+                    "type": "string"
+                },
+                "ValorInicial": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
         "models.SolicitudCDP": {
             "title": "SolicitudCDP",
             "type": "object",
@@ -2933,7 +2957,7 @@
                     "format": "int64"
                 },
                 "estado": {
-                    "$ref": "#/definitions/15179.0xc000574e70.false"
+                    "$ref": "#/definitions/15179.0xc0003af740.false"
                 },
                 "fechaCreacion": {
                     "type": "string",
@@ -3010,6 +3034,10 @@
                     "type": "string"
                 }
             }
+        },
+        "models.VigenciaNamespace": {
+            "title": "VigenciaNamespace",
+            "type": "object"
         },
         "models.VigenciaNueva": {
             "title": "VigenciaNueva",

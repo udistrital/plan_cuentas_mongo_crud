@@ -161,7 +161,7 @@ func (j *NodoRubroController) Put() {
 // @Title FullArbolRubro
 // @Description Construye el árbol a un nivel dependiendo de la raíz
 // @Param raiz path string true "Código de la raíz"
-// @Success 200 {object} []map[string]interface{}
+// @Success 200 {object} []models.PorDefinir
 // @Failure 404 body is empty
 // @router /arbol/:raiz [get]
 func (j *NodoRubroController) FullArbolRubro() {
@@ -220,7 +220,7 @@ func (j *NodoRubroController) GetHojas() {
 // @Description Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
 // @Param raiz  path  string true  "Código de la raíz"
 // @Param nivel query string false "Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... - Por Defecto: -1)"
-// @Success 200 {object} []map[string]interface{}
+// @Success 200 {object} []models.PorDefinir
 // @Failure 404 body is empty
 // @router /arbol_reducido/:raiz [get]
 func (j *NodoRubroController) FullArbolRubroReducido() {

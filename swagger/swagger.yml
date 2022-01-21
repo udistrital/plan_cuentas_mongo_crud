@@ -129,15 +129,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/map[string]interface{}'
+              $ref: '#/definitions/models.PorDefinir'
         "404":
           description: body is empty
   /arbol_rubro/arbol_reducido/{raiz}:
     get:
       tags:
       - arbol_rubro
-      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel
-        dependiendo de la raíz y nivel
+      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
       operationId: NodoRubroController.FullArbolRubroReducido
       parameters:
       - in: path
@@ -147,8 +146,7 @@ paths:
         type: string
       - in: query
         name: nivel
-        description: 'Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer
-          Nivel ... - Por Defecto: -1)'
+        description: 'Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... - Por Defecto: -1)'
         type: string
       responses:
         "200":
@@ -156,7 +154,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/map[string]interface{}'
+              $ref: '#/definitions/models.PorDefinir'
         "404":
           description: body is empty
   /arbol_rubro/get_hojas:
@@ -397,13 +395,12 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/map[string]interface{}'
+              $ref: '#/definitions/models.Root1'
   /arbol_rubro_apropiacion/aprobacion_masiva/{unidadEjecutora}/{vigencia}:
     post:
       tags:
       - arbol_rubro_apropiacion
-      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una
-        vigencia y unidad ejecutora
+      description: Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
       operationId: NodoRubroApropiacionController.AprobacionMasiva
       parameters:
       - in: path
@@ -504,8 +501,7 @@ paths:
         type: string
       - in: query
         name: nivel
-        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer
-          Nivel ... )
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
         type: integer
         format: int64
       - in: query
@@ -592,8 +588,7 @@ paths:
     get:
       tags:
       - arbol_rubro_apropiacion
-      description: Devuelve un arreglo con todos los nodos hoja correspondientes a
-        la vigencia y ue
+      description: Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
       operationId: NodoRubroApropiacionController.GetHojas
       parameters:
       - in: path
@@ -635,8 +630,7 @@ paths:
         type: string
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
-          !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -958,8 +952,7 @@ paths:
         format: int64
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
-          !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -1053,15 +1046,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/map[string]interface{}'
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: :objectId is empty
   /movimiento/RegistrarMovimientoParameter:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
-        y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimientoParameter
       parameters:
       - in: body
@@ -1081,8 +1073,7 @@ paths:
     post:
       tags:
       - movimiento
-      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento)
-        y los propaga tanto en la colección
+      description: Registra los movimientos (como cdp, rp, ver variable tipoMovimiento) y los propaga tanto en la colección
       operationId: MovimientosController.RegistrarMovimiento
       parameters:
       - in: body
@@ -1095,7 +1086,7 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/map[string]interface{}'
+            $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
   /movimiento/get_movimentos_by_parent_id/{vigencia}/{areaFuncional}/{id}:
@@ -1239,8 +1230,7 @@ paths:
       parameters:
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
-          !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -1439,8 +1429,7 @@ paths:
       parameters:
       - in: query
         name: query
-        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes
-          !$ at the begining, the value won't be converted to int
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
         type: string
       responses:
         "200":
@@ -1534,8 +1523,7 @@ paths:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias a las cuales se ha registrado un name_space
-        en el sistema.
+      description: Retorna las vigencias a las cuales se ha registrado un name_space en el sistema.
       operationId: VigenciaController.GetVigenciasByNameSpace
       parameters:
       - in: path
@@ -1554,7 +1542,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/map[string]int'
+              $ref: '#/definitions/models.VigenciaNamespace'
         "403":
           description: error
   /vigencia/agregar_vigencia:
@@ -1581,8 +1569,7 @@ paths:
     get:
       tags:
       - vigencia
-      description: Se cierra la vigencia que se encuentre con estado actual en la
-        colección, dependiendo del área funcional que le llegue.
+      description: Se cierra la vigencia que se encuentre con estado actual en la colección, dependiendo del área funcional que le llegue.
       operationId: VigenciaController.CerrarVigencia
       parameters:
       - in: path
@@ -1594,28 +1581,26 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/map[string]interface{}'
+            type: string
         "403":
           description: error
   /vigencia/vigencia_actual:
     get:
       tags:
       - vigencia
-      description: Retorna la vigencia actual según la hora del servidor y añade o
-        quita segùn el offset lo indica , por defecto 0.
+      description: Retorna la vigencia actual según la hora del servidor y añade o quita segùn el offset lo indica , por defecto 0.
       operationId: VigenciaController.GetVigenciasCurrentVigenciaWithOffset
       parameters:
       - in: query
         name: offset
-        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 ,
-          offset=-1; vigencia -1'
+        description: 'offset para determinar vigencia ej: offset= 1; vigencia+1 , offset=-1; vigencia -1'
         required: true
         type: string
       responses:
         "200":
           description: ""
           schema:
-            format: int32
+            format: int64
             type: integer
         "403":
           description: error
@@ -1637,15 +1622,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/interface{}'
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
   /vigencia/vigencias_total:
     get:
       tags:
       - vigencia
-      description: Retorna las vigencias guardadas en las diferentes colecciones de
-        la base de datos.
+      description: Retorna las vigencias guardadas en las diferentes colecciones de la base de datos.
       operationId: VigenciaController.GetTodasVigencias
       responses:
         "200":
@@ -1653,26 +1637,26 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/interface{}'
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
 definitions:
-  1422.string.0xc00052e318:
-    title: "0xc00052e318"
+  1422.string.0xc00047b6e0:
+    title: "0xc00047b6e0"
     type: object
-  15179.0xc000574e70.false:
+  15179.0xc0003af740.false:
     title: "false"
     type: object
-  21177.0xc00058aa50.false:
+  21177.0xc0003d3ad0.false:
     title: "false"
     type: object
-  24877.0xc00058bb30.false:
+  24877.0xc0003f1bc0.false:
     title: "false"
     type: object
   25228.rubroFuente:
     title: rubroFuente
     type: object
-  25578.0xc00058bb90.false:
+  25578.0xc0003f1c20.false:
     title: "false"
     type: object
   33209.<nil>.string:
@@ -1680,12 +1664,6 @@ definitions:
     type: object
   bson.ObjectId:
     title: ObjectId
-    type: object
-  interface{}:
-    title: interface{}
-    type: object
-  map[string]int:
-    title: map[string]int
     type: object
   map[string]interface{}:
     title: map[string]interface{}
@@ -1720,7 +1698,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/21177.0xc00058aa50.false'
+        $ref: '#/definitions/21177.0xc0003d3ad0.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1755,7 +1733,7 @@ definitions:
         type: string
         format: datetime
       Movimientos:
-        $ref: '#/definitions/25578.0xc00058bb90.false'
+        $ref: '#/definitions/25578.0xc0003f1c20.false'
       Nombre:
         type: string
       NumeroDocumento:
@@ -1765,7 +1743,7 @@ definitions:
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/24877.0xc00058bb30.false'
+        $ref: '#/definitions/24877.0xc0003f1bc0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1944,7 +1922,7 @@ definitions:
       Padre:
         type: string
       Productos:
-        $ref: '#/definitions/1422.string.0xc00052e318'
+        $ref: '#/definitions/1422.string.0xc00047b6e0'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1956,6 +1934,9 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.PorDefinir:
+    title: PorDefinir
+    type: object
   models.Producto:
     title: Producto
     type: object
@@ -1980,6 +1961,25 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.Root1:
+    title: Root1
+    type: object
+    properties:
+      Codigo:
+        type: string
+      Hijos:
+        type: array
+        items:
+          type: string
+      IsLeaf:
+        type: boolean
+      Nombre:
+        type: string
+      UnidadEjecutora:
+        type: string
+      ValorInicial:
+        type: number
+        format: double
   models.SolicitudCDP:
     title: SolicitudCDP
     type: object
@@ -1998,7 +1998,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/15179.0xc000574e70.false'
+        $ref: '#/definitions/15179.0xc0003af740.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -2052,6 +2052,9 @@ definitions:
         format: double
       vigencia:
         type: string
+  models.VigenciaNamespace:
+    title: VigenciaNamespace
+    type: object
   models.VigenciaNueva:
     title: VigenciaNueva
     type: object

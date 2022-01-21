@@ -307,7 +307,7 @@ func (j *NodoRubroApropiacionController) ArbolApropiacionPadreHijo() {
 // @Description RaicesArbolApropiacion
 // @Param vigencia        path  int    true  "Vigencia"
 // @Param unidadEjecutora path  int    true  "Unidad Ejecutora"
-// @Success 200 {object} []map[string]interface{}
+// @Success 200 {object} []models.Root1
 // @router /RaicesArbolApropiacion/:unidadEjecutora/:vigencia [get]
 func (j *NodoRubroApropiacionController) RaicesArbolApropiacion() {
 	ueStr := j.Ctx.Input.Param(":unidadEjecutora")
