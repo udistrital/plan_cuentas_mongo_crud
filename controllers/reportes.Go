@@ -16,7 +16,7 @@ type ReportesController struct {
 // GetSimple función para obtener todos los objetos
 // @Title GetSimple
 // @Description get all objects
-// @Success 200 {object} nil
+// @Success 200 {object} models.PorDefinir
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *ReportesController) GetSimple() {
