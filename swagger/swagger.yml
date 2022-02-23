@@ -795,6 +795,39 @@ paths:
               $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :id is empty
+  /documento_presupuestal/get_doc_mov_rubro/{vigencia}/{areaFuncional}/{rubro}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene todos los CDPs expedidos con movimientos en un rubro padre dado
+      operationId: DocumentoPresupuestalController.GetDocMovByRubro
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia del CDP
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: rubro
+        description: Rubro padre relacionado al CDP
+        required: true
+        type: string
+      - in: path
+        name: areaFuncional
+        description: Area Funcional
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: Listado de documentos relacionados
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
+        "500":
+          description: Internal server error
   /documento_presupuestal/get_info_cdp/{id}:
     get:
       tags:
@@ -1370,6 +1403,7 @@ paths:
       - in: path
         name: id
         description: El id de la SolicitudCDP a consultar
+        required: true
         type: string
       responses:
         "200":
@@ -1469,6 +1503,7 @@ paths:
       - in: path
         name: id
         description: El nombre de la SolicitudCRP a consultar
+        required: true
         type: string
       responses:
         "200":
@@ -1641,25 +1676,25 @@ paths:
         "403":
           description: error
 definitions:
-  1422.string.0xc00047b6e0:
-    title: "0xc00047b6e0"
+  1452.string.0xc0005dd300:
+    title: "0xc0005dd300"
     type: object
-  15179.0xc0003af740.false:
+  15653.0xc000618bd0.false:
     title: "false"
     type: object
-  21177.0xc0003d3ad0.false:
+  21848.0xc0006305a0.false:
     title: "false"
     type: object
-  24877.0xc0003f1bc0.false:
+  25653.0xc0006314a0.false:
     title: "false"
     type: object
-  25228.rubroFuente:
+  26009.rubroFuente:
     title: rubroFuente
     type: object
-  25578.0xc0003f1c20.false:
+  26363.0xc000631500.false:
     title: "false"
     type: object
-  33209.<nil>.string:
+  34200.<nil>.string:
     title: string
     type: object
   bson.ObjectId:
@@ -1698,7 +1733,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/21177.0xc0003d3ad0.false'
+        $ref: '#/definitions/21848.0xc0006305a0.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1733,17 +1768,17 @@ definitions:
         type: string
         format: datetime
       Movimientos:
-        $ref: '#/definitions/25578.0xc0003f1c20.false'
+        $ref: '#/definitions/26363.0xc000631500.false'
       Nombre:
         type: string
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/25228.rubroFuente'
+        $ref: '#/definitions/26009.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/24877.0xc0003f1bc0.false'
+        $ref: '#/definitions/25653.0xc0006314a0.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1777,6 +1812,12 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.GeneralReducida:
+    title: GeneralReducida
+    type: object
+    properties:
+      Nombre:
+        type: string
   models.Movimiento:
     title: Movimiento
     type: object
@@ -1786,7 +1827,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/33209.<nil>.string'
+        $ref: '#/definitions/34200.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1800,6 +1841,8 @@ definitions:
           format: double
       Padre:
         type: string
+      RubroDetalle:
+        $ref: '#/definitions/models.NodoRubroReducido'
       Tipo:
         type: string
       ValorActual:
@@ -1922,7 +1965,7 @@ definitions:
       Padre:
         type: string
       Productos:
-        $ref: '#/definitions/1422.string.0xc00047b6e0'
+        $ref: '#/definitions/1452.string.0xc0005dd300'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1934,6 +1977,20 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.NodoRubroReducido:
+    title: NodoRubroReducido
+    type: object
+    properties:
+      Codigo:
+        type: string
+      General:
+        $ref: '#/definitions/models.GeneralReducida'
+      Hijos:
+        type: array
+        items:
+          type: string
+      UnidadEjecutora:
+        type: string
   models.PorDefinir:
     title: PorDefinir
     type: object
@@ -1998,7 +2055,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/15179.0xc0003af740.false'
+        $ref: '#/definitions/15653.0xc000618bd0.false'
       fechaCreacion:
         type: string
         format: datetime

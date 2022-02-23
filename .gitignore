@@ -20,6 +20,7 @@ titan_api_crud
 
 # Otros
 .scannerwork
+swagger.zip
 swagger/**
 !swagger/swagger.json
 !swagger/swagger.yml

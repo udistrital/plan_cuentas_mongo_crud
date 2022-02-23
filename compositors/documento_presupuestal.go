@@ -1,6 +1,8 @@
 package compositors
 
 import (
+	"strings"
+
 	"github.com/astaxie/beego/logs"
 	commonhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/commonHelper"
 	documentopresupuestalhelper "github.com/udistrital/plan_cuentas_mongo_crud/helpers/documentoPresupuestalHelper"
@@ -47,4 +49,25 @@ func (c *DocumentoPresupuestalCompositor) GetMovDocumentPresByParent(vigencia, c
 	}
 
 	return docPresArr
+}
+
+func (c *DocumentoPresupuestalCompositor) GetAllDocumentoPresupuestalMovimientosByRubro(vigencia, centroGestor, rubro string) (d []models.DocumentoPresupuestal, err error) {
+	var docs []models.DocumentoPresupuestal
+	predocs := c.GetAllByType(vigencia, centroGestor, "cdp")
+	for i := range predocs {
+		if predocs[i].Estado == "expedido" {
+			for j := range predocs[i].Afectacion {
+				r := predocs[i].Afectacion[j].Padre
+				if strings.Contains(r, rubro) {
+					Rubro, err := models.GetNodoRubroReducidoById(r)
+					if err != nil {
+						return d, err
+					}
+					predocs[i].Afectacion[j].RubroDetalle = &Rubro
+					docs = append(docs, predocs[i])
+				}
+			}
+		}
+	}
+	return docs, nil
 }

@@ -22,16 +22,16 @@ type dependenciaRubro struct {
 // rubroFuente Relación entre un rubro y una fuente discriminada por un tipo(ingreso,gasto)
 type rubroFuente struct {
 	Dependencias []*dependenciaRubro `json:"Dependencias" bson:"dependencias"`
-	Productos    []string            `json:"Productos" bson:"productos`
+	Productos    []string            `json:"Productos" bson:"productos"`
 	ValorTotal   float64             `json:"ValorTotal" bson:"ValorTotal"`
-	Tipo         string              `json:"Tipo" bson:"tipo`
+	Tipo         string              `json:"Tipo" bson:"tipo"`
 }
 
 // FuenteFinanciamiento ...
 type FuenteFinanciamiento struct {
 	*General
 	ID              string                       `json:"Codigo" bson:"_id,omitempty"`
-	TipoFuente      interface{}                  `json:"TipoFuente" bson"tipoFuente"`
+	TipoFuente      interface{}                  `json:"TipoFuente" bson:"tipoFuente"`
 	ValorInicial    float64                      `json:"ValorInicial" bson:"valor_inicial"`
 	ValorActual     float64                      `json:"ValorActual" bson:"valor_actual"`
 	Estado          string                       `json:"Estado" bson:"estado"`

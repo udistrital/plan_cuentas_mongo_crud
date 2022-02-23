@@ -63,6 +63,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
         beego.ControllerComments{
+            Method: "GetAllDocMovByRubro",
+            Router: "/get_doc_mov_rubro/:vigencia/:areaFuncional/:rubro",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"] = append(beego.GlobalControllerRouter["github.com/udistrital/plan_cuentas_mongo_crud/controllers:DocumentoPresupuestalController"],
+        beego.ControllerComments{
             Method: "GetInfoCdp",
             Router: "/get_info_cdp/:id",
             AllowHTTPMethods: []string{"get"},
