@@ -8,6 +8,7 @@ plan_cuentas_mongo_crud
 titan_api_crud
 *.tmp
 *.log
+*.zip
 
 # Variables de entorno
 *.env
@@ -20,7 +21,6 @@ titan_api_crud
 
 # Otros
 .scannerwork
-swagger.zip
 swagger/**
 !swagger/swagger.json
 !swagger/swagger.yml

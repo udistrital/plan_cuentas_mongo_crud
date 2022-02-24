@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -209,7 +210,7 @@ func (j *DocumentoPresupuestalController) GetAllDocMovByRubro() {
 
 	docPresComp := compositors.DocumentoPresupuestalCompositor{}
 	docs, err := docPresComp.GetAllDocumentoPresupuestalMovimientosByRubro(vigencia, centroGestor, rubro)
-	j.Data["json"] = DefaultResponse(0, err, &docs)
+	j.Data["json"] = commonhelper.DefaultResponse(http.StatusOK, err, &docs)
 	j.ServeJSON()
 }
 
@@ -229,6 +230,6 @@ func (j *DocumentoPresupuestalController) GetInfoCrp() {
 
 	docPresComp := compositors.DocumentoPresupuestalCompositor{}
 	docs, err := docPresComp.GetRpByPersonaId(vigencia, cdp, personaId)
-	j.Data["json"] = DefaultResponse(0, err, &docs)
+	j.Data["json"] = commonhelper.DefaultResponse(http.StatusOK, err, &docs)
 	j.ServeJSON()
 }
