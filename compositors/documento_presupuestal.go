@@ -1,6 +1,7 @@
 package compositors
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego/logs"
@@ -68,6 +69,30 @@ func (c *DocumentoPresupuestalCompositor) GetAllDocumentoPresupuestalMovimientos
 				}
 			}
 		}
+	}
+	return docs, nil
+}
+
+func (c *DocumentoPresupuestalCompositor) GetRpByPersonaId(vigencia, cdp, personaId string) (d []models.DocumentoPresupuestal, err error) {
+	var docs []models.DocumentoPresupuestal
+	cdpInt, _ := strconv.Atoi(cdp)
+	query := map[string]interface{}{
+		"consecutivoCdp": cdpInt,
+	}
+	solicitudes := models.GetAllSolicitudCRP(query)
+
+	for i := range solicitudes {
+		if solicitudes[i].Beneficiario == personaId && solicitudes[i].Vigencia == vigencia {
+			query2 := map[string]interface{}{
+				"data.solicitud_crp": solicitudes[i].ID.Hex(),
+			}
+			predocs, err := models.GetAllDocumentoPresupuestal(vigencia, "1", query2)
+			if err != nil {
+				return d, err
+			}
+			docs = append(docs, predocs...)
+		}
+
 	}
 	return docs, nil
 }

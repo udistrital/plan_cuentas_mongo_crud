@@ -212,3 +212,23 @@ func (j *DocumentoPresupuestalController) GetAllDocMovByRubro() {
 	j.Data["json"] = DefaultResponse(0, err, &docs)
 	j.ServeJSON()
 }
+
+// GetInfoCrp ...
+// @Title GetInfoCrp
+// @Description Obtiene los RP asociados a un CDP y a un contratista en una vigencia
+// @Param	vigencia	path	string	true	"Vigencia del CRP"
+// @Param	cdp	path	string	true	"Numero consecutivo del CDP asociado"
+// @Param personaId path  string    true  "Numero de documento de la persona"
+// @Success 200 {object} []models.DocumentoPresupuestal Listado de documentos relacionados
+// @Failure 500 Internal server error
+// @router /get_info_crp/:vigencia/:cdp/:personaId [get]
+func (j *DocumentoPresupuestalController) GetInfoCrp() {
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	cdp := j.Ctx.Input.Param(":cdp")
+	personaId := j.Ctx.Input.Param(":personaId")
+
+	docPresComp := compositors.DocumentoPresupuestalCompositor{}
+	docs, err := docPresComp.GetRpByPersonaId(vigencia, cdp, personaId)
+	j.Data["json"] = DefaultResponse(0, err, &docs)
+	j.ServeJSON()
+}
