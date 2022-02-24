@@ -72,7 +72,7 @@ func (j *SolicitudesCRPController) GetAll() {
 // Get obtiene un elemento por su id
 // @Title Get
 // @Description get SolicitudCRP by nombre
-// @Param	id		path 	string	false		"El nombre de la SolicitudCRP a consultar"
+// @Param	id		path 	string	true		"El nombre de la SolicitudCRP a consultar"
 // @Success 200 {object} models.SolicitudCRP
 // @Failure 403 :uid is empty
 // @router /:id [get]

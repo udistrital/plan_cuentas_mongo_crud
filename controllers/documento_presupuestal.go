@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -189,5 +190,54 @@ func (j *DocumentoPresupuestalController) GetDocMovByParent() {
 
 	response := commonhelper.DefaultResponse(200, nil, &data)
 	j.Data["json"] = response
+	j.ServeJSON()
+}
+
+// GetDocMovByRubro ...
+// @Title GetDocMovByRubro
+// @Description Obtiene todos los CDPs expedidos con movimientos en un rubro padre dado
+// @Param	vigencia	path	int	true	"Vigencia del CDP"
+// @Param	rubro	path	string	true	"Rubro padre relacionado al CDP"
+// @Param areaFuncional path  int    true  "Area Funcional"
+// @Success 200 {object} []models.DocumentoPresupuestal Listado de documentos relacionados
+// @Failure 500 Internal server error
+// @router /get_doc_mov_rubro/:vigencia/:areaFuncional/:rubro [get]
+func (j *DocumentoPresupuestalController) GetAllDocMovByRubro() {
+
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	rubro := j.Ctx.Input.Param(":rubro")
+	centroGestor := j.Ctx.Input.Param(":areaFuncional")
+
+	docPresComp := compositors.DocumentoPresupuestalCompositor{}
+	docs, err := docPresComp.GetAllDocumentoPresupuestalMovimientosByRubro(vigencia, centroGestor, rubro)
+	status := http.StatusInternalServerError
+	if err == nil {
+		status = http.StatusOK
+	}
+	j.Data["json"] = commonhelper.DefaultResponse(status, err, &docs)
+	j.ServeJSON()
+}
+
+// GetInfoCrp ...
+// @Title GetInfoCrp
+// @Description Obtiene los RP asociados a un CDP y a un contratista en una vigencia
+// @Param	vigencia	path	string	true	"Vigencia del CRP"
+// @Param	cdp	path	string	true	"Numero consecutivo del CDP asociado"
+// @Param personaId path  string    true  "Numero de documento de la persona"
+// @Success 200 {object} []models.DocumentoPresupuestal Listado de documentos relacionados
+// @Failure 500 Internal server error
+// @router /get_info_crp/:vigencia/:cdp/:personaId [get]
+func (j *DocumentoPresupuestalController) GetInfoCrp() {
+	vigencia := j.Ctx.Input.Param(":vigencia")
+	cdp := j.Ctx.Input.Param(":cdp")
+	personaId := j.Ctx.Input.Param(":personaId")
+
+	docPresComp := compositors.DocumentoPresupuestalCompositor{}
+	docs, err := docPresComp.GetRpByPersonaId(vigencia, cdp, personaId)
+	status := http.StatusInternalServerError
+	if err == nil {
+		status = http.StatusOK
+	}
+	j.Data["json"] = commonhelper.DefaultResponse(status, err, &docs)
 	j.ServeJSON()
 }
