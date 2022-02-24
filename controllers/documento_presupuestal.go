@@ -210,7 +210,11 @@ func (j *DocumentoPresupuestalController) GetAllDocMovByRubro() {
 
 	docPresComp := compositors.DocumentoPresupuestalCompositor{}
 	docs, err := docPresComp.GetAllDocumentoPresupuestalMovimientosByRubro(vigencia, centroGestor, rubro)
-	j.Data["json"] = commonhelper.DefaultResponse(http.StatusOK, err, &docs)
+	status := http.StatusInternalServerError
+	if err == nil {
+		status = http.StatusOK
+	}
+	j.Data["json"] = commonhelper.DefaultResponse(status, err, &docs)
 	j.ServeJSON()
 }
 
@@ -230,6 +234,10 @@ func (j *DocumentoPresupuestalController) GetInfoCrp() {
 
 	docPresComp := compositors.DocumentoPresupuestalCompositor{}
 	docs, err := docPresComp.GetRpByPersonaId(vigencia, cdp, personaId)
-	j.Data["json"] = commonhelper.DefaultResponse(http.StatusOK, err, &docs)
+	status := http.StatusInternalServerError
+	if err == nil {
+		status = http.StatusOK
+	}
+	j.Data["json"] = commonhelper.DefaultResponse(status, err, &docs)
 	j.ServeJSON()
 }
