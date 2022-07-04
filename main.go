@@ -4,10 +4,11 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/plugins/cors"
-	"github.com/udistrital/auditoria"
+
 	migrationmanager "github.com/udistrital/plan_cuentas_mongo_crud/managers/migrationManager"
 	_ "github.com/udistrital/plan_cuentas_mongo_crud/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
+	"github.com/udistrital/utils_oas/auditoria"
 	"github.com/udistrital/utils_oas/customerror"
 )
 
@@ -41,7 +42,6 @@ func main() {
 
 	//Prueba de auditoria
 	auditoria.InitMiddleware()
-
 	beego.ErrorController(&customerror.CustomErrorController{})
 	apistatus.Init()
 	beego.Run()
