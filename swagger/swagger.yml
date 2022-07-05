@@ -17,9 +17,18 @@ paths:
       - arbol_rubro
       description: get all objects
       operationId: NodoRubroController.GetAll
+      parameters:
+      - in: query
+        name: query
+        description: Consulta
+        type: string
       responses:
         "200":
-          description: NodoRubro models.NodoRubro
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.NodoRubro'
         "403":
           description: :objectId is empty
     post:
@@ -36,7 +45,9 @@ paths:
           $ref: '#/definitions/models.NodoRubro'
       responses:
         "200":
-          description: '{int} NodoRubro.Id'
+          description: ""
+          schema:
+            type: string
         "403":
           description: body is empty
   /arbol_rubro/{id}:
@@ -47,7 +58,7 @@ paths:
       operationId: NodoRubroController.Get
       parameters:
       - in: path
-        name: nombre
+        name: id
         description: El nombre de la NodoRubro a consultar
         required: true
         type: string
@@ -74,12 +85,12 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.NodoRubro'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
     delete:
@@ -95,7 +106,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: id is empty
   /arbol_rubro/arbol/{raiz}:
@@ -105,16 +118,43 @@ paths:
       description: Construye el árbol a un nivel dependiendo de la raíz
       operationId: NodoRubroController.FullArbolRubro
       parameters:
-      - in: body
-        name: body
+      - in: path
+        name: raiz
         description: Código de la raíz
-        schema:
-          $ref: '#/definitions/stringtrue'
+        required: true
+        type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: array
+            items:
+              $ref: '#/definitions/models.PorDefinir'
+        "404":
+          description: body is empty
+  /arbol_rubro/arbol_reducido/{raiz}:
+    get:
+      tags:
+      - arbol_rubro
+      description: Construye el árbol con solo el nombre, codigo e hijos a un nivel dependiendo de la raíz y nivel
+      operationId: NodoRubroController.FullArbolRubroReducido
+      parameters:
+      - in: path
+        name: raiz
+        description: Código de la raíz
+        required: true
+        type: string
+      - in: query
+        name: nivel
+        description: 'Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... - Por Defecto: -1)'
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PorDefinir'
         "404":
           description: body is empty
   /arbol_rubro/get_hojas:
@@ -127,35 +167,58 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/models.NodoRubroApropiacion'
   /arbol_rubro_apropiacion/:
     get:
       tags:
       - arbol_rubro_apropiacion
       description: get all objects
       operationId: NodoRubroApropiacionController.GetAll
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: query
+        description: Consulta
+        type: string
       responses:
         "200":
-          description: NodoRubroApropiacion models.NodoRubroApropiacion
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.NodoRubroApropiacion'
         "403":
           description: :objectId is empty
     post:
       tags:
       - arbol_rubro_apropiacion
-      description: Post NodoRubroApropiacion2018
-      operationId: NodoRubroApropiacionController.Post NodoRubroApropiacion2018
+      description: Post NodoRubroApropiacion
+      operationId: NodoRubroApropiacionController.Post NodoRubroApropiacion
       parameters:
       - in: body
         name: body
-        description: Body para la creacion de NodoRubroApropiacion2018
+        description: Body para la creacion de NodoRubroApropiacion
         required: true
         schema:
-          $ref: '#/definitions/models.NodoRubroApropiacion2018'
+          $ref: '#/definitions/models.NodoRubroApropiacion'
       responses:
         "200":
-          description: '{int} NodoRubroApropiacion2018.Id'
+          description: ""
+          schema:
+            type: string
         "403":
           description: body is empty
   /arbol_rubro_apropiacion/{id}:
@@ -172,7 +235,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: id is empty
   /arbol_rubro_apropiacion/{id}/{vigencia}/{unidadEjecutora}:
@@ -183,21 +248,33 @@ paths:
       operationId: NodoRubroApropiacionController.Get
       parameters:
       - in: path
-        name: nombre
-        description: El nombre de la NodoRubroApropiacion2018 a consultar
+        name: id
+        description: id
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.NodoRubroApropiacion2018'
+            $ref: '#/definitions/models.NodoRubroApropiacion'
         "403":
           description: :uid is empty
     put:
       tags:
       - arbol_rubro_apropiacion
-      description: update the NodoRubroApropiacion2018
+      description: update the NodoRubroApropiacion
       operationId: NodoRubroApropiacionController.Update
       parameters:
       - in: path
@@ -205,17 +282,29 @@ paths:
         description: The id you want to update
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       - in: body
         name: body
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.NodoRubroApropiacion'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
   /arbol_rubro_apropiacion/{vigencia}/{unidadEjecutora}:
@@ -224,9 +313,30 @@ paths:
       - arbol_rubro_apropiacion
       description: get all objects
       operationId: NodoRubroApropiacionController.GetAllVigencia
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: query
+        description: Consulta
+        type: string
       responses:
         "200":
-          description: NodoRubroApropiacion models.NodoRubroApropiacion
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.NodoRubroApropiacion'
         "403":
           description: :unidadEjecutora is empty
   /arbol_rubro_apropiacion/ArbolApropiacionPadreHijo/{raiz}/{unidadEjecutora}/{vigencia}:
@@ -236,32 +346,56 @@ paths:
       description: Devuelve un nivel del árbol de apropiaciones
       operationId: NodoRubroApropiacionController.Preflight ArbolApropiacionPadreHijo
       parameters:
-      - in: body
-        name: body
-        description: Body para la creacion de NodoRubroApropiacion2018
+      - in: path
+        name: raiz
+        description: Raiz
         required: true
-        schema:
-          $ref: '#/definitions/models.NodoRubroApropiacion2018'
+        type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "403":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/map[string]interface{}'
   /arbol_rubro_apropiacion/RaicesArbolApropiacion/{unidadEjecutora}/{vigencia}:
     get:
       tags:
       - arbol_rubro_apropiacion
       description: RaicesArbolApropiacion
       operationId: NodoRubroApropiacionController.RaicesArbolApropiacion
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/models.Root1'
   /arbol_rubro_apropiacion/aprobacion_masiva/{unidadEjecutora}/{vigencia}:
     post:
       tags:
@@ -269,12 +403,12 @@ paths:
       description: Cambia el estado de los documentos arbol_rubro_apropiacion de una vigencia y unidad ejecutora
       operationId: NodoRubroApropiacionController.AprobacionMasiva
       parameters:
-      - in: unidadEjecutora
+      - in: path
         name: unidadEjecutora
         description: Unidad Ejecutora de la apropiación
         required: true
         type: string
-      - in: vigencia
+      - in: path
         name: vigencia
         description: Vigencia de la apropiación
         required: true
@@ -283,9 +417,7 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: string
   /arbol_rubro_apropiacion/arbol_apropiacion/{raiz}/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -293,18 +425,30 @@ paths:
       description: Construye el árbol dependiendo de la raíz
       operationId: NodoRubroApropiacionController.FullArbolRubroApropiaciones
       parameters:
-      - in: body
-        name: body
+      - in: path
+        name: raiz
         description: Código de la raíz
-        schema:
-          $ref: '#/definitions/stringtrue'
+        required: true
+        type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/map[string]interface{}'
   /arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}:
     get:
       tags:
@@ -312,18 +456,65 @@ paths:
       description: Construye el árbol completo con valores
       operationId: NodoRubroApropiacionController.FullArbolApropiaciones
       parameters:
-      - in: body
-        name: body
-        description: Código de la raíz
-        schema:
-          $ref: '#/definitions/stringtrue'
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/map[string]interface{}'
+  /arbol_rubro_apropiacion/arbol_apropiacion_valores/{unidadEjecutora}/{vigencia}/{id}:
+    get:
+      tags:
+      - arbol_rubro_apropiacion
+      description: Construye el árbol completo con valores
+      operationId: NodoRubroApropiacionController.FullArbolApropiacionesbyID
+      parameters:
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: id
+        description: Rubro
+        required: true
+        type: string
+      - in: query
+        name: nivel
+        description: Número de nivel (-1 = Todo el arbol, 0 = nivel 0 , 1 = Primer Nivel ... )
+        type: integer
+        format: int64
+      - in: query
+        name: estado
+        description: 'Estado de la apropiacion (TODO: Confirmar)'
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/map[string]interface{}'
   /arbol_rubro_apropiacion/arbol_por_estado/{unidadEjecutora}/{vigencia}/{estado}/:
     get:
       tags:
@@ -331,34 +522,66 @@ paths:
       description: Genera el árbol dependiendo del estado de las apropiaciones
       operationId: NodoRubroApropiacionController.TreeByState
       parameters:
-      - in: unidadEjecutora
+      - in: path
         name: unidadEjecutora
         description: Unidad Ejecutora de la apropiación
         required: true
-        type: string
-      - in: vigencia
+        type: integer
+        format: int32
+      - in: path
         name: vigencia
         description: Vigencia de la apropiación
         required: true
+        type: integer
+        format: int32
+      - in: path
+        name: estado
+        description: Estado
+        required: true
+        type: string
+      - in: query
+        name: query
+        description: Consulta
         type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/map[string]interface{}'
   /arbol_rubro_apropiacion/comprobar_balance/{unidadEjecutora}/{vigencia}:
     post:
       tags:
       - arbol_rubro_apropiacion
       description: ComprobarBalanceArbolApropiaciones
       operationId: NodoRubroApropiacionController.ComprobarBalanceArbolApropiaciones
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: movimientos
+        description: Unidad Ejecutora
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/models.Movimiento'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            $ref: '#/definitions/map[string]interface{}'
         "404":
           description: body is empty
   /arbol_rubro_apropiacion/get_hojas/{unidadEjecutora}/{vigencia}:
@@ -368,29 +591,54 @@ paths:
       description: Devuelve un arreglo con todos los nodos hoja correspondientes a la vigencia y ue
       operationId: NodoRubroApropiacionController.GetHojas
       parameters:
-      - in: body
-        name: body
-        description: Código de la raíz
+      - in: path
+        name: vigencia
+        description: Vigencia
         required: true
-        schema:
-          type: string
-        type: string
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
-        "404":
-          description: body is empty
+            type: array
+            items:
+              $ref: '#/definitions/models.NodoRubroApropiacion'
   /documento_presupuestal/{vigencia}/{CG}/:
     get:
       tags:
       - documento_presupuestal
       description: get all objects with data bases query
       operationId: DocumentoPresupuestalController.GetAllQuery
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: CG
+        description: Centro Gestor (Unidad Ejecutora?)
+        required: true
+        type: string
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
+        type: string
       responses:
         "200":
-          description: DocumentoPresupuestal models.DocumentoPresupuestal
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :objectId is empty
   /documento_presupuestal/{vigencia}/{CG}/{tipo}:
@@ -399,9 +647,30 @@ paths:
       - documento_presupuestal
       description: get all objects
       operationId: DocumentoPresupuestalController.GetAll
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: CG
+        description: Centro Gestor (Unidad Ejecutora?)
+        required: true
+        type: string
+      - in: path
+        name: tipo
+        description: Tipo
+        required: true
+        type: string
       responses:
         "200":
-          description: DocumentoPresupuestal models.DocumentoPresupuestal
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :objectId is empty
   /documento_presupuestal/{vigencia}/{areaFuncional}/{id}:
@@ -416,6 +685,18 @@ paths:
         description: The id you want to update
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: areaFuncional
+        description: Area Funcional
+        required: true
+        type: integer
+        format: int64
       - in: body
         name: body
         description: The body
@@ -426,7 +707,7 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.DocumentoPresupuestal'
+            type: string
         "403":
           description: :areaFuncional is empty
   /documento_presupuestal/documento/{vigencia}/{areaFuncional}/{id}:
@@ -441,6 +722,18 @@ paths:
         description: El id de la DocumentoPresupuestal a consultar
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: areaFuncional
+        description: Area Funcional
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
@@ -454,9 +747,20 @@ paths:
       - documento_presupuestal
       description: get all cdp objects
       operationId: DocumentoPresupuestalController.GetAllCdp
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
-          description: rows []models.DocumentoPresupuestal
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :vigencia is empty
   /documento_presupuestal/get_doc_mov_by_parent/{vigencia}/{CG}/{id}:
@@ -465,22 +769,115 @@ paths:
       - documento_presupuestal
       description: Obtiene un documento presupuestal de tipo cdp con su id de solicitud
       operationId: DocumentoPresupuestalController.GetDocMovByParent
+      parameters:
+      - in: path
+        name: id
+        description: The parentUUID you want to get
+        required: true
+        type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: CG
+        description: Centro Gestor (Unidad Ejecutora?)
+        required: true
+        type: string
       responses:
         "200":
-          description: documentoPresupuestal models.DocumentoPresupuestal
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :id is empty
+  /documento_presupuestal/get_doc_mov_rubro/{vigencia}/{areaFuncional}/{rubro}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene todos los CDPs expedidos con movimientos en un rubro padre dado
+      operationId: DocumentoPresupuestalController.GetDocMovByRubro
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia del CDP
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: rubro
+        description: Rubro padre relacionado al CDP
+        required: true
+        type: string
+      - in: path
+        name: areaFuncional
+        description: Area Funcional
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: Listado de documentos relacionados
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
+        "500":
+          description: Internal server error
   /documento_presupuestal/get_info_cdp/{id}:
     get:
       tags:
       - documento_presupuestal
       description: Obtiene un documento presupuestal de tipo cdp con su id de solicitud
       operationId: DocumentoPresupuestalController.GetInfoCdp
+      parameters:
+      - in: path
+        name: id
+        description: _id de Solicitud CDP
+        required: true
+        type: string
       responses:
         "200":
-          description: documentoPresupuestal models.DocumentoPresupuestal
+          description: ""
+          schema:
+            $ref: '#/definitions/models.DocumentoPresupuestal'
         "403":
           description: :id is empty
+  /documento_presupuestal/get_info_crp/{vigencia}/{cdp}/{personaId}:
+    get:
+      tags:
+      - documento_presupuestal
+      description: Obtiene los RP asociados a un CDP y a un contratista en una vigencia
+      operationId: DocumentoPresupuestalController.GetInfoCrp
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia del CRP
+        required: true
+        type: string
+      - in: path
+        name: cdp
+        description: Numero consecutivo del CDP asociado
+        required: true
+        type: string
+      - in: path
+        name: personaId
+        description: Numero de documento de la persona
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Listado de documentos relacionados
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.DocumentoPresupuestal'
+        "500":
+          description: Internal server error
   /fuente_financiamiento/:
     post:
       tags:
@@ -498,7 +895,7 @@ paths:
         "201":
           description: ""
           schema:
-            $ref: '#/definitions/models.FuenteFinanciamiento'
+            type: string
         "403":
           description: body is empty
   /fuente_financiamiento/{id}/{vigencia}/{unidadEjecutora}:
@@ -509,10 +906,22 @@ paths:
       operationId: FuenteFinanciamientoController.Get
       parameters:
       - in: path
-        name: nombre
+        name: id
         description: El nombre de la FuenteFinancimiento a consultar
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
@@ -531,17 +940,29 @@ paths:
         description: The objectid you want to update
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       - in: body
         name: body
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.FuenteFinanciamiento'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
     delete:
@@ -555,9 +976,23 @@ paths:
         description: El ObjectId del objeto que se quiere borrar
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: objectId is empty
   /fuente_financiamiento/{vigencia}/{unidadEjecutora}:
@@ -566,9 +1001,30 @@ paths:
       - fuente_financiamiento
       description: get all objects
       operationId: FuenteFinanciamientoController.GetAll
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
+        type: string
       responses:
         "200":
-          description: FuenteFinanciamiento models.FuenteFinanciamiento
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: :unidadEjecutora is empty
   /fuente_financiamiento/VincularFuente:
@@ -599,13 +1055,29 @@ paths:
       operationId: FuenteFinanciamientoController.GetWithRubro
       parameters:
       - in: path
-        name: objectId
+        name: rubro_apropiacion_id
         description: El ObjectId del objeto que se quiere borrar
         required: true
         type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: unidadEjecutora
+        description: Unidad Ejecutora
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.FuenteFinanciamiento'
         "403":
           description: objectId is empty
   /movimiento/{vigencia}/{CG}/{parentUUID}:
@@ -614,9 +1086,31 @@ paths:
       - movimiento
       description: get all objects
       operationId: MovimientosController.GetMovimientosByDocumentoPresupuestalUUID
+      parameters:
+      - in: path
+        name: parentUUID
+        description: El parentUUID del objeto que se quiere traer
+        required: true
+        type: string
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: CG
+        description: Centro Gestor (Unidad Ejecutora?)
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
-          description: Movimiento models.Movimiento
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: :objectId is empty
   /movimiento/RegistrarMovimientoParameter:
@@ -631,12 +1125,12 @@ paths:
         description: json de movimientos enviado desde el api_mid_financiera
         required: true
         schema:
-          type: array
-          items:
-            $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.MovimientoParameter'
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            $ref: '#/definitions/models.MovimientoParameter'
         "403":
           description: error
   /movimiento/RegistrarMovimientos:
@@ -651,12 +1145,12 @@ paths:
         description: json de movimientos enviado desde el api_mid_financiera
         required: true
         schema:
-          type: array
-          items:
-            $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.DocumentoPresupuestal'
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
   /movimiento/get_movimentos_by_parent_id/{vigencia}/{areaFuncional}/{id}:
@@ -665,9 +1159,29 @@ paths:
       - movimiento
       description: get one object
       operationId: MovimientosController.GetOne
+      parameters:
+      - in: path
+        name: vigencia
+        description: Vigencia
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: areaFuncional
+        description: Area Funcional
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: id
+        description: ID padre
+        required: true
+        type: string
       responses:
         "200":
-          description: Movimiento models.Movimiento
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Movimiento'
         "403":
           description: :objectId is empty
   /necesidades/:
@@ -676,9 +1190,19 @@ paths:
       - necesidades
       description: get all objects
       operationId: NecesidadesController.GetAll
+      parameters:
+      - in: query
+        name: query
+        description: Consulta
+        required: true
+        type: string
       responses:
         "200":
-          description: Necesidades models.Necesidades
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.Necesidad'
         "403":
           description: :objectId is empty
     post:
@@ -692,10 +1216,12 @@ paths:
         description: Body para la creacion de Necesidades
         required: true
         schema:
-          $ref: '#/definitions/models.Necesidades'
+          $ref: '#/definitions/models.Necesidad'
       responses:
         "200":
-          description: '{int} Necesidades.Id'
+          description: ""
+          schema:
+            type: string
         "403":
           description: body is empty
   /necesidades/{id}:
@@ -733,12 +1259,12 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.Necesidad'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
     delete:
@@ -754,7 +1280,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: id is empty
   /producto/:
@@ -763,9 +1291,18 @@ paths:
       - producto
       description: get all objects
       operationId: ProductoController.GetAll
+      parameters:
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ..., if the filter value includes !$ at the begining, the value won't be converted to int
+        type: string
       responses:
         "200":
-          description: Producto models.Producto
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.Producto'
         "403":
           description: :objectId is empty
     post:
@@ -784,7 +1321,7 @@ paths:
         "201":
           description: ""
           schema:
-            $ref: '#/definitions/models.Producto'
+            type: string
         "403":
           description: body is empty
   /producto/{id}:
@@ -795,8 +1332,8 @@ paths:
       operationId: ProductoController.Get
       parameters:
       - in: path
-        name: nombre
-        description: El nombre de la Producto a consultar
+        name: id
+        description: El nombre del Producto a consultar
         required: true
         type: string
       responses:
@@ -822,12 +1359,12 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.Producto'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :objectId is empty
     delete:
@@ -843,7 +1380,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: objectId is empty
   /solicitudesCDP/:
@@ -852,9 +1391,18 @@ paths:
       - solicitudesCDP
       description: get all objects
       operationId: SolicitudesCDPController.GetAll
+      parameters:
+      - in: query
+        name: query
+        description: Consulta
+        type: string
       responses:
         "200":
-          description: SolicitudCDP models.SolicitudCDP
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.SolicitudCDP'
         "403":
           description: :objectId is empty
     post:
@@ -871,7 +1419,9 @@ paths:
           $ref: '#/definitions/models.SolicitudCDP'
       responses:
         "200":
-          description: '{int} SolicitudCDP.Id'
+          description: ""
+          schema:
+            type: string
         "403":
           description: body is empty
   /solicitudesCDP/{id}:
@@ -909,12 +1459,12 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.SolicitudCDP'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
     delete:
@@ -930,7 +1480,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: id is empty
   /solicitudesCRP/:
@@ -946,7 +1498,11 @@ paths:
         type: string
       responses:
         "200":
-          description: SolicitudCRP models.SolicitudCRP
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.SolicitudCRP'
         "403":
           description: :objectId is empty
     post:
@@ -963,7 +1519,9 @@ paths:
           $ref: '#/definitions/models.SolicitudCRP'
       responses:
         "200":
-          description: '{int} SolicitudCRP.Id'
+          description: ""
+          schema:
+            type: string
         "403":
           description: body is empty
   /solicitudesCRP/{id}:
@@ -974,7 +1532,7 @@ paths:
       operationId: SolicitudesCRPController.Get
       parameters:
       - in: path
-        name: nombre
+        name: id
         description: El nombre de la SolicitudCRP a consultar
         required: true
         type: string
@@ -1001,12 +1559,12 @@ paths:
         description: The body
         required: true
         schema:
-          $ref: '#/definitions/models.Object'
+          $ref: '#/definitions/models.SolicitudCRP'
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Object'
+            type: string
         "403":
           description: :id is empty
     delete:
@@ -1022,7 +1580,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} ok'
+          description: ""
+          schema:
+            type: string
         "403":
           description: id is empty
   /vigencia/{namespace}/{centrogestor}:
@@ -1033,7 +1593,7 @@ paths:
       operationId: VigenciaController.GetVigenciasByNameSpace
       parameters:
       - in: path
-        name: naemespace
+        name: namespace
         description: name space al que pertenece el grupo de vigencias consultado
         required: true
         type: string
@@ -1044,7 +1604,11 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.VigenciaNamespace'
         "403":
           description: error
   /vigencia/agregar_vigencia:
@@ -1064,7 +1628,7 @@ paths:
         "201":
           description: ""
           schema:
-            $ref: '#/definitions/models.Vigencia'
+            $ref: '#/definitions/models.VigenciaNueva'
         "403":
           description: body is empty
   /vigencia/cerrar_vigencia_actual/{area_funcional}:
@@ -1081,7 +1645,9 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            type: string
         "403":
           description: error
   /vigencia/vigencia_actual:
@@ -1098,7 +1664,10 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            format: int64
+            type: integer
         "403":
           description: error
   /vigencia/vigencia_actual_area/{area_funcional}:
@@ -1115,7 +1684,11 @@ paths:
         type: string
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
   /vigencia/vigencias_total:
@@ -1126,30 +1699,40 @@ paths:
       operationId: VigenciaController.GetTodasVigencias
       responses:
         "200":
-          description: '{string} success'
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PorDefinir'
         "403":
           description: error
 definitions:
-  14234.0xc0005f4750.false:
+  1452.string.0xc00063a3e0:
+    title: "0xc00063a3e0"
+    type: object
+  15653.0xc000662ea0.false:
     title: "false"
     type: object
-  20232.0xc000614120.false:
+  21848.0xc000680870.false:
     title: "false"
     type: object
-  23932.0xc000615020.false:
+  25652.0xc000681770.false:
     title: "false"
     type: object
-  24283.rubroFuente:
+  26008.rubroFuente:
     title: rubroFuente
     type: object
-  24633.0xc000615080.false:
+  26362.0xc0006817d0.false:
     title: "false"
     type: object
-  32105.<nil>.string:
+  34199.<nil>.string:
     title: string
     type: object
   bson.ObjectId:
     title: ObjectId
+    type: object
+  map[string]interface{}:
+    title: map[string]interface{}
     type: object
   models.Compromiso:
     title: Compromiso
@@ -1181,7 +1764,7 @@ definitions:
         type: integer
         format: int64
       Data:
-        $ref: '#/definitions/20232.0xc000614120.false'
+        $ref: '#/definitions/21848.0xc000680870.false'
       Estado:
         type: string
       FechaRegistro:
@@ -1216,17 +1799,17 @@ definitions:
         type: string
         format: datetime
       Movimientos:
-        $ref: '#/definitions/24633.0xc000615080.false'
+        $ref: '#/definitions/26362.0xc0006817d0.false'
       Nombre:
         type: string
       NumeroDocumento:
         type: string
       Rubros:
-        $ref: '#/definitions/24283.rubroFuente'
+        $ref: '#/definitions/26008.rubroFuente'
       TipoDocumento:
         type: string
       TipoFuente:
-        $ref: '#/definitions/23932.0xc000615020.false'
+        $ref: '#/definitions/25652.0xc000681770.false'
       UnidadEjecutora:
         type: string
       ValorActual:
@@ -1260,6 +1843,12 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.GeneralReducida:
+    title: GeneralReducida
+    type: object
+    properties:
+      Nombre:
+        type: string
   models.Movimiento:
     title: Movimiento
     type: object
@@ -1269,7 +1858,7 @@ definitions:
       DocumentoPresupuestalUUID:
         type: string
       DocumentosPresGenerados:
-        $ref: '#/definitions/32105.<nil>.string'
+        $ref: '#/definitions/34199.<nil>.string'
       Estado:
         type: string
       FechaRegistro:
@@ -1283,6 +1872,8 @@ definitions:
           format: double
       Padre:
         type: string
+      RubroDetalle:
+        $ref: '#/definitions/models.NodoRubroReducido'
       Tipo:
         type: string
       ValorActual:
@@ -1291,6 +1882,31 @@ definitions:
       ValorInicial:
         type: number
         format: double
+  models.MovimientoParameter:
+    title: MovimientoParameter
+    type: object
+    properties:
+      _id:
+        type: string
+      FatherCollectionName:
+        type: string
+      FatherUUIKeyName:
+        type: string
+      Initial:
+        type: boolean
+      Multiplicador:
+        type: integer
+        format: int64
+      NoBalanceLeftStateName:
+        type: string
+      TipoDocumentoGenerado:
+        type: string
+      TipoMovimientoHijo:
+        type: string
+      TipoMovimientoPadre:
+        type: string
+      WithOutChangeState:
+        type: boolean
   models.Necesidad:
     title: Necesidad
     type: object
@@ -1312,9 +1928,6 @@ definitions:
       valor:
         type: number
         format: double
-  models.Necesidades:
-    title: Necesidades
-    type: object
   models.NodoRubro:
     title: NodoRubro
     type: object
@@ -1348,11 +1961,69 @@ definitions:
       Vigencia:
         type: integer
         format: int64
-  models.NodoRubroApropiacion2018:
-    title: NodoRubroApropiacion2018
+  models.NodoRubroApropiacion:
+    title: NodoRubroApropiacion
     type: object
-  models.Object:
-    title: Object
+    properties:
+      Activo:
+        type: boolean
+      Apropiaciones:
+        type: boolean
+      Bloqueado:
+        type: boolean
+      Codigo:
+        type: string
+      Descripcion:
+        type: string
+      Estado:
+        type: string
+      FechaCreacion:
+        type: string
+        format: datetime
+      FechaModificacion:
+        type: string
+        format: datetime
+      Hijos:
+        type: array
+        items:
+          type: string
+      Movimientos:
+        additionalProperties:
+          type: number
+          format: double
+      Nombre:
+        type: string
+      Padre:
+        type: string
+      Productos:
+        $ref: '#/definitions/1452.string.0xc00063a3e0'
+      UnidadEjecutora:
+        type: string
+      ValorActual:
+        type: number
+        format: double
+      ValorInicial:
+        type: number
+        format: double
+      Vigencia:
+        type: integer
+        format: int64
+  models.NodoRubroReducido:
+    title: NodoRubroReducido
+    type: object
+    properties:
+      Codigo:
+        type: string
+      General:
+        $ref: '#/definitions/models.GeneralReducida'
+      Hijos:
+        type: array
+        items:
+          type: string
+      UnidadEjecutora:
+        type: string
+  models.PorDefinir:
+    title: PorDefinir
     type: object
   models.Producto:
     title: Producto
@@ -1378,6 +2049,25 @@ definitions:
       Vigencia:
         type: integer
         format: int64
+  models.Root1:
+    title: Root1
+    type: object
+    properties:
+      Codigo:
+        type: string
+      Hijos:
+        type: array
+        items:
+          type: string
+      IsLeaf:
+        type: boolean
+      Nombre:
+        type: string
+      UnidadEjecutora:
+        type: string
+      ValorInicial:
+        type: number
+        format: double
   models.SolicitudCDP:
     title: SolicitudCDP
     type: object
@@ -1396,7 +2086,7 @@ definitions:
         type: integer
         format: int64
       estado:
-        $ref: '#/definitions/14234.0xc0005f4750.false'
+        $ref: '#/definitions/15653.0xc000662ea0.false'
       fechaCreacion:
         type: string
         format: datetime
@@ -1450,30 +2140,9 @@ definitions:
         format: double
       vigencia:
         type: string
-  models.Vigencia:
-    title: Vigencia
+  models.VigenciaNamespace:
+    title: VigenciaNamespace
     type: object
-    properties:
-      Activo:
-        type: boolean
-      Estado:
-        type: string
-      Id:
-        type: string
-      Valor:
-        type: integer
-        format: int64
-      Vigencia_ejecucion_programacion:
-        type: string
-      fechaCierre:
-        type: string
-        format: datetime
-      fechaCreacion:
-        type: string
-        format: datetime
-      fechaModificacion:
-        type: string
-        format: datetime
   models.VigenciaNueva:
     title: VigenciaNueva
     type: object
@@ -1562,9 +2231,6 @@ definitions:
       valor:
         type: number
         format: double
-  stringtrue:
-    title: stringtrue
-    type: object
 tags:
 - name: arbol_rubro
   description: |

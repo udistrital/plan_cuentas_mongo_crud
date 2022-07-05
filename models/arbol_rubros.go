@@ -39,6 +39,14 @@ type ArbolRubroParameter struct {
 	UnidadEjecutora string      `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
 }
 
+// NodoRubroReducido es la estructura de un Rubro con datos básicos, es un nodo puesto que forma parte del árbol
+type NodoRubroReducido struct {
+	General         *GeneralReducida `json:"General" bson:"general"`
+	ID              string           `json:"Codigo" bson:"_id,omitempty"`
+	Hijos           []string         `json:"Hijos" bson:"hijos"`
+	UnidadEjecutora string           `json:"UnidadEjecutora" bson:"unidad_ejecutora"`
+}
+
 func UpdateNodoRubro(j NodoRubro, id string) error {
 	session, err := db.GetSession()
 	if err != nil {
@@ -60,7 +68,7 @@ func InsertNodoRubro(session *mgo.Session, j NodoRubro) error {
 func GetAllNodoRubro(session *mgo.Session, query map[string]interface{}) []NodoRubro {
 	c := db.Cursor(session, NodoRubroCollection)
 	defer session.Close()
-	
+
 	var NodoRubros []NodoRubro
 	err := c.Find(query).All(&NodoRubros)
 	if err != nil {
@@ -79,6 +87,22 @@ func GetNodoRubroById(id string) (NodoRubro, error) {
 
 	c := db.Cursor(session, NodoRubroCollection)
 	err = c.FindId(id).One(&nodoRubro)
+
+	defer session.Close()
+	return nodoRubro, err
+}
+
+// GetNodoRubroReducidoById Realiza la consulta de un nodo, segun su ID y retorna unicamente el codigo, nombre e hijos
+func GetNodoRubroReducidoById(id string) (NodoRubroReducido, error) {
+	var nodoRubro NodoRubroReducido
+
+	session, err := db.GetSession()
+	if err != nil {
+		return nodoRubro, err
+	}
+
+	c := db.Cursor(session, NodoRubroCollection)
+	err = c.FindId(id).Select(bson.M{"_Id": 1, "hijos": 1, "unidad_ejecutora": 1, "general.nombre": 1}).One(&nodoRubro)
 
 	defer session.Close()
 	return nodoRubro, err

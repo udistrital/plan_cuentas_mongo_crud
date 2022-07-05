@@ -24,6 +24,7 @@ type Movimiento struct {
 	ValorActual               float64            `json:"ValorActual" bson:"valor_actual"`
 	ValorInicial              float64            `json:"ValorInicial" bson:"valor_inicial"`
 	DocumentosPresGenerados   *[]string          `json:"DocumentosPresGenerados" bson:"documentos_pres_generados,omitempty"`
+	RubroDetalle              *NodoRubroReducido
 }
 
 // MovimientoParameter this struct represent a "movmientos_parametros" collection item.

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/astaxie/beego"
@@ -15,12 +16,15 @@ type ReportesController struct {
 // GetSimple función para obtener todos los objetos
 // @Title GetSimple
 // @Description get all objects
-// @Success 200 ArbolRubros models.ArbolRubros
+// @Success 200 {object} models.PorDefinir
 // @Failure 403 :objectId is empty
 // @router / [get]
 func (j *ReportesController) GetSimple() {
-	j.Data["json"] =
-		j.ServeJSON()
+	/*
+		j.Data["json"] =
+			j.ServeJSON()
+	*/
+	j.Abort(fmt.Sprintf("%d", http.StatusNotImplemented))
 }
 
 func SimpleReport() {
