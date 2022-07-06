@@ -17,10 +17,10 @@ import (
 // RunMigrations ... Migrate all files in migrations package.
 func RunMigrations() (*mongo.Database, error) {
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s",
-		beego.AppConfig.String("mongo_user"),
-		beego.AppConfig.String("mongo_pass"),
-		beego.AppConfig.String("mongo_host"),
-		beego.AppConfig.String("mongo_port"))
+		beego.AppConfig.String("mongo::user"),
+		beego.AppConfig.String("mongo::pass"),
+		beego.AppConfig.String("mongo::host"),
+		beego.AppConfig.String("mongo::port"))
 	opt := options.Client().ApplyURI(uri)
 	client, err := mongo.NewClient(opt)
 	if err != nil {
@@ -32,7 +32,7 @@ func RunMigrations() (*mongo.Database, error) {
 	if err != nil {
 		return nil, err
 	}
-	db := client.Database(beego.AppConfig.String("mongo_db"))
+	db := client.Database(beego.AppConfig.String("mongo::db"))
 	migrate.SetDatabase(db)
 	if err := migrate.Up(migrate.AllAvailable); err != nil {
 		return nil, err
