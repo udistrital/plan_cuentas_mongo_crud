@@ -1,6 +1,6 @@
 package migrationmanager
 
-import ( 
+import (
 	"context"
 	"fmt"
 	"time"
@@ -16,7 +16,11 @@ import (
 
 // RunMigrations ... Migrate all files in migrations package.
 func RunMigrations() (*mongo.Database, error) {
-	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s", beego.AppConfig.String("mongo_user"), beego.AppConfig.String("mongo_pass"), beego.AppConfig.String("mongo_host"), "27017")
+	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s",
+		beego.AppConfig.String("mongo_user"),
+		beego.AppConfig.String("mongo_pass"),
+		beego.AppConfig.String("mongo_host"),
+		beego.AppConfig.String("mongo_port"))
 	opt := options.Client().ApplyURI(uri)
 	client, err := mongo.NewClient(opt)
 	if err != nil {

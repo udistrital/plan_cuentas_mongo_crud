@@ -23,6 +23,10 @@ func GetSession() (*mgo.Session, error) {
 	if mongoHost == "" {
 		mongoHost = os.Getenv("FINANCIERA_MONGO_CRUD_DB_URL")
 	}
+	mongoPort := beego.AppConfig.String("mongo_port")
+	if mongoPort == "" {
+		mongoPort = os.Getenv("FINANCIERA_MONGO_CRUD_DB_PORT")
+	}
 	mongoUser := beego.AppConfig.String("mongo_user")
 	if mongoUser == "" {
 		mongoUser = os.Getenv("FINANCIERA_MONGO_CRUD_DB_USER")
@@ -31,7 +35,7 @@ func GetSession() (*mgo.Session, error) {
 	if mongoPassword == "" {
 		mongoPassword = os.Getenv("FINANCIERA_MONGO_CRUD_DB_PASS")
 	}
-	mongoDatabase := beego.AppConfig.String("mongo_db_connect")
+	mongoDatabase := beego.AppConfig.String("mongo_db")
 	if mongoDatabase == "" {
 		mongoDatabase = os.Getenv("FINANCIERA_MONGO_CRUD_DB_NAME")
 	}
@@ -40,7 +44,7 @@ func GetSession() (*mgo.Session, error) {
 		mongoAuthDb = os.Getenv("FINANCIERA_MONGO_CRUD_DB_AUTH")
 	}
 	info := &mgo.DialInfo{
-		Addrs:    []string{mongoHost},
+		Addrs:    []string{mongoHost + ":" + mongoPort},
 		Timeout:  60 * time.Second,
 		Database: mongoDatabase,
 		Username: mongoUser,
