@@ -17,15 +17,15 @@ Esta API representa la capa de datos del sistema de gestión financiero KRONOS.
 ### Variables de Entorno
 
 ```shell
-FINANCIERA_MONGO_CRUD_PORT = [descripción]
-FINANCIERA_MONGO_CRUD_DB_URL = [descripción]
-FINANCIERA_MONGO_CRUD_DB_NAME = [descripción]
-FINANCIERA_MONGO_CRUD_DB_USER = [descripción]
-FINANCIERA_MONGO_CRUD_DB_PASS = [descripción]
-FINANCIERA_MONGO_CRUD_DB_AUTH = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__PORT = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__DB_URL = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__DB_NAME = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__DB_USER = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__DB_PASS = [descripción]
+PLAN_CUENTAS_MONGO_CRUD__DB_AUTH = [descripción]
 ```
 
-**NOTA:** Las variables se pueden ver en el fichero conf/app.conf y están identificadas con FINANCIERA*MONGO_CRUD*...
+**NOTA:** Las variables se pueden ver en el fichero conf/app.conf y están identificadas con `PLAN_CUENTAS_MONGO_CRUD__...`
 
 ### Ejecución del Proyecto
 
@@ -40,7 +40,7 @@ cd $GOPATH/src/github.com/udistrital/plan_cuentas_mongo_crud
 git pull origin dev && git checkout dev
 
 # 4. alimentar todas las variables de entorno que utiliza el proyecto.
-FINANCIERA_MONGO_CRUD_PORT=8080 FINANCIERA_MONGO_CRUD_DB_URL=127.0.0.1:27017 FINANCIERA_MONGO_CRUD_SOME_VARIABLE=some_value bee run
+PLAN_CUENTAS_MONGO_CRUD__PORT=8080 PLAN_CUENTAS_MONGO_CRUD_DB_URL=127.0.0.1:27017 PLAN_CUENTAS_MONGO_CRUD__SOME_VARIABLE=some_value bee run
 ```
 
 ![Vista previa](images/terminal_api_view.png)

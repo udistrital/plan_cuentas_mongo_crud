@@ -21,27 +21,27 @@ func GetSession() (*mgo.Session, error) {
 	mongoHost := beego.AppConfig.String("mongo::host")
 	// This comporbation is for test cases.
 	if mongoHost == "" {
-		mongoHost = os.Getenv("FINANCIERA_MONGO_CRUD_DB_URL")
+		mongoHost = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_URL")
 	}
 	mongoPort := beego.AppConfig.String("mongo::port")
 	if mongoPort == "" {
-		mongoPort = os.Getenv("FINANCIERA_MONGO_CRUD_DB_PORT")
+		mongoPort = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_PORT")
 	}
 	mongoUser := beego.AppConfig.String("mongo::user")
 	if mongoUser == "" {
-		mongoUser = os.Getenv("FINANCIERA_MONGO_CRUD_DB_USER")
+		mongoUser = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_USER")
 	}
 	mongoPassword := beego.AppConfig.String("mongo::pass")
 	if mongoPassword == "" {
-		mongoPassword = os.Getenv("FINANCIERA_MONGO_CRUD_DB_PASS")
+		mongoPassword = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_PASS")
 	}
 	mongoDatabase := beego.AppConfig.String("mongo::db")
 	if mongoDatabase == "" {
-		mongoDatabase = os.Getenv("FINANCIERA_MONGO_CRUD_DB_NAME")
+		mongoDatabase = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_NAME")
 	}
 	mongoAuthDb := beego.AppConfig.String("mongo::auth")
 	if mongoAuthDb == "" {
-		mongoAuthDb = os.Getenv("FINANCIERA_MONGO_CRUD_DB_AUTH")
+		mongoAuthDb = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_AUTH")
 	}
 	info := &mgo.DialInfo{
 		Addrs:    []string{mongoHost + ":" + mongoPort},
