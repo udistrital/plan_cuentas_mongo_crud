@@ -10,7 +10,7 @@ import (
 
 // Cursor devuelve un apuntador con la conexión a la bd y la colección especifica
 func Cursor(session *mgo.Session, Collection string) *mgo.Collection {
-	mongoDB := beego.AppConfig.String("mongo_db")
+	mongoDB := beego.AppConfig.String("mongo::db")
 	c := session.DB(mongoDB).C(Collection)
 	return c
 }
@@ -18,29 +18,33 @@ func Cursor(session *mgo.Session, Collection string) *mgo.Collection {
 // GetSession crea una sesión con las credenciales
 func GetSession() (*mgo.Session, error) {
 
-	mongoHost := beego.AppConfig.String("mongo_host")
+	mongoHost := beego.AppConfig.String("mongo::host")
 	// This comporbation is for test cases.
 	if mongoHost == "" {
-		mongoHost = os.Getenv("FINANCIERA_MONGO_CRUD_DB_URL")
+		mongoHost = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_URL")
 	}
-	mongoUser := beego.AppConfig.String("mongo_user")
+	mongoPort := beego.AppConfig.String("mongo::port")
+	if mongoPort == "" {
+		mongoPort = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_PORT")
+	}
+	mongoUser := beego.AppConfig.String("mongo::user")
 	if mongoUser == "" {
-		mongoUser = os.Getenv("FINANCIERA_MONGO_CRUD_DB_USER")
+		mongoUser = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_USER")
 	}
-	mongoPassword := beego.AppConfig.String("mongo_pass")
+	mongoPassword := beego.AppConfig.String("mongo::pass")
 	if mongoPassword == "" {
-		mongoPassword = os.Getenv("FINANCIERA_MONGO_CRUD_DB_PASS")
+		mongoPassword = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_PASS")
 	}
-	mongoDatabase := beego.AppConfig.String("mongo_db_connect")
+	mongoDatabase := beego.AppConfig.String("mongo::db")
 	if mongoDatabase == "" {
-		mongoDatabase = os.Getenv("FINANCIERA_MONGO_CRUD_DB_NAME")
+		mongoDatabase = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_NAME")
 	}
-	mongoAuthDb := beego.AppConfig.String("mongo_db_auth")
+	mongoAuthDb := beego.AppConfig.String("mongo::auth")
 	if mongoAuthDb == "" {
-		mongoAuthDb = os.Getenv("FINANCIERA_MONGO_CRUD_DB_AUTH")
+		mongoAuthDb = os.Getenv("PLAN_CUENTAS_MONGO_CRUD__DB_AUTH")
 	}
 	info := &mgo.DialInfo{
-		Addrs:    []string{mongoHost},
+		Addrs:    []string{mongoHost + ":" + mongoPort},
 		Timeout:  60 * time.Second,
 		Database: mongoDatabase,
 		Username: mongoUser,

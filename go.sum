@@ -454,10 +454,8 @@ github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65/go.mod h1:XNkn88O1C
 github.com/tidwall/pretty v1.0.0 h1:HsD+QiTn7sK6flMKIvNmpqz1qrpP3Ps6jOKIKMooyg4=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/udistrital/auditoria v0.0.0-20200115201815-9680ae9c2515 h1:HTZDLLQ5QiGANHPjsz2rtNoryMncPISVrQ4DIjveWI4=
-github.com/udistrital/auditoria v0.0.0-20200115201815-9680ae9c2515/go.mod h1:2g8J932brTzbNOcSHob/vjt+/GFfMQuRreLZhvGiUro=
-github.com/udistrital/utils_oas v0.0.0-20210916022348-721ac824ef36 h1:q20G9a1xSG8WD6Ddj+v7sftQyYn8Sg/ev9CrJtYW908=
-github.com/udistrital/utils_oas v0.0.0-20210916022348-721ac824ef36/go.mod h1:ctr3PgpZazF32ukxlLZP3AVjq8b2zaZ4beG4cqkx5ZA=
+github.com/udistrital/utils_oas v0.0.0-20220521085529-fbd949fcf4e2 h1:PyIjWzVInzSnZT+NBzucocZn+a8Y+onhN1q2Iy5iNRI=
+github.com/udistrital/utils_oas v0.0.0-20220521085529-fbd949fcf4e2/go.mod h1:jkSKIX5KYbf0/HxzGUs2leHo3KAwTC5n0oI1JDfoY78=
 github.com/ugorji/go v0.0.0-20171122102828-84cb69a8af83/go.mod h1:hnLbHMwcvSihnDhEfx2/BzKp2xb0Y+ErdfYcrs9tkJQ=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
