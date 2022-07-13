@@ -174,7 +174,7 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		raices["ValorInicial"] = 0
 		raices["Estado"] = models.EstadoSinRegistrar
 	} else {
-		// logs.Debug("Else apropiacion")
+		// logs.Debug(fmt.Sprintf("apropiacion: %+v", apropiacion))
 		raices["Activo"] = apropiacion.Activo
 		raices["Apropiaciones"] = apropiacion.Apropiaciones
 		raices["Bloqueado"] = apropiacion.Bloqueado
@@ -187,6 +187,7 @@ func ValuesTreebyID(unidadEjecutora string, vigencia int, estado string, query m
 		raices["UnidadEjecutora"] = apropiacion.UnidadEjecutora
 		raices["Vigencia"] = apropiacion.Vigencia
 		raices["ValorInicial"] = apropiacion.ValorInicial
+		raices["ValorActual"] = apropiacion.ValorActual
 		raices["Estado"] = apropiacion.Estado
 		raices["Productos"] = apropiacion.Productos
 		if apropiacion.Estado == estado {
